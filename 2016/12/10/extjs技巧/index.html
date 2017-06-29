@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>extjs技巧 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="extjs Ext.form.ComboBox 的设置默认值的问题Ext.onReady(function(){var dbConnectionRecord = Ext.data.Record.create([    {name: ‘dbConnectionKey’,type:”string”,mapping:”dbConnectionKey”},    {name: ‘name’,type:”s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="extjs技巧">
+<meta property="og:url" content="http://yoursite.com/2016/12/10/extjs技巧/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="extjs Ext.form.ComboBox 的设置默认值的问题Ext.onReady(function(){var dbConnectionRecord = Ext.data.Record.create([    {name: ‘dbConnectionKey’,type:”string”,mapping:”dbConnectionKey”},    {name: ‘name’,type:”s">
+<meta property="og:updated_time" content="2016-12-10T13:02:13.007Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="extjs技巧">
+<meta name="twitter:description" content="extjs Ext.form.ComboBox 的设置默认值的问题Ext.onReady(function(){var dbConnectionRecord = Ext.data.Record.create([    {name: ‘dbConnectionKey’,type:”string”,mapping:”dbConnectionKey”},    {name: ‘name’,type:”s">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <section id="main"><article id="post-extjs技巧" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      extjs技巧
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/12/10/extjs技巧/" class="article-date">
+  <time datetime="2016-12-10T13:00:02.000Z" itemprop="datePublished">2016-12-10</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>extjs Ext.form.ComboBox 的设置默认值的问题<br>Ext.onReady(function(){<br>var dbConnectionRecord = Ext.data.Record.create([<br>    {name: ‘dbConnectionKey’,type:”string”,mapping:”dbConnectionKey”},<br>    {name: ‘name’,type:”string”,mapping:”name”}<br>]);<br>var dataProxy=new Ext.data.HttpProxy({url:”&lt;%=basePath%&gt;getDBConnection.action”});<br>var theReader=new Ext.data.JsonReader({totalProperty: ‘totalProperty’,root:’root’,id:”ecname”},dbConnectionRecord);<br>var dbstore=new Ext.data.Store({proxy:dataProxy,reader:theReader});<br>dbstore.load();<br>var dbcombo = new Ext.form.ComboBox({<br>id:’dbCombo’,<br>renderTo:Ext.getBody(),<br>    store: dbstore,<br>    valueField:’dbConnectionKey’,<br>   displayField:’name’,<br>    typeAhead: true,<br>    emptyText:’请选择’,<br>    readOnly : true,<br>    mode: ‘local’,<br>    name:”dbkey”,<br>    hiddenName:’dbkey’,<br>    editable: false,<br>    triggerAction: ‘all’,<br>    selectOnFocus:true<br>});<br>////dbcombo.setValue(“4”); 肯定不行，参见后面的代码</p>
+<p>});</p>
+<p>实现：<br>写在store load的callback里 </p>
+<p>dbstore.load({<br>    callback : function(records) {<br>    dbcombo.setValue(“4”);<br>    }<br>    });<br>//在分页组件前面添加组件<br>var page = new Ext.PagingToolbar({<br>store: store,<br>displayInfo: true,<br>pageSize: 10<br>});<br>page.insert(0, ‘-‘);<br>page.insert(0, { //添加一个日期组件<br>xtype: ‘datefield’,<br>name: ‘chatdate’,<br>format: ‘Y-m-d’,<br>value: new Date()<br>});<br>//树节点(TreeNode)图标动态修改 2009-11-22 15:36:52<br>var ui = node.getUI();<br>ui.removeClass(‘x-tree-node-leaf’); //去掉之前的根节点样式<br>ui.addClass(‘x-tree-node-expanded’); //设定已展开文件夹样式<br>//ui.addClass(‘x-tree-node-collapsed’);//设定合并的文件夹样式<br>使用Ext.Ajaxt对象完成异步请求的交互，Ext.Ajax是单实例对象（非常重要，全局单一Ext.Ajax实例！）。<br>注册Ext.Ajax的requestcomplete事件，每个ajax请求成功后首先响应该事件。在该事件的回调函数里面判断<br>访问请求是否超时。使用Ext.Ajax对象的好处是，只需要引入一个包含了几行超时处理代码的js文件，就可以<br>为当前应用增加超时处理功能，原有代码不需要做任何修改。</p>
+<p>使用Ext.Ajaxt对象完成异步请求交互，假如checkUserSessionStatus是你的回调方法，每个页面引用：</p>
+<p>Js代码<br>Ext.Ajax.on(‘requestcomplete’,checkUserSessionStatus, this);<br>function checkUserSessionStatus(conn,response,options){<br>//Ext重新封装了response对象<br>if(typeof response.getResponseHeader.sessionstatus != ‘undefined’){<br>//发现请求超时，退出处理代码…<br>}<br>}<br>Ext.Ajax.on(‘requestcomplete’,checkUserSessionStatus, this); function checkUserSessionStatus(conn,response,options){ //Ext重新封装了response对象 if(typeof response.getResponseHeader.sessionstatus != ‘undefined’){ //发现请求超时，退出处理代码… } }可以利用的几个特*：<br>a）所有的ajax请求均带有x-requested-with:XMLHttpRequest头信息<br>b）Ext.Ajax是单实例对象（非常重要，全局单一Ext.Ajax实例！）<br>c）注册Ext.Ajax的requestcomplete事件，每个ajax请求成功后首先响应该事件（概念类似spring的aop拦截）。</p>
+<p>对于其他的ajax框架，解决用户访问请求超时这个问题的思路是类似的。</p>
+<p>二、如何设置DateField的默认值。</p>
+<p>设置DateField的默认值，可以直接给value属性赋值，如：value: ‘01/01/2009’，如果要设置默认值为当天的日期，可以如下设置：value: new Date</p>
+<p>1 new Ext.form.DateField({<br>2 id: ‘df’,<br>3 fieldLabel: ‘日期’,<br>4 format: ‘Y年m月d日’,<br>5 width: 150,<br>6 //value: ‘01/01/2009’<br>7 value: new Date<br>8 })<br>如何禁用或者启用某个菜单<br>有的时候，有时会根据需要，启用或者禁用某个菜单项，在ExtJS中，可以通过如下的操作进行。</p>
+<p>1 Ext.onReady(function() {<br>2 Ext.BLANK_IMAGE_URL = ‘resources/images/default/s.gif’;<br>3 Ext.QuickTips.init();<br>4 var tb = new Ext.Toolbar({<br>5 applyTo: ‘tb’,<br>6 width: 400<br>7 });<br>8 var styleMenu = new Ext.menu.Menu({<br>9 items: [{<br>10 text: ‘主题选择’,<br>11 id: ‘style’,<br>12 menu: new Ext.menu.Menu({<br>13 items: [{<br>14 text: ‘红色主题’,<br>15 checked: true,<br>16 group: ‘theme’<br>17 }, {<br>18 text: ‘蓝色主题’,<br>19 checked: false,<br>20 group: ‘theme’<br>21 }, {<br>22 text: ‘黑色主题’,<br>23 checked: false,<br>24 group: ‘theme’<br>25 }]<br>26 })<br>27 }, {<br>28 text: ‘启用主题’,<br>29 checked: true,<br>30 checkHandler: function() { Ext.getCmp(‘style’).setDisabled(!this.checked) }<br>31 }]<br>32 });<br>33 tb.add({ text: ‘主题’, menu: styleMenu });<br>34 });<br>一、从form中获取field的三个方法：</p>
+<p>１、Ext.getCmp(‘id’);</p>
+<p>２、FormPanel.getForm().findField(‘id/name’);</p>
+<p>３、Ext.get(‘id/name’);//前提是FormPanel在界面上显示出来了。</p>
+<p>二、ExtJS如何给textfield赋值的三个方法：</p>
+<p>var value=”值”;</p>
+<p>１、 fs.form.findField(id/name).setValue(value);</p>
+<p>２、 Ext.get(id/name).setValue(value);</p>
+<p>３、 Ext.getCmp(id).setValue(value);</p>
+<p>三、Ext grid中得到选择行的方法</p>
+<p>在Ext grid中假设有一个名称为grid的对象。</p>
+<p>(1)grid.getStore().getRange(0,store.getCount());//得到grid所有的行</p>
+<p>(2)grid.getSelectionModel().getSelections()//得到选择所有行</p>
+<p>(3)grid.selModel.selections.items;//得到选择所有行</p>
+<p>(4)grid.getSelectionModel().getSelected();//得到选择行的第一行</p>
+<p>四、formPanel组件load数据时combo的自动赋值</p>
+<p>　　combo有个hiddenName这个属*，这个属性是真正提交的值，在加载的时候你将这个属性的设置到reader中,就可以自动选择到指定的值了，比如说：hiddenName:’value’,那么你的reader中就应该有一个{name:’value’}.</p>
+<p>traceofsun 2010-07-26 14:08:33 8楼<br>Grid 加入一个序号列 </p>
+<p>cm = new Ext.grid.ColumnModel([<br>////////////序号列<br>new　Ext.grid.RowNumberer({<br>header　:　“序号”,<br>width　:　40,<br>renderer:function(value,metadata,record,rowIndex){<br>return　　1　+　rowIndex;<br>}<br>}),　<br>{<br>header: “货物编号”,<br>dataIndex: ‘CARGONO’,<br>width: 100<br>},<br>{<br>header: “货物名称”,<br>width: 150,<br>sortable: true,<br>dataIndex: ‘CARGONAME’<br>},</p>
+<p>traceofsun 2010-07-27 08:53:06 9楼<br>Extjs Panel 上放子Panel实例<br>Ext.onReady(function(){<br>Ext.BLANK_IMAGE_URL = ‘/images/s.gif’;<br>//Ext.chart.Chart.CHART_URL = ‘/js/extjs/3.0/resources/charts.swf’;<br>Ext.QuickTips.init();<br>var p2 = new Ext.Panel({<br>autoShow: true, html:’zzz’,title:’zzz’,id:’zzz’<br>})<br>var p = new Ext.Panel({<br>title:’Test’,<br>height:300,<br>width:600,<br>renderTo:Ext.getBody(),<br>layout:’accordion’,<br>layoutConfig:{<br>animate:false,<br>activeOnTop: false,<br>fill:true<br>},<br>items:[<br>{xtype:’panel’,html:’xxx’,title:’xxx’},<br>{xtype:’panel’,html:’yyy’,title:’yyy’}<br>],<br>buttons:[<br>{<br>text:’add’,<br>handler:function(){<br>p.add(p2);<br>p.doLayout();<br>}<br>},{<br>text:’remove’,<br>handler:function(){<br>p.remove(p2,false);<br>p.doLayout();<br>}<br>}<br>]<br>})<br>});</p>
+<p>traceofsun 2010-07-27 08:54:35 10楼<br>Extjs Panel的使用：<br>var panel = new Ext.Panel({<br>title : “面板”,<br>renderTo:”testPanel”//Panel的外层容器一般是DIV或SPAN的<br>id : “testPanel”<br>collapsible : true,// 可收缩<br>collapsed:false,//收缩的<br>width : 500,<br>height : 200,<br>autoScroll : true,// 自动卷轴<br>frame:true,//渲染框架<br>border : true,//边框<br>margins : ‘0 0 0 0’,//边缘<br>split : true,// 分割条面板组合是经常用到<br>minHeight : 100,// 最小高度<br>autoHeight : true,//自动高度以下参数用于Panel的各个部位工具栏<br>tools : [{// 标题栏按钮<br>/* </p>
+<ul>
+<li>id常用参数表//已经定义好的按钮id * - toggle</li>
+<li><ul>
+<li>close</li>
+</ul>
+</li>
+<li><ul>
+<li>minimize</li>
+</ul>
+</li>
+<li><ul>
+<li>maximize</li>
+</ul>
+</li>
+<li><ul>
+<li>refresh</li>
+</ul>
+</li>
+<li><ul>
+<li>minus</li>
+</ul>
+</li>
+<li><ul>
+<li>plus - help - search - save - print <em>/<br>id : “refresh”,<br>qtip : ‘Refresh form Data’,// 快速提示// hidden : true,<br>handler : function(event, toolEl, panel) {<br>// close logic }<br>}],// 标题栏按钮<br>tbar : [//工具条按钮<br>{<br>/</em> xtype参数用与匿名类创建(非常重要)<br>-tbfill填充空白<br>-tbseparator分割线<br>-tbtext文本说明<br><em>/<br>xtype : ‘tbtext’,<br>text : ‘工具条’<br>},{//不指定xtype属性则默认为按钮(Button)<br>pressed : true,<br>text : ‘删除’<br>}],//工具条按钮<br>bbar : [//底部工具条<br>{<br>/</em> xtype常用参数</li>
+</ul>
+</li>
+<li>-tbfill//填充空白</li>
+<li>-tbseparator//分割线</li>
+<li>-tbtext//文本说明<br>*/<br>xtype : ‘tbtext’,<br>text : ‘底部工具’<br>},{//不指定xtype属性是默认为按钮</li>
+</ul>
+<p>extjs Ext.form.ComboBox 的设置默认值的问题<br>Ext.onReady(function(){<br>var dbConnectionRecord = Ext.data.Record.create([<br>    {name: ‘dbConnectionKey’,type:”string”,mapping:”dbConnectionKey”},<br>    {name: ‘name’,type:”string”,mapping:”name”}<br>]);<br>var dataProxy=new Ext.data.HttpProxy({url:”&lt;%=basePath%&gt;getDBConnection.action”});<br>var theReader=new Ext.data.JsonReader({totalProperty: ‘totalProperty’,root:’root’,id:”ecname”},dbConnectionRecord);<br>var dbstore=new Ext.data.Store({proxy:dataProxy,reader:theReader});<br>dbstore.load();<br>var dbcombo = new Ext.form.ComboBox({<br>id:’dbCombo’,<br>renderTo:Ext.getBody(),<br>    store: dbstore,<br>    valueField:’dbConnectionKey’,<br>   displayField:’name’,<br>    typeAhead: true,<br>    emptyText:’请选择’,<br>    readOnly : true,<br>    mode: ‘local’,<br>    name:”dbkey”,<br>    hiddenName:’dbkey’,<br>    editable: false,<br>    triggerAction: ‘all’,<br>    selectOnFocus:true<br>});<br>////dbcombo.setValue(“4”); 肯定不行，参见后面的代码</p>
+<p>});</p>
+<p>实现：<br>写在store load的callback里 </p>
+<p>dbstore.load({<br>    callback : function(records) {<br>    dbcombo.setValue(“4”);<br>    }<br>    });<br>回帖列表回帖(15) | 浏览(35)</p>
+<p>traceofsun 2010-07-27 10:41:48 11楼<br>1、确保[{<br>xtype:’textarea’,<br>id:’steno_subText’,<br>width:300 }的textarea被创建了 </p>
+<p>2、<br>在a之前<br>加上这句<br>Ext.ComponentMgr.all.each(function(r){alert(r.id)}); </p>
+<p>Ext.getCmp(“控件ID”).setValue(‘1’);</p>
+<p>traceofsun 2010-07-27 22:31:30 12楼<br>Ext ContentPanel中javascript函数的执行问题2007-08-02 09:33方法1：<br>ContentPanel.setUrl({url: Rt+’/jsp/formAndResult/511Form.jsp’, scripts: true, text: ‘正在加载…’});<br>contentPanel.refresh();<br>方法2：<br>ContentPanel.load({url: Rt+’/jsp/formAndResult/511Form.jsp’, scripts: true, text: ‘正在加载…’});<br>没有认真看API的，找了半天才发现的。</p>
+<p>—————————-ContentPanel刷新————————————————————–</p>
+<p>traceofsun 2010-08-03 21:12:40 13楼<br>Ext.ux.ThemeChange = Ext.extend(Ext.form.ComboBox,{<br>editable : false,<br>displayField : ‘theme’,<br>valueField : ‘css’,<br>typeAhead : true,<br>mode : ‘local’,<br>triggerAction : ‘all’,<br>selectOnFocus : true,<br>initComponent : function(){<br>//定义主题名和主题样式的对应关系<br>var themes = [<br>[‘默认’,’ext-all.css’],<br>[‘深蓝心情’,’xtheme-slate.css’],<br>[‘灰色回忆’,’xtheme-gray-extend.css’],<br>[‘银色勾红’,’xtheme-silverCherry.css’],<br>[‘黑色水晶’,’xtheme-slickness2.css’],<br>[‘靛蓝情怀’,’xtheme-indigo.css’],<br>[‘黑色物语’,’xtheme-black.css’]<br>];<br>this.store = new Ext.data.SimpleStore({<br>fields : [‘theme’,’css’],<br>data : themes<br>});<br>this.value = ‘默认’;<br>},<br>initEvents : function(){<br>//初始化事件<br>this.on(‘collapse’,function(){//绑定组合框下拉列表的收缩事件<br>Ext.util.CSS.swapStyleSheet(‘theme’,’extlib/resources/css/‘+this.getValue());//切换样式表<br>});<br>}<br>});</p>
+<p>在下拉列表中加入一个默认的字段，修改该列表的load事件：<br>listeners : {<br>beforeload : function(ds, option) {<br>var para = {<br>tableName : ‘SD_ENUM’,<br>queryColumns : ‘ENUM_VALUE’,<br>returnColumns : ‘ENUM_KEY,ENUM_VALUE’,<br>conds : ‘ENUM_ATTR=’’ + ds.enumAttr + ‘’’<br>};<br>Ext.apply(para, ds.baseParams);<br>Ext.apply(para, option.params);<br>option.params.para = “[“ + Ext.encode(para) + “]”;<br>},<br>load : function(ds, records, options) {<br>var rd = Ext.data.Record.create([{<br>name : ‘id’<br>}, {<br>name : ‘name’<br>}]);<br>var oo = new rd({<br>‘id’ : null,<br>‘name’ : ‘&lt;–空–&gt;’<br>});<br>ds.insert(ds.getCount(), oo);<br>records.push(oo);<br>}<br>},</p>
+<p>store排序：加入属*，<br>sortInfo : {<br>field : “id”,<br>direction : “ASC”<br>}</p>
+<p>五、ExtJS 重置表单的方法：</p>
+<p>有三种方法能实现form表单的重置，假设var fs=new Ext.form.FormPanel({…});<br>(1)fs.form.reset();//重置form<br>(2)fs.getForm().getEl().dom.reset();//重置form<br>(3)Ext.getCmp(‘fs’).form.reset();</p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/12/10/extjs-下拉列表联动/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          extjs-下拉列表联动
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/11/10/【Maven】Project-configuration-is-not-up-to-date-with-pom-xml错误解决方法/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">【Maven】Project configuration is not up-to-date with pom.xml错误解决方法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2017 John Doe 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a href="https://github.com/" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

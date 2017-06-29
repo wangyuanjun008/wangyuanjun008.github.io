@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/page/2/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-如何相互转换逗号分隔的字符串和List" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/12/如何相互转换逗号分隔的字符串和List/">如何相互转换逗号分隔的字符串和List</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/01/12/如何相互转换逗号分隔的字符串和List/" class="article-date">
+  <time datetime="2017-01-12T03:01:54.000Z" itemprop="datePublished">2017-01-12</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>将逗号分隔的字符串转换为List<br>方法 1： 利用JDK的Arrays类<br>String str = “a,b,c”;<br>List<string> result = Arrays.asList(str.split(“,”));</string></p>
+<p>方法 2： 利用Guava的Splitter<br>String str = “a, b, c”;<br>List<string> result = Splitter.on(“,”).trimResults().splitToList(str);</string></p>
+<p>方法 3： 利用Apache Commons的StringUtils （只是用了split)<br>String str = “a,b,c”;<br>List<string> result = Arrays.asList(StringUtils.split(str,”,”));</string></p>
+<p>方法 4: 利用Spring Framework的StringUtils<br>String str = “a,b,c”;<br>List<string> str = Arrays.asList(StringUtils.commaDelimitedListToStringArray(str));</string></p>
+<p>将List转换为逗号分隔符<br>方法 1: 不用工具类<br>       public String listToString(List list, char separator) {<br>        StringBuilder sb = new StringBuilder();<br>        for (int i = 0; i &lt; list.size(); i++) {<br>            if (i == list.size() - 1) {<br>                sb.append(list.get(i));<br>            } else {<br>                sb.append(list.get(i));<br>                sb.append(separator);<br>            }<br>        }<br>        return sb.toString();<br>       } </p>
+<pre><code>public String listToString(List list, char separator) {  
+  StringBuilder sb = new StringBuilder();  
+  for (int i = 0; i &lt; list.size(); i++) {  
+      sb.append(list.get(i)).append(separator);  
+  }  
+  return sb.toString().substring(0,sb.toString().length()-1);  
+ }  
+</code></pre><p>方法 2： 利用Guava的Joiner<br>List<string> list = new ArrayList<string>();<br>list.add(“a”);<br>list.add(“b”);<br>list.add(“c”);<br>String str = Joiner.on(“,”).join(list);</string></string></p>
+<p>方法 3： 利用Apache Commons的StringUtils<br>List<string> list = new ArrayList<string>();<br>list.add(“a”);<br>list.add(“b”);<br>list.add(“c”);<br>String str = StringUtils.join(list.toArray(), “,”);</string></string></p>
+<p>方法 4：利用Spring Framework的StringUtils<br>List<string> list = new ArrayList<string>();<br>list.add(“a”);<br>list.add(“b”);<br>list.add(“c”);<br>String str = StringUtils.collectionToDelimitedString(list, “,”);</string></string></p>
+<p>比较下来，我的观点就是Guava库和StringUtils更灵活，适用面更广。</p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-extjs-上传图片" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/10/extjs-上传图片/">extjs-上传图片</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/12/10/extjs-上传图片/" class="article-date">
+  <time datetime="2016-12-10T13:44:29.000Z" itemprop="datePublished">2016-12-10</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>&lt;!DOCTYPE html PUBLIC “-//W3C//DTD XHTML 1.0 Transitional//EN” “<a href="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;" target="_blank" rel="external">http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;</a></p>
+<html xmlns="http://www.w3.org/1999/xhtml"><br><head><br>    <title></title><br>    <!--ExtJs框架开始--><br>    <script type="text/javascript" src="/Ext/adapter/ext/ext-base.js"></script><br>    <script type="text/javascript" src="/Ext/ext-all.js"></script><br>    <script src="/Ext/src/locale/ext-lang-zh_CN.js" type="text/javascript"></script><br>    <link rel="stylesheet" type="text/css" href="/Ext/resources/css/ext-all.css"><br>    <!--ExtJs框架结束--><br>    <script type="text/javascript"><br>        Ext.onReady(function () {<br>            //初始化标签中的Ext:Qtip属性。<br>            Ext.QuickTips.init();<br>            Ext.form.Field.prototype.msgTarget = ‘side’;<br>            //创建div组件<br>            var imagebox = new Ext.BoxComponent({<br>                autoEl: {<br>                    style: ‘width:150px;height:150px;margin:0px auto;border:1px solid #ccc; text-align:center;padding-top:20px;margin-bottom:10px’,<br>                    tag: ‘div’,<br>                    id: ‘imageshow’,<br>                    html: ‘暂无图片’<br>                }<br>            });<br>            //创建文本上传域<br>            var file = new Ext.form.TextField({<br>                name: ‘imgFile’,<br>                fieldLabel: ‘文件上传’,<br>                inputType: ‘file’,<br>                allowBlank: false,<br>                blankText: ‘请浏览图片’<br>            });<br>            //提交按钮处理方法<br>            var btnsubmitclick = function () {<br>                if (form.getForm().isValid()) {<br>                    form.getForm().submit({<br>                        waitTitle: “请稍候”,<br>                        waitMsg: ‘正在上传…’,<br>                        success: function (form, action) {<br>                            Ext.MessageBox.alert(“提示”, “上传成功！”);<br>                            document.getElementById(‘imageshow’).innerHTML = ‘<img style="width:150px;height:150px" src="' + action.result.path + '"/>‘;<br>                        },<br>                        failure: function () {<br>                            Ext.MessageBox.alert(“提示”, “上传失败！”);<br>                        }<br>                    });<br>                }<br>            }<br>            //重置按钮”点击时”处理方法<br>            var btnresetclick = function () {<br>                form.getForm().reset();<br>            }<br>            //表单<br>            var form = new Ext.form.FormPanel({<br>                frame: true,<br>                fileUpload: true,<br>                url: ‘/App_Ashx/Demo/Upload.ashx’,<br>                title: ‘表单标题’,<br>                style: ‘margin:10px’,<br>                items: [imagebox, file],<br>                buttons: [{<br>                    text: ‘保存’,<br>                    handler: btnsubmitclick<br>                }, {<br>                    text: ‘重置’,<br>                    handler: btnresetclick<br>                }]<br>            });<br>            //窗体<br>            var win = new Ext.Window({<br>                title: ‘窗口’,<br>                width: 476,<br>                height: 374,<br>                resizable: true,<br>                modal: true,<br>                closable: true,<br>                maximizable: true,<br>                minimizable: true,<br>                buttonAlign: ‘center’,<br>                items: form<br>            });<br>            win.show();<br>        });<br>    </script><br></head><br><body><br><!--
+说明：
+(1)var imagebox = new Ext.BoxComponent():创建一个新的html标记。
+    官方解释如下：
+    This may then be added to a Container as a child item.
+    To create a BoxComponent based around a HTML element to be created at render time, use the autoEl config option which takes the form of a DomHelper specification:
+(2) autoEl: {style: '',tag: 'div',id: 'imageshow', html: '暂无图片'}定义这个html标记的属性，如 标记为：div，id是多少等。
+    官方实例为：
+    var myImage = new Ext.BoxComponent({
+    autoEl: {
+        tag: 'img',
+        src: '/images/my-image.jpg'
+        }
+    });
+(3)var file = new Ext.form.TextField()：创建一个新的文件上传域。 
+(4)name: 'imgFile':名称，重要，因为service端要根据这个名称接收图片。
+(5)inputType: 'file'：表单类型为文件类型。
+(6)waitTitle: "请稍候",waitMsg: '正在上传...',：上传等待过程中的提示信息。    
+(7)document.getElementById('imageshow').innerHTML = '<img style="width:150px;height:150px" src="' + action.result.path + '"/>';这个是原生态的js，把imageshow的值换成图片。
+--><br></body><br></html>
+
+<p>其中与service交互用上传图片的 一般处理程序文件，源码如下：</p>
+<p>/App_Ashx/Demo/Upload.ashx</p>
+<p>using System;<br>using System.Web;<br>using System.IO;<br>using System.Globalization;</p>
+<p>namespace HZYT.ExtJs.WebSite.App_Ashx.Demo<br>{<br>    public class Upload : IHttpHandler<br>    {<br>        public void ProcessRequest(HttpContext context)<br>        {<br>            //虚拟目录，建议写在配置文件中<br>            String strPath = “/Upload/Image/“;<br>            //文件本地目录<br>            String dirPath = context.Server.MapPath(strPath);<br>            //接收文件<br>            HttpPostedFile imgFile = context.Request.Files[“imgFile”];<br>            //取出文件扩展名<br>            String fileExt = Path.GetExtension(imgFile.FileName).ToLower();<br>            //重新命名文件<br>            String newFileName = DateTime.Now.ToString(“yyyyMMddHHmmss_ffff”, DateTimeFormatInfo.InvariantInfo) + fileExt;<br>            //文件上传路径<br>            String filePath = dirPath + newFileName;<br>            //保存文件<br>            imgFile.SaveAs(filePath);<br>            //客户端输出<br>            context.Response.Write(“{success:true,path:’” + strPath + newFileName + “‘}”);<br>        }</p>
+<pre><code>    public bool IsReusable
+    {
+        get
+        {
+            return false;
+        }
+    }
+}
+</code></pre><p>}</p>
+<p> 2.效果如下</p>
+<p> <img src="/images/extjs-sctp.png" alt="&quot;&quot;"> </p>
+<p> 3.说明：</p>
+<p>(1)上传域不光可以上传图片，还要以上传其他文件。这里我们以图片为例。</p>
+<p>(2)在实际开发中，我们还要对图片格式，大小等进行校验，这个示例测重于上传，没有加入任何校验</p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-extjs-下拉列表联动" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/10/extjs-下拉列表联动/">extjs-下拉列表联动</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/12/10/extjs-下拉列表联动/" class="article-date">
+  <time datetime="2016-12-10T13:22:32.000Z" itemprop="datePublished">2016-12-10</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>不管是几级下拉列表的联动实现本质上都是根据某个下拉列表的变化，去动态加载其他下拉列表，如：省、市、地区。</p>
+<p>当我们监听到省变化时，向service端发送省的编号，service端根据收到的”省”编号到数据库中查询该省所对应的市信息，</p>
+<p>地区同理，抓住这一点，我们只需要监听 combobox 的 select 事件并在其中实现逻辑即可。</p>
+<p>1.代码如下：</p>
+<p>&lt;!DOCTYPE html PUBLIC “-//W3C//DTD XHTML 1.0 Transitional//EN” “<a href="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;" target="_blank" rel="external">http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;</a></p>
+<html xmlns="http://www.w3.org/1999/xhtml"><br><head><br>    <title></title><br>    <!--ExtJs框架开始--><br>    <script type="text/javascript" src="/Ext/adapter/ext/ext-base.js"></script><br>    <script type="text/javascript" src="/Ext/ext-all.js"></script><br>    <script src="/Ext/src/locale/ext-lang-zh_CN.js" type="text/javascript"></script><br>    <link rel="stylesheet" type="text/css" href="/Ext/resources/css/ext-all.css"><br>    <!--ExtJs框架结束--><br>    <script type="text/javascript"><br>        Ext.onReady(function () {<br>            //初始化标签中的Ext:Qtip属性。<br>            Ext.QuickTips.init();<br>            Ext.form.Field.prototype.msgTarget = ‘side’;<br><br>            //———————-下拉列表开始———————-//<br>            //创建市数据源<br>            var combocitystore = new Ext.data.Store({<br>                //设定读取的地址<br>                proxy: new Ext.data.HttpProxy({ url: ‘/App_Ashx/Demo/City.ashx’ }),<br>                //设定读取的格式<br>                reader: new Ext.data.JsonReader({ root: ‘data’ },<br>                 [{ name: ‘id’ }, { name: ‘name’}])<br>            });<br>            //创建区数据源<br>            var comboareastore = new Ext.data.Store({<br>                //设定读取的地址<br>                proxy: new Ext.data.HttpProxy({ url: ‘/App_Ashx/Demo/Area.ashx’ }),<br>                reader: new Ext.data.JsonReader({ root: ‘data’ },<br>                 [{ name: ‘id’ }, { name: ‘name’}])<br>            });<br>            //创建市Combobox<br>            var comboboxcity = new Ext.form.ComboBox({<br>                id: ‘comboboxcity’,<br>                fieldLabel: ‘市’,<br>                width: 120,<br>                store: combocitystore,<br>                displayField: ‘name’,<br>                valueField: ‘id’,<br>                triggerAction: ‘all’,<br>                emptyText: ‘请选择…’,<br>                allowBlank: false,<br>                blankText: ‘请选择市’,<br>                editable: false,<br>                mode: ‘local’, //该属性和以下方法为了兼容ie8<br>                listeners: {<br>                    ‘render’: function () {<br>                        combocitystore.load();<br>                    }<br>                }<br>            });<br><br>            //创建区Combobox<br>            var comboareacity = new Ext.form.ComboBox({<br>                fieldLabel: ‘区’,<br>                width: 120,<br>                store: comboareastore,<br>                displayField: ‘name’,<br>                valueField: ‘id’,<br>                triggerAction: ‘all’,<br>                emptyText: ‘请选择…’,<br>                allowBlank: false,<br>                blankText: ‘请选择区’,<br>                editable: false<br>            });<br>            //联动的实现<br>            comboboxcity.on(‘select’, function () {<br>                comboareastore.baseParams.id = comboboxcity.getValue();<br>                comboareacity.setValue(‘’);<br>                comboareastore.load();<br>            })<br>            //———————-下拉列表结束———————-//<br>            //表单<br>            var form = new Ext.form.FormPanel({<br>                frame: true,<br>                title: ‘表单标题’,<br>                style: ‘margin:10px’,<br>                items: [comboboxcity, comboareacity]<br>            });<br>            //窗体<br>            var win = new Ext.Window({<br>                title: ‘窗口’,<br>                width: 476,<br>                height: 374,<br>                resizable: true,<br>                modal: true,<br>                closable: true,<br>                maximizable: true,<br>                minimizable: true,<br>                buttonAlign: ‘center’,<br>                items: form<br>            });<br>            win.show();<br>        });<br>    </script><br></head><br><body><br>    <!--
+说明：
+(1)var combocitystore = new Ext.data.Store():创建一个新的数据源。
+(2)proxy: new Ext.data.HttpProxy({ url: '/App_Ashx/Demo/City.ashx' })：数据代理为http代理，地址为/App_Ashx/Demo/City.ashx。
+(3)reader: new Ext.data.JsonReader({ root: 'data' },[{ name: 'id' }, { name: 'name'}]):读取json返回值根节点为data，对象列为id和name。
+    这里要结合client与service观察,我在service端的输出如下：{data:[{id:1,name:'北京'},{id:2,name:'上海'}]}
+(4)comboboxcity.on('select', function () {}：市选择变化时触发事件。
+(5)comboareastore.baseParams.id = comboboxcity.getValue()：注意，前面的comboareastore是区的数据源，
+    当市变化时，我们给区的数据源加上个向service端发送的参数。
+(6)comboareacity.setValue('')：把区的下拉列表设置为空，由于非空验证，Ext会提示用户“请选择区”，这个地方也可以把加载出来的第一个区
+    显示在区的下拉列表中，具体请自行实现吧。        
+(7)comboareastore.load()：区的数据源重新加载。
+--><br></body><br></html>
+
+<p>其中与service交互用到两个.net 一般处理程序文件，源码如下：<br>(1)/App_Ashx/Demo/City.ashx</p>
+<p>using System.Web;</p>
+<p>namespace HZYT.ExtJs.WebSite.App_Ashx.Demo<br>{<br>    public class City : IHttpHandler<br>    {<br>        public void ProcessRequest(HttpContext context)<br>        {<br>            context.Response.Write(“{data:[{id:1,name:’北京’},{id:2,name:’上海’}]}”);<br>        }</p>
+<pre><code>    public bool IsReusable
+    {
+        get
+        {
+            return false;
+        }
+    }
+}
+</code></pre><p>}</p>
+<p>(2)/App_Ashx/Demo/Area.ashx</p>
+<p>using System.Web;</p>
+<p>namespace HZYT.ExtJs.WebSite.App_Ashx.Demo<br>{<br>    public class Area : IHttpHandler<br>    {<br>        public void ProcessRequest(HttpContext context)<br>        {<br>            //接收Client端传来的参数，交根据条件返回<br>            if (context.Request.Form[“id”].ToString() == “1”)<br>            {<br>                context.Response.Write(“{data:[{id:1,name:’东城区’},{id:2,name:’西城区’},{id:2,name:’海淀区’}]}”);<br>            }<br>            else<br>            {<br>                context.Response.Write(“{data:[{id:1,name:’杨浦区’},{id:2,name:’虹口区’},{id:2,name:’闸北区’}]}”);<br>            }<br>        }</p>
+<pre><code>    public bool IsReusable
+    {
+        get
+        {
+            return false;
+        }
+    }
+}
+</code></pre><p>}</p>
+<p>2.效果如下：<br><img src="/images/extjs-xlld.png" alt="&quot;下拉联动&quot;"> </p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-extjs技巧" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/10/extjs技巧/">extjs技巧</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/12/10/extjs技巧/" class="article-date">
+  <time datetime="2016-12-10T13:00:02.000Z" itemprop="datePublished">2016-12-10</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>extjs Ext.form.ComboBox 的设置默认值的问题<br>Ext.onReady(function(){<br>var dbConnectionRecord = Ext.data.Record.create([<br>    {name: ‘dbConnectionKey’,type:”string”,mapping:”dbConnectionKey”},<br>    {name: ‘name’,type:”string”,mapping:”name”}<br>]);<br>var dataProxy=new Ext.data.HttpProxy({url:”&lt;%=basePath%&gt;getDBConnection.action”});<br>var theReader=new Ext.data.JsonReader({totalProperty: ‘totalProperty’,root:’root’,id:”ecname”},dbConnectionRecord);<br>var dbstore=new Ext.data.Store({proxy:dataProxy,reader:theReader});<br>dbstore.load();<br>var dbcombo = new Ext.form.ComboBox({<br>id:’dbCombo’,<br>renderTo:Ext.getBody(),<br>    store: dbstore,<br>    valueField:’dbConnectionKey’,<br>   displayField:’name’,<br>    typeAhead: true,<br>    emptyText:’请选择’,<br>    readOnly : true,<br>    mode: ‘local’,<br>    name:”dbkey”,<br>    hiddenName:’dbkey’,<br>    editable: false,<br>    triggerAction: ‘all’,<br>    selectOnFocus:true<br>});<br>////dbcombo.setValue(“4”); 肯定不行，参见后面的代码</p>
+<p>});</p>
+<p>实现：<br>写在store load的callback里 </p>
+<p>dbstore.load({<br>    callback : function(records) {<br>    dbcombo.setValue(“4”);<br>    }<br>    });<br>//在分页组件前面添加组件<br>var page = new Ext.PagingToolbar({<br>store: store,<br>displayInfo: true,<br>pageSize: 10<br>});<br>page.insert(0, ‘-‘);<br>page.insert(0, { //添加一个日期组件<br>xtype: ‘datefield’,<br>name: ‘chatdate’,<br>format: ‘Y-m-d’,<br>value: new Date()<br>});<br>//树节点(TreeNode)图标动态修改 2009-11-22 15:36:52<br>var ui = node.getUI();<br>ui.removeClass(‘x-tree-node-leaf’); //去掉之前的根节点样式<br>ui.addClass(‘x-tree-node-expanded’); //设定已展开文件夹样式<br>//ui.addClass(‘x-tree-node-collapsed’);//设定合并的文件夹样式<br>使用Ext.Ajaxt对象完成异步请求的交互，Ext.Ajax是单实例对象（非常重要，全局单一Ext.Ajax实例！）。<br>注册Ext.Ajax的requestcomplete事件，每个ajax请求成功后首先响应该事件。在该事件的回调函数里面判断<br>访问请求是否超时。使用Ext.Ajax对象的好处是，只需要引入一个包含了几行超时处理代码的js文件，就可以<br>为当前应用增加超时处理功能，原有代码不需要做任何修改。</p>
+<p>使用Ext.Ajaxt对象完成异步请求交互，假如checkUserSessionStatus是你的回调方法，每个页面引用：</p>
+<p>Js代码<br>Ext.Ajax.on(‘requestcomplete’,checkUserSessionStatus, this);<br>function checkUserSessionStatus(conn,response,options){<br>//Ext重新封装了response对象<br>if(typeof response.getResponseHeader.sessionstatus != ‘undefined’){<br>//发现请求超时，退出处理代码…<br>}<br>}<br>Ext.Ajax.on(‘requestcomplete’,checkUserSessionStatus, this); function checkUserSessionStatus(conn,response,options){ //Ext重新封装了response对象 if(typeof response.getResponseHeader.sessionstatus != ‘undefined’){ //发现请求超时，退出处理代码… } }可以利用的几个特*：<br>a）所有的ajax请求均带有x-requested-with:XMLHttpRequest头信息<br>b）Ext.Ajax是单实例对象（非常重要，全局单一Ext.Ajax实例！）<br>c）注册Ext.Ajax的requestcomplete事件，每个ajax请求成功后首先响应该事件（概念类似spring的aop拦截）。</p>
+<p>对于其他的ajax框架，解决用户访问请求超时这个问题的思路是类似的。</p>
+<p>二、如何设置DateField的默认值。</p>
+<p>设置DateField的默认值，可以直接给value属性赋值，如：value: ‘01/01/2009’，如果要设置默认值为当天的日期，可以如下设置：value: new Date</p>
+<p>1 new Ext.form.DateField({<br>2 id: ‘df’,<br>3 fieldLabel: ‘日期’,<br>4 format: ‘Y年m月d日’,<br>5 width: 150,<br>6 //value: ‘01/01/2009’<br>7 value: new Date<br>8 })<br>如何禁用或者启用某个菜单<br>有的时候，有时会根据需要，启用或者禁用某个菜单项，在ExtJS中，可以通过如下的操作进行。</p>
+<p>1 Ext.onReady(function() {<br>2 Ext.BLANK_IMAGE_URL = ‘resources/images/default/s.gif’;<br>3 Ext.QuickTips.init();<br>4 var tb = new Ext.Toolbar({<br>5 applyTo: ‘tb’,<br>6 width: 400<br>7 });<br>8 var styleMenu = new Ext.menu.Menu({<br>9 items: [{<br>10 text: ‘主题选择’,<br>11 id: ‘style’,<br>12 menu: new Ext.menu.Menu({<br>13 items: [{<br>14 text: ‘红色主题’,<br>15 checked: true,<br>16 group: ‘theme’<br>17 }, {<br>18 text: ‘蓝色主题’,<br>19 checked: false,<br>20 group: ‘theme’<br>21 }, {<br>22 text: ‘黑色主题’,<br>23 checked: false,<br>24 group: ‘theme’<br>25 }]<br>26 })<br>27 }, {<br>28 text: ‘启用主题’,<br>29 checked: true,<br>30 checkHandler: function() { Ext.getCmp(‘style’).setDisabled(!this.checked) }<br>31 }]<br>32 });<br>33 tb.add({ text: ‘主题’, menu: styleMenu });<br>34 });<br>一、从form中获取field的三个方法：</p>
+<p>１、Ext.getCmp(‘id’);</p>
+<p>２、FormPanel.getForm().findField(‘id/name’);</p>
+<p>３、Ext.get(‘id/name’);//前提是FormPanel在界面上显示出来了。</p>
+<p>二、ExtJS如何给textfield赋值的三个方法：</p>
+<p>var value=”值”;</p>
+<p>１、 fs.form.findField(id/name).setValue(value);</p>
+<p>２、 Ext.get(id/name).setValue(value);</p>
+<p>３、 Ext.getCmp(id).setValue(value);</p>
+<p>三、Ext grid中得到选择行的方法</p>
+<p>在Ext grid中假设有一个名称为grid的对象。</p>
+<p>(1)grid.getStore().getRange(0,store.getCount());//得到grid所有的行</p>
+<p>(2)grid.getSelectionModel().getSelections()//得到选择所有行</p>
+<p>(3)grid.selModel.selections.items;//得到选择所有行</p>
+<p>(4)grid.getSelectionModel().getSelected();//得到选择行的第一行</p>
+<p>四、formPanel组件load数据时combo的自动赋值</p>
+<p>　　combo有个hiddenName这个属*，这个属性是真正提交的值，在加载的时候你将这个属性的设置到reader中,就可以自动选择到指定的值了，比如说：hiddenName:’value’,那么你的reader中就应该有一个{name:’value’}.</p>
+<p>traceofsun 2010-07-26 14:08:33 8楼<br>Grid 加入一个序号列 </p>
+<p>cm = new Ext.grid.ColumnModel([<br>////////////序号列<br>new　Ext.grid.RowNumberer({<br>header　:　“序号”,<br>width　:　40,<br>renderer:function(value,metadata,record,rowIndex){<br>return　　1　+　rowIndex;<br>}<br>}),　<br>{<br>header: “货物编号”,<br>dataIndex: ‘CARGONO’,<br>width: 100<br>},<br>{<br>header: “货物名称”,<br>width: 150,<br>sortable: true,<br>dataIndex: ‘CARGONAME’<br>},</p>
+<p>traceofsun 2010-07-27 08:53:06 9楼<br>Extjs Panel 上放子Panel实例<br>Ext.onReady(function(){<br>Ext.BLANK_IMAGE_URL = ‘/images/s.gif’;<br>//Ext.chart.Chart.CHART_URL = ‘/js/extjs/3.0/resources/charts.swf’;<br>Ext.QuickTips.init();<br>var p2 = new Ext.Panel({<br>autoShow: true, html:’zzz’,title:’zzz’,id:’zzz’<br>})<br>var p = new Ext.Panel({<br>title:’Test’,<br>height:300,<br>width:600,<br>renderTo:Ext.getBody(),<br>layout:’accordion’,<br>layoutConfig:{<br>animate:false,<br>activeOnTop: false,<br>fill:true<br>},<br>items:[<br>{xtype:’panel’,html:’xxx’,title:’xxx’},<br>{xtype:’panel’,html:’yyy’,title:’yyy’}<br>],<br>buttons:[<br>{<br>text:’add’,<br>handler:function(){<br>p.add(p2);<br>p.doLayout();<br>}<br>},{<br>text:’remove’,<br>handler:function(){<br>p.remove(p2,false);<br>p.doLayout();<br>}<br>}<br>]<br>})<br>});</p>
+<p>traceofsun 2010-07-27 08:54:35 10楼<br>Extjs Panel的使用：<br>var panel = new Ext.Panel({<br>title : “面板”,<br>renderTo:”testPanel”//Panel的外层容器一般是DIV或SPAN的<br>id : “testPanel”<br>collapsible : true,// 可收缩<br>collapsed:false,//收缩的<br>width : 500,<br>height : 200,<br>autoScroll : true,// 自动卷轴<br>frame:true,//渲染框架<br>border : true,//边框<br>margins : ‘0 0 0 0’,//边缘<br>split : true,// 分割条面板组合是经常用到<br>minHeight : 100,// 最小高度<br>autoHeight : true,//自动高度以下参数用于Panel的各个部位工具栏<br>tools : [{// 标题栏按钮<br>/* </p>
+<ul>
+<li>id常用参数表//已经定义好的按钮id * - toggle</li>
+<li><ul>
+<li>close</li>
+</ul>
+</li>
+<li><ul>
+<li>minimize</li>
+</ul>
+</li>
+<li><ul>
+<li>maximize</li>
+</ul>
+</li>
+<li><ul>
+<li>refresh</li>
+</ul>
+</li>
+<li><ul>
+<li>minus</li>
+</ul>
+</li>
+<li><ul>
+<li>plus - help - search - save - print <em>/<br>id : “refresh”,<br>qtip : ‘Refresh form Data’,// 快速提示// hidden : true,<br>handler : function(event, toolEl, panel) {<br>// close logic }<br>}],// 标题栏按钮<br>tbar : [//工具条按钮<br>{<br>/</em> xtype参数用与匿名类创建(非常重要)<br>-tbfill填充空白<br>-tbseparator分割线<br>-tbtext文本说明<br><em>/<br>xtype : ‘tbtext’,<br>text : ‘工具条’<br>},{//不指定xtype属性则默认为按钮(Button)<br>pressed : true,<br>text : ‘删除’<br>}],//工具条按钮<br>bbar : [//底部工具条<br>{<br>/</em> xtype常用参数</li>
+</ul>
+</li>
+<li>-tbfill//填充空白</li>
+<li>-tbseparator//分割线</li>
+<li>-tbtext//文本说明<br>*/<br>xtype : ‘tbtext’,<br>text : ‘底部工具’<br>},{//不指定xtype属性是默认为按钮</li>
+</ul>
+<p>extjs Ext.form.ComboBox 的设置默认值的问题<br>Ext.onReady(function(){<br>var dbConnectionRecord = Ext.data.Record.create([<br>    {name: ‘dbConnectionKey’,type:”string”,mapping:”dbConnectionKey”},<br>    {name: ‘name’,type:”string”,mapping:”name”}<br>]);<br>var dataProxy=new Ext.data.HttpProxy({url:”&lt;%=basePath%&gt;getDBConnection.action”});<br>var theReader=new Ext.data.JsonReader({totalProperty: ‘totalProperty’,root:’root’,id:”ecname”},dbConnectionRecord);<br>var dbstore=new Ext.data.Store({proxy:dataProxy,reader:theReader});<br>dbstore.load();<br>var dbcombo = new Ext.form.ComboBox({<br>id:’dbCombo’,<br>renderTo:Ext.getBody(),<br>    store: dbstore,<br>    valueField:’dbConnectionKey’,<br>   displayField:’name’,<br>    typeAhead: true,<br>    emptyText:’请选择’,<br>    readOnly : true,<br>    mode: ‘local’,<br>    name:”dbkey”,<br>    hiddenName:’dbkey’,<br>    editable: false,<br>    triggerAction: ‘all’,<br>    selectOnFocus:true<br>});<br>////dbcombo.setValue(“4”); 肯定不行，参见后面的代码</p>
+<p>});</p>
+<p>实现：<br>写在store load的callback里 </p>
+<p>dbstore.load({<br>    callback : function(records) {<br>    dbcombo.setValue(“4”);<br>    }<br>    });<br>回帖列表回帖(15) | 浏览(35)</p>
+<p>traceofsun 2010-07-27 10:41:48 11楼<br>1、确保[{<br>xtype:’textarea’,<br>id:’steno_subText’,<br>width:300 }的textarea被创建了 </p>
+<p>2、<br>在a之前<br>加上这句<br>Ext.ComponentMgr.all.each(function(r){alert(r.id)}); </p>
+<p>Ext.getCmp(“控件ID”).setValue(‘1’);</p>
+<p>traceofsun 2010-07-27 22:31:30 12楼<br>Ext ContentPanel中javascript函数的执行问题2007-08-02 09:33方法1：<br>ContentPanel.setUrl({url: Rt+’/jsp/formAndResult/511Form.jsp’, scripts: true, text: ‘正在加载…’});<br>contentPanel.refresh();<br>方法2：<br>ContentPanel.load({url: Rt+’/jsp/formAndResult/511Form.jsp’, scripts: true, text: ‘正在加载…’});<br>没有认真看API的，找了半天才发现的。</p>
+<p>—————————-ContentPanel刷新————————————————————–</p>
+<p>traceofsun 2010-08-03 21:12:40 13楼<br>Ext.ux.ThemeChange = Ext.extend(Ext.form.ComboBox,{<br>editable : false,<br>displayField : ‘theme’,<br>valueField : ‘css’,<br>typeAhead : true,<br>mode : ‘local’,<br>triggerAction : ‘all’,<br>selectOnFocus : true,<br>initComponent : function(){<br>//定义主题名和主题样式的对应关系<br>var themes = [<br>[‘默认’,’ext-all.css’],<br>[‘深蓝心情’,’xtheme-slate.css’],<br>[‘灰色回忆’,’xtheme-gray-extend.css’],<br>[‘银色勾红’,’xtheme-silverCherry.css’],<br>[‘黑色水晶’,’xtheme-slickness2.css’],<br>[‘靛蓝情怀’,’xtheme-indigo.css’],<br>[‘黑色物语’,’xtheme-black.css’]<br>];<br>this.store = new Ext.data.SimpleStore({<br>fields : [‘theme’,’css’],<br>data : themes<br>});<br>this.value = ‘默认’;<br>},<br>initEvents : function(){<br>//初始化事件<br>this.on(‘collapse’,function(){//绑定组合框下拉列表的收缩事件<br>Ext.util.CSS.swapStyleSheet(‘theme’,’extlib/resources/css/‘+this.getValue());//切换样式表<br>});<br>}<br>});</p>
+<p>在下拉列表中加入一个默认的字段，修改该列表的load事件：<br>listeners : {<br>beforeload : function(ds, option) {<br>var para = {<br>tableName : ‘SD_ENUM’,<br>queryColumns : ‘ENUM_VALUE’,<br>returnColumns : ‘ENUM_KEY,ENUM_VALUE’,<br>conds : ‘ENUM_ATTR=’’ + ds.enumAttr + ‘’’<br>};<br>Ext.apply(para, ds.baseParams);<br>Ext.apply(para, option.params);<br>option.params.para = “[“ + Ext.encode(para) + “]”;<br>},<br>load : function(ds, records, options) {<br>var rd = Ext.data.Record.create([{<br>name : ‘id’<br>}, {<br>name : ‘name’<br>}]);<br>var oo = new rd({<br>‘id’ : null,<br>‘name’ : ‘&lt;–空–&gt;’<br>});<br>ds.insert(ds.getCount(), oo);<br>records.push(oo);<br>}<br>},</p>
+<p>store排序：加入属*，<br>sortInfo : {<br>field : “id”,<br>direction : “ASC”<br>}</p>
+<p>五、ExtJS 重置表单的方法：</p>
+<p>有三种方法能实现form表单的重置，假设var fs=new Ext.form.FormPanel({…});<br>(1)fs.form.reset();//重置form<br>(2)fs.getForm().getEl().dom.reset();//重置form<br>(3)Ext.getCmp(‘fs’).form.reset();</p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-【Maven】Project-configuration-is-not-up-to-date-with-pom-xml错误解决方法" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/11/10/【Maven】Project-configuration-is-not-up-to-date-with-pom-xml错误解决方法/">【Maven】Project configuration is not up-to-date with pom.xml错误解决方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/11/10/【Maven】Project-configuration-is-not-up-to-date-with-pom-xml错误解决方法/" class="article-date">
+  <time datetime="2016-11-10T08:53:45.000Z" itemprop="datePublished">2016-11-10</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>导入一个Maven项目之后发现有一个如下的错误：<br>Project configuration is not up-to-date with pom.xml. Run project configuration update</p>
+<p>其实这个问题解决非常简单：<br>在项目上右键——【Maven】——【Update Project Configuration……】<br>这时会打开一个（Update Maven Dependencies）的对话框，然后勾选住出错的项目，点击Ok<br>这样就搞定了。</p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Tomcat报内存溢出" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/10/26/Tomcat报内存溢出/">Tomcat报内存溢出</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/10/26/Tomcat报内存溢出/" class="article-date">
+  <time datetime="2016-10-26T13:45:17.000Z" itemprop="datePublished">2016-10-26</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1、错误描述</p>
+<p>严重：Exception occurred during processing request:null</p>
+<pre><code>java.lang.reflect.InvocationTargetException.
+</code></pre><p>Caused by:java.lang.OutOfMemoryError:Java heap space.</p>
+<p>2、错误原因</p>
+<pre><code>Tomcat在处理大数据时出现内存溢出
+</code></pre><p>3、解决办法</p>
+<pre><code>编辑tomcat的catalina.bat文件，在第一行的后面增加一句：
+set JAVA_OPTS=-server -Xms512m -Xmx512m -XX:PermSize=128M -XX:MaxPermSize=256M
+</code></pre>
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Docker的安装" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/10/26/Docker的安装/">Docker的安装</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/10/26/Docker的安装/" class="article-date">
+  <time datetime="2016-10-26T12:44:32.000Z" itemprop="datePublished">2016-10-26</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1，关于docker</p>
+<p>Docker 是一个开源项目，诞生于 2013 年初，最初是 dotCloud 公司内部的一个业余项目。它基于 Google 公司推出的 Go 语言实现。 项目后来加入了 Linux 基金会，遵从了 Apache 2.0 协议，项目代码在 GitHub 上进行维护。</p>
+<p>Docker 项目的目标是实现轻量级的操作系统虚拟化解决方案。 Docker 的基础是 Linux 容器（LXC）等技术。</p>
+<p>在 LXC 的基础上 Docker 进行了进一步的封装，让用户不需要去关心容器的管理，使得操作更为简便。用户操作 Docker 的容器就像操作一个快速轻量级的虚拟机一样简单。</p>
+<p>摘自：<br><a href="http://dockerpool.com/static/books/docker_practice/introduction/what.html" target="_blank" rel="external">http://dockerpool.com/static/books/docker_practice/introduction/what.html</a></p>
+<p>2，安装centos</p>
+<p>在使用virtualbox安装的时候需要把网络修改成【Bridged A’dapter】，方便获得上网ip，ssh连接到虚拟机。<br>centos7 可以直接使用yum 安装docker<br>最懒的方式，只是为了学习docker省去了折腾环境的麻烦。<br>直接使用iso进行安装就行了。 </p>
+<p>3，安装docker</p>
+<p>直接安装就可以了： yum install golang docker device-mapper-event-libs</p>
+<p>必须安装 device-mapper-event-libs 否则docker启动不了，报错：Failed to start Docker Application Container Engine。<br>配置&amp;启动服务</p>
+<p>1:systemctl enable docker<br>2:systemctl start docker</p>
+<p>docker服务就可以正常启动了。</p>
+<p>4，docker hello world</p>
+<p>虚拟安装一个MySQL，docker非常强大的时image。在官方搜索类库非常多。<br><a href="https://registry.hub.docker.com/search?q=library" target="_blank" rel="external">https://registry.hub.docker.com/search?q=library</a><br>docker的注册中心，里面有很多做好的镜像库。<br>mysql的安装：<br>/mysql/”&gt;<a href="https://registry.hub.docker.com//mysql/" target="_blank" rel="external">https://registry.hub.docker.com//mysql/</a></p>
+<p>安装mysql过程，设置数据库docker-mysql，版本5.5</p>
+<p>1:# docker run –name docker-mysql -e MYSQL_ROOT_PASSWORD=docker-mysql -d mysql:5.5<br>2:Unable to find image ‘mysql:5.5’ locally<br>3:Trying to pull repository docker.io/mysql …<br>4:2f08318d65b3: Pulling dependent layers<br>5:511136ea3c5a: Download complete<br>6:4f903438061c: Download complete<br>7:1265e16d0c28: Download complete<br>8:ac1d5afd7b69: Download complete<br>9:7c89455832dd: Downloading [===========================&gt;                       ] 4.434 MB/8.077 MB 34s</p>
+<p>查看docker镜像：</p>
+<h1 id="docker-ps-a"><a href="#docker-ps-a" class="headerlink" title="docker ps -a"></a>docker ps -a</h1><p>CONTAINER ID        IMAGE               COMMAND                CREATED             STATUS              PORTS               NAMES<br>e59ad4702626        mysql:5.5           “/entrypoint.sh mysq   2 minutes ago       Up 2 minutes        3306/tcp            docker-mysql</p>
+<p>查看mysql的docker服务器，直接登录到mysql容器，就安装好了mysql。同时服务也启动了，测试mysql docker启动成功。<br>docker exec -it docker-mysql bash</p>
+<p>1 docker exec -it docker-mysql bash<br>2 root@e59ad4702626:/# mysql -uroot -pdocker-mysql<br>3 Welcome to the MySQL monitor.  Commands end with ; or \g.<br>4 Your MySQL connection id is 5<br>5 Server version: 5.5.43 MySQL Community Server (GPL)<br>6<br>7 Copyright (c) 2000, 2015, Oracle and/or its affiliates. All rights reserved.<br>8<br>9 Oracle is a registered trademark of Oracle Corporation and/or its<br>10 affiliates. Other names may be trademarks of their respective<br>11 owners.<br>12<br>13 Type ‘help;’ or ‘\h’ for help. Type ‘\c’ to clear the current input statement.<br>14<br>15 mysql&gt; show databases;<br>16 +——————–+<br>17 | Database           |<br>18 +——————–+<br>19 | information_schema |<br>20 | mysql              |<br>21 | performance_schema |<br>22 +——————–+<br>23 3 rows in set (0.00 sec)<br>24<br>25 mysql&gt; </p>
+<p>同时这个是一个虚拟的服务器，上面安装的mysql。</p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-常用Git命令大全" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/09/21/常用Git命令大全/">常用Git命令大全</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/09/21/常用Git命令大全/" class="article-date">
+  <time datetime="2016-09-21T13:04:33.000Z" itemprop="datePublished">2016-09-21</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一、新建代码库</p>
+<pre><code># 在当前目录新建一个Git代码库
+$ git init
+
+# 新建一个目录，将其初始化为Git代码库
+$ git init [project-name]
+
+# 下载一个项目和它的整个代码历史
+$ git clone [url]
+</code></pre><p>二、配置</p>
+<p>Git的设置文件为.gitconfig，它可以在用户主目录下（全局配置），也可以在项目目录下（项目配置）。</p>
+<pre><code># 显示当前的Git配置
+$ git config --list
+
+# 编辑Git配置文件
+$ git config -e [--global]
+
+# 设置提交代码时的用户信息
+$ git config [--global] user.name &quot;[name]&quot;
+$ git config [--global] user.email &quot;[email address]&quot;
+</code></pre><p>三、增加/删除文件</p>
+<pre><code># 添加指定文件到暂存区
+$ git add [file1] [file2] ...
+
+# 添加指定目录到暂存区，包括子目录
+$ git add [dir]
+
+# 添加当前目录的所有文件到暂存区
+$ git add .
+
+# 添加每个变化前，都会要求确认
+# 对于同一个文件的多处变化，可以实现分次提交
+$ git add -p
+
+# 删除工作区文件，并且将这次删除放入暂存区
+$ git rm [file1] [file2] ...
+
+# 停止追踪指定文件，但该文件会保留在工作区
+$ git rm --cached [file]
+
+# 改名文件，并且将这个改名放入暂存区
+$ git mv [file-original] [file-renamed]
+</code></pre><p>四、代码提交</p>
+<pre><code># 提交暂存区到仓库区
+$ git commit -m [message]
+
+# 提交暂存区的指定文件到仓库区
+$ git commit [file1] [file2] ... -m [message]
+
+# 提交工作区自上次commit之后的变化，直接到仓库区
+$ git commit -a
+
+# 提交时显示所有diff信息
+$ git commit -v
+
+# 使用一次新的commit，替代上一次提交
+# 如果代码没有任何新变化，则用来改写上一次commit的提交信息
+$ git commit --amend -m [message]
+
+# 重做上一次commit，并包括指定文件的新变化
+$ git commit --amend [file1] [file2] ...
+</code></pre><p>五、分支</p>
+<pre><code># 列出所有本地分支
+$ git branch
+
+# 列出所有远程分支
+$ git branch -r
+
+# 列出所有本地分支和远程分支
+$ git branch -a
+
+# 新建一个分支，但依然停留在当前分支
+$ git branch [branch-name]
+
+# 新建一个分支，并切换到该分支
+$ git checkout -b [branch]
+
+# 新建一个分支，指向指定commit
+$ git branch [branch] [commit]
+
+# 新建一个分支，与指定的远程分支建立追踪关系
+$ git branch --track [branch] [remote-branch]
+
+# 切换到指定分支，并更新工作区
+$ git checkout [branch-name]
+
+# 切换到上一个分支
+$ git checkout -
+
+# 建立追踪关系，在现有分支与指定的远程分支之间
+$ git branch --set-upstream [branch] [remote-branch]
+
+# 合并指定分支到当前分支
+$ git merge [branch]
+
+# 选择一个commit，合并进当前分支
+$ git cherry-pick [commit]
+
+# 删除分支
+$ git branch -d [branch-name]
+
+# 删除远程分支
+$ git push origin --delete [branch-name]
+$ git branch -dr [remote/branch]
+</code></pre><p>六、标签</p>
+<pre><code># 列出所有tag
+$ git tag
+
+# 新建一个tag在当前commit
+$ git tag [tag]
+
+# 新建一个tag在指定commit
+$ git tag [tag] [commit]
+
+# 删除本地tag
+$ git tag -d [tag]
+
+# 删除远程tag
+$ git push origin :refs/tags/[tagName]
+
+# 查看tag信息
+$ git show [tag]
+
+# 提交指定tag
+$ git push [remote] [tag]
+
+# 提交所有tag
+$ git push [remote] --tags
+
+# 新建一个分支，指向某个tag
+$ git checkout -b [branch] [tag]
+</code></pre><p>七、查看信息</p>
+<pre><code># 显示有变更的文件
+$ git status
+
+# 显示当前分支的版本历史
+$ git log
+
+# 显示commit历史，以及每次commit发生变更的文件
+$ git log --stat
+
+# 搜索提交历史，根据关键词
+$ git log -S [keyword]
+
+# 显示某个commit之后的所有变动，每个commit占据一行
+$ git log [tag] HEAD --pretty=format:%s
+
+# 显示某个commit之后的所有变动，其&quot;提交说明&quot;必须符合搜索条件
+$ git log [tag] HEAD --grep feature
+
+# 显示某个文件的版本历史，包括文件改名
+$ git log --follow [file]
+$ git whatchanged [file]
+
+# 显示指定文件相关的每一次diff
+$ git log -p [file]
+
+# 显示过去5次提交
+$ git log -5 --pretty --oneline
+
+# 显示所有提交过的用户，按提交次数排序
+$ git shortlog -sn
+
+# 显示指定文件是什么人在什么时间修改过
+$ git blame [file]
+
+# 显示暂存区和工作区的差异
+$ git diff
+
+# 显示暂存区和上一个commit的差异
+$ git diff --cached [file]
+
+# 显示工作区与当前分支最新commit之间的差异
+$ git diff HEAD
+
+# 显示两次提交之间的差异
+$ git diff [first-branch]...[second-branch]
+
+# 显示今天你写了多少行代码
+$ git diff --shortstat &quot;@{0 day ago}&quot;
+
+# 显示某次提交的元数据和内容变化
+$ git show [commit]
+
+# 显示某次提交发生变化的文件
+$ git show --name-only [commit]
+
+# 显示某次提交时，某个文件的内容
+$ git show [commit]:[filename]
+
+# 显示当前分支的最近几次提交
+$ git reflog
+</code></pre><p>八、远程同步</p>
+<pre><code># 下载远程仓库的所有变动
+$ git fetch [remote]
+
+# 显示所有远程仓库
+$ git remote -v
+
+# 显示某个远程仓库的信息
+$ git remote show [remote]
+
+# 增加一个新的远程仓库，并命名
+$ git remote add [shortname] [url]
+
+# 取回远程仓库的变化，并与本地分支合并
+$ git pull [remote] [branch]
+
+# 上传本地指定分支到远程仓库
+$ git push [remote] [branch]
+
+# 强行推送当前分支到远程仓库，即使有冲突
+$ git push [remote] --force
+
+# 推送所有分支到远程仓库
+$ git push [remote] --all
+</code></pre><p>九、撤销</p>
+<pre><code># 恢复暂存区的指定文件到工作区
+$ git checkout [file]
+
+# 恢复某个commit的指定文件到暂存区和工作区
+$ git checkout [commit] [file]
+
+# 恢复暂存区的所有文件到工作区
+$ git checkout .
+
+# 重置暂存区的指定文件，与上一次commit保持一致，但工作区不变
+$ git reset [file]
+
+# 重置暂存区与工作区，与上一次commit保持一致
+$ git reset --hard
+
+# 重置当前分支的指针为指定commit，同时重置暂存区，但工作区不变
+$ git reset [commit]
+
+# 重置当前分支的HEAD为指定commit，同时重置暂存区和工作区，与指定commit一致
+$ git reset --hard [commit]
+
+# 重置当前HEAD为指定commit，但保持暂存区和工作区不变
+$ git reset --keep [commit]
+
+# 新建一个commit，用来撤销指定commit
+# 后者的所有变化都将被前者抵消，并且应用到当前分支
+$ git revert [commit]
+
+# 暂时将未提交的变化移除，稍后再移入
+$ git stash
+$ git stash pop
+</code></pre><p>十、其他</p>
+<pre><code># 生成一个可供发布的压缩包
+$ git archive
+</code></pre>
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-test" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/09/19/test/">test</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/09/19/test/" class="article-date">
+  <time datetime="2016-09-19T15:53:34.000Z" itemprop="datePublished">2016-09-19</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>this is hexo test page</p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
+  
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    </nav>
+  
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2017 John Doe 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a href="https://github.com/" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

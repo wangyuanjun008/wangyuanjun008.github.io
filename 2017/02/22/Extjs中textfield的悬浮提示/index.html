@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Extjs中textfield的悬浮提示 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在Extjs中有时候我们需要textfield的提示信息，但是我们发现textfield并没有这样的配置项。这时候我们就要另想方法：我们需要在鼠标悬停在textfield组件的时候进行信息的提示，我们就需要在textfield中来监听，这里有两种进行textfield悬停提示的方法：  进行固定信息的提示：需要在监听中用render方法render: function (field, p) {">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Extjs中textfield的悬浮提示">
+<meta property="og:url" content="http://yoursite.com/2017/02/22/Extjs中textfield的悬浮提示/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="在Extjs中有时候我们需要textfield的提示信息，但是我们发现textfield并没有这样的配置项。这时候我们就要另想方法：我们需要在鼠标悬停在textfield组件的时候进行信息的提示，我们就需要在textfield中来监听，这里有两种进行textfield悬停提示的方法：  进行固定信息的提示：需要在监听中用render方法render: function (field, p) {">
+<meta property="og:updated_time" content="2017-02-22T06:05:33.881Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Extjs中textfield的悬浮提示">
+<meta name="twitter:description" content="在Extjs中有时候我们需要textfield的提示信息，但是我们发现textfield并没有这样的配置项。这时候我们就要另想方法：我们需要在鼠标悬停在textfield组件的时候进行信息的提示，我们就需要在textfield中来监听，这里有两种进行textfield悬停提示的方法：  进行固定信息的提示：需要在监听中用render方法render: function (field, p) {">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <section id="main"><article id="post-Extjs中textfield的悬浮提示" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Extjs中textfield的悬浮提示
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/02/22/Extjs中textfield的悬浮提示/" class="article-date">
+  <time datetime="2017-02-22T05:56:35.000Z" itemprop="datePublished">2017-02-22</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在Extjs中有时候我们需要textfield的提示信息，但是我们发现textfield并没有这样的配置项。这时候我们就要另想方法：我们需要在鼠标悬停在textfield组件的时候进行信息的提示，我们就需要在textfield中来监听，<br>这里有两种进行textfield悬停提示的方法：</p>
+<ol>
+<li>进行固定信息的提示：需要在监听中用render方法<pre><code>render: function (field, p) {
+       Ext.QuickTips.init();
+       Ext.QuickTips.register({
+             target: field.el,
+             text: &apos;这是textfield的固定信息提示！&apos;
+       })
+    }
+</code></pre></li>
+<li><p>进行文本信息提示：提示信息为textfield的文本信息<br> var updateTip = function (field, t) {</p>
+<pre><code>    Ext.QuickTips.init();
+    Ext.QuickTips.register({
+        target: field.el,
+        text: field.getValue()
+    })
+};   
+</code></pre><p> listeners: {</p>
+<pre><code>// 鼠标移动到文本框显示悬浮框
+render : function(p) {
+    p.getEl().on(&apos;mouseover&apos;, function(p1) {
+        updateTip(p);
+    });
+}
+</code></pre><p> }</p>
+</li>
+</ol>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/03/30/解决“Dynamic-Web-Module-3-0-requires-Java-1-6-or-newer-”错误/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+           解决“Dynamic Web Module 3.0 requires Java 1.6 or newer.”错误
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/02/21/Redis基础命令/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Redis基础命令</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2017 John Doe 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a href="https://github.com/" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

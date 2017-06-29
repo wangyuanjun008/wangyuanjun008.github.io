@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>如何相互转换逗号分隔的字符串和List | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="将逗号分隔的字符串转换为List方法 1： 利用JDK的Arrays类String str = “a,b,c”;List result = Arrays.asList(str.split(“,”)); 方法 2： 利用Guava的SplitterString str = “a, b, c”;List result = Splitter.on(“,”).trimResults().splitToLi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何相互转换逗号分隔的字符串和List">
+<meta property="og:url" content="http://yoursite.com/2017/01/12/如何相互转换逗号分隔的字符串和List/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="将逗号分隔的字符串转换为List方法 1： 利用JDK的Arrays类String str = “a,b,c”;List result = Arrays.asList(str.split(“,”)); 方法 2： 利用Guava的SplitterString str = “a, b, c”;List result = Splitter.on(“,”).trimResults().splitToLi">
+<meta property="og:updated_time" content="2017-01-12T05:09:59.591Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何相互转换逗号分隔的字符串和List">
+<meta name="twitter:description" content="将逗号分隔的字符串转换为List方法 1： 利用JDK的Arrays类String str = “a,b,c”;List result = Arrays.asList(str.split(“,”)); 方法 2： 利用Guava的SplitterString str = “a, b, c”;List result = Splitter.on(“,”).trimResults().splitToLi">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <section id="main"><article id="post-如何相互转换逗号分隔的字符串和List" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      如何相互转换逗号分隔的字符串和List
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/01/12/如何相互转换逗号分隔的字符串和List/" class="article-date">
+  <time datetime="2017-01-12T03:01:54.000Z" itemprop="datePublished">2017-01-12</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>将逗号分隔的字符串转换为List<br>方法 1： 利用JDK的Arrays类<br>String str = “a,b,c”;<br>List<string> result = Arrays.asList(str.split(“,”));</string></p>
+<p>方法 2： 利用Guava的Splitter<br>String str = “a, b, c”;<br>List<string> result = Splitter.on(“,”).trimResults().splitToList(str);</string></p>
+<p>方法 3： 利用Apache Commons的StringUtils （只是用了split)<br>String str = “a,b,c”;<br>List<string> result = Arrays.asList(StringUtils.split(str,”,”));</string></p>
+<p>方法 4: 利用Spring Framework的StringUtils<br>String str = “a,b,c”;<br>List<string> str = Arrays.asList(StringUtils.commaDelimitedListToStringArray(str));</string></p>
+<p>将List转换为逗号分隔符<br>方法 1: 不用工具类<br>       public String listToString(List list, char separator) {<br>        StringBuilder sb = new StringBuilder();<br>        for (int i = 0; i &lt; list.size(); i++) {<br>            if (i == list.size() - 1) {<br>                sb.append(list.get(i));<br>            } else {<br>                sb.append(list.get(i));<br>                sb.append(separator);<br>            }<br>        }<br>        return sb.toString();<br>       } </p>
+<pre><code>public String listToString(List list, char separator) {  
+  StringBuilder sb = new StringBuilder();  
+  for (int i = 0; i &lt; list.size(); i++) {  
+      sb.append(list.get(i)).append(separator);  
+  }  
+  return sb.toString().substring(0,sb.toString().length()-1);  
+ }  
+</code></pre><p>方法 2： 利用Guava的Joiner<br>List<string> list = new ArrayList<string>();<br>list.add(“a”);<br>list.add(“b”);<br>list.add(“c”);<br>String str = Joiner.on(“,”).join(list);</string></string></p>
+<p>方法 3： 利用Apache Commons的StringUtils<br>List<string> list = new ArrayList<string>();<br>list.add(“a”);<br>list.add(“b”);<br>list.add(“c”);<br>String str = StringUtils.join(list.toArray(), “,”);</string></string></p>
+<p>方法 4：利用Spring Framework的StringUtils<br>List<string> list = new ArrayList<string>();<br>list.add(“a”);<br>list.add(“b”);<br>list.add(“c”);<br>String str = StringUtils.collectionToDelimitedString(list, “,”);</string></string></p>
+<p>比较下来，我的观点就是Guava库和StringUtils更灵活，适用面更广。</p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/02/14/SpringMVC与LogBack集成/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          SpringMVC与LogBack集成
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/12/10/extjs-上传图片/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">extjs-上传图片</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2017 John Doe 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a href="https://github.com/" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Docker的安装 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1，关于docker Docker 是一个开源项目，诞生于 2013 年初，最初是 dotCloud 公司内部的一个业余项目。它基于 Google 公司推出的 Go 语言实现。 项目后来加入了 Linux 基金会，遵从了 Apache 2.0 协议，项目代码在 GitHub 上进行维护。 Docker 项目的目标是实现轻量级的操作系统虚拟化解决方案。 Docker 的基础是 Linux 容器（LX">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker的安装">
+<meta property="og:url" content="http://yoursite.com/2016/10/26/Docker的安装/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1，关于docker Docker 是一个开源项目，诞生于 2013 年初，最初是 dotCloud 公司内部的一个业余项目。它基于 Google 公司推出的 Go 语言实现。 项目后来加入了 Linux 基金会，遵从了 Apache 2.0 协议，项目代码在 GitHub 上进行维护。 Docker 项目的目标是实现轻量级的操作系统虚拟化解决方案。 Docker 的基础是 Linux 容器（LX">
+<meta property="og:updated_time" content="2016-10-26T13:02:13.178Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker的安装">
+<meta name="twitter:description" content="1，关于docker Docker 是一个开源项目，诞生于 2013 年初，最初是 dotCloud 公司内部的一个业余项目。它基于 Google 公司推出的 Go 语言实现。 项目后来加入了 Linux 基金会，遵从了 Apache 2.0 协议，项目代码在 GitHub 上进行维护。 Docker 项目的目标是实现轻量级的操作系统虚拟化解决方案。 Docker 的基础是 Linux 容器（LX">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <section id="main"><article id="post-Docker的安装" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Docker的安装
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/10/26/Docker的安装/" class="article-date">
+  <time datetime="2016-10-26T12:44:32.000Z" itemprop="datePublished">2016-10-26</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1，关于docker</p>
+<p>Docker 是一个开源项目，诞生于 2013 年初，最初是 dotCloud 公司内部的一个业余项目。它基于 Google 公司推出的 Go 语言实现。 项目后来加入了 Linux 基金会，遵从了 Apache 2.0 协议，项目代码在 GitHub 上进行维护。</p>
+<p>Docker 项目的目标是实现轻量级的操作系统虚拟化解决方案。 Docker 的基础是 Linux 容器（LXC）等技术。</p>
+<p>在 LXC 的基础上 Docker 进行了进一步的封装，让用户不需要去关心容器的管理，使得操作更为简便。用户操作 Docker 的容器就像操作一个快速轻量级的虚拟机一样简单。</p>
+<p>摘自：<br><a href="http://dockerpool.com/static/books/docker_practice/introduction/what.html" target="_blank" rel="external">http://dockerpool.com/static/books/docker_practice/introduction/what.html</a></p>
+<p>2，安装centos</p>
+<p>在使用virtualbox安装的时候需要把网络修改成【Bridged A’dapter】，方便获得上网ip，ssh连接到虚拟机。<br>centos7 可以直接使用yum 安装docker<br>最懒的方式，只是为了学习docker省去了折腾环境的麻烦。<br>直接使用iso进行安装就行了。 </p>
+<p>3，安装docker</p>
+<p>直接安装就可以了： yum install golang docker device-mapper-event-libs</p>
+<p>必须安装 device-mapper-event-libs 否则docker启动不了，报错：Failed to start Docker Application Container Engine。<br>配置&amp;启动服务</p>
+<p>1:systemctl enable docker<br>2:systemctl start docker</p>
+<p>docker服务就可以正常启动了。</p>
+<p>4，docker hello world</p>
+<p>虚拟安装一个MySQL，docker非常强大的时image。在官方搜索类库非常多。<br><a href="https://registry.hub.docker.com/search?q=library" target="_blank" rel="external">https://registry.hub.docker.com/search?q=library</a><br>docker的注册中心，里面有很多做好的镜像库。<br>mysql的安装：<br>/mysql/”&gt;<a href="https://registry.hub.docker.com//mysql/" target="_blank" rel="external">https://registry.hub.docker.com//mysql/</a></p>
+<p>安装mysql过程，设置数据库docker-mysql，版本5.5</p>
+<p>1:# docker run –name docker-mysql -e MYSQL_ROOT_PASSWORD=docker-mysql -d mysql:5.5<br>2:Unable to find image ‘mysql:5.5’ locally<br>3:Trying to pull repository docker.io/mysql …<br>4:2f08318d65b3: Pulling dependent layers<br>5:511136ea3c5a: Download complete<br>6:4f903438061c: Download complete<br>7:1265e16d0c28: Download complete<br>8:ac1d5afd7b69: Download complete<br>9:7c89455832dd: Downloading [===========================&gt;                       ] 4.434 MB/8.077 MB 34s</p>
+<p>查看docker镜像：</p>
+<h1 id="docker-ps-a"><a href="#docker-ps-a" class="headerlink" title="docker ps -a"></a>docker ps -a</h1><p>CONTAINER ID        IMAGE               COMMAND                CREATED             STATUS              PORTS               NAMES<br>e59ad4702626        mysql:5.5           “/entrypoint.sh mysq   2 minutes ago       Up 2 minutes        3306/tcp            docker-mysql</p>
+<p>查看mysql的docker服务器，直接登录到mysql容器，就安装好了mysql。同时服务也启动了，测试mysql docker启动成功。<br>docker exec -it docker-mysql bash</p>
+<p>1 docker exec -it docker-mysql bash<br>2 root@e59ad4702626:/# mysql -uroot -pdocker-mysql<br>3 Welcome to the MySQL monitor.  Commands end with ; or \g.<br>4 Your MySQL connection id is 5<br>5 Server version: 5.5.43 MySQL Community Server (GPL)<br>6<br>7 Copyright (c) 2000, 2015, Oracle and/or its affiliates. All rights reserved.<br>8<br>9 Oracle is a registered trademark of Oracle Corporation and/or its<br>10 affiliates. Other names may be trademarks of their respective<br>11 owners.<br>12<br>13 Type ‘help;’ or ‘\h’ for help. Type ‘\c’ to clear the current input statement.<br>14<br>15 mysql&gt; show databases;<br>16 +——————–+<br>17 | Database           |<br>18 +——————–+<br>19 | information_schema |<br>20 | mysql              |<br>21 | performance_schema |<br>22 +——————–+<br>23 3 rows in set (0.00 sec)<br>24<br>25 mysql&gt; </p>
+<p>同时这个是一个虚拟的服务器，上面安装的mysql。</p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/10/26/Tomcat报内存溢出/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Tomcat报内存溢出
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/09/21/常用Git命令大全/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">常用Git命令大全</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2017 John Doe 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a href="https://github.com/" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

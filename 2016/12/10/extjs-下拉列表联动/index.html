@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>extjs-下拉列表联动 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="不管是几级下拉列表的联动实现本质上都是根据某个下拉列表的变化，去动态加载其他下拉列表，如：省、市、地区。 当我们监听到省变化时，向service端发送省的编号，service端根据收到的”省”编号到数据库中查询该省所对应的市信息， 地区同理，抓住这一点，我们只需要监听 combobox 的 select 事件并在其中实现逻辑即可。 1.代码如下： &amp;lt;!DOCTYPE html PUBLIC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="extjs-下拉列表联动">
+<meta property="og:url" content="http://yoursite.com/2016/12/10/extjs-下拉列表联动/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="不管是几级下拉列表的联动实现本质上都是根据某个下拉列表的变化，去动态加载其他下拉列表，如：省、市、地区。 当我们监听到省变化时，向service端发送省的编号，service端根据收到的”省”编号到数据库中查询该省所对应的市信息， 地区同理，抓住这一点，我们只需要监听 combobox 的 select 事件并在其中实现逻辑即可。 1.代码如下： &amp;lt;!DOCTYPE html PUBLIC">
+<meta property="og:image" content="http://yoursite.com/images/extjs-xlld.png">
+<meta property="og:updated_time" content="2016-12-10T13:38:14.819Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="extjs-下拉列表联动">
+<meta name="twitter:description" content="不管是几级下拉列表的联动实现本质上都是根据某个下拉列表的变化，去动态加载其他下拉列表，如：省、市、地区。 当我们监听到省变化时，向service端发送省的编号，service端根据收到的”省”编号到数据库中查询该省所对应的市信息， 地区同理，抓住这一点，我们只需要监听 combobox 的 select 事件并在其中实现逻辑即可。 1.代码如下： &amp;lt;!DOCTYPE html PUBLIC">
+<meta name="twitter:image" content="http://yoursite.com/images/extjs-xlld.png">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <section id="main"><article id="post-extjs-下拉列表联动" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      extjs-下拉列表联动
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/12/10/extjs-下拉列表联动/" class="article-date">
+  <time datetime="2016-12-10T13:22:32.000Z" itemprop="datePublished">2016-12-10</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>不管是几级下拉列表的联动实现本质上都是根据某个下拉列表的变化，去动态加载其他下拉列表，如：省、市、地区。</p>
+<p>当我们监听到省变化时，向service端发送省的编号，service端根据收到的”省”编号到数据库中查询该省所对应的市信息，</p>
+<p>地区同理，抓住这一点，我们只需要监听 combobox 的 select 事件并在其中实现逻辑即可。</p>
+<p>1.代码如下：</p>
+<p>&lt;!DOCTYPE html PUBLIC “-//W3C//DTD XHTML 1.0 Transitional//EN” “<a href="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;" target="_blank" rel="external">http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;</a></p>
+<html xmlns="http://www.w3.org/1999/xhtml"><br><head><br>    <title></title><br>    <!--ExtJs框架开始--><br>    <script type="text/javascript" src="/Ext/adapter/ext/ext-base.js"></script><br>    <script type="text/javascript" src="/Ext/ext-all.js"></script><br>    <script src="/Ext/src/locale/ext-lang-zh_CN.js" type="text/javascript"></script><br>    <link rel="stylesheet" type="text/css" href="/Ext/resources/css/ext-all.css"><br>    <!--ExtJs框架结束--><br>    <script type="text/javascript"><br>        Ext.onReady(function () {<br>            //初始化标签中的Ext:Qtip属性。<br>            Ext.QuickTips.init();<br>            Ext.form.Field.prototype.msgTarget = ‘side’;<br><br>            //———————-下拉列表开始———————-//<br>            //创建市数据源<br>            var combocitystore = new Ext.data.Store({<br>                //设定读取的地址<br>                proxy: new Ext.data.HttpProxy({ url: ‘/App_Ashx/Demo/City.ashx’ }),<br>                //设定读取的格式<br>                reader: new Ext.data.JsonReader({ root: ‘data’ },<br>                 [{ name: ‘id’ }, { name: ‘name’}])<br>            });<br>            //创建区数据源<br>            var comboareastore = new Ext.data.Store({<br>                //设定读取的地址<br>                proxy: new Ext.data.HttpProxy({ url: ‘/App_Ashx/Demo/Area.ashx’ }),<br>                reader: new Ext.data.JsonReader({ root: ‘data’ },<br>                 [{ name: ‘id’ }, { name: ‘name’}])<br>            });<br>            //创建市Combobox<br>            var comboboxcity = new Ext.form.ComboBox({<br>                id: ‘comboboxcity’,<br>                fieldLabel: ‘市’,<br>                width: 120,<br>                store: combocitystore,<br>                displayField: ‘name’,<br>                valueField: ‘id’,<br>                triggerAction: ‘all’,<br>                emptyText: ‘请选择…’,<br>                allowBlank: false,<br>                blankText: ‘请选择市’,<br>                editable: false,<br>                mode: ‘local’, //该属性和以下方法为了兼容ie8<br>                listeners: {<br>                    ‘render’: function () {<br>                        combocitystore.load();<br>                    }<br>                }<br>            });<br><br>            //创建区Combobox<br>            var comboareacity = new Ext.form.ComboBox({<br>                fieldLabel: ‘区’,<br>                width: 120,<br>                store: comboareastore,<br>                displayField: ‘name’,<br>                valueField: ‘id’,<br>                triggerAction: ‘all’,<br>                emptyText: ‘请选择…’,<br>                allowBlank: false,<br>                blankText: ‘请选择区’,<br>                editable: false<br>            });<br>            //联动的实现<br>            comboboxcity.on(‘select’, function () {<br>                comboareastore.baseParams.id = comboboxcity.getValue();<br>                comboareacity.setValue(‘’);<br>                comboareastore.load();<br>            })<br>            //———————-下拉列表结束———————-//<br>            //表单<br>            var form = new Ext.form.FormPanel({<br>                frame: true,<br>                title: ‘表单标题’,<br>                style: ‘margin:10px’,<br>                items: [comboboxcity, comboareacity]<br>            });<br>            //窗体<br>            var win = new Ext.Window({<br>                title: ‘窗口’,<br>                width: 476,<br>                height: 374,<br>                resizable: true,<br>                modal: true,<br>                closable: true,<br>                maximizable: true,<br>                minimizable: true,<br>                buttonAlign: ‘center’,<br>                items: form<br>            });<br>            win.show();<br>        });<br>    </script><br></head><br><body><br>    <!--
+说明：
+(1)var combocitystore = new Ext.data.Store():创建一个新的数据源。
+(2)proxy: new Ext.data.HttpProxy({ url: '/App_Ashx/Demo/City.ashx' })：数据代理为http代理，地址为/App_Ashx/Demo/City.ashx。
+(3)reader: new Ext.data.JsonReader({ root: 'data' },[{ name: 'id' }, { name: 'name'}]):读取json返回值根节点为data，对象列为id和name。
+    这里要结合client与service观察,我在service端的输出如下：{data:[{id:1,name:'北京'},{id:2,name:'上海'}]}
+(4)comboboxcity.on('select', function () {}：市选择变化时触发事件。
+(5)comboareastore.baseParams.id = comboboxcity.getValue()：注意，前面的comboareastore是区的数据源，
+    当市变化时，我们给区的数据源加上个向service端发送的参数。
+(6)comboareacity.setValue('')：把区的下拉列表设置为空，由于非空验证，Ext会提示用户“请选择区”，这个地方也可以把加载出来的第一个区
+    显示在区的下拉列表中，具体请自行实现吧。        
+(7)comboareastore.load()：区的数据源重新加载。
+--><br></body><br></html>
+
+<p>其中与service交互用到两个.net 一般处理程序文件，源码如下：<br>(1)/App_Ashx/Demo/City.ashx</p>
+<p>using System.Web;</p>
+<p>namespace HZYT.ExtJs.WebSite.App_Ashx.Demo<br>{<br>    public class City : IHttpHandler<br>    {<br>        public void ProcessRequest(HttpContext context)<br>        {<br>            context.Response.Write(“{data:[{id:1,name:’北京’},{id:2,name:’上海’}]}”);<br>        }</p>
+<pre><code>    public bool IsReusable
+    {
+        get
+        {
+            return false;
+        }
+    }
+}
+</code></pre><p>}</p>
+<p>(2)/App_Ashx/Demo/Area.ashx</p>
+<p>using System.Web;</p>
+<p>namespace HZYT.ExtJs.WebSite.App_Ashx.Demo<br>{<br>    public class Area : IHttpHandler<br>    {<br>        public void ProcessRequest(HttpContext context)<br>        {<br>            //接收Client端传来的参数，交根据条件返回<br>            if (context.Request.Form[“id”].ToString() == “1”)<br>            {<br>                context.Response.Write(“{data:[{id:1,name:’东城区’},{id:2,name:’西城区’},{id:2,name:’海淀区’}]}”);<br>            }<br>            else<br>            {<br>                context.Response.Write(“{data:[{id:1,name:’杨浦区’},{id:2,name:’虹口区’},{id:2,name:’闸北区’}]}”);<br>            }<br>        }</p>
+<pre><code>    public bool IsReusable
+    {
+        get
+        {
+            return false;
+        }
+    }
+}
+</code></pre><p>}</p>
+<p>2.效果如下：<br><img src="/images/extjs-xlld.png" alt="&quot;下拉联动&quot;"> </p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/12/10/extjs-上传图片/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          extjs-上传图片
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/12/10/extjs技巧/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">extjs技巧</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2017 John Doe 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a href="https://github.com/" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

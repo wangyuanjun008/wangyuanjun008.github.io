@@ -1,0 +1,1456 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Hexo</title>
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://yoursite.com/"/>
+  <updated>2016-09-19T15:36:52.584Z</updated>
+  <id>http://yoursite.com/</id>
+  
+  <author>
+    <name>John Doe</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="http://yoursite.com/2017/06/29/hello-world/"/>
+    <id>http://yoursite.com/2017/06/29/hello-world/</id>
+    <published>2017-06-29T15:21:26.034Z</published>
+    <updated>2016-09-19T15:36:52.584Z</updated>
+    
+    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>修改Weblogic jdk版本</title>
+    <link href="http://yoursite.com/2017/05/17/%E4%BF%AE%E6%94%B9Weblogic-jdk%E7%89%88%E6%9C%AC/"/>
+    <id>http://yoursite.com/2017/05/17/修改Weblogic-jdk版本/</id>
+    <published>2017-05-17T08:10:45.000Z</published>
+    <updated>2017-05-17T08:26:28.558Z</updated>
+    
+    <content type="html"><![CDATA[<p>1、E:\develop-tools\toolsInstall\weblogic是我的weblogic安装目录<br>2、E:\develop-tools\toolsInstall\weblogic\user_projects\domains\base_domain是我的域创建目录</p>
+<p>找到E:\develop-tools\toolsInstall\weblogic\user_projects\domains\base_domain\bin<br>setDomainEnv.cmd,修改红框标注的</p>
+<p><img src="/images/updateWebLogicJdk.png" alt="&quot;&quot;"></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;1、E:\develop-tools\toolsInstall\weblogic是我的weblogic安装目录&lt;br&gt;2、E:\develop-tools\toolsInstall\weblogic\user_projects\domains\base_domain是我的域
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Oracle数据库之PL/SQL游标</title>
+    <link href="http://yoursite.com/2017/04/28/Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8BPL-SQL%E6%B8%B8%E6%A0%87/"/>
+    <id>http://yoursite.com/2017/04/28/Oracle数据库之PL-SQL游标/</id>
+    <published>2017-04-28T06:35:56.000Z</published>
+    <updated>2017-04-28T06:39:03.454Z</updated>
+    
+    <content type="html"><![CDATA[<p>原文  <a href="http://www.cnblogs.com/zf29506564/p/5772344.html" target="_blank" rel="external">http://www.cnblogs.com/zf29506564/p/5772344.html</a></p>
+<ol>
+<li>游标概念</li>
+</ol>
+<p>字面意思是游动的光标，是指向上下文区域的句柄或指针。</p>
+<p>在PL/SQL块中执行CRUD操作时，ORACLE会在内存中为其分配上下文区。用数据库语言来描述游标就是：映射在上下文区结果集中一行数据上的位置实体。</p>
+<p>用户可以使用游标访问结果集中的任意一行数据，将游标指向某行后，即可对该行数据进行操作。游标为应用提供了一种对具有多行数据查询结果集中的每一行数据分别进行单独处理的方法，是设计嵌入式SQL语句的应用程序的常用编程方式。</p>
+<p>在每个用户会话中，可以同时打开多个游标，其最大数量由数据库初始化参数文件中的OPEN_CURSORS参数定义。</p>
+<p>游标可分为显式游标和隐式游标两类。</p>
+<ol>
+<li>显式游标</li>
+</ol>
+<p>显式游标使用主要有四个步骤：</p>
+<p>声明/定义游标<br>打开游标<br>读取数据<br>关闭游标<br>2.1 声明/定义游标</p>
+<p>语法：</p>
+<p>CURSOR cursor_name<br>  [(parameter_dec [, parameter_dec ]…)]<br>    [RETURN datatype]<br>      IS<br>        select_statement;<br>示例：</p>
+<p>DECLARE<br>  CURSOR c1 RETURN departments%ROWTYPE;    – 声明C1游标</p>
+<p>  CURSOR c2 IS                             – 声明C2游标并定义<br>    SELECT employee_id, job_id, salary FROM employees<br>    WHERE salary &gt; 2000; </p>
+<p>  CURSOR c1 RETURN departments%ROWTYPE IS  – 定义C1游标<br>    SELECT * FROM departments<br>    WHERE department_id = 110;</p>
+<p>  CURSOR c3 RETURN locations%ROWTYPE;      – 声明C3游标</p>
+<p>  CURSOR c3 IS                             – 定义C3游标<br>    SELECT * FROM locations<br>    WHERE country_id = ‘JP’;</p>
+<p>  CURSOR c4(sal number) IS                             – 声明C4游标并定义<br>    SELECT employee_id, job_id, salary FROM employees<br>    WHERE salary &gt; sal;<br>BEGIN<br>  NULL;<br>END;<br>说明：</p>
+<p>在指定参数数据类型时，不能使用长度约束，如C4游标的参数，不能写为number(10,4)这种结构。</p>
+<p>[RETURN datatype]是可选的，表示游标返回数据的数据。如果选择，则应该严格与select_statement中的选择列表在次序和数据类型上匹配。一般是记录数据类型（RECORD）或带“%ROWTYPE”的数据。</p>
+<p>2.2 打开游标</p>
+<p>执行游标所对应的SELECT语句，将其查询结果放入工作区，并且指针指向工作区的首部，标识游标结果集。</p>
+<p>语法：</p>
+<p>OPEN cursor_name [ ( cursor_parameter [ [,] actual_cursor_parameter ]… ) ]<br>示例：</p>
+<p>OPEN c4 (1300);<br>2.3 读取数据</p>
+<p>检索结果集合中的数据行，放入指定的输出变量中。</p>
+<p>语法：</p>
+<p>FETCH { cursor | cursor_variable | :host_cursor_variable }<br>  { into_clause | bulk_collect_into_clause [ LIMIT numeric_expression ] } ;<br>执行FETCH语句时，每次返回一个数据行，然后自动将游标移动指向下一个数据行。当检索到最后一行数据时，如果再次执行FETCH语句，将操作失败，并将游标属性%NOTFOUND置为TRUE。所以每次执行完FETCH语句后，检查游标属性%NOTFOUND就可以判断FETCH语句是否执行成功并返回一个数据行，以便确定是否给对应的变量赋了值。</p>
+<p>示例：</p>
+<p>fetch c4 into eid, jid, sal;<br>2.4 关闭游标</p>
+<p>当处理完游标结果集合数据后，应及时关闭游标，以释放该游标所占用的系统资源。</p>
+<p>关闭游标后不能再使用FETCH语句获取其中数据。关闭后的游标可以使用OPEN语句重新打开。</p>
+<p>语法：</p>
+<p>CLOSE cursor_name;<br>完整示例1：</p>
+<p>DECLARE<br>   – 定义游标<br>   CURSOR c_cursor IS<br>   SELECT first_name || last_name, Salary FROM EMPLOYEES WHERE rownum&lt;11;   </p>
+<p>   – 声明变量<br>   v_ename  EMPLOYEES.first_name%TYPE;<br>   v_sal    EMPLOYEES.Salary%TYPE;<br>BEGIN<br>  – 打开游标<br>  OPEN c_cursor;<br>  – 获取数据<br>  FETCH c_cursor INTO v_ename, v_sal;<br>  – 处理数据<br>  WHILE c_cursor%FOUND LOOP<br>     DBMS_OUTPUT.PUT_LINE(v_ename||’—‘||to_char(v_sal) );<br>     FETCH c_cursor INTO v_ename, v_sal;<br>  END LOOP;<br>  – 关闭游标<br>  CLOSE c_cursor;<br>END;<br>完整示例2：</p>
+<p>DECLARE<br>   – 定义RECORD记录类型<br>   TYPE emp_record_type IS RECORD(<br>        f_name   employees.first_name%TYPE,<br>        h_date   employees.hire_date%TYPE);<br>   – 声明记录变量<br>   v_emp_record EMP_RECORD_TYPE;<br>   – 定义游标，有参数与返回值<br>   CURSOR c3(dept_id NUMBER, j_id VARCHAR2)<br>      RETURN EMP_RECORD_TYPE<br>   IS<br>      SELECT first_name, hire_date FROM employees<br>      WHERE department_id = dept_id AND job_id = j_id;</p>
+<p>BEGIN<br>   – 打开游标，传递参数值<br>   OPEN c3(j_id =&gt; ‘AD_VP’, dept_id =&gt; 90);<br>   LOOP<br>      FETCH c3 INTO v_emp_record;    – 获取数据<br>      IF c3%FOUND THEN<br>         DBMS_OUTPUT.PUT_LINE(v_emp_record.f_name||’的雇佣日期是’||v_emp_record.h_date);<br>      ELSE<br>         DBMS_OUTPUT.PUT_LINE(‘已经处理完结果集了’);<br>         EXIT; – 处理完则退出循环<br>      END IF;<br>   END LOOP;<br>   CLOSE c3;   –关闭游标<br>END;</p>
+<ol>
+<li>显式游标属性</li>
+</ol>
+<p>游标的状态（如是否打开，获取了多少行数据等）可以使用游标属性来获取。</p>
+<p>游标属性以“%属性名”的形式加在游标名之后。显式游标属性有：</p>
+<p>属性名        说明<br>%FOUND        如果记录成功获取，返回TRUE，否则返回FALSE<br>%NOTFOUND    如果记录获取失败，返回TRUE，否则返回FALSE<br>%ROWCOUNT    返回已经从游标中获取的记录数<br>%ISOPEN        如果游标是打开的，返回TRUE，否则返回FALSE<br>示例：</p>
+<p>DECLARE<br>   v_empno  EMPLOYEES.EMPLOYEE_ID%TYPE;<br>   v_sal      EMPLOYEES.Salary%TYPE;<br>   – 定义游标<br>   CURSOR c_cursor IS SELECT EMPLOYEE_ID, Salary FROM EMPLOYEES;<br>BEGIN<br>   – 打开游标<br>   OPEN c_cursor;<br>   LOOP<br>      – 获取数据<br>      FETCH c_cursor INTO v_empno, v_sal;<br>      EXIT WHEN c_cursor%NOTFOUND;  – 未读取到记录，则退出循环<br>      IF v_sal&lt;=1200 THEN<br>            UPDATE EMPLOYEES SET Salary=Salary+50 WHERE EMPLOYEE_ID=v_empno;<br>            DBMS_OUTPUT.PUT_LINE(‘编码为’||v_empno||’工资已更新!’);<br>      END IF;<br>      DBMS_OUTPUT.PUT_LINE(‘记录数:’|| c_cursor %ROWCOUNT);<br>   END LOOP;<br>   – 关闭游标<br>   CLOSE c_cursor;<br>END;</p>
+<ol>
+<li>基于游标定义记录变量</li>
+</ol>
+<p>使用%ROWTYPE属性不仅可以基于表和视图定义记录变量，也可以基于游标定义记录变量。当基于游标定义记录变量时，记录成员名实际就是SELECT语句的列名和列别名。</p>
+<p>为了简化显式游标的数据处理，建议使用基于游标的记录变量存放游标数据。基于游标定义记录变量，比声明记录类型变量要方便，不容易出错。</p>
+<p>示例：</p>
+<p>DECLARE<br>   – 定义游标<br>   CURSOR emp_cursor IS SELECT ename,sal FROM emp；<br>   emp_reocrd emp_cursor%ROWTYPE；– 游标变量<br>BEGIN<br>   – 打开游标<br>   OPEN emp_cursor；<br>   LOOP<br>      – 获取记录<br>      FETCH emp_cursor INTO emp_record；<br>      EXIT WHEN emp_record%NOTFOUND；<br>      dbms_ouput.put_line(‘雇员名:’||emp_record.ename||’,雇员工资:’||emp_record.sal)；<br>   END LOOP；<br>   – 关闭游标<br>   CLOSE emp_cursor；<br>END；</p>
+<ol>
+<li>隐式游标</li>
+</ol>
+<p>如果在PL/SQL块中使用了SELECT语句进行操作，PL/SQL会隐含处理游标定义，而对于非查询语句，如修改、删除操作，则由ORACLE系统自动地为这些操作设置游标并创建其工作区。由系统隐含创建的游标称为隐式游标，隐式游标的名字为SQL。</p>
+<p>对于隐式游标的操作，如定义、打开、取值及关闭操作，都由ORACLE 系统自动地完成，无需用户进行处理。用户只能通过隐式游标的相关属性，来完成相应的操作。在隐式游标的工作区中，所存放的数据是与用户自定义的显示游标无关的、最新处理的一条SQL语句所包含的数据。</p>
+<p>隐式游标的属性：</p>
+<p>属性名            说明<br>SQL%FOUND        如果记录成功获取，返回TRUE，否则返回FALSE<br>SQL%NOTFOUND    如果记录获取失败，返回TRUE，否则返回FALSE<br>SQL%ROWCOUNT    返回已经从游标中获取的记录数<br>SQL%ISOPEN        如果游标是打开的，返回TRUE，否则返回FALSE<br>隐式游标在INSERT，UPDATE，DELETE，SELECT语句中不必明确定义游标。</p>
+<p>示例：</p>
+<p>DECLARE<br>   v_rows NUMBER;<br>BEGIN<br>   – 更新表数据<br>   UPDATE employees SET salary = 5000 WHERE department_id = 90 AND job_id = ‘AD_VP’;<br>   – 获取受影响行数<br>   v_rows := SQL%ROWCOUNT;<br>   DBMS_OUTPUT.PUT_LINE(‘更新了’||v_rows||’个员工的工资’);<br>END;</p>
+<ol>
+<li>游标FOR循环</li>
+</ol>
+<p>游标FOR循环和显示游标的一种快捷使用方式，它使用FOR循环依次读取结果集中的行数据，当FOR循环开始时，游标自动打开（不需要OPEN）,每循环一次系统自动读取游标当前行的数据（不需要FETCH)，当退出FOR循环时，游标被自动关闭（不需要使用CLOSE）使用游标FOR循环的时候不能使用OPEN语句，FETCH语句和CLOSE语句，否则会产生错误。</p>
+<p>语法：</p>
+<p>FOR index_variable IN cursor_name[(value[, value]…)] LOOP<br>    – 游标处理语句<br>END LOOP;<br>示例：</p>
+<p>DECLARE<br>    CURSOR emp_cur(vartype number) IS<br>        SELECT emp_no,emp_zc FROM cus_emp_basic WHERE com_no=vartype;<br>BEGIN<br>    FOR person IN emp_cur(123) LOOP<br>        DBMS_OUTPUT.PUT_LINE(‘编号:’||person.emp_no||’,地址:’||person.emp_zc);<br>END LOOP;<br>END;</p>
+<ol>
+<li>使用显示游标修改数据</li>
+</ol>
+<p>在PL/SQL中依然可以使用UPDATE和DELETE语句更新或删除数据行。显式游标只有在需要获得多行数据的情况下使用。PL/SQL提供了仅仅使用游标就可以执行删除或更新记录的方法。</p>
+<p>UPDATE或DELETE语句中的WHERE CURRENT OF子句专门处理要执行UPDATE或DELETE操作的表中取出的最近的数据。要使用这个方法，在声明游标时必须使用FOR UPDATE子句，当使用FOR UPDATE子句打开一个游标时，所有返回集中的数据行都将处于行级（ROW-LEVEL)独占式锁定，其他对象只能查询这些数据行，不能进行UPDATE、DELETE或SELECT…FOR UPDATE操作。</p>
+<p>语法：</p>
+<p>FOR UPDATE [OF [schema.]table.column[,[schema.]table.column]..<br>[NOWAIT]<br>在多表查询中，使用OF子句来锁定特定的表,如果忽略了OF子句，那么所有表中选择的数据行都将被锁定。如果这些数据行已经被其他会话锁定，那么正常情况下ORACLE将等待，直到数据行解锁。当加上NOWAIT子句时，如果这些行真的被另一个会话锁定，则OPEN立即返回并给出：</p>
+<p>ORA-00054 ：resource busy  and  acquire with nowait specified.<br>在UPDATE和DELETE中使用WHERE CURRENT OF子串的语法如下：</p>
+<p>WHERE{CURRENT OF cursor_name|search_condition}<br>示例：</p>
+<p>DELCARE<br>    CURSOR c1 IS<br>        SELECT empno,salary FROM emp<br>        WHERE comm IS NULL<br>        FOR UPDATE OF comm;<br>    v_comm NUMBER(10,2);<br>BEGIN<br>    FOR r1 IN c1 LOOP<br>        IF r1.salary&lt;500 THEN<br>            v_comm:=r1.salary<em>0.25;<br>　　      ELSEIF r1.salary&lt;1000 THEN<br>            v_comm:=r1.salary</em>0.20;<br>　　      ELSEIF r1.salary&lt;3000 THEN<br>            v_comm:=r1.salary<em>0.15;<br>        ELSE<br>            v_comm:=r1.salary</em>0.12;<br>        END IF;<br>        UPDATE emp SET comm=v_comm WHERE CURRENT OF c1;<br>    END LOOP;<br>END</p>
+<ol>
+<li>游标变量</li>
+</ol>
+<p>与游标类似，游标变量指向多行查询的结果集的当前行。但是，游标与游标变量是不同的，就像常量和变量的关系一样。游标是静态的，游标变量是动态的，因为它不与特定的查询绑定在一起。</p>
+<p>8.1 声明游标变量</p>
+<p>语法：</p>
+<p>TYPE ref_type_name IS REF CURSOR<br>    [ RETURN return_type];<br>说明：</p>
+<p>游标变量类型有强类型定义和弱类型定义两种。强类型定义必须指定游标变量的返回值类型，而弱类型定义则不说明返回值类型。</p>
+<p>return_type为游标变量的返回值类型，它必须为记录变量。</p>
+<p>示例：</p>
+<p>– 定义一个REF CURSOU类型<br>TYPE ref_cursor_type IS REF CURSOR;<br>– 声明一个游标变量<br>cv_ref REF_CURSOR_TYPE;<br>8.2 游标变量的使用</p>
+<p>与游标一样，游标变量操作也包括打开、提取和关闭三个步骤。</p>
+<p>8.2.1 打开游标变量</p>
+<p>语法：</p>
+<p>OPEN {cursor_variable_name | :host_cursor_variable_name}<br>FOR select_statement;<br>说明：</p>
+<p>host_cursor_variable_name为PL/SQL主机环境（如OCI: ORACLE Call Interface，Pro*c 程序等）中声明的游标变量。</p>
+<p>OPEN…FOR 语句可以在关闭当前的游标变量之前重新打开游标变量，而不会导致CURSOR_ALREAD_OPEN异常错误。新打开游标变量时，前一个查询的内存处理区将被释放。</p>
+<p>8.2.2 提取数据</p>
+<p>语法：</p>
+<p>FETCH {cursor_variable_name | :host_cursor_variable_name}<br>INTO {variable [, variable]…| record_variable};<br>说明：</p>
+<p>将提取到的数据放入普通变量和记录变量中存放。</p>
+<p>8.2.3 关闭游标</p>
+<p>语法：</p>
+<p>CLOSE {cursor_variable_name | :host_cursor_variable_name}<br>说明：</p>
+<p>如果应用程序试图关闭一个未打开的游标变量，则将导致INVALID_CURSOR异常错误。</p>
+<p>示例1：</p>
+<p>DECLARE<br>TYPE ref_type_table IS REF CURSOR;<br>v_cursor            ref_type_table;<br>emp_record          emp%rowtype;<br>BEGIN<br>     OPEN v_cursor FOR select * from emp where deptno=&no;<br>     LOOP<br>         FETCH v_cursor INTO emp_record;<br>         EXIT WHEN v_cursor%NOTFOUND;<br>         dbms_output.put_line(‘员工号：’||emp_record.ename||’部门号：’||emp_record.deptno);<br>     END LOOP;<br>     CLOSE v_cursor;<br>END;<br>示例2：</p>
+<p>DECLARE<br>    emp_record          emp%rowtype;<br>    TYPE ref_type_table IS REF CURSOR RETURN emp%rowtype;<br>    v_cursor            ref_type_table;<br>BEGIN<br>     OPEN v_cursor FOR select * from emp where deptno=&no;<br>     LOOP<br>         FETCH v_cursor INTO emp_record;<br>         EXIT WHEN v_cursor%NOTFOUND;<br>         dbms_output.put_line(‘员工号：’||emp_record.ename||’部门号：’||emp_record.deptno);<br>     END LOOP;<br>     CLOSE v_cursor;<br>END;</p>
+<p>DECLARE<br>Type emp_record_type IS RECORD(<br>       ename emp.ename%TYPE,<br>       salary emp.sal%TYPE,<br>       deptno emp.deptno%TYPE);<br>emp_record emp_record_type;</p>
+<p>TYPE ref_type_table IS REF CURSOR RETURN emp_record_type;<br>v_cursor            ref_type_table;<br>BEGIN<br>     OPEN v_cursor FOR select ename,sal,deptno from emp where deptno=&no;<br>     LOOP<br>         FETCH v_cursor INTO emp_record;<br>         EXIT WHEN v_cursor%NOTFOUND;<br>         dbms_output.put_line(‘员工号：’||emp_record.ename||’，部门号：’||emp_record.deptno||’，工资：’||emp_record.salary);<br>     END LOOP;<br>     CLOSE v_cursor;<br>END;</p>
+<ol>
+<li>使用游标批量获取</li>
+</ol>
+<p>语法：</p>
+<p>FETCH … BULK COLLECT INTO …[LIMIT row_number];<br>说明：</p>
+<p>使用BULK COLLECT，我们可以用对数据库的一个来回，返回多行数据。BULK COLLECT减少了PL/SQL和SQL引擎之间的上下文开关数目，因而加速了数据获取的速度。</p>
+<p>示例：</p>
+<p>DECLARE<br>     CURSOR emp_cursor(v_deptno number) IS SELECT * FROM EMP WHERE deptno = v_deptno;<br>     TYPE type_emp_table IS TABLE OF emp%ROWTYPE INDEX BY BINARY_INTEGER;<br>     emp_table type_emp_table;<br>     v_dno emp.deptno%TYPE;<br>BEGIN<br>     v_dno := &no;<br>     OPEN emp_cursor(v_dno);<br>     FETCH emp_cursor BULK COLLECT INTO emp_table;<br>     CLOSE emp_cursor;<br>     FOR i IN 1..emp_table.COUNT LOOP<br>         dbms_output.put_line(‘员工号：’||emp_table(i).ename||’工资：’||emp_table(i).sal);<br>     END LOOP;<br>     CLOSE emp_cursor;<br>END;</p>
+<ol>
+<li>游标表达式</li>
+</ol>
+<p>游标表达式作用是用于返回嵌套游标。语法：</p>
+<p>CURSOR(sub_query)<br>示例：</p>
+<p>DECLARE<br>       CURSOR dept_emp_cursor(v_deptno number) IS<br>   SELECT dname,cursor(SELECT * FROM emp e WHERE e.deptno = d.deptno)<br>   FROM dept d WHERE deptno = v_deptno;<br>       TYPE emp_cursor_type IS REF CURSOR;<br>       emp_cursor emp_cursor_type;<br>       emp_record emp%ROWTYPE;<br>       v_name dept.dname%TYPE;<br>       v_dno emp.deptno%TYPE;<br>BEGIN<br>     v_dno := &no;<br>     OPEN dept_emp_cursor(v_dno);<br>     loop<br>          FETCH dept_emp_cursor INTO v_name,emp_cursor;<br>          EXIT WHEN dept_emp_cursor%NOTFOUND;<br>          dbms_output.put_line(‘部门名称：’||v_name);<br>          LOOP<br>              FETCH emp_cursor INTO emp_record;<br>              EXIT WHEN emp_cursor%NOTFOUND;<br>              dbms_output.put_line(‘员工名称：’||emp_record.ename||’，工资：’||emp_record.sal);<br>          END LOOP;<br>     end loop;<br>     CLOSE dept_emp_cursor;<br>END;</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;原文  &lt;a href=&quot;http://www.cnblogs.com/zf29506564/p/5772344.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://www.cnblogs.com/zf29506564/p/5772344
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>跨Oracle数据库实现表级别的实时同步</title>
+    <link href="http://yoursite.com/2017/04/28/%E8%B7%A8Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%9E%E7%8E%B0%E8%A1%A8%E7%BA%A7%E5%88%AB%E7%9A%84%E5%AE%9E%E6%97%B6%E5%90%8C%E6%AD%A5/"/>
+    <id>http://yoursite.com/2017/04/28/跨Oracle数据库实现表级别的实时同步/</id>
+    <published>2017-04-28T05:49:50.000Z</published>
+    <updated>2017-04-28T05:51:38.141Z</updated>
+    
+    <content type="html"><![CDATA[<p>一. 问题描述</p>
+<p>有两个Oracle数据库，分别布置在不同的服务器上，系统均为windows2003；</p>
+<p>这里暂且说成是一个主数据库和从数据库：</p>
+<p>(1) 主数据库: oracle_A ；</p>
+<p>(2) 从数据库: oracle_B ；</p>
+<p>在oracle_A中有一个表table_A与oracle_B中的表table_B 结构相同 ；</p>
+<p>我是处在oracle_B，oracle_A数据库分配给我有一个访问oracle_A表table_A的用户，该用户 只拥有查询的权限 ；</p>
+<p>另外，需要 说明的一点 ，就是在oracle_B处,只需对table_B表进行查询的操作，不进行其他增删改的操作。</p>
+<p>场景介绍完了， 我的问题 的是,如何在oracle_A中表table_A发生变化时,实时更新同步到oracle_B的table_B中?</p>
+<p>我原来的处理方式:</p>
+<p>通过建立远程连接DBLink+JOB定时任务+存储过程的方式,实现了定时同步 更新,但不能做到实时同步 。</p>
+<p>二. 采用同义词+DB_Link的方式结果步骤</p>
+<p>之所以能够选择采用同义词的方式，处理这个问题。主要还是源于在问题描述中提到一个点，那就是我们只需要对同步后的表进行 查询 操作。这点是使用同义词方式的重要要素。</p>
+<p>下面详细模拟一下整个实验测试的过程：</p>
+<p>（1）首先在Oracle_A端创建一个对table_A只有查询功能的用户</p>
+<p><1> 创建用户<br>  sqlplus /nolog<br>  conn /as sysdba;<br>  create user username identified by password;</1></p>
+<p><2> 查看所有的用户列表<br>    用户创建完成后,查看用户是否创建成功<br>  select * from all_users;</2></p>
+<p><3>授予权限<br>    为了能够保证能够登陆,必须赋予如下权限</3></p>
+<p>  –授予username用户创建session的权限,即登陆权限<br>  grant create session to username;</p>
+<p>  –授予username用户使用表空间的权限<br>  grant unlimited tablespace to username;</p>
+<p>  –oracle对权限管理比较严谨,普通用户之间也是默认不能互相访问的,需要互相授权.<br>  –如果scott用户要授权给username用户查看自己的test表的权限;<br>  sqlplus scott/tiget@localhost:1521/orcl</p>
+<p>  –授予username用户查看指定的权限<br>  grant select on test to username;</p>
+<p>  –撤销权限<br>    基本语法同grant,关键字为revoke;<br>（2）验证用户是否可以成功登录，并进行访问授权的表</p>
+<p>–使用sqlplus登录，并进行查询<br>sqlplus username/password@localhost:1521/orcl;<br>select * from scott.test;<br>注意：查询表时，务必带上用户名，说明是哪个用户下的表。</p>
+<p>（3）创建远程连接DB_Link</p>
+<p><1> 创建远程连接 db_link<br>create public database link db32　connect to tianzhi_test identified by “tianzhi_test” using ‘192.168.56.6:1521/ORCL’</1></p>
+<p><2> 测试远程连接是否成功<br>select * from tianzhi_smart.zh_item_news@db32;<br>（4）在Oracle_B端创建同义词</2></p>
+<p><1> 使用sqlplus登录自己的用户<br>sqlplus tianzhi_smart/tianzhi_smart@localhost:1521/orcl</1></p>
+<p><2> 创建同义词<br>create or replace public synonym TEST1130 for scott.TEST@db32;</2></p>
+<p><3> 查询测试<br>select * from TEST1130;<br>可以看到这与在Oracle_A源数据库中查到的table_A表中的数据一样.<br>注意事项:</3></p>
+<p>当远程查询的数据库中包含BLOB字段时,会报出如下错误.</p>
+<p>ORA-22992: 无法使用从远程表选择的 LOB 定位器</p>
+<p>当出现这个错误的时候，那是因为跨库连接查询中的表中存在BLOB类型的字段，所以一定要注意，所有表中存在blob类型字段，</p>
+<p>不能用 select * from 连接的表<br>不能将blob类型的字段出现在脚本中。<br>如果这些blob类型的字段一定要导过来，可以先建立临时表再插入本地表，方法如下.在pl/sql中执行</p>
+<p>第一步 建临时表</p>
+<p>create global temporary table foo ( X BLOB )</p>
+<p>on commit delete rows;</p>
+<p>第二步 插入本地表</p>
+<p>insert into foo select blobcolumn from remoteTable@dl_remote ;</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;一. 问题描述&lt;/p&gt;
+&lt;p&gt;有两个Oracle数据库，分别布置在不同的服务器上，系统均为windows2003；&lt;/p&gt;
+&lt;p&gt;这里暂且说成是一个主数据库和从数据库：&lt;/p&gt;
+&lt;p&gt;(1) 主数据库: oracle_A ；&lt;/p&gt;
+&lt;p&gt;(2) 从数据库: oracle_
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title> 解决“Dynamic Web Module 3.0 requires Java 1.6 or newer.”错误</title>
+    <link href="http://yoursite.com/2017/03/30/%E8%A7%A3%E5%86%B3%E2%80%9CDynamic-Web-Module-3-0-requires-Java-1-6-or-newer-%E2%80%9D%E9%94%99%E8%AF%AF/"/>
+    <id>http://yoursite.com/2017/03/30/解决“Dynamic-Web-Module-3-0-requires-Java-1-6-or-newer-”错误/</id>
+    <published>2017-03-30T13:23:16.000Z</published>
+    <updated>2017-03-30T13:25:04.690Z</updated>
+    
+    <content type="html"><![CDATA[<p>eclipse maven<br>在项目的pom.xml的<build></build>标签中加入：<br>        <plugins><br>            <plugin><br>                <groupid>org.apache.maven.plugins</groupid><br>                <artifactid>maven-compiler-plugin</artifactid><br>                <version>2.3.2</version><br>                <configuration><br>                    <source>1.6<br>                    <target>1.6</target><br>                </configuration><br>            </plugin><br>        </plugins>  </p>
+<p>保存，项目构建完成后在项目文件夹上点右键，选择Maven-&gt;Update Project Configuration，问题解决。 </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;eclipse maven&lt;br&gt;在项目的pom.xml的&lt;build&gt;&lt;/build&gt;标签中加入：&lt;br&gt;        &lt;plugins&gt;&lt;br&gt;            &lt;plugin&gt;&lt;br&gt;                &lt;groupid&gt;org.apache.ma
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Extjs中textfield的悬浮提示</title>
+    <link href="http://yoursite.com/2017/02/22/Extjs%E4%B8%ADtextfield%E7%9A%84%E6%82%AC%E6%B5%AE%E6%8F%90%E7%A4%BA/"/>
+    <id>http://yoursite.com/2017/02/22/Extjs中textfield的悬浮提示/</id>
+    <published>2017-02-22T05:56:35.000Z</published>
+    <updated>2017-02-22T06:05:33.881Z</updated>
+    
+    <content type="html"><![CDATA[<p>在Extjs中有时候我们需要textfield的提示信息，但是我们发现textfield并没有这样的配置项。这时候我们就要另想方法：我们需要在鼠标悬停在textfield组件的时候进行信息的提示，我们就需要在textfield中来监听，<br>这里有两种进行textfield悬停提示的方法：</p>
+<ol>
+<li>进行固定信息的提示：需要在监听中用render方法<pre><code>render: function (field, p) {
+       Ext.QuickTips.init();
+       Ext.QuickTips.register({
+             target: field.el,
+             text: &apos;这是textfield的固定信息提示！&apos;
+       })
+    }
+</code></pre></li>
+<li><p>进行文本信息提示：提示信息为textfield的文本信息<br> var updateTip = function (field, t) {</p>
+<pre><code>    Ext.QuickTips.init();
+    Ext.QuickTips.register({
+        target: field.el,
+        text: field.getValue()
+    })
+};   
+</code></pre><p> listeners: {</p>
+<pre><code>// 鼠标移动到文本框显示悬浮框
+render : function(p) {
+    p.getEl().on(&apos;mouseover&apos;, function(p1) {
+        updateTip(p);
+    });
+}
+</code></pre><p> }</p>
+</li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在Extjs中有时候我们需要textfield的提示信息，但是我们发现textfield并没有这样的配置项。这时候我们就要另想方法：我们需要在鼠标悬停在textfield组件的时候进行信息的提示，我们就需要在textfield中来监听，&lt;br&gt;这里有两种进行textfiel
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Redis基础命令</title>
+    <link href="http://yoursite.com/2017/02/21/Redis%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4/"/>
+    <id>http://yoursite.com/2017/02/21/Redis基础命令/</id>
+    <published>2017-02-21T14:51:21.000Z</published>
+    <updated>2017-02-21T14:53:10.459Z</updated>
+    
+    <content type="html"><![CDATA[<p>笔者最初接触Redis是因为了解了一些nosql方面的知识，觉得nosql是一个很有意思的方面。像其中的mongodb，redis等等。当初也没有深入的去了解Redis，直到自己前段时间在写一个web项目的时候需要用到缓存来进行性能优化我才仔细的来学习Redis。下面我就来说说我自己在学习Redis过程中的一些心得。</p>
+<p>Redis是一个nosql数据库，它采用字典结构以键值对的形式将数据全部存储在内存中所以它读写的速度很快，因此很多项目用Redis做缓存用，我也是基于这个想法来学习Redis的。 Redis支持的数据类型分别是字符串(string)、散列(hash)、列表(list)、集合(set)、有序集合(sorted set)这五种。接下来我将仔细介绍下这几种数据结构的用法和对应的命令。</p>
+<h2 id="字符串类型-：字符串类型是Redis中-最-基本-的数-据类型，是其他四种数据类型的基础。它能存储任何形式的字符串-二进制数据、Json对象、图片等-，它的最大数据容量是512MB。"><a href="#字符串类型-：字符串类型是Redis中-最-基本-的数-据类型，是其他四种数据类型的基础。它能存储任何形式的字符串-二进制数据、Json对象、图片等-，它的最大数据容量是512MB。" class="headerlink" title="字符串类型 ：字符串类型是Redis中 最 基本 的数 据类型，是其他四种数据类型的基础。它能存储任何形式的字符串(二进制数据、Json对象、图片等)，它的最大数据容量是512MB。"></a>字符串类型 ：字符串类型是Redis中 最 基本 的数 据类型，是其他四种数据类型的基础。它能存储任何形式的字符串(二进制数据、Json对象、图片等)，它的最大数据容量是512MB。</h2><p>常用命令:</p>
+<p>set key value      //赋值</p>
+<p>get key                //取值</p>
+<p>keys *                 //查看所有的键</p>
+<p>exists key            //判断某个键是否存在</p>
+<p>del key               //删除一个键</p>
+<p>type key            //获取键的类型</p>
+<p>incr/decr key     //给键增加/减少一</p>
+<p>incrby/decrby key increment/decrement     //给键增加/减少一个整数</p>
+<p>incrbyfloat key increment        //增加浮点数</p>
+<p>strlen key                             //返回键的长度</p>
+<p>mset/mget                          //同时设置或者获取多个值</p>
+<h2 id="散列类型-：散列类型的键值是一种字典结构，存储了字段和字段值的映射。但是字段值只能是字符串，不支持其他数据类型-Redis的其他数据类型也都不支持嵌套，只能是字符串。-。"><a href="#散列类型-：散列类型的键值是一种字典结构，存储了字段和字段值的映射。但是字段值只能是字符串，不支持其他数据类型-Redis的其他数据类型也都不支持嵌套，只能是字符串。-。" class="headerlink" title="散列类型 ：散列类型的键值是一种字典结构，存储了字段和字段值的映射。但是字段值只能是字符串，不支持其他数据类型(Redis的其他数据类型也都不支持嵌套，只能是字符串。)。"></a>散列类型 ：散列类型的键值是一种字典结构，存储了字段和字段值的映射。但是字段值只能是字符串，不支持其他数据类型(Redis的其他数据类型也都不支持嵌套，只能是字符串。)。</h2><p>常用命令：</p>
+<p>hset   key  field value               //赋值。不区分插入和更新操作，当键不存在是会自动建立。</p>
+<p>hget   key  field                       //取值</p>
+<p>hgetall key                              //取出所有的值</p>
+<p>hexists key field                      //判断字段是否存在</p>
+<p>hsetnx key field value              //字段不存在时便赋值</p>
+<p>hincrby key field increment        //增加指定的数字，没有自增</p>
+<p>hdel key field                            //删除一个或者多个字段，返回被删除的个数                </p>
+<p>hkeys key                                 //只获取字段名</p>
+<p>hvals  key                                 //只获取字段值</p>
+<p>hlen   key                                 //只获取字段数量</p>
+<h2 id="列表类型-：列表是个有序的字符串，向两端添加或者删除元素。它是使用双向链表实现的。"><a href="#列表类型-：列表是个有序的字符串，向两端添加或者删除元素。它是使用双向链表实现的。" class="headerlink" title="列表类型 ：列表是个有序的字符串，向两端添加或者删除元素。它是使用双向链表实现的。"></a>列表类型 ：列表是个有序的字符串，向两端添加或者删除元素。它是使用双向链表实现的。</h2><p>常用命令:</p>
+<p>lpush/rpush  list value                         //向左/右增加元素</p>
+<p>lpop/rpop  list                                     //从左/右弹出元素</p>
+<p>llen list                                              //获列表的元素个数</p>
+<p>lrange list start stop                           //获得列表片段(左边索引为0，如果为负则从右边开始)   lrange  key -1 0 则为获取所有的元素</p>
+<p>lrem list  count value                          //删除列表中前count个值为value的元素</p>
+<p>rpoplpush oldlist newlist                     //将原列表的值放入新列表</p>
+<h2 id="集合类型-集合中的元素都是不同的，而且没有顺序。它可以求交集、并集、差集。"><a href="#集合类型-集合中的元素都是不同的，而且没有顺序。它可以求交集、并集、差集。" class="headerlink" title="集合类型 : 集合中的元素都是不同的，而且没有顺序。它可以求交集、并集、差集。"></a>集合类型 : 集合中的元素都是不同的，而且没有顺序。它可以求交集、并集、差集。</h2><p>常用命令:</p>
+<p>sadd set member                                  //增加一个元素给集合(没有则创建)</p>
+<p>srem set member                                 //删除一个或多个元素</p>
+<p>smembers set                                     //返回集合中所有的元素</p>
+<p>sismember set member                        //判断元素是否存在于集合中</p>
+<p>sdiff setA  setB                                    //求差集</p>
+<p>sinter setA  setB                                  //求交集</p>
+<p>sunion  setA setB                                 //求并集</p>
+<p>sdiffstore  destination setA setB             //将求到的差集结果保存在destination中</p>
+<p>srandmember  set  num                        //随机获取一个或多个元素(看后面加的参数)            </p>
+<p>spop set                                              //从集合中随机弹出一个元素</p>
+<h2 id="有序集合-和集合相比给每个元素都关联了个分数。我们除了可以进行集合的操作外，还可以获取分数最高或者最低的几个元素。"><a href="#有序集合-和集合相比给每个元素都关联了个分数。我们除了可以进行集合的操作外，还可以获取分数最高或者最低的几个元素。" class="headerlink" title="有序集合: 和集合相比给每个元素都关联了个分数。我们除了可以进行集合的操作外，还可以获取分数最高或者最低的几个元素。"></a>有序集合: 和集合相比给每个元素都关联了个分数。我们除了可以进行集合的操作外，还可以获取分数最高或者最低的几个元素。</h2><p>常用命令:</p>
+<p>zadd key score member                         //加入元素和对应分数，支持整数和双精度浮点，如果存在则修改。其中+inf和-inf代表正负无穷大</p>
+<p>zscore  key  member                             //获得元素的分数</p>
+<p>zrange/zrevrange  key start stop             //按分数从顺序/逆序排序</p>
+<p>zrangebyscore  key  min (max                //返回min和max之间的数左括号代表不包含</p>
+<p>zincrby key increment member              //给元素增加值</p>
+<p>zcount key min max                             //获取指定范围元素的个数</p>
+<p>zcard  key                                           //获取集合中元素的数量 </p>
+<p>zrem key member                               //删除元素</p>
+<p>zremrangebyrank  key start stop           //按排名范围删除元素</p>
+<p>zremrangebyscore  key min max           //删除分数范围值</p>
+<p>zrank key member                               //元素按分数大小排名</p>
+<p>zrevrank key member                          //从大到小排名</p>
+<p>结语:个人学习总结有遗漏错误的地方还希望大家留言斧正，多多交流一起学习。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;笔者最初接触Redis是因为了解了一些nosql方面的知识，觉得nosql是一个很有意思的方面。像其中的mongodb，redis等等。当初也没有深入的去了解Redis，直到自己前段时间在写一个web项目的时候需要用到缓存来进行性能优化我才仔细的来学习Redis。下面我就来
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>阿里巴巴 Java 开发手册 笔记及重点</title>
+    <link href="http://yoursite.com/2017/02/21/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-Java-%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C-%E7%AC%94%E8%AE%B0%E5%8F%8A%E9%87%8D%E7%82%B9/"/>
+    <id>http://yoursite.com/2017/02/21/阿里巴巴-Java-开发手册-笔记及重点/</id>
+    <published>2017-02-21T13:58:21.000Z</published>
+    <updated>2017-02-21T14:30:23.259Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="编程规约"><a href="#编程规约" class="headerlink" title="编程规约"></a>编程规约</h2><pre><code>1. POJO 类中布尔类型的变量，都不要加 is，否则部分框架解析会引起序列化错误。假设定义一个 boolean 的 isSuccess 属性，它的方法 Getter 被IDE生成为 isSuccess()，RPC等三方框架在反向解析的时候，“以为”对应的属性名称是 success，导致属性获取不到，进而抛出异常。这点也是笔者之前遇到过的，查了很久哪里的错最后发现是这个问题，不过经历一次后基本后面就能避免。
+2. 接口类中的方法和属性不要加任何修饰符号。包括在一些开源的代码里，笔者也经常看见在接口方法上声明 public 关键字的，这是冗余的，在Java规范中提到过。关于代码的规范及简洁性诸位可以参考《重构 改善既有代码的设计》 及 代码整洁之道。
+3. 方法体内的执行语句组、变量的定义语句组、不同的业务逻辑之间或者不同的语义之间插入一个空行。相同业务逻辑和语义之间不需要插入空行。不过没有必要插入多行空格进行隔开。这样可读性会明显提高，笔者经常看到部分开发人员的代码在很长的代码块里完全没有一个空行，没有按逻辑进行换行，这种习惯是不太好的。
+4. 所有的覆写方法，必须加 @Override 注解。这样IDE会检查合法性，有错误的话会及时提示。
+5. 所有的相同类型的包装类对象之间值的比较，全部使用 equals 方法比较。比如 Integer 的-128至127之间被缓存的对象可以直接使用==判断，因为被缓存了，是同一对象，地址相等，而这个区间外的却不能使用==判断，这也是面试时的一个常考点。
+6. 关于基本数据类型与包装数据类型：所有的POJO类属性必须使用包装数据类型，以便映射数据库中的NULL，局部变量推荐使用基本数据类型。
+7. 关于 hashCode 和 equals 的处理，遵循如下规则：只要重写 equals，就必须重写 hashCode，具体原因可参考《Effective java 中文版（第2版）》。
+8. 关于 ArrayList 里 subList 结果的注意事项，subList 只是 ArrayList 的一个视图，这部分大家可以参考JDK里的源码。
+9. 不要在 foreach 循环里进行元素的 remove/add 操作。remove 元素请使用 Iterator 方式，如果并发操作，需要对 Iterator 对象加锁。
+10. 在 JDK7 版本以上，Comparator 要满足自反性，传递性，对称性，不然 Arrays.sort， Collections.sort 会报 IllegalArgumentException 异常。这个在《Effective java 中文版（第2版）》中也有说明，虽然笔者之前看过，但在刚实习时的一个用于省份排序的代码里使用 Comparator 时还是忘了处理值相等的情况，所以，还是要实战后才能加深记忆。
+11. 集合初始化时，尽量指定集合初始值大小。这在笔者实习面试时也被问到，这块的话主要考察 ArrayList 的原理，内部机制，诸位看看JDK里 ArrayList 的原理就明白了。
+12. 创建线程或线程池时请指定有意义的线程名称，方便出错时回溯。
+13. 高并发时，同步调用应该去考量锁的性能损耗。能用无锁数据结构，就不要用锁；能锁区块，就不要锁整个方法体；能用对象锁，就不要用类锁。概括为一句话就是：尽量降低锁的粒度。
+14. 对多个资源、数据库表、对象同时加锁时，需要保持一致的加锁顺序，否则可能会造成死锁。关于并发这块可以参考《Java并发编程实战》，个人认为这本在笔者看过Java并发的书籍里能算上乘之作，另外也可参考《Java并发编程的艺术》。
+15. 通过双重检查锁(double-checked locking)(在并发场景)实现延迟初始化的优化问题隐患(可参考 The “Double-Checked Locking is Broken” Declaration)，推荐问题解决方案中较为简单一种(适用于 JDK5 及以上版本)，将目标属性声明为 volatile 型。这部分涉及到两个重点，一是双重检查锁，二是 volatile 的原理及Java的主内存及每个线程的内存之间的关系。volatile只能解决多线程时的内存可见性问题，无法解决线程安全问题。可参考Double checked locking 及 Initialization on demand holder idiom。
+16. 注释掉的代码尽量要配合说明，而不是简单的注释掉。如果永久不用，建议直接删除，因为Git等版本控制系统保存了历史代码。
+17. 好的命名、代码结构是自解释的，注释力求精简准确、表达到位。避免无用的注释。
+18. 善用 TODO 及 FIXME，IDE可以方便的进行扫描。
+19. 获取当前毫秒数使用 System.currentTimeMillis()，System.nanoTime()产生的值仅用于比较，同一时刻不同虚拟机System.nanoTime()返回的值可能不一样并且相差很大，笔者的同事已经踩过一次坑，关于 nanoTime 诸位可以看一看JavaDoc。
+</code></pre><h2 id="异常日志"><a href="#异常日志" class="headerlink" title="异常日志"></a>异常日志</h2><pre><code>1. 不要捕获Java类库中定义的继承自 RuntimeException 的运行时异常类，如：IndexOutOfBoundsException / NullPointerException，这类异常由程序员预检查来规避，保证程序健壮性。说到这里，异常继承结构图也可以看下。
+2. 捕获异常是为了处理它，不要捕获了却什么都不处理而抛弃之，如果不想处理它，请将该异常抛给它的调用者。最外层的业务使用者，必须处理异常，将其转化为用户可以理解的内容。
+3. 避免出现重复的代码(Don’t Repeat Yourself)，即DRY原则。关于这部分可参考《程序员修炼之道》。
+4. 谨慎地记录日志。生产环境禁止输出 debug 日志；有选择地输出 info 日志；如果使用 warn 来记录刚上线时的业务行为信息，一定要注意日志输出量的问题，避免把服务器磁盘撑爆，并记得及时删除这些观察日志。关于日志把server磁盘撑爆的问题，我司也出现过，后面加了相关监控来避免。
+</code></pre><h2 id="MySQL规约"><a href="#MySQL规约" class="headerlink" title="MySQL规约"></a>MySQL规约</h2><pre><code>1. 表达是与否概念的字段，必须使用 is_xxx 的方式命名，数据类型是 unsigned tinyint (1表示是，0表示否)，此规则同样适用于odps建表。任何字段如果为非负数，必须是 unsigned。因为这样的话可用容量提升了一倍。
+2. 表名不使用复数名词。表名应该仅仅表示表里面的实体内容，不应该表示实体数量，对应于 DO 类名也是单数形式，符合表达习惯。
+3. 禁用保留字，如 desc、range、match、delayed 等，禁止在代码里对 SQL 关键字进行单独处理。
+4. 唯一索引名为 uk_字段名，普通索引名则为 idx_字段名。这样能让开发人员一眼就知道相关索引。
+5. 如果存储的字符串长度几乎相等，使用 char 定长字符串类型。
+6. 表必备三字段:id, gmt_create, gmt_modified。其中id必为主键，类型为unsigned bigint、单表时自增、步长为1。gmt_create, gmt_modified 的类型均为 date_time 类型。创建时间与修改时间需要记录笔者理解，不理解的为什么要用 gmt 开头，北京时间应该是GMT + 8:00 啊。
+7. 字段允许适当冗余，以提高性能，但是必须考虑数据同步的情况。冗余字段应遵循：不是频繁修改的字段；不是 varchar 超长字段，更不能是 text 字段。比如我司的很多表都冗余了 user_name 这个字段。
+8. 单表行数超过 500 万行或者单表容量超过 2GB，才推荐进行分库分表。
+9. 业务上具有唯一特性的字段，即使是组合字段，也必须建成唯一索引。即使在应用层做了非常完善的校验和控制，只要没有唯一索引，根据墨菲定律，必然有脏数据产生。
+10. 页面搜索严禁左模糊或者全模糊，如果需要请走搜索引擎来解决。索引文件具有 B-Tree 的最左前缀匹配特性，如果左边的值未确定，那么无法使用此索引。关于 MySQL 的知识，诸位可参考《高性能MySQL》。
+11. 利用延迟关联或者子查询优化超多分页场景。MySQL 并不是跳过 offset 行，而是取 offset+N 行，然后返回放弃前 offset 行，返回 N 行，那当 offset 特别大的时候，效率就非常的低下，要么控制返回的总页数，要么对超过特定阈值的页数进行 SQL 改写。
+12. 建组合索引的时候，区分度最高的在最左边。
+13. 不要使用 count(列名)或 count(常量)来替代 count(*)，count(*)就是 SQL92 定义 的标准统计行数的语法，跟数据库无关，跟 NULL 和非 NULL 无关。
+14. 不得使用外键与级联，一切外键概念必须在应用层解决。外键与级联更新适用于单机低并发，不适合分布式、高并发集群；级联更新是强阻塞，存在数据库更新风暴的风险；外键影响数据库的插入速度。
+15. 禁止使用存储过程，存储过程难以调试和扩展，更没有移植性。
+16. 数据订正时，删除和修改记录时，要先 select，避免出现误删除，确认无误才能执行更新语句。
+</code></pre><h2 id="工程规约"><a href="#工程规约" class="headerlink" title="工程规约"></a>工程规约</h2><pre><code>1. 高并发服务器建议调小 TCP 协议的 time_wait 超时时间。
+2. 调大服务器所支持的最大文件句柄数(File Descriptor，简写为fd)。
+3. 给 JVM 设置-XX:+HeapDumpOnOutOfMemoryError 参数，让 JVM 碰到 OOM 场景时输出 dump 信息。
+</code></pre><h2 id="安全规约"><a href="#安全规约" class="headerlink" title="安全规约"></a>安全规约</h2><pre><code>1. 隶属于用户个人的页面或者功能必须进行权限控制校验。
+2. 用户敏感数据禁止直接展示，必须对展示数据脱敏。
+3. 用户输入的 SQL 参数严格使用参数绑定或者 METADATA 字段值限定，防止 SQL 注入， 禁止字符串拼接 SQL 访问数据库。
+4.用户请求传入的任何参数必须做有效性验证。
+5.表单、AJAX 提交必须执行 CSRF 安全过滤。
+6.在使用平台资源，譬如短信、邮件、电话、下单、支付，必须实现正确的防重放限制， 如数量限制、疲劳度控制、验证码校验，避免被滥刷、资损。
+7.关于安全这块可以阅读《白帽子讲Web安全》。
+</code></pre><p><a href="https://ohpew91u7.qnssl.com/2017/02/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4Java%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C.pdf" title="阿里巴巴开发手册" target="_blank" rel="external">阿里巴巴Java开发手册</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;编程规约&quot;&gt;&lt;a href=&quot;#编程规约&quot; class=&quot;headerlink&quot; title=&quot;编程规约&quot;&gt;&lt;/a&gt;编程规约&lt;/h2&gt;&lt;pre&gt;&lt;code&gt;1. POJO 类中布尔类型的变量，都不要加 is，否则部分框架解析会引起序列化错误。假设定义一个 bool
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>spring 读取properties的两种方法</title>
+    <link href="http://yoursite.com/2017/02/21/spring-%E8%AF%BB%E5%8F%96properties%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E6%B3%95/"/>
+    <id>http://yoursite.com/2017/02/21/spring-读取properties的两种方法/</id>
+    <published>2017-02-21T13:47:12.000Z</published>
+    <updated>2017-02-21T13:47:51.500Z</updated>
+    
+    <content type="html"><![CDATA[<p>1.在配置文件中配置PropertyPlaceholderConfigurer</p>
+<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"><br>  <property name="locations" value="classpath:com/foo/jdbc.properties"><br></property></bean>
+
+<p>然后在需要的地方直接以下方式引用：</p>
+<property name="url" value="${jdbc.url}">
+
+<p>2.在配置文件中加入<br>beans的命名空间声明如下：</p>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx" xsi:schemalocation="http://www.springframework.org/schema/beans 
+            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+            http://www.springframework.org/schema/context 
+            http://www.springframework.org/schema/context/spring-context-3.0.xsd 
+            http://www.springframework.org/schema/aop 
+            http://www.springframework.org/schema/aop/spring-aop-3.0.xsd 
+            http://www.springframework.org/schema/tx 
+            http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+
+<p>用到了<br>xmlns:context=<a href="http://www.springframework.org/schema/context" target="_blank" rel="external">http://www.springframework.org/schema/context</a><br>配置如下：</p>
+<context:property-placeholder location="dbconf.properties"></context:property-placeholder></beans></property>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;1.在配置文件中配置PropertyPlaceholderConfigurer&lt;/p&gt;
+&lt;bean class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&gt;&lt;br&gt;  &lt;p
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>SpringMVC与LogBack集成</title>
+    <link href="http://yoursite.com/2017/02/14/SpringMVC%E4%B8%8ELogBack%E9%9B%86%E6%88%90/"/>
+    <id>http://yoursite.com/2017/02/14/SpringMVC与LogBack集成/</id>
+    <published>2017-02-14T05:01:16.000Z</published>
+    <updated>2017-02-14T05:01:51.141Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近在做项目中需要用到日志，本来选取的是Log4j，最后经过对比之后还是发现LogBack在性能上比Log4j有优势。至于有什么好处，请参考下面这篇文章。<br>从Log4j迁移到LogBack的理由</p>
+<pre><code>下面废话不多说了，就看一下，如何来把LogBack集成到我们的web项目中吧。本人前台用的是SpringMVC。
+
+jar包配置
+</code></pre><p>   如果要使用LogBack做为日志的插件的话，需要的jar包有如下，直接看一下Maven依赖</p>
+<p>   <span style="font-family:Comic Sans MS;font-size:18px;"><dependency><br>            <groupid>org.slf4j</groupid><br>            <artifactid>slf4j-api</artifactid><br>            <version>1.7.12</version><br>        </dependency><br>        <dependency><br>            <groupid>ch.qos.logback</groupid><br>            <artifactid>logback-classic</artifactid><br>            <version>1.1.3</version><br>            <scope>compile</scope><br>            <exclusions><br>                <exclusion><br>                    <artifactid>slf4j-api</artifactid><br>                    <groupid>org.slf4j</groupid><br>                </exclusion><br>            </exclusions><br>        </dependency></span></p>
+<pre><code>    &lt;dependency&gt;
+        &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
+        &lt;artifactId&gt;logback-core&lt;/artifactId&gt;
+        &lt;version&gt;1.1.3&lt;/version&gt;
+        &lt;exclusions&gt;
+            &lt;exclusion&gt;
+                &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+                &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;
+            &lt;/exclusion&gt;
+        &lt;/exclusions&gt;
+        &lt;scope&gt;compile&lt;/scope&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+        &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
+        &lt;artifactId&gt;logback-access&lt;/artifactId&gt;
+        &lt;version&gt;1.1.3&lt;/version&gt;
+        &lt;exclusions&gt;
+            &lt;exclusion&gt;
+                &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+                &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;
+            &lt;/exclusion&gt;
+        &lt;/exclusions&gt;
+        &lt;scope&gt;compile&lt;/scope&gt;
+    &lt;/dependency&gt;&lt;/span&gt;
+
+Web.xml
+在web项目中需要通过web.xml来加载我们所需要的LogBack.xml具体如下
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+</code></pre><web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemalocation="http://java.sun.com/xml/ns/javaee
+    http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+
+
+
+<pre><code>&lt;!-- logback-begin --&gt;
+&lt;context-param&gt;
+    &lt;param-name&gt;logbackConfigLocation&lt;/param-name&gt;
+    &lt;param-value&gt; classpath:logback.xml&lt;/param-value&gt;
+&lt;/context-param&gt;
+&lt;listener&gt;
+    &lt;listener-class&gt;com.util.LogbackConfigListener&lt;/listener-class&gt;
+&lt;/listener&gt;
+&lt;!-- logback-end --&gt;
+
+
+&lt;filter&gt;
+    &lt;filter-name&gt;encodingFilter&lt;/filter-name&gt;
+    &lt;filter-class&gt;org.springframework.web.filter.CharacterEncodingFilter&lt;/filter-class&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;encoding&lt;/param-name&gt;
+        &lt;param-value&gt;UTF-8&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;forceEncoding&lt;/param-name&gt;
+        &lt;param-value&gt;true&lt;/param-value&gt;
+    &lt;/init-param&gt;
+&lt;/filter&gt;
+&lt;filter-mapping&gt;
+    &lt;filter-name&gt;encodingFilter&lt;/filter-name&gt;
+    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;
+
+&lt;servlet&gt;
+    &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+        &lt;param-value&gt; classpath:springMVC-servlet.xml&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+&lt;/servlet&gt;
+&lt;!-- 这里一定要是/根据Servlet规范来的 --&gt;
+&lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+</code></pre><p></p></web-app><p></p>
+<p>上面的XML中用到了自定义的监听器，分别是三个类，如下所示</p>
+<p>LogbackConfigListener类</p>
+<p>package com.util;</p>
+<p>import javax.servlet.ServletContextEvent;<br>import javax.servlet.ServletContextListener;</p>
+<p>public class LogbackConfigListener implements ServletContextListener {</p>
+<pre><code>public void contextInitialized(ServletContextEvent event) {
+    LogbackWebConfigurer.initLogging(event.getServletContext());
+}
+
+public void contextDestroyed(ServletContextEvent event) {
+    LogbackWebConfigurer.shutdownLogging(event.getServletContext());
+}
+</code></pre><p>}</p>
+<p>LogbackConfigurer类</p>
+<p>package com.util;</p>
+<p>import java.io.File;<br>import java.io.FileNotFoundException;<br>import java.net.URL;</p>
+<p>import org.slf4j.LoggerFactory;<br>import org.springframework.util.ResourceUtils;<br>import org.springframework.util.SystemPropertyUtils;</p>
+<p>import ch.qos.logback.classic.LoggerContext;<br>import ch.qos.logback.classic.joran.JoranConfigurator;<br>import ch.qos.logback.core.joran.spi.JoranException;</p>
+<p>public abstract class LogbackConfigurer {</p>
+<pre><code>/** Pseudo URL prefix for loading from the class path: &quot;classpath:&quot; */
+public static final String CLASSPATH_URL_PREFIX = &quot;classpath:&quot;;
+
+/** Extension that indicates a logback XML config file: &quot;.xml&quot; */
+public static final String XML_FILE_EXTENSION = &quot;.xml&quot;;
+
+private static LoggerContext lc = (LoggerContext) LoggerFactory
+        .getILoggerFactory();
+private static JoranConfigurator configurator = new JoranConfigurator();
+
+/**
+ * Initialize logback from the given file location, with no config file
+ * refreshing. Assumes an XML file in case of a &quot;.xml&quot; file extension, and a
+ * properties file otherwise.
+ * 
+ * @param location
+ *            the location of the config file: either a &quot;classpath:&quot;
+ *            location (e.g. &quot;classpath:mylogback.properties&quot;), an absolute
+ *            file URL (e.g.
+ *            &quot;file:C:/logback.properties), or a plain absolute path in the file system (e.g. &quot;
+ *            C:/logback.properties&quot;)
+ * @throws FileNotFoundException
+ *             if the location specifies an invalid file path
+ */
+public static void initLogging(String location)
+        throws FileNotFoundException {
+    String resolvedLocation = SystemPropertyUtils
+            .resolvePlaceholders(location);
+    URL url = ResourceUtils.getURL(resolvedLocation);
+    if (resolvedLocation.toLowerCase().endsWith(XML_FILE_EXTENSION)) {
+        // DOMConfigurator.configure(url);
+        configurator.setContext(lc);
+        lc.reset();
+        try {
+            configurator.doConfigure(url);
+        } catch (JoranException ex) {
+            throw new FileNotFoundException(url.getPath());
+        }
+        lc.start();
+    }
+    // else {
+    // PropertyConfigurator.configure(url);
+    // }
+}
+
+/**
+ * Shut down logback, properly releasing all file locks.
+ * &lt;p&gt;
+ * This isn&apos;t strictly necessary, but recommended for shutting down logback
+ * in a scenario where the host VM stays alive (for example, when shutting
+ * down an application in a J2EE environment).
+ */
+public static void shutdownLogging() {
+    lc.stop();
+}
+
+/**
+ * Set the specified system property to the current working directory.
+ * &lt;p&gt;
+ * This can be used e.g. for test environments, for applications that
+ * leverage logbackWebConfigurer&apos;s &quot;webAppRootKey&quot; support in a web
+ * environment.
+ * 
+ * @param key
+ *            system property key to use, as expected in logback
+ *            configuration (for example: &quot;demo.root&quot;, used as
+ *            &quot;${demo.root}/WEB-INF/demo.log&quot;)
+ * @see org.springframework.web.util.logbackWebConfigurer
+ */
+public static void setWorkingDirSystemProperty(String key) {
+    System.setProperty(key, new File(&quot;&quot;).getAbsolutePath());
+}
+</code></pre><p>}</p>
+<p>LogbackWebConfigurer类</p>
+<p>package com.util;</p>
+<p>import java.io.FileNotFoundException;</p>
+<p>import javax.servlet.ServletContext;</p>
+<p>import org.springframework.util.ResourceUtils;<br>import org.springframework.util.SystemPropertyUtils;<br>import org.springframework.web.util.WebUtils;</p>
+<p>public abstract class LogbackWebConfigurer {</p>
+<pre><code>/** Parameter specifying the location of the logback config file */
+public static final String CONFIG_LOCATION_PARAM = &quot;logbackConfigLocation&quot;;
+
+/**
+ * Parameter specifying the refresh interval for checking the logback config
+ * file
+ */
+public static final String REFRESH_INTERVAL_PARAM = &quot;logbackRefreshInterval&quot;;
+
+/** Parameter specifying whether to expose the web app root system property */
+public static final String EXPOSE_WEB_APP_ROOT_PARAM = &quot;logbackExposeWebAppRoot&quot;;
+
+/**
+ * Initialize logback, including setting the web app root system property.
+ * 
+ * @param servletContext
+ *            the current ServletContext
+ * @see WebUtils#setWebAppRootSystemProperty
+ */
+public static void initLogging(ServletContext servletContext) {
+    // Expose the web app root system property.
+    if (exposeWebAppRoot(servletContext)) {
+        WebUtils.setWebAppRootSystemProperty(servletContext);
+    }
+
+    // Only perform custom logback initialization in case of a config file.
+    String location = servletContext
+            .getInitParameter(CONFIG_LOCATION_PARAM);
+    if (location != null) {
+        // Perform actual logback initialization; else rely on logback&apos;s
+        // default initialization.
+        try {
+            // Return a URL (e.g. &quot;classpath:&quot; or &quot;file:&quot;) as-is;
+            // consider a plain file path as relative to the web application
+            // root directory.
+            if (!ResourceUtils.isUrl(location)) {
+                // Resolve system property placeholders before resolving
+                // real path.
+                location = SystemPropertyUtils
+                        .resolvePlaceholders(location);
+                location = WebUtils.getRealPath(servletContext, location);
+            }
+
+            // Write log message to server log.
+            servletContext.log(&quot;Initializing logback from [&quot; + location
+                    + &quot;]&quot;);
+
+            // Initialize without refresh check, i.e. without logback&apos;s
+            // watchdog thread.
+            LogbackConfigurer.initLogging(location);
+
+        } catch (FileNotFoundException ex) {
+            throw new IllegalArgumentException(
+                    &quot;Invalid &apos;logbackConfigLocation&apos; parameter: &quot;
+                            + ex.getMessage());
+        }
+    }
+}
+
+/**
+ * Shut down logback, properly releasing all file locks and resetting the
+ * web app root system property.
+ * 
+ * @param servletContext
+ *            the current ServletContext
+ * @see WebUtils#removeWebAppRootSystemProperty
+ */
+public static void shutdownLogging(ServletContext servletContext) {
+    servletContext.log(&quot;Shutting down logback&quot;);
+    try {
+        LogbackConfigurer.shutdownLogging();
+    } finally {
+        // Remove the web app root system property.
+        if (exposeWebAppRoot(servletContext)) {
+            WebUtils.removeWebAppRootSystemProperty(servletContext);
+        }
+    }
+}
+
+/**
+ * Return whether to expose the web app root system property, checking the
+ * corresponding ServletContext init parameter.
+ * 
+ * @see #EXPOSE_WEB_APP_ROOT_PARAM
+ */
+private static boolean exposeWebAppRoot(ServletContext servletContext) {
+    String exposeWebAppRootParam = servletContext
+            .getInitParameter(EXPOSE_WEB_APP_ROOT_PARAM);
+    return (exposeWebAppRootParam == null || Boolean
+            .valueOf(exposeWebAppRootParam));
+}
+</code></pre><p>}</p>
+<p>   logback.XML配置<br>下面来看一下这个xml是如何配置的</p>
+<p>&lt;?xml version=”1.0” encoding=”UTF-8”?&gt;<br><!-- ROOT 节点 --><br><!-- 属性描述 scan：性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true scanPeriod:设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。当scan为true时，此属性生效。默认的时间间隔为1分钟。 
+    debug:当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。 --></p>
+<configuration scan="true" scanperiod="60 seconds" debug="false"><br>    <!-- 定义日志文件 输入位置,注意此处的/ --><br>    <property name="log_dir" value="E:/logs"><br>    <!-- 日志最大的历史 60天 --><br>    <property name="maxHistory" value="60"></property><br><br><br>    <!-- 控制台输出日志 --><br>    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender"><br>        <encoder><br>            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -<br>                %msg%n</pattern><br>        </encoder><br><br>    </appender><br><br><br>    <!-- 出错日志 appender --><br>    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender"><br>        <!-- 在多数的Log工具中，级别是可以传递，例如如果指定了日志输出级别为DEBUG， 那么INFO、ERROR级别的log也会出现在日志文件。这种默认给程序的调试带来了很多的麻烦 
+            通过配置Filter 来严格控制日志输入级别 <filter class="ch.qos.logback.classic.filter.LevelFilter"> 
+            <level>ERROR/level> <onMatch>ACCEPT</onMatch> <onMismatch>DENY</onMismatch> 
+            </filter> --><br>        <rollingpolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"><br>            <!-- 按天回滚 daily --><br>            <filenamepattern>${log_dir}/error-log-%d{yyyy-MM-dd}.log<br>            </filenamepattern><br>            <!-- 日志最大的历史 60天 --><br>            <maxhistory>${maxHistory}</maxhistory><br>        </rollingpolicy><br>        <encoder><br>            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -<br>                %msg%n</pattern><br>        </encoder><br>    </appender><br><br>    <!-- INFO 日志 appender --><br>    <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender"><br>        <rollingpolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"><br>            <!-- 按天回滚 daily --><br>            <filenamepattern>${log_dir}/info-log-%d{yyyy-MM-dd}.log<br>            </filenamepattern><br>            <!-- 日志最大的历史 60天 --><br>            <maxhistory>${maxHistory}</maxhistory><br>        </rollingpolicy><br>        <encoder><br>            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -<br>                %msg%n</pattern><br>        </encoder><br>    </appender><br><br><br>    <!-- 访问日志 appender --><br>    <appender name="ACCESS" class="ch.qos.logback.core.rolling.RollingFileAppender"><br>        <rollingpolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"><br>            <!-- 按天回滚 daily --><br>            <filenamepattern>${log_dir}/access-log-%d{yyyy-MM-dd}.log<br>            </filenamepattern><br>            <!-- 日志最大的历史 60天 --><br>            <maxhistory>${maxHistory}</maxhistory><br>        </rollingpolicy><br>        <encoder><br>            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -<br>                %msg%n</pattern><br>        </encoder><br>    </appender><br><br>    <!-- 系统用户操作日志 appender --><br>    <appender name="SYS-USER" class="ch.qos.logback.core.rolling.RollingFileAppender"><br>        <rollingpolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"><br>            <!-- 按天回滚 daily --><br>            <filenamepattern>${log_dir}/sys_user-log-%d{yyyy-MM-dd}.log<br>            </filenamepattern><br>            <!-- 日志最大的历史 60天 --><br>            <maxhistory>${maxHistory}</maxhistory><br>        </rollingpolicy><br>        <encoder><br>            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -<br>                %msg%n</pattern><br>        </encoder><br>    </appender><br><br><br>    <!-- 打印SQL输出 --><br>    <logger name="java.sql.Connection" level="DEBUG"><br>    <logger name="java.sql.Statement" level="DEBUG"><br>    <logger name="java.sql.PreparedStatement" level="DEBUG"><br><br><br><br>    <!--error错误日志 additivity="false"表示不向上传递 --><br>    <!-- <logger name="com.test" level="error" > --><br>    <!-- <appender-ref ref="ERROR" /> --><br>    <!-- </logger> --><br>    <!--info日志 --><br>    <logger name="com.test" level="info" additivity="false"><br>        <appender-ref ref="INFO"><br>    </appender-ref></logger><br>    <!--访问日志 --><br>    <!-- <logger name="com.test" level="info" additivity="false"> --><br>    <!-- <appender-ref ref="ACCESS" /> --><br>    <!-- </logger> --><br>    <!--系统用户操作日志 --><br>    <!-- <logger name="com.test" level="info" additivity="false"> --><br>    <!-- <appender-ref ref="SYS-USER" /> --><br>    <!-- </logger> --><br><br>    <root><br>        <level value="INFO"><br>        <appender-ref ref="stdout"><br>    </appender-ref></level></root><br></logger></logger></logger></property></configuration>
+
+<p>关于这个XML文件的详细讲解请参考<a href="http://blog.csdn.net/haidage/article/details/6794509" target="_blank" rel="external">http://blog.csdn.net/haidage/article/details/6794509</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近在做项目中需要用到日志，本来选取的是Log4j，最后经过对比之后还是发现LogBack在性能上比Log4j有优势。至于有什么好处，请参考下面这篇文章。&lt;br&gt;从Log4j迁移到LogBack的理由&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;下面废话不多说了，就看一下，如何来把Log
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>如何相互转换逗号分隔的字符串和List</title>
+    <link href="http://yoursite.com/2017/01/12/%E5%A6%82%E4%BD%95%E7%9B%B8%E4%BA%92%E8%BD%AC%E6%8D%A2%E9%80%97%E5%8F%B7%E5%88%86%E9%9A%94%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8CList/"/>
+    <id>http://yoursite.com/2017/01/12/如何相互转换逗号分隔的字符串和List/</id>
+    <published>2017-01-12T03:01:54.000Z</published>
+    <updated>2017-01-12T05:09:59.591Z</updated>
+    
+    <content type="html"><![CDATA[<p>将逗号分隔的字符串转换为List<br>方法 1： 利用JDK的Arrays类<br>String str = “a,b,c”;<br>List<string> result = Arrays.asList(str.split(“,”));</string></p>
+<p>方法 2： 利用Guava的Splitter<br>String str = “a, b, c”;<br>List<string> result = Splitter.on(“,”).trimResults().splitToList(str);</string></p>
+<p>方法 3： 利用Apache Commons的StringUtils （只是用了split)<br>String str = “a,b,c”;<br>List<string> result = Arrays.asList(StringUtils.split(str,”,”));</string></p>
+<p>方法 4: 利用Spring Framework的StringUtils<br>String str = “a,b,c”;<br>List<string> str = Arrays.asList(StringUtils.commaDelimitedListToStringArray(str));</string></p>
+<p>将List转换为逗号分隔符<br>方法 1: 不用工具类<br>       public String listToString(List list, char separator) {<br>        StringBuilder sb = new StringBuilder();<br>        for (int i = 0; i &lt; list.size(); i++) {<br>            if (i == list.size() - 1) {<br>                sb.append(list.get(i));<br>            } else {<br>                sb.append(list.get(i));<br>                sb.append(separator);<br>            }<br>        }<br>        return sb.toString();<br>       } </p>
+<pre><code>public String listToString(List list, char separator) {  
+  StringBuilder sb = new StringBuilder();  
+  for (int i = 0; i &lt; list.size(); i++) {  
+      sb.append(list.get(i)).append(separator);  
+  }  
+  return sb.toString().substring(0,sb.toString().length()-1);  
+ }  
+</code></pre><p>方法 2： 利用Guava的Joiner<br>List<string> list = new ArrayList<string>();<br>list.add(“a”);<br>list.add(“b”);<br>list.add(“c”);<br>String str = Joiner.on(“,”).join(list);</string></string></p>
+<p>方法 3： 利用Apache Commons的StringUtils<br>List<string> list = new ArrayList<string>();<br>list.add(“a”);<br>list.add(“b”);<br>list.add(“c”);<br>String str = StringUtils.join(list.toArray(), “,”);</string></string></p>
+<p>方法 4：利用Spring Framework的StringUtils<br>List<string> list = new ArrayList<string>();<br>list.add(“a”);<br>list.add(“b”);<br>list.add(“c”);<br>String str = StringUtils.collectionToDelimitedString(list, “,”);</string></string></p>
+<p>比较下来，我的观点就是Guava库和StringUtils更灵活，适用面更广。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;将逗号分隔的字符串转换为List&lt;br&gt;方法 1： 利用JDK的Arrays类&lt;br&gt;String str = “a,b,c”;&lt;br&gt;List&lt;string&gt; result = Arrays.asList(str.split(“,”));&lt;/string&gt;&lt;/p&gt;
+&lt;p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>extjs-上传图片</title>
+    <link href="http://yoursite.com/2016/12/10/extjs-%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87/"/>
+    <id>http://yoursite.com/2016/12/10/extjs-上传图片/</id>
+    <published>2016-12-10T13:44:29.000Z</published>
+    <updated>2016-12-10T13:49:16.427Z</updated>
+    
+    <content type="html"><![CDATA[<p>&lt;!DOCTYPE html PUBLIC “-//W3C//DTD XHTML 1.0 Transitional//EN” “<a href="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;" target="_blank" rel="external">http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;</a></p>
+<html xmlns="http://www.w3.org/1999/xhtml"><br><head><br>    <title></title><br>    <!--ExtJs框架开始--><br>    <script type="text/javascript" src="/Ext/adapter/ext/ext-base.js"></script><br>    <script type="text/javascript" src="/Ext/ext-all.js"></script><br>    <script src="/Ext/src/locale/ext-lang-zh_CN.js" type="text/javascript"></script><br>    <link rel="stylesheet" type="text/css" href="/Ext/resources/css/ext-all.css"><br>    <!--ExtJs框架结束--><br>    <script type="text/javascript"><br>        Ext.onReady(function () {<br>            //初始化标签中的Ext:Qtip属性。<br>            Ext.QuickTips.init();<br>            Ext.form.Field.prototype.msgTarget = ‘side’;<br>            //创建div组件<br>            var imagebox = new Ext.BoxComponent({<br>                autoEl: {<br>                    style: ‘width:150px;height:150px;margin:0px auto;border:1px solid #ccc; text-align:center;padding-top:20px;margin-bottom:10px’,<br>                    tag: ‘div’,<br>                    id: ‘imageshow’,<br>                    html: ‘暂无图片’<br>                }<br>            });<br>            //创建文本上传域<br>            var file = new Ext.form.TextField({<br>                name: ‘imgFile’,<br>                fieldLabel: ‘文件上传’,<br>                inputType: ‘file’,<br>                allowBlank: false,<br>                blankText: ‘请浏览图片’<br>            });<br>            //提交按钮处理方法<br>            var btnsubmitclick = function () {<br>                if (form.getForm().isValid()) {<br>                    form.getForm().submit({<br>                        waitTitle: “请稍候”,<br>                        waitMsg: ‘正在上传…’,<br>                        success: function (form, action) {<br>                            Ext.MessageBox.alert(“提示”, “上传成功！”);<br>                            document.getElementById(‘imageshow’).innerHTML = ‘<img style="width:150px;height:150px" src="' + action.result.path + '"/>‘;<br>                        },<br>                        failure: function () {<br>                            Ext.MessageBox.alert(“提示”, “上传失败！”);<br>                        }<br>                    });<br>                }<br>            }<br>            //重置按钮”点击时”处理方法<br>            var btnresetclick = function () {<br>                form.getForm().reset();<br>            }<br>            //表单<br>            var form = new Ext.form.FormPanel({<br>                frame: true,<br>                fileUpload: true,<br>                url: ‘/App_Ashx/Demo/Upload.ashx’,<br>                title: ‘表单标题’,<br>                style: ‘margin:10px’,<br>                items: [imagebox, file],<br>                buttons: [{<br>                    text: ‘保存’,<br>                    handler: btnsubmitclick<br>                }, {<br>                    text: ‘重置’,<br>                    handler: btnresetclick<br>                }]<br>            });<br>            //窗体<br>            var win = new Ext.Window({<br>                title: ‘窗口’,<br>                width: 476,<br>                height: 374,<br>                resizable: true,<br>                modal: true,<br>                closable: true,<br>                maximizable: true,<br>                minimizable: true,<br>                buttonAlign: ‘center’,<br>                items: form<br>            });<br>            win.show();<br>        });<br>    </script><br></head><br><body><br><!--
+说明：
+(1)var imagebox = new Ext.BoxComponent():创建一个新的html标记。
+    官方解释如下：
+    This may then be added to a Container as a child item.
+    To create a BoxComponent based around a HTML element to be created at render time, use the autoEl config option which takes the form of a DomHelper specification:
+(2) autoEl: {style: '',tag: 'div',id: 'imageshow', html: '暂无图片'}定义这个html标记的属性，如 标记为：div，id是多少等。
+    官方实例为：
+    var myImage = new Ext.BoxComponent({
+    autoEl: {
+        tag: 'img',
+        src: '/images/my-image.jpg'
+        }
+    });
+(3)var file = new Ext.form.TextField()：创建一个新的文件上传域。 
+(4)name: 'imgFile':名称，重要，因为service端要根据这个名称接收图片。
+(5)inputType: 'file'：表单类型为文件类型。
+(6)waitTitle: "请稍候",waitMsg: '正在上传...',：上传等待过程中的提示信息。    
+(7)document.getElementById('imageshow').innerHTML = '<img style="width:150px;height:150px" src="' + action.result.path + '"/>';这个是原生态的js，把imageshow的值换成图片。
+--><br></body><br></html>
+
+<p>其中与service交互用上传图片的 一般处理程序文件，源码如下：</p>
+<p>/App_Ashx/Demo/Upload.ashx</p>
+<p>using System;<br>using System.Web;<br>using System.IO;<br>using System.Globalization;</p>
+<p>namespace HZYT.ExtJs.WebSite.App_Ashx.Demo<br>{<br>    public class Upload : IHttpHandler<br>    {<br>        public void ProcessRequest(HttpContext context)<br>        {<br>            //虚拟目录，建议写在配置文件中<br>            String strPath = “/Upload/Image/“;<br>            //文件本地目录<br>            String dirPath = context.Server.MapPath(strPath);<br>            //接收文件<br>            HttpPostedFile imgFile = context.Request.Files[“imgFile”];<br>            //取出文件扩展名<br>            String fileExt = Path.GetExtension(imgFile.FileName).ToLower();<br>            //重新命名文件<br>            String newFileName = DateTime.Now.ToString(“yyyyMMddHHmmss_ffff”, DateTimeFormatInfo.InvariantInfo) + fileExt;<br>            //文件上传路径<br>            String filePath = dirPath + newFileName;<br>            //保存文件<br>            imgFile.SaveAs(filePath);<br>            //客户端输出<br>            context.Response.Write(“{success:true,path:’” + strPath + newFileName + “‘}”);<br>        }</p>
+<pre><code>    public bool IsReusable
+    {
+        get
+        {
+            return false;
+        }
+    }
+}
+</code></pre><p>}</p>
+<p> 2.效果如下</p>
+<p> <img src="/images/extjs-sctp.png" alt="&quot;&quot;"> </p>
+<p> 3.说明：</p>
+<p>(1)上传域不光可以上传图片，还要以上传其他文件。这里我们以图片为例。</p>
+<p>(2)在实际开发中，我们还要对图片格式，大小等进行校验，这个示例测重于上传，没有加入任何校验</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&amp;lt;!DOCTYPE html PUBLIC “-//W3C//DTD XHTML 1.0 Transitional//EN” “&lt;a href=&quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&amp;quot;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>extjs-下拉列表联动</title>
+    <link href="http://yoursite.com/2016/12/10/extjs-%E4%B8%8B%E6%8B%89%E5%88%97%E8%A1%A8%E8%81%94%E5%8A%A8/"/>
+    <id>http://yoursite.com/2016/12/10/extjs-下拉列表联动/</id>
+    <published>2016-12-10T13:22:32.000Z</published>
+    <updated>2016-12-10T13:38:14.819Z</updated>
+    
+    <content type="html"><![CDATA[<p>不管是几级下拉列表的联动实现本质上都是根据某个下拉列表的变化，去动态加载其他下拉列表，如：省、市、地区。</p>
+<p>当我们监听到省变化时，向service端发送省的编号，service端根据收到的”省”编号到数据库中查询该省所对应的市信息，</p>
+<p>地区同理，抓住这一点，我们只需要监听 combobox 的 select 事件并在其中实现逻辑即可。</p>
+<p>1.代码如下：</p>
+<p>&lt;!DOCTYPE html PUBLIC “-//W3C//DTD XHTML 1.0 Transitional//EN” “<a href="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;" target="_blank" rel="external">http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;</a></p>
+<html xmlns="http://www.w3.org/1999/xhtml"><br><head><br>    <title></title><br>    <!--ExtJs框架开始--><br>    <script type="text/javascript" src="/Ext/adapter/ext/ext-base.js"></script><br>    <script type="text/javascript" src="/Ext/ext-all.js"></script><br>    <script src="/Ext/src/locale/ext-lang-zh_CN.js" type="text/javascript"></script><br>    <link rel="stylesheet" type="text/css" href="/Ext/resources/css/ext-all.css"><br>    <!--ExtJs框架结束--><br>    <script type="text/javascript"><br>        Ext.onReady(function () {<br>            //初始化标签中的Ext:Qtip属性。<br>            Ext.QuickTips.init();<br>            Ext.form.Field.prototype.msgTarget = ‘side’;<br><br>            //———————-下拉列表开始———————-//<br>            //创建市数据源<br>            var combocitystore = new Ext.data.Store({<br>                //设定读取的地址<br>                proxy: new Ext.data.HttpProxy({ url: ‘/App_Ashx/Demo/City.ashx’ }),<br>                //设定读取的格式<br>                reader: new Ext.data.JsonReader({ root: ‘data’ },<br>                 [{ name: ‘id’ }, { name: ‘name’}])<br>            });<br>            //创建区数据源<br>            var comboareastore = new Ext.data.Store({<br>                //设定读取的地址<br>                proxy: new Ext.data.HttpProxy({ url: ‘/App_Ashx/Demo/Area.ashx’ }),<br>                reader: new Ext.data.JsonReader({ root: ‘data’ },<br>                 [{ name: ‘id’ }, { name: ‘name’}])<br>            });<br>            //创建市Combobox<br>            var comboboxcity = new Ext.form.ComboBox({<br>                id: ‘comboboxcity’,<br>                fieldLabel: ‘市’,<br>                width: 120,<br>                store: combocitystore,<br>                displayField: ‘name’,<br>                valueField: ‘id’,<br>                triggerAction: ‘all’,<br>                emptyText: ‘请选择…’,<br>                allowBlank: false,<br>                blankText: ‘请选择市’,<br>                editable: false,<br>                mode: ‘local’, //该属性和以下方法为了兼容ie8<br>                listeners: {<br>                    ‘render’: function () {<br>                        combocitystore.load();<br>                    }<br>                }<br>            });<br><br>            //创建区Combobox<br>            var comboareacity = new Ext.form.ComboBox({<br>                fieldLabel: ‘区’,<br>                width: 120,<br>                store: comboareastore,<br>                displayField: ‘name’,<br>                valueField: ‘id’,<br>                triggerAction: ‘all’,<br>                emptyText: ‘请选择…’,<br>                allowBlank: false,<br>                blankText: ‘请选择区’,<br>                editable: false<br>            });<br>            //联动的实现<br>            comboboxcity.on(‘select’, function () {<br>                comboareastore.baseParams.id = comboboxcity.getValue();<br>                comboareacity.setValue(‘’);<br>                comboareastore.load();<br>            })<br>            //———————-下拉列表结束———————-//<br>            //表单<br>            var form = new Ext.form.FormPanel({<br>                frame: true,<br>                title: ‘表单标题’,<br>                style: ‘margin:10px’,<br>                items: [comboboxcity, comboareacity]<br>            });<br>            //窗体<br>            var win = new Ext.Window({<br>                title: ‘窗口’,<br>                width: 476,<br>                height: 374,<br>                resizable: true,<br>                modal: true,<br>                closable: true,<br>                maximizable: true,<br>                minimizable: true,<br>                buttonAlign: ‘center’,<br>                items: form<br>            });<br>            win.show();<br>        });<br>    </script><br></head><br><body><br>    <!--
+说明：
+(1)var combocitystore = new Ext.data.Store():创建一个新的数据源。
+(2)proxy: new Ext.data.HttpProxy({ url: '/App_Ashx/Demo/City.ashx' })：数据代理为http代理，地址为/App_Ashx/Demo/City.ashx。
+(3)reader: new Ext.data.JsonReader({ root: 'data' },[{ name: 'id' }, { name: 'name'}]):读取json返回值根节点为data，对象列为id和name。
+    这里要结合client与service观察,我在service端的输出如下：{data:[{id:1,name:'北京'},{id:2,name:'上海'}]}
+(4)comboboxcity.on('select', function () {}：市选择变化时触发事件。
+(5)comboareastore.baseParams.id = comboboxcity.getValue()：注意，前面的comboareastore是区的数据源，
+    当市变化时，我们给区的数据源加上个向service端发送的参数。
+(6)comboareacity.setValue('')：把区的下拉列表设置为空，由于非空验证，Ext会提示用户“请选择区”，这个地方也可以把加载出来的第一个区
+    显示在区的下拉列表中，具体请自行实现吧。        
+(7)comboareastore.load()：区的数据源重新加载。
+--><br></body><br></html>
+
+<p>其中与service交互用到两个.net 一般处理程序文件，源码如下：<br>(1)/App_Ashx/Demo/City.ashx</p>
+<p>using System.Web;</p>
+<p>namespace HZYT.ExtJs.WebSite.App_Ashx.Demo<br>{<br>    public class City : IHttpHandler<br>    {<br>        public void ProcessRequest(HttpContext context)<br>        {<br>            context.Response.Write(“{data:[{id:1,name:’北京’},{id:2,name:’上海’}]}”);<br>        }</p>
+<pre><code>    public bool IsReusable
+    {
+        get
+        {
+            return false;
+        }
+    }
+}
+</code></pre><p>}</p>
+<p>(2)/App_Ashx/Demo/Area.ashx</p>
+<p>using System.Web;</p>
+<p>namespace HZYT.ExtJs.WebSite.App_Ashx.Demo<br>{<br>    public class Area : IHttpHandler<br>    {<br>        public void ProcessRequest(HttpContext context)<br>        {<br>            //接收Client端传来的参数，交根据条件返回<br>            if (context.Request.Form[“id”].ToString() == “1”)<br>            {<br>                context.Response.Write(“{data:[{id:1,name:’东城区’},{id:2,name:’西城区’},{id:2,name:’海淀区’}]}”);<br>            }<br>            else<br>            {<br>                context.Response.Write(“{data:[{id:1,name:’杨浦区’},{id:2,name:’虹口区’},{id:2,name:’闸北区’}]}”);<br>            }<br>        }</p>
+<pre><code>    public bool IsReusable
+    {
+        get
+        {
+            return false;
+        }
+    }
+}
+</code></pre><p>}</p>
+<p>2.效果如下：<br><img src="/images/extjs-xlld.png" alt="&quot;下拉联动&quot;"> </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;不管是几级下拉列表的联动实现本质上都是根据某个下拉列表的变化，去动态加载其他下拉列表，如：省、市、地区。&lt;/p&gt;
+&lt;p&gt;当我们监听到省变化时，向service端发送省的编号，service端根据收到的”省”编号到数据库中查询该省所对应的市信息，&lt;/p&gt;
+&lt;p&gt;地区同理，抓住
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>extjs技巧</title>
+    <link href="http://yoursite.com/2016/12/10/extjs%E6%8A%80%E5%B7%A7/"/>
+    <id>http://yoursite.com/2016/12/10/extjs技巧/</id>
+    <published>2016-12-10T13:00:02.000Z</published>
+    <updated>2016-12-10T13:02:13.007Z</updated>
+    
+    <content type="html"><![CDATA[<p>extjs Ext.form.ComboBox 的设置默认值的问题<br>Ext.onReady(function(){<br>var dbConnectionRecord = Ext.data.Record.create([<br>    {name: ‘dbConnectionKey’,type:”string”,mapping:”dbConnectionKey”},<br>    {name: ‘name’,type:”string”,mapping:”name”}<br>]);<br>var dataProxy=new Ext.data.HttpProxy({url:”&lt;%=basePath%&gt;getDBConnection.action”});<br>var theReader=new Ext.data.JsonReader({totalProperty: ‘totalProperty’,root:’root’,id:”ecname”},dbConnectionRecord);<br>var dbstore=new Ext.data.Store({proxy:dataProxy,reader:theReader});<br>dbstore.load();<br>var dbcombo = new Ext.form.ComboBox({<br>id:’dbCombo’,<br>renderTo:Ext.getBody(),<br>    store: dbstore,<br>    valueField:’dbConnectionKey’,<br>   displayField:’name’,<br>    typeAhead: true,<br>    emptyText:’请选择’,<br>    readOnly : true,<br>    mode: ‘local’,<br>    name:”dbkey”,<br>    hiddenName:’dbkey’,<br>    editable: false,<br>    triggerAction: ‘all’,<br>    selectOnFocus:true<br>});<br>////dbcombo.setValue(“4”); 肯定不行，参见后面的代码</p>
+<p>});</p>
+<p>实现：<br>写在store load的callback里 </p>
+<p>dbstore.load({<br>    callback : function(records) {<br>    dbcombo.setValue(“4”);<br>    }<br>    });<br>//在分页组件前面添加组件<br>var page = new Ext.PagingToolbar({<br>store: store,<br>displayInfo: true,<br>pageSize: 10<br>});<br>page.insert(0, ‘-‘);<br>page.insert(0, { //添加一个日期组件<br>xtype: ‘datefield’,<br>name: ‘chatdate’,<br>format: ‘Y-m-d’,<br>value: new Date()<br>});<br>//树节点(TreeNode)图标动态修改 2009-11-22 15:36:52<br>var ui = node.getUI();<br>ui.removeClass(‘x-tree-node-leaf’); //去掉之前的根节点样式<br>ui.addClass(‘x-tree-node-expanded’); //设定已展开文件夹样式<br>//ui.addClass(‘x-tree-node-collapsed’);//设定合并的文件夹样式<br>使用Ext.Ajaxt对象完成异步请求的交互，Ext.Ajax是单实例对象（非常重要，全局单一Ext.Ajax实例！）。<br>注册Ext.Ajax的requestcomplete事件，每个ajax请求成功后首先响应该事件。在该事件的回调函数里面判断<br>访问请求是否超时。使用Ext.Ajax对象的好处是，只需要引入一个包含了几行超时处理代码的js文件，就可以<br>为当前应用增加超时处理功能，原有代码不需要做任何修改。</p>
+<p>使用Ext.Ajaxt对象完成异步请求交互，假如checkUserSessionStatus是你的回调方法，每个页面引用：</p>
+<p>Js代码<br>Ext.Ajax.on(‘requestcomplete’,checkUserSessionStatus, this);<br>function checkUserSessionStatus(conn,response,options){<br>//Ext重新封装了response对象<br>if(typeof response.getResponseHeader.sessionstatus != ‘undefined’){<br>//发现请求超时，退出处理代码…<br>}<br>}<br>Ext.Ajax.on(‘requestcomplete’,checkUserSessionStatus, this); function checkUserSessionStatus(conn,response,options){ //Ext重新封装了response对象 if(typeof response.getResponseHeader.sessionstatus != ‘undefined’){ //发现请求超时，退出处理代码… } }可以利用的几个特*：<br>a）所有的ajax请求均带有x-requested-with:XMLHttpRequest头信息<br>b）Ext.Ajax是单实例对象（非常重要，全局单一Ext.Ajax实例！）<br>c）注册Ext.Ajax的requestcomplete事件，每个ajax请求成功后首先响应该事件（概念类似spring的aop拦截）。</p>
+<p>对于其他的ajax框架，解决用户访问请求超时这个问题的思路是类似的。</p>
+<p>二、如何设置DateField的默认值。</p>
+<p>设置DateField的默认值，可以直接给value属性赋值，如：value: ‘01/01/2009’，如果要设置默认值为当天的日期，可以如下设置：value: new Date</p>
+<p>1 new Ext.form.DateField({<br>2 id: ‘df’,<br>3 fieldLabel: ‘日期’,<br>4 format: ‘Y年m月d日’,<br>5 width: 150,<br>6 //value: ‘01/01/2009’<br>7 value: new Date<br>8 })<br>如何禁用或者启用某个菜单<br>有的时候，有时会根据需要，启用或者禁用某个菜单项，在ExtJS中，可以通过如下的操作进行。</p>
+<p>1 Ext.onReady(function() {<br>2 Ext.BLANK_IMAGE_URL = ‘resources/images/default/s.gif’;<br>3 Ext.QuickTips.init();<br>4 var tb = new Ext.Toolbar({<br>5 applyTo: ‘tb’,<br>6 width: 400<br>7 });<br>8 var styleMenu = new Ext.menu.Menu({<br>9 items: [{<br>10 text: ‘主题选择’,<br>11 id: ‘style’,<br>12 menu: new Ext.menu.Menu({<br>13 items: [{<br>14 text: ‘红色主题’,<br>15 checked: true,<br>16 group: ‘theme’<br>17 }, {<br>18 text: ‘蓝色主题’,<br>19 checked: false,<br>20 group: ‘theme’<br>21 }, {<br>22 text: ‘黑色主题’,<br>23 checked: false,<br>24 group: ‘theme’<br>25 }]<br>26 })<br>27 }, {<br>28 text: ‘启用主题’,<br>29 checked: true,<br>30 checkHandler: function() { Ext.getCmp(‘style’).setDisabled(!this.checked) }<br>31 }]<br>32 });<br>33 tb.add({ text: ‘主题’, menu: styleMenu });<br>34 });<br>一、从form中获取field的三个方法：</p>
+<p>１、Ext.getCmp(‘id’);</p>
+<p>２、FormPanel.getForm().findField(‘id/name’);</p>
+<p>３、Ext.get(‘id/name’);//前提是FormPanel在界面上显示出来了。</p>
+<p>二、ExtJS如何给textfield赋值的三个方法：</p>
+<p>var value=”值”;</p>
+<p>１、 fs.form.findField(id/name).setValue(value);</p>
+<p>２、 Ext.get(id/name).setValue(value);</p>
+<p>３、 Ext.getCmp(id).setValue(value);</p>
+<p>三、Ext grid中得到选择行的方法</p>
+<p>在Ext grid中假设有一个名称为grid的对象。</p>
+<p>(1)grid.getStore().getRange(0,store.getCount());//得到grid所有的行</p>
+<p>(2)grid.getSelectionModel().getSelections()//得到选择所有行</p>
+<p>(3)grid.selModel.selections.items;//得到选择所有行</p>
+<p>(4)grid.getSelectionModel().getSelected();//得到选择行的第一行</p>
+<p>四、formPanel组件load数据时combo的自动赋值</p>
+<p>　　combo有个hiddenName这个属*，这个属性是真正提交的值，在加载的时候你将这个属性的设置到reader中,就可以自动选择到指定的值了，比如说：hiddenName:’value’,那么你的reader中就应该有一个{name:’value’}.</p>
+<p>traceofsun 2010-07-26 14:08:33 8楼<br>Grid 加入一个序号列 </p>
+<p>cm = new Ext.grid.ColumnModel([<br>////////////序号列<br>new　Ext.grid.RowNumberer({<br>header　:　“序号”,<br>width　:　40,<br>renderer:function(value,metadata,record,rowIndex){<br>return　　1　+　rowIndex;<br>}<br>}),　<br>{<br>header: “货物编号”,<br>dataIndex: ‘CARGONO’,<br>width: 100<br>},<br>{<br>header: “货物名称”,<br>width: 150,<br>sortable: true,<br>dataIndex: ‘CARGONAME’<br>},</p>
+<p>traceofsun 2010-07-27 08:53:06 9楼<br>Extjs Panel 上放子Panel实例<br>Ext.onReady(function(){<br>Ext.BLANK_IMAGE_URL = ‘/images/s.gif’;<br>//Ext.chart.Chart.CHART_URL = ‘/js/extjs/3.0/resources/charts.swf’;<br>Ext.QuickTips.init();<br>var p2 = new Ext.Panel({<br>autoShow: true, html:’zzz’,title:’zzz’,id:’zzz’<br>})<br>var p = new Ext.Panel({<br>title:’Test’,<br>height:300,<br>width:600,<br>renderTo:Ext.getBody(),<br>layout:’accordion’,<br>layoutConfig:{<br>animate:false,<br>activeOnTop: false,<br>fill:true<br>},<br>items:[<br>{xtype:’panel’,html:’xxx’,title:’xxx’},<br>{xtype:’panel’,html:’yyy’,title:’yyy’}<br>],<br>buttons:[<br>{<br>text:’add’,<br>handler:function(){<br>p.add(p2);<br>p.doLayout();<br>}<br>},{<br>text:’remove’,<br>handler:function(){<br>p.remove(p2,false);<br>p.doLayout();<br>}<br>}<br>]<br>})<br>});</p>
+<p>traceofsun 2010-07-27 08:54:35 10楼<br>Extjs Panel的使用：<br>var panel = new Ext.Panel({<br>title : “面板”,<br>renderTo:”testPanel”//Panel的外层容器一般是DIV或SPAN的<br>id : “testPanel”<br>collapsible : true,// 可收缩<br>collapsed:false,//收缩的<br>width : 500,<br>height : 200,<br>autoScroll : true,// 自动卷轴<br>frame:true,//渲染框架<br>border : true,//边框<br>margins : ‘0 0 0 0’,//边缘<br>split : true,// 分割条面板组合是经常用到<br>minHeight : 100,// 最小高度<br>autoHeight : true,//自动高度以下参数用于Panel的各个部位工具栏<br>tools : [{// 标题栏按钮<br>/* </p>
+<ul>
+<li>id常用参数表//已经定义好的按钮id * - toggle</li>
+<li><ul>
+<li>close</li>
+</ul>
+</li>
+<li><ul>
+<li>minimize</li>
+</ul>
+</li>
+<li><ul>
+<li>maximize</li>
+</ul>
+</li>
+<li><ul>
+<li>refresh</li>
+</ul>
+</li>
+<li><ul>
+<li>minus</li>
+</ul>
+</li>
+<li><ul>
+<li>plus - help - search - save - print <em>/<br>id : “refresh”,<br>qtip : ‘Refresh form Data’,// 快速提示// hidden : true,<br>handler : function(event, toolEl, panel) {<br>// close logic }<br>}],// 标题栏按钮<br>tbar : [//工具条按钮<br>{<br>/</em> xtype参数用与匿名类创建(非常重要)<br>-tbfill填充空白<br>-tbseparator分割线<br>-tbtext文本说明<br><em>/<br>xtype : ‘tbtext’,<br>text : ‘工具条’<br>},{//不指定xtype属性则默认为按钮(Button)<br>pressed : true,<br>text : ‘删除’<br>}],//工具条按钮<br>bbar : [//底部工具条<br>{<br>/</em> xtype常用参数</li>
+</ul>
+</li>
+<li>-tbfill//填充空白</li>
+<li>-tbseparator//分割线</li>
+<li>-tbtext//文本说明<br>*/<br>xtype : ‘tbtext’,<br>text : ‘底部工具’<br>},{//不指定xtype属性是默认为按钮</li>
+</ul>
+<p>extjs Ext.form.ComboBox 的设置默认值的问题<br>Ext.onReady(function(){<br>var dbConnectionRecord = Ext.data.Record.create([<br>    {name: ‘dbConnectionKey’,type:”string”,mapping:”dbConnectionKey”},<br>    {name: ‘name’,type:”string”,mapping:”name”}<br>]);<br>var dataProxy=new Ext.data.HttpProxy({url:”&lt;%=basePath%&gt;getDBConnection.action”});<br>var theReader=new Ext.data.JsonReader({totalProperty: ‘totalProperty’,root:’root’,id:”ecname”},dbConnectionRecord);<br>var dbstore=new Ext.data.Store({proxy:dataProxy,reader:theReader});<br>dbstore.load();<br>var dbcombo = new Ext.form.ComboBox({<br>id:’dbCombo’,<br>renderTo:Ext.getBody(),<br>    store: dbstore,<br>    valueField:’dbConnectionKey’,<br>   displayField:’name’,<br>    typeAhead: true,<br>    emptyText:’请选择’,<br>    readOnly : true,<br>    mode: ‘local’,<br>    name:”dbkey”,<br>    hiddenName:’dbkey’,<br>    editable: false,<br>    triggerAction: ‘all’,<br>    selectOnFocus:true<br>});<br>////dbcombo.setValue(“4”); 肯定不行，参见后面的代码</p>
+<p>});</p>
+<p>实现：<br>写在store load的callback里 </p>
+<p>dbstore.load({<br>    callback : function(records) {<br>    dbcombo.setValue(“4”);<br>    }<br>    });<br>回帖列表回帖(15) | 浏览(35)</p>
+<p>traceofsun 2010-07-27 10:41:48 11楼<br>1、确保[{<br>xtype:’textarea’,<br>id:’steno_subText’,<br>width:300 }的textarea被创建了 </p>
+<p>2、<br>在a之前<br>加上这句<br>Ext.ComponentMgr.all.each(function(r){alert(r.id)}); </p>
+<p>Ext.getCmp(“控件ID”).setValue(‘1’);</p>
+<p>traceofsun 2010-07-27 22:31:30 12楼<br>Ext ContentPanel中javascript函数的执行问题2007-08-02 09:33方法1：<br>ContentPanel.setUrl({url: Rt+’/jsp/formAndResult/511Form.jsp’, scripts: true, text: ‘正在加载…’});<br>contentPanel.refresh();<br>方法2：<br>ContentPanel.load({url: Rt+’/jsp/formAndResult/511Form.jsp’, scripts: true, text: ‘正在加载…’});<br>没有认真看API的，找了半天才发现的。</p>
+<p>—————————-ContentPanel刷新————————————————————–</p>
+<p>traceofsun 2010-08-03 21:12:40 13楼<br>Ext.ux.ThemeChange = Ext.extend(Ext.form.ComboBox,{<br>editable : false,<br>displayField : ‘theme’,<br>valueField : ‘css’,<br>typeAhead : true,<br>mode : ‘local’,<br>triggerAction : ‘all’,<br>selectOnFocus : true,<br>initComponent : function(){<br>//定义主题名和主题样式的对应关系<br>var themes = [<br>[‘默认’,’ext-all.css’],<br>[‘深蓝心情’,’xtheme-slate.css’],<br>[‘灰色回忆’,’xtheme-gray-extend.css’],<br>[‘银色勾红’,’xtheme-silverCherry.css’],<br>[‘黑色水晶’,’xtheme-slickness2.css’],<br>[‘靛蓝情怀’,’xtheme-indigo.css’],<br>[‘黑色物语’,’xtheme-black.css’]<br>];<br>this.store = new Ext.data.SimpleStore({<br>fields : [‘theme’,’css’],<br>data : themes<br>});<br>this.value = ‘默认’;<br>},<br>initEvents : function(){<br>//初始化事件<br>this.on(‘collapse’,function(){//绑定组合框下拉列表的收缩事件<br>Ext.util.CSS.swapStyleSheet(‘theme’,’extlib/resources/css/‘+this.getValue());//切换样式表<br>});<br>}<br>});</p>
+<p>在下拉列表中加入一个默认的字段，修改该列表的load事件：<br>listeners : {<br>beforeload : function(ds, option) {<br>var para = {<br>tableName : ‘SD_ENUM’,<br>queryColumns : ‘ENUM_VALUE’,<br>returnColumns : ‘ENUM_KEY,ENUM_VALUE’,<br>conds : ‘ENUM_ATTR=’’ + ds.enumAttr + ‘’’<br>};<br>Ext.apply(para, ds.baseParams);<br>Ext.apply(para, option.params);<br>option.params.para = “[“ + Ext.encode(para) + “]”;<br>},<br>load : function(ds, records, options) {<br>var rd = Ext.data.Record.create([{<br>name : ‘id’<br>}, {<br>name : ‘name’<br>}]);<br>var oo = new rd({<br>‘id’ : null,<br>‘name’ : ‘&lt;–空–&gt;’<br>});<br>ds.insert(ds.getCount(), oo);<br>records.push(oo);<br>}<br>},</p>
+<p>store排序：加入属*，<br>sortInfo : {<br>field : “id”,<br>direction : “ASC”<br>}</p>
+<p>五、ExtJS 重置表单的方法：</p>
+<p>有三种方法能实现form表单的重置，假设var fs=new Ext.form.FormPanel({…});<br>(1)fs.form.reset();//重置form<br>(2)fs.getForm().getEl().dom.reset();//重置form<br>(3)Ext.getCmp(‘fs’).form.reset();</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;extjs Ext.form.ComboBox 的设置默认值的问题&lt;br&gt;Ext.onReady(function(){&lt;br&gt;var dbConnectionRecord = Ext.data.Record.create([&lt;br&gt;    {name: ‘dbConnec
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>【Maven】Project configuration is not up-to-date with pom.xml错误解决方法</title>
+    <link href="http://yoursite.com/2016/11/10/%E3%80%90Maven%E3%80%91Project-configuration-is-not-up-to-date-with-pom-xml%E9%94%99%E8%AF%AF%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/"/>
+    <id>http://yoursite.com/2016/11/10/【Maven】Project-configuration-is-not-up-to-date-with-pom-xml错误解决方法/</id>
+    <published>2016-11-10T08:53:45.000Z</published>
+    <updated>2016-11-10T09:24:07.410Z</updated>
+    
+    <content type="html"><![CDATA[<p>导入一个Maven项目之后发现有一个如下的错误：<br>Project configuration is not up-to-date with pom.xml. Run project configuration update</p>
+<p>其实这个问题解决非常简单：<br>在项目上右键——【Maven】——【Update Project Configuration……】<br>这时会打开一个（Update Maven Dependencies）的对话框，然后勾选住出错的项目，点击Ok<br>这样就搞定了。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;导入一个Maven项目之后发现有一个如下的错误：&lt;br&gt;Project configuration is not up-to-date with pom.xml. Run project configuration update&lt;/p&gt;
+&lt;p&gt;其实这个问题解决非常简单：&lt;b
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Tomcat报内存溢出</title>
+    <link href="http://yoursite.com/2016/10/26/Tomcat%E6%8A%A5%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA/"/>
+    <id>http://yoursite.com/2016/10/26/Tomcat报内存溢出/</id>
+    <published>2016-10-26T13:45:17.000Z</published>
+    <updated>2016-10-26T13:45:44.126Z</updated>
+    
+    <content type="html"><![CDATA[<p>1、错误描述</p>
+<p>严重：Exception occurred during processing request:null</p>
+<pre><code>java.lang.reflect.InvocationTargetException.
+</code></pre><p>Caused by:java.lang.OutOfMemoryError:Java heap space.</p>
+<p>2、错误原因</p>
+<pre><code>Tomcat在处理大数据时出现内存溢出
+</code></pre><p>3、解决办法</p>
+<pre><code>编辑tomcat的catalina.bat文件，在第一行的后面增加一句：
+set JAVA_OPTS=-server -Xms512m -Xmx512m -XX:PermSize=128M -XX:MaxPermSize=256M
+</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;1、错误描述&lt;/p&gt;
+&lt;p&gt;严重：Exception occurred during processing request:null&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;java.lang.reflect.InvocationTargetException.
+&lt;/code&gt;&lt;/p
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Docker的安装</title>
+    <link href="http://yoursite.com/2016/10/26/Docker%E7%9A%84%E5%AE%89%E8%A3%85/"/>
+    <id>http://yoursite.com/2016/10/26/Docker的安装/</id>
+    <published>2016-10-26T12:44:32.000Z</published>
+    <updated>2016-10-26T13:02:13.178Z</updated>
+    
+    <content type="html"><![CDATA[<p>1，关于docker</p>
+<p>Docker 是一个开源项目，诞生于 2013 年初，最初是 dotCloud 公司内部的一个业余项目。它基于 Google 公司推出的 Go 语言实现。 项目后来加入了 Linux 基金会，遵从了 Apache 2.0 协议，项目代码在 GitHub 上进行维护。</p>
+<p>Docker 项目的目标是实现轻量级的操作系统虚拟化解决方案。 Docker 的基础是 Linux 容器（LXC）等技术。</p>
+<p>在 LXC 的基础上 Docker 进行了进一步的封装，让用户不需要去关心容器的管理，使得操作更为简便。用户操作 Docker 的容器就像操作一个快速轻量级的虚拟机一样简单。</p>
+<p>摘自：<br><a href="http://dockerpool.com/static/books/docker_practice/introduction/what.html" target="_blank" rel="external">http://dockerpool.com/static/books/docker_practice/introduction/what.html</a></p>
+<p>2，安装centos</p>
+<p>在使用virtualbox安装的时候需要把网络修改成【Bridged A’dapter】，方便获得上网ip，ssh连接到虚拟机。<br>centos7 可以直接使用yum 安装docker<br>最懒的方式，只是为了学习docker省去了折腾环境的麻烦。<br>直接使用iso进行安装就行了。 </p>
+<p>3，安装docker</p>
+<p>直接安装就可以了： yum install golang docker device-mapper-event-libs</p>
+<p>必须安装 device-mapper-event-libs 否则docker启动不了，报错：Failed to start Docker Application Container Engine。<br>配置&amp;启动服务</p>
+<p>1:systemctl enable docker<br>2:systemctl start docker</p>
+<p>docker服务就可以正常启动了。</p>
+<p>4，docker hello world</p>
+<p>虚拟安装一个MySQL，docker非常强大的时image。在官方搜索类库非常多。<br><a href="https://registry.hub.docker.com/search?q=library" target="_blank" rel="external">https://registry.hub.docker.com/search?q=library</a><br>docker的注册中心，里面有很多做好的镜像库。<br>mysql的安装：<br>/mysql/”&gt;<a href="https://registry.hub.docker.com//mysql/" target="_blank" rel="external">https://registry.hub.docker.com//mysql/</a></p>
+<p>安装mysql过程，设置数据库docker-mysql，版本5.5</p>
+<p>1:# docker run –name docker-mysql -e MYSQL_ROOT_PASSWORD=docker-mysql -d mysql:5.5<br>2:Unable to find image ‘mysql:5.5’ locally<br>3:Trying to pull repository docker.io/mysql …<br>4:2f08318d65b3: Pulling dependent layers<br>5:511136ea3c5a: Download complete<br>6:4f903438061c: Download complete<br>7:1265e16d0c28: Download complete<br>8:ac1d5afd7b69: Download complete<br>9:7c89455832dd: Downloading [===========================&gt;                       ] 4.434 MB/8.077 MB 34s</p>
+<p>查看docker镜像：</p>
+<h1 id="docker-ps-a"><a href="#docker-ps-a" class="headerlink" title="docker ps -a"></a>docker ps -a</h1><p>CONTAINER ID        IMAGE               COMMAND                CREATED             STATUS              PORTS               NAMES<br>e59ad4702626        mysql:5.5           “/entrypoint.sh mysq   2 minutes ago       Up 2 minutes        3306/tcp            docker-mysql</p>
+<p>查看mysql的docker服务器，直接登录到mysql容器，就安装好了mysql。同时服务也启动了，测试mysql docker启动成功。<br>docker exec -it docker-mysql bash</p>
+<p>1 docker exec -it docker-mysql bash<br>2 root@e59ad4702626:/# mysql -uroot -pdocker-mysql<br>3 Welcome to the MySQL monitor.  Commands end with ; or \g.<br>4 Your MySQL connection id is 5<br>5 Server version: 5.5.43 MySQL Community Server (GPL)<br>6<br>7 Copyright (c) 2000, 2015, Oracle and/or its affiliates. All rights reserved.<br>8<br>9 Oracle is a registered trademark of Oracle Corporation and/or its<br>10 affiliates. Other names may be trademarks of their respective<br>11 owners.<br>12<br>13 Type ‘help;’ or ‘\h’ for help. Type ‘\c’ to clear the current input statement.<br>14<br>15 mysql&gt; show databases;<br>16 +——————–+<br>17 | Database           |<br>18 +——————–+<br>19 | information_schema |<br>20 | mysql              |<br>21 | performance_schema |<br>22 +——————–+<br>23 3 rows in set (0.00 sec)<br>24<br>25 mysql&gt; </p>
+<p>同时这个是一个虚拟的服务器，上面安装的mysql。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;1，关于docker&lt;/p&gt;
+&lt;p&gt;Docker 是一个开源项目，诞生于 2013 年初，最初是 dotCloud 公司内部的一个业余项目。它基于 Google 公司推出的 Go 语言实现。 项目后来加入了 Linux 基金会，遵从了 Apache 2.0 协议，项目代码在
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>常用Git命令大全</title>
+    <link href="http://yoursite.com/2016/09/21/%E5%B8%B8%E7%94%A8Git%E5%91%BD%E4%BB%A4%E5%A4%A7%E5%85%A8/"/>
+    <id>http://yoursite.com/2016/09/21/常用Git命令大全/</id>
+    <published>2016-09-21T13:04:33.000Z</published>
+    <updated>2016-09-21T13:06:49.805Z</updated>
+    
+    <content type="html"><![CDATA[<p>一、新建代码库</p>
+<pre><code># 在当前目录新建一个Git代码库
+$ git init
+
+# 新建一个目录，将其初始化为Git代码库
+$ git init [project-name]
+
+# 下载一个项目和它的整个代码历史
+$ git clone [url]
+</code></pre><p>二、配置</p>
+<p>Git的设置文件为.gitconfig，它可以在用户主目录下（全局配置），也可以在项目目录下（项目配置）。</p>
+<pre><code># 显示当前的Git配置
+$ git config --list
+
+# 编辑Git配置文件
+$ git config -e [--global]
+
+# 设置提交代码时的用户信息
+$ git config [--global] user.name &quot;[name]&quot;
+$ git config [--global] user.email &quot;[email address]&quot;
+</code></pre><p>三、增加/删除文件</p>
+<pre><code># 添加指定文件到暂存区
+$ git add [file1] [file2] ...
+
+# 添加指定目录到暂存区，包括子目录
+$ git add [dir]
+
+# 添加当前目录的所有文件到暂存区
+$ git add .
+
+# 添加每个变化前，都会要求确认
+# 对于同一个文件的多处变化，可以实现分次提交
+$ git add -p
+
+# 删除工作区文件，并且将这次删除放入暂存区
+$ git rm [file1] [file2] ...
+
+# 停止追踪指定文件，但该文件会保留在工作区
+$ git rm --cached [file]
+
+# 改名文件，并且将这个改名放入暂存区
+$ git mv [file-original] [file-renamed]
+</code></pre><p>四、代码提交</p>
+<pre><code># 提交暂存区到仓库区
+$ git commit -m [message]
+
+# 提交暂存区的指定文件到仓库区
+$ git commit [file1] [file2] ... -m [message]
+
+# 提交工作区自上次commit之后的变化，直接到仓库区
+$ git commit -a
+
+# 提交时显示所有diff信息
+$ git commit -v
+
+# 使用一次新的commit，替代上一次提交
+# 如果代码没有任何新变化，则用来改写上一次commit的提交信息
+$ git commit --amend -m [message]
+
+# 重做上一次commit，并包括指定文件的新变化
+$ git commit --amend [file1] [file2] ...
+</code></pre><p>五、分支</p>
+<pre><code># 列出所有本地分支
+$ git branch
+
+# 列出所有远程分支
+$ git branch -r
+
+# 列出所有本地分支和远程分支
+$ git branch -a
+
+# 新建一个分支，但依然停留在当前分支
+$ git branch [branch-name]
+
+# 新建一个分支，并切换到该分支
+$ git checkout -b [branch]
+
+# 新建一个分支，指向指定commit
+$ git branch [branch] [commit]
+
+# 新建一个分支，与指定的远程分支建立追踪关系
+$ git branch --track [branch] [remote-branch]
+
+# 切换到指定分支，并更新工作区
+$ git checkout [branch-name]
+
+# 切换到上一个分支
+$ git checkout -
+
+# 建立追踪关系，在现有分支与指定的远程分支之间
+$ git branch --set-upstream [branch] [remote-branch]
+
+# 合并指定分支到当前分支
+$ git merge [branch]
+
+# 选择一个commit，合并进当前分支
+$ git cherry-pick [commit]
+
+# 删除分支
+$ git branch -d [branch-name]
+
+# 删除远程分支
+$ git push origin --delete [branch-name]
+$ git branch -dr [remote/branch]
+</code></pre><p>六、标签</p>
+<pre><code># 列出所有tag
+$ git tag
+
+# 新建一个tag在当前commit
+$ git tag [tag]
+
+# 新建一个tag在指定commit
+$ git tag [tag] [commit]
+
+# 删除本地tag
+$ git tag -d [tag]
+
+# 删除远程tag
+$ git push origin :refs/tags/[tagName]
+
+# 查看tag信息
+$ git show [tag]
+
+# 提交指定tag
+$ git push [remote] [tag]
+
+# 提交所有tag
+$ git push [remote] --tags
+
+# 新建一个分支，指向某个tag
+$ git checkout -b [branch] [tag]
+</code></pre><p>七、查看信息</p>
+<pre><code># 显示有变更的文件
+$ git status
+
+# 显示当前分支的版本历史
+$ git log
+
+# 显示commit历史，以及每次commit发生变更的文件
+$ git log --stat
+
+# 搜索提交历史，根据关键词
+$ git log -S [keyword]
+
+# 显示某个commit之后的所有变动，每个commit占据一行
+$ git log [tag] HEAD --pretty=format:%s
+
+# 显示某个commit之后的所有变动，其&quot;提交说明&quot;必须符合搜索条件
+$ git log [tag] HEAD --grep feature
+
+# 显示某个文件的版本历史，包括文件改名
+$ git log --follow [file]
+$ git whatchanged [file]
+
+# 显示指定文件相关的每一次diff
+$ git log -p [file]
+
+# 显示过去5次提交
+$ git log -5 --pretty --oneline
+
+# 显示所有提交过的用户，按提交次数排序
+$ git shortlog -sn
+
+# 显示指定文件是什么人在什么时间修改过
+$ git blame [file]
+
+# 显示暂存区和工作区的差异
+$ git diff
+
+# 显示暂存区和上一个commit的差异
+$ git diff --cached [file]
+
+# 显示工作区与当前分支最新commit之间的差异
+$ git diff HEAD
+
+# 显示两次提交之间的差异
+$ git diff [first-branch]...[second-branch]
+
+# 显示今天你写了多少行代码
+$ git diff --shortstat &quot;@{0 day ago}&quot;
+
+# 显示某次提交的元数据和内容变化
+$ git show [commit]
+
+# 显示某次提交发生变化的文件
+$ git show --name-only [commit]
+
+# 显示某次提交时，某个文件的内容
+$ git show [commit]:[filename]
+
+# 显示当前分支的最近几次提交
+$ git reflog
+</code></pre><p>八、远程同步</p>
+<pre><code># 下载远程仓库的所有变动
+$ git fetch [remote]
+
+# 显示所有远程仓库
+$ git remote -v
+
+# 显示某个远程仓库的信息
+$ git remote show [remote]
+
+# 增加一个新的远程仓库，并命名
+$ git remote add [shortname] [url]
+
+# 取回远程仓库的变化，并与本地分支合并
+$ git pull [remote] [branch]
+
+# 上传本地指定分支到远程仓库
+$ git push [remote] [branch]
+
+# 强行推送当前分支到远程仓库，即使有冲突
+$ git push [remote] --force
+
+# 推送所有分支到远程仓库
+$ git push [remote] --all
+</code></pre><p>九、撤销</p>
+<pre><code># 恢复暂存区的指定文件到工作区
+$ git checkout [file]
+
+# 恢复某个commit的指定文件到暂存区和工作区
+$ git checkout [commit] [file]
+
+# 恢复暂存区的所有文件到工作区
+$ git checkout .
+
+# 重置暂存区的指定文件，与上一次commit保持一致，但工作区不变
+$ git reset [file]
+
+# 重置暂存区与工作区，与上一次commit保持一致
+$ git reset --hard
+
+# 重置当前分支的指针为指定commit，同时重置暂存区，但工作区不变
+$ git reset [commit]
+
+# 重置当前分支的HEAD为指定commit，同时重置暂存区和工作区，与指定commit一致
+$ git reset --hard [commit]
+
+# 重置当前HEAD为指定commit，但保持暂存区和工作区不变
+$ git reset --keep [commit]
+
+# 新建一个commit，用来撤销指定commit
+# 后者的所有变化都将被前者抵消，并且应用到当前分支
+$ git revert [commit]
+
+# 暂时将未提交的变化移除，稍后再移入
+$ git stash
+$ git stash pop
+</code></pre><p>十、其他</p>
+<pre><code># 生成一个可供发布的压缩包
+$ git archive
+</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;一、新建代码库&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# 在当前目录新建一个Git代码库
+$ git init
+
+# 新建一个目录，将其初始化为Git代码库
+$ git init [project-name]
+
+# 下载一个项目和它的整个代码历史
+$ git clone [url]
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>test</title>
+    <link href="http://yoursite.com/2016/09/19/test/"/>
+    <id>http://yoursite.com/2016/09/19/test/</id>
+    <published>2016-09-19T15:53:34.000Z</published>
+    <updated>2016-09-19T15:54:14.580Z</updated>
+    
+    <content type="html"><![CDATA[<p>this is hexo test page</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;this is hexo test page&lt;/p&gt;
+
+    
+    </summary>
+    
+    
+  </entry>
+  
+</feed>
