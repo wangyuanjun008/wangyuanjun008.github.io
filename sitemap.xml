@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2017/08/17/mybatis%E4%BD%BF%E7%94%A8PageHelper%E6%8F%92%E4%BB%B6%E6%8A%A5%E9%94%99Error-creating-bean-with-name-sqlSessionFactory-defined-in-class-path-resource-spring-mybatis-xml/</loc>
+    
+    <lastmod>2017-08-17T13:41:08.220Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2017/06/29/%E8%AF%95%E7%94%A8hexo-%E6%8D%A2%E7%94%B5%E8%84%91%E8%B7%9F%E6%96%B0%E5%8D%9A%E5%AE%A2/</loc>
     
-    <lastmod>2017-06-29T15:37:33.052Z</lastmod>
+    <lastmod>2017-06-29T15:39:19.391Z</lastmod>
     
   </url>
   
