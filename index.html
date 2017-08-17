@@ -104,9 +104,40 @@
 &lt;/bean&gt;
 
 mybatis-config.xml 配置文件(分页插件)
-</code></pre><configuration><br>    <plugins><br>        <!-- com.github.pagehelper为PageHelper类所在包名 --><br>        <plugin interceptor="com.github.pagehelper.PageHelper"><br>            <!-- 设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库 --><br>            <property name="dialect" value="mysql"><br>            <!-- 该参数默认为false --><br>            <!-- 设置为true时，会将RowBounds第一个参数offset当成pageNum页码使用 --><br>            <!-- 和startPage中的pageNum效果一样--><br>            <property name="offsetAsPageNum" value="true"><br>            <!-- 该参数默认为false --><br>            <!-- 设置为true时，使用RowBounds分页会进行count查询 --><br>            <property name="rowBoundsWithCount" value="true"><br>            <!-- 设置为true时，如果pageSize=0或者RowBounds.limit = 0就会查询出全部的结果 --><br>            <!-- （相当于没有执行分页查询，但是返回结果仍然是Page类型）--><br>            <property name="pageSizeZero" value="true"><br>            <!-- 3.3.0版本可用 - 分页参数合理化，默认false禁用 --><br>            <!-- 启用合理化时，如果pageNum<1会查询第一页，如果pageNum>pages会查询最后一页 --><br>            <!-- 禁用合理化时，如果pageNum<1或pageNum>pages会返回空数据 --><br>            <property name="reasonable" value="true"><br>            <!-- 3.5.0版本可用 - 为了支持startPage(Object params)方法 --><br>            <!-- 增加了一个`params`参数来配置参数映射，用于从Map或ServletRequest中取值 --><br>            <!-- 可以配置pageNum,pageSize,count,pageSizeZero,reasonable,orderBy,不配置映射的用默认值 --><br>            <!-- 不理解该含义的前提下，不要随便复制该配置 --><br>            <property name="params" value="pageNum=start;pageSize=limit;"><br>            <!-- 支持通过Mapper接口参数来传递分页参数 --><br>            <property name="supportMethodsArguments" value="true"><br>            <!-- always总是返回PageInfo类型,check检查返回类型是否为PageInfo,none返回Page --><br>            <property name="returnPageInfo" value="check"><br>        </property></property></property></property></property></property></property></property></plugin><br>    </plugins><br></configuration>
 
-<p>经过查找，原来是与mybaitis的jar包版本相差过大，项目运用的是4.1.1的版本，换上5.0.4的版本，重新运行项目，不再抛错。</p>
+&lt;configuration&gt;  
+    &lt;plugins&gt;  
+        &lt;!-- com.github.pagehelper为PageHelper类所在包名 --&gt;  
+        &lt;plugin interceptor=&quot;com.github.pagehelper.PageHelper&quot;&gt;  
+            &lt;!-- 设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库 --&gt;  
+            &lt;property name=&quot;dialect&quot; value=&quot;mysql&quot; /&gt;  
+            &lt;!-- 该参数默认为false --&gt;  
+            &lt;!-- 设置为true时，会将RowBounds第一个参数offset当成pageNum页码使用 --&gt;  
+            &lt;!-- 和startPage中的pageNum效果一样--&gt;  
+            &lt;property name=&quot;offsetAsPageNum&quot; value=&quot;true&quot;/&gt;  
+            &lt;!-- 该参数默认为false --&gt;  
+            &lt;!-- 设置为true时，使用RowBounds分页会进行count查询 --&gt;  
+            &lt;property name=&quot;rowBoundsWithCount&quot; value=&quot;true&quot;/&gt;  
+            &lt;!-- 设置为true时，如果pageSize=0或者RowBounds.limit = 0就会查询出全部的结果 --&gt;  
+            &lt;!-- （相当于没有执行分页查询，但是返回结果仍然是Page类型）--&gt;  
+            &lt;property name=&quot;pageSizeZero&quot; value=&quot;true&quot;/&gt;  
+            &lt;!-- 3.3.0版本可用 - 分页参数合理化，默认false禁用 --&gt;  
+            &lt;!-- 启用合理化时，如果pageNum&lt;1会查询第一页，如果pageNum&gt;pages会查询最后一页 --&gt;  
+            &lt;!-- 禁用合理化时，如果pageNum&lt;1或pageNum&gt;pages会返回空数据 --&gt;  
+            &lt;property name=&quot;reasonable&quot; value=&quot;true&quot;/&gt;  
+            &lt;!-- 3.5.0版本可用 - 为了支持startPage(Object params)方法 --&gt;  
+            &lt;!-- 增加了一个`params`参数来配置参数映射，用于从Map或ServletRequest中取值 --&gt;  
+            &lt;!-- 可以配置pageNum,pageSize,count,pageSizeZero,reasonable,orderBy,不配置映射的用默认值 --&gt;  
+            &lt;!-- 不理解该含义的前提下，不要随便复制该配置 --&gt;  
+            &lt;property name=&quot;params&quot; value=&quot;pageNum=start;pageSize=limit;&quot;/&gt;  
+            &lt;!-- 支持通过Mapper接口参数来传递分页参数 --&gt;  
+            &lt;property name=&quot;supportMethodsArguments&quot; value=&quot;true&quot;/&gt;  
+            &lt;!-- always总是返回PageInfo类型,check检查返回类型是否为PageInfo,none返回Page --&gt;  
+            &lt;property name=&quot;returnPageInfo&quot; value=&quot;check&quot;/&gt;  
+        &lt;/plugin&gt;  
+    &lt;/plugins&gt;  
+&lt;/configuration&gt;
+</code></pre><p>经过查找，原来是与mybaitis的jar包版本相差过大，项目运用的是4.1.1的版本，换上5.0.4的版本，重新运行项目，不再抛错。</p>
 <pre><code>修改spring-mybatis.xml配置文件如下
 修改 sqlSessionFactory
 
