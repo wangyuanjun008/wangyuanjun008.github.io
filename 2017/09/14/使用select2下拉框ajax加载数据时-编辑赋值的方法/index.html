@@ -5,16 +5,16 @@
   
   <title>使用select2下拉框ajax加载数据时,编辑赋值的方法 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近做项目时遇到一个问题,使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:      使用状态:     $(&amp;quot;#sel_status&amp;quot;).select2({     placeholder : &amp;quot;--请选择--&amp;quot;,     dropdownParent : $(&amp;quot;#my">
+  <meta name="description" content="最近做项目时遇到一个问题,使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:   &amp;lt;label class=&amp;quot;col-sm-1 control-label&amp;quot;&amp;gt;使用状态:&amp;lt;/label&amp;gt; &amp;lt;select id=&amp;quot;sel_status&amp;quot; name=&amp;quot">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用select2下拉框ajax加载数据时,编辑赋值的方法">
 <meta property="og:url" content="http://yoursite.com/2017/09/14/使用select2下拉框ajax加载数据时-编辑赋值的方法/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="最近做项目时遇到一个问题,使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:      使用状态:     $(&amp;quot;#sel_status&amp;quot;).select2({     placeholder : &amp;quot;--请选择--&amp;quot;,     dropdownParent : $(&amp;quot;#my">
-<meta property="og:updated_time" content="2017-09-13T16:34:15.309Z">
+<meta property="og:description" content="最近做项目时遇到一个问题,使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:   &amp;lt;label class=&amp;quot;col-sm-1 control-label&amp;quot;&amp;gt;使用状态:&amp;lt;/label&amp;gt; &amp;lt;select id=&amp;quot;sel_status&amp;quot; name=&amp;quot">
+<meta property="og:updated_time" content="2017-09-13T16:36:36.300Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用select2下拉框ajax加载数据时,编辑赋值的方法">
-<meta name="twitter:description" content="最近做项目时遇到一个问题,使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:      使用状态:     $(&amp;quot;#sel_status&amp;quot;).select2({     placeholder : &amp;quot;--请选择--&amp;quot;,     dropdownParent : $(&amp;quot;#my">
+<meta name="twitter:description" content="最近做项目时遇到一个问题,使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:   &amp;lt;label class=&amp;quot;col-sm-1 control-label&amp;quot;&amp;gt;使用状态:&amp;lt;/label&amp;gt; &amp;lt;select id=&amp;quot;sel_status&amp;quot; name=&amp;quot">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -52,8 +52,11 @@
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近做项目时遇到一个问题,使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:<br>      <label class="col-sm-1 control-label">使用状态:</label><br>    <select id="sel_status" name="status" class="col-sm-3 form-control select2"></select></p>
-<pre><code>$(&quot;#sel_status&quot;).select2({
+        <p>最近做项目时遇到一个问题,使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:</p>
+<pre><code>  &lt;label class=&quot;col-sm-1 control-label&quot;&gt;使用状态:&lt;/label&gt;
+&lt;select id=&quot;sel_status&quot; name=&quot;status&quot; class=&quot;col-sm-3 form-control select2&quot;&gt;&lt;/select&gt;
+
+$(&quot;#sel_status&quot;).select2({
     placeholder : &quot;--请选择--&quot;,
     dropdownParent : $(&quot;#myModal&quot;),
     allowClear : true,

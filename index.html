@@ -50,8 +50,11 @@
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近做项目时遇到一个问题,使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:<br>      <label class="col-sm-1 control-label">使用状态:</label><br>    <select id="sel_status" name="status" class="col-sm-3 form-control select2"></select></p>
-<pre><code>$(&quot;#sel_status&quot;).select2({
+        <p>最近做项目时遇到一个问题,使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:</p>
+<pre><code>  &lt;label class=&quot;col-sm-1 control-label&quot;&gt;使用状态:&lt;/label&gt;
+&lt;select id=&quot;sel_status&quot; name=&quot;status&quot; class=&quot;col-sm-3 form-control select2&quot;&gt;&lt;/select&gt;
+
+$(&quot;#sel_status&quot;).select2({
     placeholder : &quot;--请选择--&quot;,
     dropdownParent : $(&quot;#myModal&quot;),
     allowClear : true,
