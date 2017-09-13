@@ -28,6 +28,90 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-阿里巴巴-Java-开发手册-笔记及重点" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/21/阿里巴巴-Java-开发手册-笔记及重点/">阿里巴巴 Java 开发手册 笔记及重点</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/02/21/阿里巴巴-Java-开发手册-笔记及重点/" class="article-date">
+  <time datetime="2017-02-21T13:58:21.000Z" itemprop="datePublished">2017-02-21</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="编程规约"><a href="#编程规约" class="headerlink" title="编程规约"></a>编程规约</h2><pre><code>1. POJO 类中布尔类型的变量，都不要加 is，否则部分框架解析会引起序列化错误。假设定义一个 boolean 的 isSuccess 属性，它的方法 Getter 被IDE生成为 isSuccess()，RPC等三方框架在反向解析的时候，“以为”对应的属性名称是 success，导致属性获取不到，进而抛出异常。这点也是笔者之前遇到过的，查了很久哪里的错最后发现是这个问题，不过经历一次后基本后面就能避免。
+2. 接口类中的方法和属性不要加任何修饰符号。包括在一些开源的代码里，笔者也经常看见在接口方法上声明 public 关键字的，这是冗余的，在Java规范中提到过。关于代码的规范及简洁性诸位可以参考《重构 改善既有代码的设计》 及 代码整洁之道。
+3. 方法体内的执行语句组、变量的定义语句组、不同的业务逻辑之间或者不同的语义之间插入一个空行。相同业务逻辑和语义之间不需要插入空行。不过没有必要插入多行空格进行隔开。这样可读性会明显提高，笔者经常看到部分开发人员的代码在很长的代码块里完全没有一个空行，没有按逻辑进行换行，这种习惯是不太好的。
+4. 所有的覆写方法，必须加 @Override 注解。这样IDE会检查合法性，有错误的话会及时提示。
+5. 所有的相同类型的包装类对象之间值的比较，全部使用 equals 方法比较。比如 Integer 的-128至127之间被缓存的对象可以直接使用==判断，因为被缓存了，是同一对象，地址相等，而这个区间外的却不能使用==判断，这也是面试时的一个常考点。
+6. 关于基本数据类型与包装数据类型：所有的POJO类属性必须使用包装数据类型，以便映射数据库中的NULL，局部变量推荐使用基本数据类型。
+7. 关于 hashCode 和 equals 的处理，遵循如下规则：只要重写 equals，就必须重写 hashCode，具体原因可参考《Effective java 中文版（第2版）》。
+8. 关于 ArrayList 里 subList 结果的注意事项，subList 只是 ArrayList 的一个视图，这部分大家可以参考JDK里的源码。
+9. 不要在 foreach 循环里进行元素的 remove/add 操作。remove 元素请使用 Iterator 方式，如果并发操作，需要对 Iterator 对象加锁。
+10. 在 JDK7 版本以上，Comparator 要满足自反性，传递性，对称性，不然 Arrays.sort， Collections.sort 会报 IllegalArgumentException 异常。这个在《Effective java 中文版（第2版）》中也有说明，虽然笔者之前看过，但在刚实习时的一个用于省份排序的代码里使用 Comparator 时还是忘了处理值相等的情况，所以，还是要实战后才能加深记忆。
+11. 集合初始化时，尽量指定集合初始值大小。这在笔者实习面试时也被问到，这块的话主要考察 ArrayList 的原理，内部机制，诸位看看JDK里 ArrayList 的原理就明白了。
+12. 创建线程或线程池时请指定有意义的线程名称，方便出错时回溯。
+13. 高并发时，同步调用应该去考量锁的性能损耗。能用无锁数据结构，就不要用锁；能锁区块，就不要锁整个方法体；能用对象锁，就不要用类锁。概括为一句话就是：尽量降低锁的粒度。
+14. 对多个资源、数据库表、对象同时加锁时，需要保持一致的加锁顺序，否则可能会造成死锁。关于并发这块可以参考《Java并发编程实战》，个人认为这本在笔者看过Java并发的书籍里能算上乘之作，另外也可参考《Java并发编程的艺术》。
+15. 通过双重检查锁(double-checked locking)(在并发场景)实现延迟初始化的优化问题隐患(可参考 The “Double-Checked Locking is Broken” Declaration)，推荐问题解决方案中较为简单一种(适用于 JDK5 及以上版本)，将目标属性声明为 volatile 型。这部分涉及到两个重点，一是双重检查锁，二是 volatile 的原理及Java的主内存及每个线程的内存之间的关系。volatile只能解决多线程时的内存可见性问题，无法解决线程安全问题。可参考Double checked locking 及 Initialization on demand holder idiom。
+16. 注释掉的代码尽量要配合说明，而不是简单的注释掉。如果永久不用，建议直接删除，因为Git等版本控制系统保存了历史代码。
+17. 好的命名、代码结构是自解释的，注释力求精简准确、表达到位。避免无用的注释。
+18. 善用 TODO 及 FIXME，IDE可以方便的进行扫描。
+19. 获取当前毫秒数使用 System.currentTimeMillis()，System.nanoTime()产生的值仅用于比较，同一时刻不同虚拟机System.nanoTime()返回的值可能不一样并且相差很大，笔者的同事已经踩过一次坑，关于 nanoTime 诸位可以看一看JavaDoc。
+</code></pre><h2 id="异常日志"><a href="#异常日志" class="headerlink" title="异常日志"></a>异常日志</h2><pre><code>1. 不要捕获Java类库中定义的继承自 RuntimeException 的运行时异常类，如：IndexOutOfBoundsException / NullPointerException，这类异常由程序员预检查来规避，保证程序健壮性。说到这里，异常继承结构图也可以看下。
+2. 捕获异常是为了处理它，不要捕获了却什么都不处理而抛弃之，如果不想处理它，请将该异常抛给它的调用者。最外层的业务使用者，必须处理异常，将其转化为用户可以理解的内容。
+3. 避免出现重复的代码(Don’t Repeat Yourself)，即DRY原则。关于这部分可参考《程序员修炼之道》。
+4. 谨慎地记录日志。生产环境禁止输出 debug 日志；有选择地输出 info 日志；如果使用 warn 来记录刚上线时的业务行为信息，一定要注意日志输出量的问题，避免把服务器磁盘撑爆，并记得及时删除这些观察日志。关于日志把server磁盘撑爆的问题，我司也出现过，后面加了相关监控来避免。
+</code></pre><h2 id="MySQL规约"><a href="#MySQL规约" class="headerlink" title="MySQL规约"></a>MySQL规约</h2><pre><code>1. 表达是与否概念的字段，必须使用 is_xxx 的方式命名，数据类型是 unsigned tinyint (1表示是，0表示否)，此规则同样适用于odps建表。任何字段如果为非负数，必须是 unsigned。因为这样的话可用容量提升了一倍。
+2. 表名不使用复数名词。表名应该仅仅表示表里面的实体内容，不应该表示实体数量，对应于 DO 类名也是单数形式，符合表达习惯。
+3. 禁用保留字，如 desc、range、match、delayed 等，禁止在代码里对 SQL 关键字进行单独处理。
+4. 唯一索引名为 uk_字段名，普通索引名则为 idx_字段名。这样能让开发人员一眼就知道相关索引。
+5. 如果存储的字符串长度几乎相等，使用 char 定长字符串类型。
+6. 表必备三字段:id, gmt_create, gmt_modified。其中id必为主键，类型为unsigned bigint、单表时自增、步长为1。gmt_create, gmt_modified 的类型均为 date_time 类型。创建时间与修改时间需要记录笔者理解，不理解的为什么要用 gmt 开头，北京时间应该是GMT + 8:00 啊。
+7. 字段允许适当冗余，以提高性能，但是必须考虑数据同步的情况。冗余字段应遵循：不是频繁修改的字段；不是 varchar 超长字段，更不能是 text 字段。比如我司的很多表都冗余了 user_name 这个字段。
+8. 单表行数超过 500 万行或者单表容量超过 2GB，才推荐进行分库分表。
+9. 业务上具有唯一特性的字段，即使是组合字段，也必须建成唯一索引。即使在应用层做了非常完善的校验和控制，只要没有唯一索引，根据墨菲定律，必然有脏数据产生。
+10. 页面搜索严禁左模糊或者全模糊，如果需要请走搜索引擎来解决。索引文件具有 B-Tree 的最左前缀匹配特性，如果左边的值未确定，那么无法使用此索引。关于 MySQL 的知识，诸位可参考《高性能MySQL》。
+11. 利用延迟关联或者子查询优化超多分页场景。MySQL 并不是跳过 offset 行，而是取 offset+N 行，然后返回放弃前 offset 行，返回 N 行，那当 offset 特别大的时候，效率就非常的低下，要么控制返回的总页数，要么对超过特定阈值的页数进行 SQL 改写。
+12. 建组合索引的时候，区分度最高的在最左边。
+13. 不要使用 count(列名)或 count(常量)来替代 count(*)，count(*)就是 SQL92 定义 的标准统计行数的语法，跟数据库无关，跟 NULL 和非 NULL 无关。
+14. 不得使用外键与级联，一切外键概念必须在应用层解决。外键与级联更新适用于单机低并发，不适合分布式、高并发集群；级联更新是强阻塞，存在数据库更新风暴的风险；外键影响数据库的插入速度。
+15. 禁止使用存储过程，存储过程难以调试和扩展，更没有移植性。
+16. 数据订正时，删除和修改记录时，要先 select，避免出现误删除，确认无误才能执行更新语句。
+</code></pre><h2 id="工程规约"><a href="#工程规约" class="headerlink" title="工程规约"></a>工程规约</h2><pre><code>1. 高并发服务器建议调小 TCP 协议的 time_wait 超时时间。
+2. 调大服务器所支持的最大文件句柄数(File Descriptor，简写为fd)。
+3. 给 JVM 设置-XX:+HeapDumpOnOutOfMemoryError 参数，让 JVM 碰到 OOM 场景时输出 dump 信息。
+</code></pre><h2 id="安全规约"><a href="#安全规约" class="headerlink" title="安全规约"></a>安全规约</h2><pre><code>1. 隶属于用户个人的页面或者功能必须进行权限控制校验。
+2. 用户敏感数据禁止直接展示，必须对展示数据脱敏。
+3. 用户输入的 SQL 参数严格使用参数绑定或者 METADATA 字段值限定，防止 SQL 注入， 禁止字符串拼接 SQL 访问数据库。
+4.用户请求传入的任何参数必须做有效性验证。
+5.表单、AJAX 提交必须执行 CSRF 安全过滤。
+6.在使用平台资源，譬如短信、邮件、电话、下单、支付，必须实现正确的防重放限制， 如数量限制、疲劳度控制、验证码校验，避免被滥刷、资损。
+7.关于安全这块可以阅读《白帽子讲Web安全》。
+</code></pre><p><a href="https://ohpew91u7.qnssl.com/2017/02/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4Java%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C.pdf" title="阿里巴巴开发手册" target="_blank" rel="external">阿里巴巴Java开发手册</a></p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-spring-读取properties的两种方法" class="article article-type-post" itemscope itemprop="blogPost">
   
   <div class="article-inner">
@@ -831,291 +915,6 @@ set JAVA_OPTS=-server -Xms512m -Xmx512m -XX:PermSize=128M -XX:MaxPermSize=256M
 <p>1 docker exec -it docker-mysql bash<br>2 root@e59ad4702626:/# mysql -uroot -pdocker-mysql<br>3 Welcome to the MySQL monitor.  Commands end with ; or \g.<br>4 Your MySQL connection id is 5<br>5 Server version: 5.5.43 MySQL Community Server (GPL)<br>6<br>7 Copyright (c) 2000, 2015, Oracle and/or its affiliates. All rights reserved.<br>8<br>9 Oracle is a registered trademark of Oracle Corporation and/or its<br>10 affiliates. Other names may be trademarks of their respective<br>11 owners.<br>12<br>13 Type ‘help;’ or ‘\h’ for help. Type ‘\c’ to clear the current input statement.<br>14<br>15 mysql&gt; show databases;<br>16 +——————–+<br>17 | Database           |<br>18 +——————–+<br>19 | information_schema |<br>20 | mysql              |<br>21 | performance_schema |<br>22 +——————–+<br>23 3 rows in set (0.00 sec)<br>24<br>25 mysql&gt; </p>
 <p>同时这个是一个虚拟的服务器，上面安装的mysql。</p>
 
-      
-
-      
-        
-    </div>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-常用Git命令大全" class="article article-type-post" itemscope itemprop="blogPost">
-  
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/21/常用Git命令大全/">常用Git命令大全</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      <a href="/2016/09/21/常用Git命令大全/" class="article-date">
-  <time datetime="2016-09-21T13:04:33.000Z" itemprop="datePublished">2016-09-21</time>
-</a>
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>一、新建代码库</p>
-<pre><code># 在当前目录新建一个Git代码库
-$ git init
-
-# 新建一个目录，将其初始化为Git代码库
-$ git init [project-name]
-
-# 下载一个项目和它的整个代码历史
-$ git clone [url]
-</code></pre><p>二、配置</p>
-<p>Git的设置文件为.gitconfig，它可以在用户主目录下（全局配置），也可以在项目目录下（项目配置）。</p>
-<pre><code># 显示当前的Git配置
-$ git config --list
-
-# 编辑Git配置文件
-$ git config -e [--global]
-
-# 设置提交代码时的用户信息
-$ git config [--global] user.name &quot;[name]&quot;
-$ git config [--global] user.email &quot;[email address]&quot;
-</code></pre><p>三、增加/删除文件</p>
-<pre><code># 添加指定文件到暂存区
-$ git add [file1] [file2] ...
-
-# 添加指定目录到暂存区，包括子目录
-$ git add [dir]
-
-# 添加当前目录的所有文件到暂存区
-$ git add .
-
-# 添加每个变化前，都会要求确认
-# 对于同一个文件的多处变化，可以实现分次提交
-$ git add -p
-
-# 删除工作区文件，并且将这次删除放入暂存区
-$ git rm [file1] [file2] ...
-
-# 停止追踪指定文件，但该文件会保留在工作区
-$ git rm --cached [file]
-
-# 改名文件，并且将这个改名放入暂存区
-$ git mv [file-original] [file-renamed]
-</code></pre><p>四、代码提交</p>
-<pre><code># 提交暂存区到仓库区
-$ git commit -m [message]
-
-# 提交暂存区的指定文件到仓库区
-$ git commit [file1] [file2] ... -m [message]
-
-# 提交工作区自上次commit之后的变化，直接到仓库区
-$ git commit -a
-
-# 提交时显示所有diff信息
-$ git commit -v
-
-# 使用一次新的commit，替代上一次提交
-# 如果代码没有任何新变化，则用来改写上一次commit的提交信息
-$ git commit --amend -m [message]
-
-# 重做上一次commit，并包括指定文件的新变化
-$ git commit --amend [file1] [file2] ...
-</code></pre><p>五、分支</p>
-<pre><code># 列出所有本地分支
-$ git branch
-
-# 列出所有远程分支
-$ git branch -r
-
-# 列出所有本地分支和远程分支
-$ git branch -a
-
-# 新建一个分支，但依然停留在当前分支
-$ git branch [branch-name]
-
-# 新建一个分支，并切换到该分支
-$ git checkout -b [branch]
-
-# 新建一个分支，指向指定commit
-$ git branch [branch] [commit]
-
-# 新建一个分支，与指定的远程分支建立追踪关系
-$ git branch --track [branch] [remote-branch]
-
-# 切换到指定分支，并更新工作区
-$ git checkout [branch-name]
-
-# 切换到上一个分支
-$ git checkout -
-
-# 建立追踪关系，在现有分支与指定的远程分支之间
-$ git branch --set-upstream [branch] [remote-branch]
-
-# 合并指定分支到当前分支
-$ git merge [branch]
-
-# 选择一个commit，合并进当前分支
-$ git cherry-pick [commit]
-
-# 删除分支
-$ git branch -d [branch-name]
-
-# 删除远程分支
-$ git push origin --delete [branch-name]
-$ git branch -dr [remote/branch]
-</code></pre><p>六、标签</p>
-<pre><code># 列出所有tag
-$ git tag
-
-# 新建一个tag在当前commit
-$ git tag [tag]
-
-# 新建一个tag在指定commit
-$ git tag [tag] [commit]
-
-# 删除本地tag
-$ git tag -d [tag]
-
-# 删除远程tag
-$ git push origin :refs/tags/[tagName]
-
-# 查看tag信息
-$ git show [tag]
-
-# 提交指定tag
-$ git push [remote] [tag]
-
-# 提交所有tag
-$ git push [remote] --tags
-
-# 新建一个分支，指向某个tag
-$ git checkout -b [branch] [tag]
-</code></pre><p>七、查看信息</p>
-<pre><code># 显示有变更的文件
-$ git status
-
-# 显示当前分支的版本历史
-$ git log
-
-# 显示commit历史，以及每次commit发生变更的文件
-$ git log --stat
-
-# 搜索提交历史，根据关键词
-$ git log -S [keyword]
-
-# 显示某个commit之后的所有变动，每个commit占据一行
-$ git log [tag] HEAD --pretty=format:%s
-
-# 显示某个commit之后的所有变动，其&quot;提交说明&quot;必须符合搜索条件
-$ git log [tag] HEAD --grep feature
-
-# 显示某个文件的版本历史，包括文件改名
-$ git log --follow [file]
-$ git whatchanged [file]
-
-# 显示指定文件相关的每一次diff
-$ git log -p [file]
-
-# 显示过去5次提交
-$ git log -5 --pretty --oneline
-
-# 显示所有提交过的用户，按提交次数排序
-$ git shortlog -sn
-
-# 显示指定文件是什么人在什么时间修改过
-$ git blame [file]
-
-# 显示暂存区和工作区的差异
-$ git diff
-
-# 显示暂存区和上一个commit的差异
-$ git diff --cached [file]
-
-# 显示工作区与当前分支最新commit之间的差异
-$ git diff HEAD
-
-# 显示两次提交之间的差异
-$ git diff [first-branch]...[second-branch]
-
-# 显示今天你写了多少行代码
-$ git diff --shortstat &quot;@{0 day ago}&quot;
-
-# 显示某次提交的元数据和内容变化
-$ git show [commit]
-
-# 显示某次提交发生变化的文件
-$ git show --name-only [commit]
-
-# 显示某次提交时，某个文件的内容
-$ git show [commit]:[filename]
-
-# 显示当前分支的最近几次提交
-$ git reflog
-</code></pre><p>八、远程同步</p>
-<pre><code># 下载远程仓库的所有变动
-$ git fetch [remote]
-
-# 显示所有远程仓库
-$ git remote -v
-
-# 显示某个远程仓库的信息
-$ git remote show [remote]
-
-# 增加一个新的远程仓库，并命名
-$ git remote add [shortname] [url]
-
-# 取回远程仓库的变化，并与本地分支合并
-$ git pull [remote] [branch]
-
-# 上传本地指定分支到远程仓库
-$ git push [remote] [branch]
-
-# 强行推送当前分支到远程仓库，即使有冲突
-$ git push [remote] --force
-
-# 推送所有分支到远程仓库
-$ git push [remote] --all
-</code></pre><p>九、撤销</p>
-<pre><code># 恢复暂存区的指定文件到工作区
-$ git checkout [file]
-
-# 恢复某个commit的指定文件到暂存区和工作区
-$ git checkout [commit] [file]
-
-# 恢复暂存区的所有文件到工作区
-$ git checkout .
-
-# 重置暂存区的指定文件，与上一次commit保持一致，但工作区不变
-$ git reset [file]
-
-# 重置暂存区与工作区，与上一次commit保持一致
-$ git reset --hard
-
-# 重置当前分支的指针为指定commit，同时重置暂存区，但工作区不变
-$ git reset [commit]
-
-# 重置当前分支的HEAD为指定commit，同时重置暂存区和工作区，与指定commit一致
-$ git reset --hard [commit]
-
-# 重置当前HEAD为指定commit，但保持暂存区和工作区不变
-$ git reset --keep [commit]
-
-# 新建一个commit，用来撤销指定commit
-# 后者的所有变化都将被前者抵消，并且应用到当前分支
-$ git revert [commit]
-
-# 暂时将未提交的变化移除，稍后再移入
-$ git stash
-$ git stash pop
-</code></pre><p>十、其他</p>
-<pre><code># 生成一个可供发布的压缩包
-$ git archive
-</code></pre>
       
 
       

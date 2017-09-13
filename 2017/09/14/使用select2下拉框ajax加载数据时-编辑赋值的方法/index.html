@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>使用select2下拉框ajax加载数据时,编辑赋值的方法 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近做项目时遇到一个问题,使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:      使用状态:     $(&amp;quot;#sel_status&amp;quot;).select2({     placeholder : &amp;quot;--请选择--&amp;quot;,     dropdownParent : $(&amp;quot;#my">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用select2下拉框ajax加载数据时,编辑赋值的方法">
+<meta property="og:url" content="http://yoursite.com/2017/09/14/使用select2下拉框ajax加载数据时-编辑赋值的方法/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="最近做项目时遇到一个问题,使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:      使用状态:     $(&amp;quot;#sel_status&amp;quot;).select2({     placeholder : &amp;quot;--请选择--&amp;quot;,     dropdownParent : $(&amp;quot;#my">
+<meta property="og:updated_time" content="2017-09-13T16:34:15.309Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用select2下拉框ajax加载数据时,编辑赋值的方法">
+<meta name="twitter:description" content="最近做项目时遇到一个问题,使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:      使用状态:     $(&amp;quot;#sel_status&amp;quot;).select2({     placeholder : &amp;quot;--请选择--&amp;quot;,     dropdownParent : $(&amp;quot;#my">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <section id="main"><article id="post-使用select2下拉框ajax加载数据时-编辑赋值的方法" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用select2下拉框ajax加载数据时,编辑赋值的方法
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/09/14/使用select2下拉框ajax加载数据时-编辑赋值的方法/" class="article-date">
+  <time datetime="2017-09-13T16:19:44.000Z" itemprop="datePublished">2017-09-14</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近做项目时遇到一个问题,使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:<br>      <label class="col-sm-1 control-label">使用状态:</label><br>    <select id="sel_status" name="status" class="col-sm-3 form-control select2"></select></p>
+<pre><code>$(&quot;#sel_status&quot;).select2({
+    placeholder : &quot;--请选择--&quot;,
+    dropdownParent : $(&quot;#myModal&quot;),
+    allowClear : true,
+    width : 150,
+    ajax : {
+        url : &apos;${ctx}/dataDict/getData?groupCode=&apos;+&apos;yesOrNo&apos;,
+        dataType : &apos;json&apos;,
+        type : &apos;get&apos;,
+        data: function (params) {
+            return {
+                q: params.term, // search term 请求参数
+                page: params.page
+            };
+        },
+        processResults: function (data, params) {
+            params.page = params.page || 1;
+            return {
+                results: data,//itemList
+                pagination: {
+                    more: (params.page * 30) &lt; data.total_count
+                }
+            };
+        },
+        cache: true
+    }
+ });
+</code></pre><p>通过查询api知道，在select4.0之后可以使用 $(“select”).val(“id”).trigger(“change”);为下拉框赋值<br>你会发现下拉框中的数据是点击之后才会加载数据的，使用如上方法 ‘id’是未知的，原因是在编辑的时候下拉框的数据还没有加载出来</p>
+<p>解决方法如下:</p>
+<pre><code>function getDataByGroupCode(groupCode){
+    var dataStore;
+    $.ajax({
+        dataType : &apos;json&apos;,
+        type : &apos;get&apos;,
+        url : model.dataURL+groupCode,
+        async : false,
+        success: function(data){
+            dataStore=data;
+        }
+     });
+    return dataStore;
+}    
+var dataStore = getDataByGroupCode(&apos;yesOrNo&apos;);
+
+$(&quot;#sel_status&quot;).select2({
+    placeholder : &quot;--请选择--&quot;,
+    dropdownParent : $(&quot;#myModal&quot;),
+    allowClear : true,
+    width : 150,
+    minimumResultsForSearch: -1,
+    data : dataStore
+});
+</code></pre><p>在页面加载的时候就加载下拉框数据，在编辑时就能为其赋值，问题解决!</p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/08/17/mybatis使用PageHelper插件报错Error-creating-bean-with-name-sqlSessionFactory-defined-in-class-path-resource-spring-mybatis-xml/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">mybatis使用PageHelper插件报错Error creating bean with name sqlSessionFactory defined in class path resource [spring-mybatis.xml]</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2017 John Doe 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a href="https://github.com/" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
