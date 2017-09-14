@@ -68,11 +68,12 @@
 }
 </code></pre><p>但是在运用的过程是没有效果的，后来找了另外的方法，使用了jpa注解，代码如下:</p>
 <ol>
-<li><p>存储过程需要依赖在实体上，在实体上加上@NamedStoredProcedureQueries注解，@NamedStoredProcedureQuery中name为java的方法名，procedureName为存储过程的名字，@StoredProcedureParameter中mode代表入参，name是参数名，type是参数类型</p>
-<p> @Entity<br> Table(name = “d_cp_delivery”)<br> @NamedStoredProcedureQueries({ @NamedStoredProcedureQuery(name = “closePurchaseorder”, procedureName = “SRMANLI.closePurchaseorder”, parameters = { @StoredProcedureParameter(mode = ParameterMode.IN, name = “i_deliveryid”, type = Long.class) }) })    </p>
-</li>
+<li>存储过程需要依赖在实体上，在实体上加上@NamedStoredProcedureQueries注解，@NamedStoredProcedureQuery中name为java的方法名，procedureName为存储过程的名字，@StoredProcedureParameter中mode代表入参，name是参数名，type是参数类型</li>
 </ol>
-<p>2.调用方法如下</p>
+<pre><code>@Entity
+Table(name = &quot;d_cp_delivery&quot;)
+@NamedStoredProcedureQueries({ @NamedStoredProcedureQuery(name = &quot;closePurchaseorder&quot;, procedureName = &quot;SRMANLI.closePurchaseorder&quot;, parameters = { @StoredProcedureParameter(mode = ParameterMode.IN, name = &quot;i_deliveryid&quot;, type = Long.class) }) })    
+</code></pre><p>2.调用方法如下</p>
 <pre><code>//java代码
 EntityManager em;
 

@@ -11,7 +11,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/09/14/在java中调用存储过程/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="最近在做一个需要调用存储过程的功能，大多数的写法是: Connection conn=null;     CallableStatement csmt=null;     try {         conn=JDBCUtils.getConnection();         conn.setAutoCommit(false);         csmt=conn.prepareCall(&amp;qu">
-<meta property="og:updated_time" content="2017-09-14T02:28:28.936Z">
+<meta property="og:updated_time" content="2017-09-14T02:35:10.203Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在java中调用存储过程">
 <meta name="twitter:description" content="最近在做一个需要调用存储过程的功能，大多数的写法是: Connection conn=null;     CallableStatement csmt=null;     try {         conn=JDBCUtils.getConnection();         conn.setAutoCommit(false);         csmt=conn.prepareCall(&amp;qu">
@@ -70,11 +70,12 @@
 }
 </code></pre><p>但是在运用的过程是没有效果的，后来找了另外的方法，使用了jpa注解，代码如下:</p>
 <ol>
-<li><p>存储过程需要依赖在实体上，在实体上加上@NamedStoredProcedureQueries注解，@NamedStoredProcedureQuery中name为java的方法名，procedureName为存储过程的名字，@StoredProcedureParameter中mode代表入参，name是参数名，type是参数类型</p>
-<p> @Entity<br> Table(name = “d_cp_delivery”)<br> @NamedStoredProcedureQueries({ @NamedStoredProcedureQuery(name = “closePurchaseorder”, procedureName = “SRMANLI.closePurchaseorder”, parameters = { @StoredProcedureParameter(mode = ParameterMode.IN, name = “i_deliveryid”, type = Long.class) }) })    </p>
-</li>
+<li>存储过程需要依赖在实体上，在实体上加上@NamedStoredProcedureQueries注解，@NamedStoredProcedureQuery中name为java的方法名，procedureName为存储过程的名字，@StoredProcedureParameter中mode代表入参，name是参数名，type是参数类型</li>
 </ol>
-<p>2.调用方法如下</p>
+<pre><code>@Entity
+Table(name = &quot;d_cp_delivery&quot;)
+@NamedStoredProcedureQueries({ @NamedStoredProcedureQuery(name = &quot;closePurchaseorder&quot;, procedureName = &quot;SRMANLI.closePurchaseorder&quot;, parameters = { @StoredProcedureParameter(mode = ParameterMode.IN, name = &quot;i_deliveryid&quot;, type = Long.class) }) })    
+</code></pre><p>2.调用方法如下</p>
 <pre><code>//java代码
 EntityManager em;
 
