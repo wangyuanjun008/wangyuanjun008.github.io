@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>在java中调用存储过程 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近在做一个需要调用存储过程的功能，大多数的写法是: Connection conn=null;     CallableStatement csmt=null;     try {         conn=JDBCUtils.getConnection();         conn.setAutoCommit(false);         csmt=conn.prepareCall(&amp;qu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在java中调用存储过程">
+<meta property="og:url" content="http://yoursite.com/2017/09/14/在java中调用存储过程/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="最近在做一个需要调用存储过程的功能，大多数的写法是: Connection conn=null;     CallableStatement csmt=null;     try {         conn=JDBCUtils.getConnection();         conn.setAutoCommit(false);         csmt=conn.prepareCall(&amp;qu">
+<meta property="og:updated_time" content="2017-09-14T02:28:28.936Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在java中调用存储过程">
+<meta name="twitter:description" content="最近在做一个需要调用存储过程的功能，大多数的写法是: Connection conn=null;     CallableStatement csmt=null;     try {         conn=JDBCUtils.getConnection();         conn.setAutoCommit(false);         csmt=conn.prepareCall(&amp;qu">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <section id="main"><article id="post-在java中调用存储过程" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      在java中调用存储过程
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/09/14/在java中调用存储过程/" class="article-date">
+  <time datetime="2017-09-14T01:57:48.000Z" itemprop="datePublished">2017-09-14</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在做一个需要调用存储过程的功能，大多数的写法是:</p>
+<pre><code>Connection conn=null;
+    CallableStatement csmt=null;
+    try {
+        conn=JDBCUtils.getConnection();
+        conn.setAutoCommit(false);
+        csmt=conn.prepareCall(&quot;call prc_1(?,?,?)&quot;);
+        csmt.setInt(1,80);
+        csmt.setString(2,&quot;ioc&quot;);
+        csmt.setString(3,&quot;fhp&quot;);
+        csmt.execute();
+        conn.commit();
+        System.out.println(&quot;success insert data&quot;);
+    } catch (SQLException e) {
+        e.printStackTrace();
+}
+</code></pre><p>但是在运用的过程是没有效果的，后来找了另外的方法，使用了jpa注解，代码如下:</p>
+<ol>
+<li><p>存储过程需要依赖在实体上，在实体上加上@NamedStoredProcedureQueries注解，@NamedStoredProcedureQuery中name为java的方法名，procedureName为存储过程的名字，@StoredProcedureParameter中mode代表入参，name是参数名，type是参数类型</p>
+<p> @Entity<br> Table(name = “d_cp_delivery”)<br> @NamedStoredProcedureQueries({ @NamedStoredProcedureQuery(name = “closePurchaseorder”, procedureName = “SRMANLI.closePurchaseorder”, parameters = { @StoredProcedureParameter(mode = ParameterMode.IN, name = “i_deliveryid”, type = Long.class) }) })    </p>
+</li>
+</ol>
+<p>2.调用方法如下</p>
+<pre><code>//java代码
+EntityManager em;
+
+@Override
+@PersistenceContext(unitName = &quot;srment&quot;)
+public void setEntityManager(EntityManager em) {
+    super.setEntityManager(em);
+    this.em = em;
+}
+
+@Override
+public void closePurchaseorder(Long deliveryId) {
+    Query qry = em.createNativeQuery(&quot;{call srmanli.closePurchaseorder(?1)}&quot;);
+    qry.setParameter(1, deliveryId);
+    qry.executeUpdate();
+    em.clear();
+}
+
+//存储过程
+  procedure closePurchaseorder(i_deliveryid in number) is
+v_PurchaseorderDtlNum number; --
+v_reqtime             date := sysdate; --请求时间
+v_err_msg             clob; --异常
+
+begin
+
+end;
+</code></pre>
+      
+
+      
+        
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/09/14/使用select2下拉框ajax加载数据时-编辑赋值的方法/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">使用select2下拉框ajax加载数据时,编辑赋值的方法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2017 John Doe 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a href="https://github.com/" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

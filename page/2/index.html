@@ -28,6 +28,97 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Redis基础命令" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/21/Redis基础命令/">Redis基础命令</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/02/21/Redis基础命令/" class="article-date">
+  <time datetime="2017-02-21T14:51:21.000Z" itemprop="datePublished">2017-02-21</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>笔者最初接触Redis是因为了解了一些nosql方面的知识，觉得nosql是一个很有意思的方面。像其中的mongodb，redis等等。当初也没有深入的去了解Redis，直到自己前段时间在写一个web项目的时候需要用到缓存来进行性能优化我才仔细的来学习Redis。下面我就来说说我自己在学习Redis过程中的一些心得。</p>
+<p>Redis是一个nosql数据库，它采用字典结构以键值对的形式将数据全部存储在内存中所以它读写的速度很快，因此很多项目用Redis做缓存用，我也是基于这个想法来学习Redis的。 Redis支持的数据类型分别是字符串(string)、散列(hash)、列表(list)、集合(set)、有序集合(sorted set)这五种。接下来我将仔细介绍下这几种数据结构的用法和对应的命令。</p>
+<h2 id="字符串类型-：字符串类型是Redis中-最-基本-的数-据类型，是其他四种数据类型的基础。它能存储任何形式的字符串-二进制数据、Json对象、图片等-，它的最大数据容量是512MB。"><a href="#字符串类型-：字符串类型是Redis中-最-基本-的数-据类型，是其他四种数据类型的基础。它能存储任何形式的字符串-二进制数据、Json对象、图片等-，它的最大数据容量是512MB。" class="headerlink" title="字符串类型 ：字符串类型是Redis中 最 基本 的数 据类型，是其他四种数据类型的基础。它能存储任何形式的字符串(二进制数据、Json对象、图片等)，它的最大数据容量是512MB。"></a>字符串类型 ：字符串类型是Redis中 最 基本 的数 据类型，是其他四种数据类型的基础。它能存储任何形式的字符串(二进制数据、Json对象、图片等)，它的最大数据容量是512MB。</h2><p>常用命令:</p>
+<p>set key value      //赋值</p>
+<p>get key                //取值</p>
+<p>keys *                 //查看所有的键</p>
+<p>exists key            //判断某个键是否存在</p>
+<p>del key               //删除一个键</p>
+<p>type key            //获取键的类型</p>
+<p>incr/decr key     //给键增加/减少一</p>
+<p>incrby/decrby key increment/decrement     //给键增加/减少一个整数</p>
+<p>incrbyfloat key increment        //增加浮点数</p>
+<p>strlen key                             //返回键的长度</p>
+<p>mset/mget                          //同时设置或者获取多个值</p>
+<h2 id="散列类型-：散列类型的键值是一种字典结构，存储了字段和字段值的映射。但是字段值只能是字符串，不支持其他数据类型-Redis的其他数据类型也都不支持嵌套，只能是字符串。-。"><a href="#散列类型-：散列类型的键值是一种字典结构，存储了字段和字段值的映射。但是字段值只能是字符串，不支持其他数据类型-Redis的其他数据类型也都不支持嵌套，只能是字符串。-。" class="headerlink" title="散列类型 ：散列类型的键值是一种字典结构，存储了字段和字段值的映射。但是字段值只能是字符串，不支持其他数据类型(Redis的其他数据类型也都不支持嵌套，只能是字符串。)。"></a>散列类型 ：散列类型的键值是一种字典结构，存储了字段和字段值的映射。但是字段值只能是字符串，不支持其他数据类型(Redis的其他数据类型也都不支持嵌套，只能是字符串。)。</h2><p>常用命令：</p>
+<p>hset   key  field value               //赋值。不区分插入和更新操作，当键不存在是会自动建立。</p>
+<p>hget   key  field                       //取值</p>
+<p>hgetall key                              //取出所有的值</p>
+<p>hexists key field                      //判断字段是否存在</p>
+<p>hsetnx key field value              //字段不存在时便赋值</p>
+<p>hincrby key field increment        //增加指定的数字，没有自增</p>
+<p>hdel key field                            //删除一个或者多个字段，返回被删除的个数                </p>
+<p>hkeys key                                 //只获取字段名</p>
+<p>hvals  key                                 //只获取字段值</p>
+<p>hlen   key                                 //只获取字段数量</p>
+<h2 id="列表类型-：列表是个有序的字符串，向两端添加或者删除元素。它是使用双向链表实现的。"><a href="#列表类型-：列表是个有序的字符串，向两端添加或者删除元素。它是使用双向链表实现的。" class="headerlink" title="列表类型 ：列表是个有序的字符串，向两端添加或者删除元素。它是使用双向链表实现的。"></a>列表类型 ：列表是个有序的字符串，向两端添加或者删除元素。它是使用双向链表实现的。</h2><p>常用命令:</p>
+<p>lpush/rpush  list value                         //向左/右增加元素</p>
+<p>lpop/rpop  list                                     //从左/右弹出元素</p>
+<p>llen list                                              //获列表的元素个数</p>
+<p>lrange list start stop                           //获得列表片段(左边索引为0，如果为负则从右边开始)   lrange  key -1 0 则为获取所有的元素</p>
+<p>lrem list  count value                          //删除列表中前count个值为value的元素</p>
+<p>rpoplpush oldlist newlist                     //将原列表的值放入新列表</p>
+<h2 id="集合类型-集合中的元素都是不同的，而且没有顺序。它可以求交集、并集、差集。"><a href="#集合类型-集合中的元素都是不同的，而且没有顺序。它可以求交集、并集、差集。" class="headerlink" title="集合类型 : 集合中的元素都是不同的，而且没有顺序。它可以求交集、并集、差集。"></a>集合类型 : 集合中的元素都是不同的，而且没有顺序。它可以求交集、并集、差集。</h2><p>常用命令:</p>
+<p>sadd set member                                  //增加一个元素给集合(没有则创建)</p>
+<p>srem set member                                 //删除一个或多个元素</p>
+<p>smembers set                                     //返回集合中所有的元素</p>
+<p>sismember set member                        //判断元素是否存在于集合中</p>
+<p>sdiff setA  setB                                    //求差集</p>
+<p>sinter setA  setB                                  //求交集</p>
+<p>sunion  setA setB                                 //求并集</p>
+<p>sdiffstore  destination setA setB             //将求到的差集结果保存在destination中</p>
+<p>srandmember  set  num                        //随机获取一个或多个元素(看后面加的参数)            </p>
+<p>spop set                                              //从集合中随机弹出一个元素</p>
+<h2 id="有序集合-和集合相比给每个元素都关联了个分数。我们除了可以进行集合的操作外，还可以获取分数最高或者最低的几个元素。"><a href="#有序集合-和集合相比给每个元素都关联了个分数。我们除了可以进行集合的操作外，还可以获取分数最高或者最低的几个元素。" class="headerlink" title="有序集合: 和集合相比给每个元素都关联了个分数。我们除了可以进行集合的操作外，还可以获取分数最高或者最低的几个元素。"></a>有序集合: 和集合相比给每个元素都关联了个分数。我们除了可以进行集合的操作外，还可以获取分数最高或者最低的几个元素。</h2><p>常用命令:</p>
+<p>zadd key score member                         //加入元素和对应分数，支持整数和双精度浮点，如果存在则修改。其中+inf和-inf代表正负无穷大</p>
+<p>zscore  key  member                             //获得元素的分数</p>
+<p>zrange/zrevrange  key start stop             //按分数从顺序/逆序排序</p>
+<p>zrangebyscore  key  min (max                //返回min和max之间的数左括号代表不包含</p>
+<p>zincrby key increment member              //给元素增加值</p>
+<p>zcount key min max                             //获取指定范围元素的个数</p>
+<p>zcard  key                                           //获取集合中元素的数量 </p>
+<p>zrem key member                               //删除元素</p>
+<p>zremrangebyrank  key start stop           //按排名范围删除元素</p>
+<p>zremrangebyscore  key min max           //删除分数范围值</p>
+<p>zrank key member                               //元素按分数大小排名</p>
+<p>zrevrank key member                          //从大到小排名</p>
+<p>结语:个人学习总结有遗漏错误的地方还希望大家留言斧正，多多交流一起学习。</p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-阿里巴巴-Java-开发手册-笔记及重点" class="article article-type-post" itemscope itemprop="blogPost">
   
   <div class="article-inner">
@@ -860,61 +951,6 @@ private static boolean exposeWebAppRoot(ServletContext servletContext) {
 <pre><code>编辑tomcat的catalina.bat文件，在第一行的后面增加一句：
 set JAVA_OPTS=-server -Xms512m -Xmx512m -XX:PermSize=128M -XX:MaxPermSize=256M
 </code></pre>
-      
-
-      
-        
-    </div>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Docker的安装" class="article article-type-post" itemscope itemprop="blogPost">
-  
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/26/Docker的安装/">Docker的安装</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      <a href="/2016/10/26/Docker的安装/" class="article-date">
-  <time datetime="2016-10-26T12:44:32.000Z" itemprop="datePublished">2016-10-26</time>
-</a>
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>1，关于docker</p>
-<p>Docker 是一个开源项目，诞生于 2013 年初，最初是 dotCloud 公司内部的一个业余项目。它基于 Google 公司推出的 Go 语言实现。 项目后来加入了 Linux 基金会，遵从了 Apache 2.0 协议，项目代码在 GitHub 上进行维护。</p>
-<p>Docker 项目的目标是实现轻量级的操作系统虚拟化解决方案。 Docker 的基础是 Linux 容器（LXC）等技术。</p>
-<p>在 LXC 的基础上 Docker 进行了进一步的封装，让用户不需要去关心容器的管理，使得操作更为简便。用户操作 Docker 的容器就像操作一个快速轻量级的虚拟机一样简单。</p>
-<p>摘自：<br><a href="http://dockerpool.com/static/books/docker_practice/introduction/what.html" target="_blank" rel="external">http://dockerpool.com/static/books/docker_practice/introduction/what.html</a></p>
-<p>2，安装centos</p>
-<p>在使用virtualbox安装的时候需要把网络修改成【Bridged A’dapter】，方便获得上网ip，ssh连接到虚拟机。<br>centos7 可以直接使用yum 安装docker<br>最懒的方式，只是为了学习docker省去了折腾环境的麻烦。<br>直接使用iso进行安装就行了。 </p>
-<p>3，安装docker</p>
-<p>直接安装就可以了： yum install golang docker device-mapper-event-libs</p>
-<p>必须安装 device-mapper-event-libs 否则docker启动不了，报错：Failed to start Docker Application Container Engine。<br>配置&amp;启动服务</p>
-<p>1:systemctl enable docker<br>2:systemctl start docker</p>
-<p>docker服务就可以正常启动了。</p>
-<p>4，docker hello world</p>
-<p>虚拟安装一个MySQL，docker非常强大的时image。在官方搜索类库非常多。<br><a href="https://registry.hub.docker.com/search?q=library" target="_blank" rel="external">https://registry.hub.docker.com/search?q=library</a><br>docker的注册中心，里面有很多做好的镜像库。<br>mysql的安装：<br>/mysql/”&gt;<a href="https://registry.hub.docker.com//mysql/" target="_blank" rel="external">https://registry.hub.docker.com//mysql/</a></p>
-<p>安装mysql过程，设置数据库docker-mysql，版本5.5</p>
-<p>1:# docker run –name docker-mysql -e MYSQL_ROOT_PASSWORD=docker-mysql -d mysql:5.5<br>2:Unable to find image ‘mysql:5.5’ locally<br>3:Trying to pull repository docker.io/mysql …<br>4:2f08318d65b3: Pulling dependent layers<br>5:511136ea3c5a: Download complete<br>6:4f903438061c: Download complete<br>7:1265e16d0c28: Download complete<br>8:ac1d5afd7b69: Download complete<br>9:7c89455832dd: Downloading [===========================&gt;                       ] 4.434 MB/8.077 MB 34s</p>
-<p>查看docker镜像：</p>
-<h1 id="docker-ps-a"><a href="#docker-ps-a" class="headerlink" title="docker ps -a"></a>docker ps -a</h1><p>CONTAINER ID        IMAGE               COMMAND                CREATED             STATUS              PORTS               NAMES<br>e59ad4702626        mysql:5.5           “/entrypoint.sh mysq   2 minutes ago       Up 2 minutes        3306/tcp            docker-mysql</p>
-<p>查看mysql的docker服务器，直接登录到mysql容器，就安装好了mysql。同时服务也启动了，测试mysql docker启动成功。<br>docker exec -it docker-mysql bash</p>
-<p>1 docker exec -it docker-mysql bash<br>2 root@e59ad4702626:/# mysql -uroot -pdocker-mysql<br>3 Welcome to the MySQL monitor.  Commands end with ; or \g.<br>4 Your MySQL connection id is 5<br>5 Server version: 5.5.43 MySQL Community Server (GPL)<br>6<br>7 Copyright (c) 2000, 2015, Oracle and/or its affiliates. All rights reserved.<br>8<br>9 Oracle is a registered trademark of Oracle Corporation and/or its<br>10 affiliates. Other names may be trademarks of their respective<br>11 owners.<br>12<br>13 Type ‘help;’ or ‘\h’ for help. Type ‘\c’ to clear the current input statement.<br>14<br>15 mysql&gt; show databases;<br>16 +——————–+<br>17 | Database           |<br>18 +——————–+<br>19 | information_schema |<br>20 | mysql              |<br>21 | performance_schema |<br>22 +——————–+<br>23 3 rows in set (0.00 sec)<br>24<br>25 mysql&gt; </p>
-<p>同时这个是一个虚拟的服务器，上面安装的mysql。</p>
-
       
 
       
