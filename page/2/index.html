@@ -28,6 +28,67 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Extjs中textfield的悬浮提示" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/22/Extjs中textfield的悬浮提示/">Extjs中textfield的悬浮提示</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/02/22/Extjs中textfield的悬浮提示/" class="article-date">
+  <time datetime="2017-02-22T05:56:35.000Z" itemprop="datePublished">2017-02-22</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在Extjs中有时候我们需要textfield的提示信息，但是我们发现textfield并没有这样的配置项。这时候我们就要另想方法：我们需要在鼠标悬停在textfield组件的时候进行信息的提示，我们就需要在textfield中来监听，<br>这里有两种进行textfield悬停提示的方法：</p>
+<ol>
+<li>进行固定信息的提示：需要在监听中用render方法<pre><code>render: function (field, p) {
+       Ext.QuickTips.init();
+       Ext.QuickTips.register({
+             target: field.el,
+             text: &apos;这是textfield的固定信息提示！&apos;
+       })
+    }
+</code></pre></li>
+<li><p>进行文本信息提示：提示信息为textfield的文本信息<br> var updateTip = function (field, t) {</p>
+<pre><code>    Ext.QuickTips.init();
+    Ext.QuickTips.register({
+        target: field.el,
+        text: field.getValue()
+    })
+};   
+</code></pre><p> listeners: {</p>
+<pre><code>// 鼠标移动到文本框显示悬浮框
+render : function(p) {
+    p.getEl().on(&apos;mouseover&apos;, function(p1) {
+        updateTip(p);
+    });
+}
+</code></pre><p> }</p>
+</li>
+</ol>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Redis基础命令" class="article article-type-post" itemscope itemprop="blogPost">
   
   <div class="article-inner">
@@ -908,49 +969,6 @@ private static boolean exposeWebAppRoot(ServletContext servletContext) {
         <p>导入一个Maven项目之后发现有一个如下的错误：<br>Project configuration is not up-to-date with pom.xml. Run project configuration update</p>
 <p>其实这个问题解决非常简单：<br>在项目上右键——【Maven】——【Update Project Configuration……】<br>这时会打开一个（Update Maven Dependencies）的对话框，然后勾选住出错的项目，点击Ok<br>这样就搞定了。</p>
 
-      
-
-      
-        
-    </div>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Tomcat报内存溢出" class="article article-type-post" itemscope itemprop="blogPost">
-  
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/26/Tomcat报内存溢出/">Tomcat报内存溢出</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      <a href="/2016/10/26/Tomcat报内存溢出/" class="article-date">
-  <time datetime="2016-10-26T13:45:17.000Z" itemprop="datePublished">2016-10-26</time>
-</a>
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>1、错误描述</p>
-<p>严重：Exception occurred during processing request:null</p>
-<pre><code>java.lang.reflect.InvocationTargetException.
-</code></pre><p>Caused by:java.lang.OutOfMemoryError:Java heap space.</p>
-<p>2、错误原因</p>
-<pre><code>Tomcat在处理大数据时出现内存溢出
-</code></pre><p>3、解决办法</p>
-<pre><code>编辑tomcat的catalina.bat文件，在第一行的后面增加一句：
-set JAVA_OPTS=-server -Xms512m -Xmx512m -XX:PermSize=128M -XX:MaxPermSize=256M
-</code></pre>
       
 
       

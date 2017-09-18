@@ -28,6 +28,49 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Tomcat报内存溢出" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/10/26/Tomcat报内存溢出/">Tomcat报内存溢出</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/10/26/Tomcat报内存溢出/" class="article-date">
+  <time datetime="2016-10-26T13:45:17.000Z" itemprop="datePublished">2016-10-26</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1、错误描述</p>
+<p>严重：Exception occurred during processing request:null</p>
+<pre><code>java.lang.reflect.InvocationTargetException.
+</code></pre><p>Caused by:java.lang.OutOfMemoryError:Java heap space.</p>
+<p>2、错误原因</p>
+<pre><code>Tomcat在处理大数据时出现内存溢出
+</code></pre><p>3、解决办法</p>
+<pre><code>编辑tomcat的catalina.bat文件，在第一行的后面增加一句：
+set JAVA_OPTS=-server -Xms512m -Xmx512m -XX:PermSize=128M -XX:MaxPermSize=256M
+</code></pre>
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Docker的安装" class="article article-type-post" itemscope itemprop="blogPost">
   
   <div class="article-inner">

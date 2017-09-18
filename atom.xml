@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-09-14T02:35:10.203Z</updated>
+  <updated>2017-09-18T13:26:52.319Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,121 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>树插件ztree异步加载数据与一次性加载全部数据的写法</title>
+    <link href="http://yoursite.com/2017/09/18/%E6%A0%91%E6%8F%92%E4%BB%B6ztree%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE%E4%B8%8E%E4%B8%80%E6%AC%A1%E6%80%A7%E5%8A%A0%E8%BD%BD%E5%85%A8%E9%83%A8%E6%95%B0%E6%8D%AE%E7%9A%84%E5%86%99%E6%B3%95/"/>
+    <id>http://yoursite.com/2017/09/18/树插件ztree异步加载数据与一次性加载全部数据的写法/</id>
+    <published>2017-09-18T13:12:47.000Z</published>
+    <updated>2017-09-18T13:26:52.319Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近自己在做一个权限系统管理的项目，用到了ztree树，给大家分享异步加载数据与一次性加载数据的写法</p>
+<p>异步加载数据是为了防止大数据量而造成树卡死的情况,代码如下:<br>前台js:</p>
+<pre><code>&lt;div class=&quot;col-lg-12&quot; style=&quot;height:300px; overflow:scroll;&quot;&gt;
+    &lt;ul id=&quot;treeDemo&quot; class=&quot;ztree&quot;&gt;&lt;/ul&gt;
+&lt;/div&gt;
+function setting() {
+    var setting = {
+        async : {
+            enable : true,
+            type : &quot;get&quot;,
+            url : &apos;${ctx}/menu/renderTree&apos;,
+            autoParam : [ &quot;id&quot;, &quot;type&quot; ]
+        },
+        callback : {
+            onClick : zTreeOnClick
+        }
+    };
+    return setting;
+}
+$.fn.zTree.init($(&quot;#treeDemo&quot;), setting(treeUrl));
+</code></pre><p>后台java:</p>
+<pre><code>@ResponseBody
+@RequestMapping(value = &quot;/renderTree&quot;, method = RequestMethod.GET)
+public List&lt;Map&lt;String, Object&gt;&gt; renderTree1(Long id, String type) {
+    List&lt;Map&lt;String, Object&gt;&gt; returnList = new ArrayList&lt;Map&lt;String, Object&gt;&gt;();
+    // 加载根节点
+    if (StringUtils.isEmpty(id)) {
+        Map&lt;String, Object&gt; root = new HashMap&lt;String, Object&gt;();
+
+        root.put(&quot;id&quot;, 0);// 根节点的ID
+        root.put(&quot;name&quot;, &quot;权限管理系统&quot;); // 根节点的名字
+        root.put(&quot;isParent&quot;, true);//// 设置根节点为父节点
+
+        // 加载一级节点
+        List&lt;Map&lt;String, Object&gt;&gt; returnList1 = new ArrayList&lt;Map&lt;String, Object&gt;&gt;();
+
+        List&lt;Menu&gt; menus = menuService.listOneNodeMenus();
+        for (Menu menu : menus) {
+            Map&lt;String, Object&gt; node = new HashMap&lt;String, Object&gt;();
+            node.put(&quot;id&quot;, menu.getMenuId());
+            node.put(&quot;name&quot;, menu.getName());
+            node.put(&quot;isParent&quot;, menuService.isSubNodeById(menu.getMenuId()));
+            returnList1.add(node);
+        }
+
+        root.put(&quot;children&quot;, returnList1);
+        returnList.add(root);
+        return returnList;
+    }
+
+    // 加载子节点
+    List&lt;Menu&gt; menus = null;
+    if (id != null &amp;&amp; id &gt; 0L) {
+        menus = menuService.listSubMenuByParentId(id);
+        for (Menu menu : menus) {
+            Map&lt;String, Object&gt; node = new HashMap&lt;String, Object&gt;();
+            node.put(&quot;id&quot;, menu.getMenuId());
+            node.put(&quot;name&quot;, menu.getName());
+            node.put(&quot;isParent&quot;, menuService.isSubNodeById(menu.getMenuId()));
+            returnList.add(node);
+        }
+    }
+    return returnList;
+}
+</code></pre><p>加载全部数据:<br>前台js</p>
+<pre><code>&lt;div class=&quot;col-lg-12&quot; style=&quot;height:300px; overflow:scroll;&quot;&gt;
+    &lt;ul id=&quot;treeDemo&quot; class=&quot;ztree&quot;&gt;&lt;/ul&gt;
+&lt;/div&gt;
+function setting() {
+        var setting = {
+            data : {
+                simpleData : {
+                    enable : true,
+                    idKey : &quot;menuId&quot;,
+                    pIdKey : &quot;parentId&quot;,
+                    rootPId : null
+                },
+            check: {
+                enable: true,
+                chkStyle: &quot;checkbox&quot;,
+                chkboxType: { &quot;Y&quot;: &quot;ps&quot;, &quot;N&quot;: &quot;ps&quot; }
+            }
+        };
+        return setting;
+    }
+}
+var jsonTree = getDataStore(&apos;${ctx}/auth/renderTree&apos;);//获得所有节点
+var ztree=$.fn.zTree.init($(&quot;#treeDemo&quot;), setting(),jsonTree);
+</code></pre><p>后台java:</p>
+<pre><code>@ResponseBody
+@RequestMapping(value = &quot;/renderTree&quot;, method = RequestMethod.GET)
+public List&lt;Menu&gt; renderTree() {
+    return menuService.listTree();
+}
+</code></pre><p>希望能对大家有所帮助!</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近自己在做一个权限系统管理的项目，用到了ztree树，给大家分享异步加载数据与一次性加载数据的写法&lt;/p&gt;
+&lt;p&gt;异步加载数据是为了防止大数据量而造成树卡死的情况,代码如下:&lt;br&gt;前台js:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;div class=&amp;quot;col-
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>在java中调用存储过程</title>
@@ -1418,36 +1533,6 @@ private static boolean exposeWebAppRoot(ServletContext servletContext) {
     
       &lt;p&gt;导入一个Maven项目之后发现有一个如下的错误：&lt;br&gt;Project configuration is not up-to-date with pom.xml. Run project configuration update&lt;/p&gt;
 &lt;p&gt;其实这个问题解决非常简单：&lt;b
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Tomcat报内存溢出</title>
-    <link href="http://yoursite.com/2016/10/26/Tomcat%E6%8A%A5%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA/"/>
-    <id>http://yoursite.com/2016/10/26/Tomcat报内存溢出/</id>
-    <published>2016-10-26T13:45:17.000Z</published>
-    <updated>2016-10-26T13:45:44.126Z</updated>
-    
-    <content type="html"><![CDATA[<p>1、错误描述</p>
-<p>严重：Exception occurred during processing request:null</p>
-<pre><code>java.lang.reflect.InvocationTargetException.
-</code></pre><p>Caused by:java.lang.OutOfMemoryError:Java heap space.</p>
-<p>2、错误原因</p>
-<pre><code>Tomcat在处理大数据时出现内存溢出
-</code></pre><p>3、解决办法</p>
-<pre><code>编辑tomcat的catalina.bat文件，在第一行的后面增加一句：
-set JAVA_OPTS=-server -Xms512m -Xmx512m -XX:PermSize=128M -XX:MaxPermSize=256M
-</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;1、错误描述&lt;/p&gt;
-&lt;p&gt;严重：Exception occurred during processing request:null&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;java.lang.reflect.InvocationTargetException.
-&lt;/code&gt;&lt;/p
     
     </summary>
     
