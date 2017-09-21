@@ -13,7 +13,7 @@
 <meta property="og:description" content="最近在试用shiro框架与系统集成的时候，启动报错如下: org.springframework.beans.factory.BeanCreationException: Error creating bean with name &amp;apos;shiroFilter&amp;apos; defined in class path resource [spring-context-shiro.xml]: C">
 <meta property="og:image" content="http://yoursite.com/2017/09/21/images/shiro无法实例化bean-1.png">
 <meta property="og:image" content="http://yoursite.com/2017/09/21/images/shiro无法实例化bean-2.png">
-<meta property="og:updated_time" content="2017-09-21T15:51:31.744Z">
+<meta property="og:updated_time" content="2017-09-21T15:54:26.067Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Spring配置shiro时,自定义Realm中属性无法使用注解注入解决办法">
 <meta name="twitter:description" content="最近在试用shiro框架与系统集成的时候，启动报错如下: org.springframework.beans.factory.BeanCreationException: Error creating bean with name &amp;apos;shiroFilter&amp;apos; defined in class path resource [spring-context-shiro.xml]: C">
@@ -158,7 +158,7 @@ Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No q
 }
 </code></pre><p>纠结了几个小时终于找到了问题所在,因为shiro的realm属于Filter,简单说就是初始化realm时,spring还未加载相关业务Bean,那么解决办法就是将springmvc的配置文件加载提前。</p>
 <p>解决办法<br>打开web.xml文件</p>
-<p><img src="../images/shiro无法实例化bean-1.png" alt="logo"><br><img src="../images/shiro无法实例化bean-2.png" alt="logo"></p>
+<p><img src="../images/shiro无法实例化bean-1.png" alt="spring加载配置文件"><br><img src="../images/shiro无法实例化bean-2.png" alt="springmvc前端控制器"></p>
 
       
 
