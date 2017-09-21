@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-09-21T15:46:49.800Z</updated>
+  <updated>2017-09-21T15:51:31.744Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://yoursite.com/2017/09/21/%E4%BD%BF%E7%94%A8Spring%E9%85%8D%E7%BD%AEshiro%E6%97%B6-%E8%87%AA%E5%AE%9A%E4%B9%89Realm%E4%B8%AD%E5%B1%9E%E6%80%A7%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8%E6%B3%A8%E8%A7%A3%E6%B3%A8%E5%85%A5%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/"/>
     <id>http://yoursite.com/2017/09/21/使用Spring配置shiro时-自定义Realm中属性无法使用注解注入解决办法/</id>
     <published>2017-09-21T15:30:17.000Z</published>
-    <updated>2017-09-21T15:46:49.800Z</updated>
+    <updated>2017-09-21T15:51:31.744Z</updated>
     
     <content type="html"><![CDATA[<p>最近在试用shiro框架与系统集成的时候，启动报错如下:</p>
 <pre><code>org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;shiroFilter&apos; defined in class path resource [spring-context-shiro.xml]: Cannot resolve reference to bean &apos;securityManager&apos; while setting bean property &apos;securityManager&apos;; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;securityManager&apos; defined in class path resource [spring-context-shiro.xml]: Cannot resolve reference to bean &apos;userRealm&apos; while setting bean property &apos;realm&apos;; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;userRealm&apos;: Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private com.wyj.service.system.UserService com.wyj.shiro.realm.UserRealm.userService; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [com.wyj.service.system.UserService] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
@@ -125,7 +125,7 @@ Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No q
 }
 </code></pre><p>纠结了几个小时终于找到了问题所在,因为shiro的realm属于Filter,简单说就是初始化realm时,spring还未加载相关业务Bean,那么解决办法就是将springmvc的配置文件加载提前。</p>
 <p>解决办法<br>打开web.xml文件</p>
-<p><img src="shiro无法实例化bean-1.png" alt="logo"><br><img src="shiro无法实例化bean-2.png" alt="logo"></p>
+<p><img src="../images/shiro无法实例化bean-1.png" alt="logo"><br><img src="../images/shiro无法实例化bean-2.png" alt="logo"></p>
 ]]></content>
     
     <summary type="html">
