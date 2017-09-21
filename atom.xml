@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-09-18T13:26:52.319Z</updated>
+  <updated>2017-09-21T15:46:49.800Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,11 +16,134 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>使用Spring配置shiro时,自定义Realm中属性无法使用注解注入解决办法</title>
+    <link href="http://yoursite.com/2017/09/21/%E4%BD%BF%E7%94%A8Spring%E9%85%8D%E7%BD%AEshiro%E6%97%B6-%E8%87%AA%E5%AE%9A%E4%B9%89Realm%E4%B8%AD%E5%B1%9E%E6%80%A7%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8%E6%B3%A8%E8%A7%A3%E6%B3%A8%E5%85%A5%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/"/>
+    <id>http://yoursite.com/2017/09/21/使用Spring配置shiro时-自定义Realm中属性无法使用注解注入解决办法/</id>
+    <published>2017-09-21T15:30:17.000Z</published>
+    <updated>2017-09-21T15:46:49.800Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近在试用shiro框架与系统集成的时候，启动报错如下:</p>
+<pre><code>org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;shiroFilter&apos; defined in class path resource [spring-context-shiro.xml]: Cannot resolve reference to bean &apos;securityManager&apos; while setting bean property &apos;securityManager&apos;; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;securityManager&apos; defined in class path resource [spring-context-shiro.xml]: Cannot resolve reference to bean &apos;userRealm&apos; while setting bean property &apos;realm&apos;; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;userRealm&apos;: Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private com.wyj.service.system.UserService com.wyj.shiro.realm.UserRealm.userService; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [com.wyj.service.system.UserService] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:328) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:107) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1456) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1197) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:537) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:475) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:304) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:228) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:300) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+at org.springframework.context.support.PostProcessorRegistrationDelegate.registerBeanPostProcessors(PostProcessorRegistrationDelegate.java:232) ~[spring-context-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+at org.springframework.context.support.AbstractApplicationContext.registerBeanPostProcessors(AbstractApplicationContext.java:618) ~[spring-context-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:467) ~[spring-context-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+at org.springframework.web.context.ContextLoader.configureAndRefreshWebApplicationContext(ContextLoader.java:403) ~[spring-web-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+at org.springframework.web.context.ContextLoader.initWebApplicationContext(ContextLoader.java:306) ~[spring-web-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+at org.springframework.web.context.ContextLoaderListener.contextInitialized(ContextLoaderListener.java:106) [spring-web-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+at org.apache.catalina.core.StandardContext.listenerStart(StandardContext.java:4729) [catalina.jar:na]
+at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:5167) [catalina.jar:na]
+at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:150) [catalina.jar:na]
+at org.apache.catalina.core.ContainerBase.addChildInternal(ContainerBase.java:725) [catalina.jar:na]
+at org.apache.catalina.core.ContainerBase.addChild(ContainerBase.java:701) [catalina.jar:na]
+at org.apache.catalina.core.StandardHost.addChild(StandardHost.java:717) [catalina.jar:na]
+at org.apache.catalina.startup.HostConfig.deployDescriptor(HostConfig.java:586) [catalina.jar:8.0.26.B]
+at org.apache.catalina.startup.HostConfig$DeployDescriptor.run(HostConfig.java:1750) [catalina.jar:8.0.26.B]
+at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511) [na:1.8.0_77]
+at java.util.concurrent.FutureTask.run(FutureTask.java:266) [na:1.8.0_77]
+at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142) [na:1.8.0_77]
+at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617) [na:1.8.0_77]
+at java.lang.Thread.run(Thread.java:745) [na:1.8.0_77]
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;securityManager&apos; defined in class path resource [spring-context-shiro.xml]: Cannot resolve reference to bean &apos;userRealm&apos; while setting bean property &apos;realm&apos;; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;userRealm&apos;: Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private com.wyj.service.system.UserService com.wyj.shiro.realm.UserRealm.userService; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [com.wyj.service.system.UserService] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+    at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:328) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:107) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1456) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1197) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:537) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:475) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:304) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:228) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:300) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:195) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:320) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    ... 28 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;userRealm&apos;: Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private com.wyj.service.system.UserService com.wyj.shiro.realm.UserRealm.userService; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [com.wyj.service.system.UserService] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+    at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:292) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1185) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:537) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:475) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:304) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:228) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:300) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:195) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:320) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    ... 38 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Could not autowire field: private com.wyj.service.system.UserService com.wyj.shiro.realm.UserRealm.userService; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [com.wyj.service.system.UserService] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+    at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:508) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:87) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:289) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    ... 46 common frames omitted
+Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [com.wyj.service.system.UserService] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+    at org.springframework.beans.factory.support.DefaultListableBeanFactory.raiseNoSuchBeanDefinitionException(DefaultListableBeanFactory.java:1100) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:960) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:855) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+    at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:480) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
+... 48 common frames omitted
+</code></pre><p>在shiro.xml的配置是:</p>
+<pre><code>&lt;bean id=&quot;userRealm&quot; class=&quot;com.wyj.shiro.realm.UserRealm&quot;/&gt;
+</code></pre><p>UserRealm.java的代码是:</p>
+<pre><code>public class UserRealm extends AuthorizingRealm{
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private MenuService menuService;
+
+    /**
+     * 授权(验证权限时调用)
+     * 为当前登陆成功的用户授予权限和角色，已经登陆成功了
+     */
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        ...
+        return info;
+    }
+
+    /**
+     * 认证(登录时调用)
+     * 验证当前登录的用户，获取认证信息
+     */
+    @Override
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+        ...
+        return info;
+    }
+
+}
+</code></pre><p>纠结了几个小时终于找到了问题所在,因为shiro的realm属于Filter,简单说就是初始化realm时,spring还未加载相关业务Bean,那么解决办法就是将springmvc的配置文件加载提前。</p>
+<p>解决办法<br>打开web.xml文件</p>
+<p><img src="shiro无法实例化bean-1.png" alt="logo"><br><img src="shiro无法实例化bean-2.png" alt="logo"></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近在试用shiro框架与系统集成的时候，启动报错如下:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;org.springframework.beans.factory.BeanCreationException: Error creating bean with name &amp;apos;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>树插件ztree异步加载数据与一次性加载全部数据的写法</title>
     <link href="http://yoursite.com/2017/09/18/%E6%A0%91%E6%8F%92%E4%BB%B6ztree%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE%E4%B8%8E%E4%B8%80%E6%AC%A1%E6%80%A7%E5%8A%A0%E8%BD%BD%E5%85%A8%E9%83%A8%E6%95%B0%E6%8D%AE%E7%9A%84%E5%86%99%E6%B3%95/"/>
     <id>http://yoursite.com/2017/09/18/树插件ztree异步加载数据与一次性加载全部数据的写法/</id>
     <published>2017-09-18T13:12:47.000Z</published>
-    <updated>2017-09-18T13:26:52.319Z</updated>
+    <updated>2017-09-18T13:27:58.271Z</updated>
     
     <content type="html"><![CDATA[<p>最近自己在做一个权限系统管理的项目，用到了ztree树，给大家分享异步加载数据与一次性加载数据的写法</p>
 <p>异步加载数据是为了防止大数据量而造成树卡死的情况,代码如下:<br>前台js:</p>
@@ -1512,27 +1635,6 @@ private static boolean exposeWebAppRoot(ServletContext servletContext) {
     <summary type="html">
     
       &lt;p&gt;extjs Ext.form.ComboBox 的设置默认值的问题&lt;br&gt;Ext.onReady(function(){&lt;br&gt;var dbConnectionRecord = Ext.data.Record.create([&lt;br&gt;    {name: ‘dbConnec
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>【Maven】Project configuration is not up-to-date with pom.xml错误解决方法</title>
-    <link href="http://yoursite.com/2016/11/10/%E3%80%90Maven%E3%80%91Project-configuration-is-not-up-to-date-with-pom-xml%E9%94%99%E8%AF%AF%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/"/>
-    <id>http://yoursite.com/2016/11/10/【Maven】Project-configuration-is-not-up-to-date-with-pom-xml错误解决方法/</id>
-    <published>2016-11-10T08:53:45.000Z</published>
-    <updated>2016-11-10T09:24:07.410Z</updated>
-    
-    <content type="html"><![CDATA[<p>导入一个Maven项目之后发现有一个如下的错误：<br>Project configuration is not up-to-date with pom.xml. Run project configuration update</p>
-<p>其实这个问题解决非常简单：<br>在项目上右键——【Maven】——【Update Project Configuration……】<br>这时会打开一个（Update Maven Dependencies）的对话框，然后勾选住出错的项目，点击Ok<br>这样就搞定了。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;导入一个Maven项目之后发现有一个如下的错误：&lt;br&gt;Project configuration is not up-to-date with pom.xml. Run project configuration update&lt;/p&gt;
-&lt;p&gt;其实这个问题解决非常简单：&lt;b
     
     </summary>
     

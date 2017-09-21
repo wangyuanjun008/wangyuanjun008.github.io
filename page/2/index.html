@@ -28,6 +28,42 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-解决“Dynamic-Web-Module-3-0-requires-Java-1-6-or-newer-”错误" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/30/解决“Dynamic-Web-Module-3-0-requires-Java-1-6-or-newer-”错误/"> 解决“Dynamic Web Module 3.0 requires Java 1.6 or newer.”错误</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/03/30/解决“Dynamic-Web-Module-3-0-requires-Java-1-6-or-newer-”错误/" class="article-date">
+  <time datetime="2017-03-30T13:23:16.000Z" itemprop="datePublished">2017-03-30</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>eclipse maven<br>在项目的pom.xml的<build></build>标签中加入：<br>        <plugins><br>            <plugin><br>                <groupid>org.apache.maven.plugins</groupid><br>                <artifactid>maven-compiler-plugin</artifactid><br>                <version>2.3.2</version><br>                <configuration><br>                    <source>1.6<br>                    <target>1.6</target><br>                </configuration><br>            </plugin><br>        </plugins>  </p>
+<p>保存，项目构建完成后在项目文件夹上点右键，选择Maven-&gt;Update Project Configuration，问题解决。 </p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Extjs中textfield的悬浮提示" class="article article-type-post" itemscope itemprop="blogPost">
   
   <div class="article-inner">
@@ -932,42 +968,6 @@ private static boolean exposeWebAppRoot(ServletContext servletContext) {
 <p>store排序：加入属*，<br>sortInfo : {<br>field : “id”,<br>direction : “ASC”<br>}</p>
 <p>五、ExtJS 重置表单的方法：</p>
 <p>有三种方法能实现form表单的重置，假设var fs=new Ext.form.FormPanel({…});<br>(1)fs.form.reset();//重置form<br>(2)fs.getForm().getEl().dom.reset();//重置form<br>(3)Ext.getCmp(‘fs’).form.reset();</p>
-
-      
-
-      
-        
-    </div>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-【Maven】Project-configuration-is-not-up-to-date-with-pom-xml错误解决方法" class="article article-type-post" itemscope itemprop="blogPost">
-  
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/11/10/【Maven】Project-configuration-is-not-up-to-date-with-pom-xml错误解决方法/">【Maven】Project configuration is not up-to-date with pom.xml错误解决方法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      <a href="/2016/11/10/【Maven】Project-configuration-is-not-up-to-date-with-pom-xml错误解决方法/" class="article-date">
-  <time datetime="2016-11-10T08:53:45.000Z" itemprop="datePublished">2016-11-10</time>
-</a>
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>导入一个Maven项目之后发现有一个如下的错误：<br>Project configuration is not up-to-date with pom.xml. Run project configuration update</p>
-<p>其实这个问题解决非常简单：<br>在项目上右键——【Maven】——【Update Project Configuration……】<br>这时会打开一个（Update Maven Dependencies）的对话框，然后勾选住出错的项目，点击Ok<br>这样就搞定了。</p>
 
       
 
