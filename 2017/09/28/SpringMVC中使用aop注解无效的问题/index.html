@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>SpringMVC中使用aop注解无效的问题 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近在做一个系统，写日志注解完，进行测试时，发现日志注解没有生效，代码如下: 定义注解: @Target(ElementType.METHOD) @Retention(RetentionPolicy.RUNTIME) @Documented public @interface SysLog {      String action() default &amp;quot;&amp;quot;;//动作  }">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringMVC中使用aop注解无效的问题">
+<meta property="og:url" content="http://yoursite.com/2017/09/28/SpringMVC中使用aop注解无效的问题/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="最近在做一个系统，写日志注解完，进行测试时，发现日志注解没有生效，代码如下: 定义注解: @Target(ElementType.METHOD) @Retention(RetentionPolicy.RUNTIME) @Documented public @interface SysLog {      String action() default &amp;quot;&amp;quot;;//动作  }">
+<meta property="og:updated_time" content="2017-09-28T07:22:16.835Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringMVC中使用aop注解无效的问题">
+<meta name="twitter:description" content="最近在做一个系统，写日志注解完，进行测试时，发现日志注解没有生效，代码如下: 定义注解: @Target(ElementType.METHOD) @Retention(RetentionPolicy.RUNTIME) @Documented public @interface SysLog {      String action() default &amp;quot;&amp;quot;;//动作  }">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <section id="main"><article id="post-SpringMVC中使用aop注解无效的问题" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      SpringMVC中使用aop注解无效的问题
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/09/28/SpringMVC中使用aop注解无效的问题/" class="article-date">
+  <time datetime="2017-09-28T06:47:46.000Z" itemprop="datePublished">2017-09-28</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在做一个系统，写日志注解完，进行测试时，发现日志注解没有生效，代码如下:</p>
+<p>定义注解:</p>
+<pre><code>@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface SysLog {
+
+    String action() default &quot;&quot;;//动作
+
+}    
+</code></pre><p>切面:</p>
+<pre><code>@Aspect
+@Component
+public class SysLogAspect {
+
+    @Autowired
+    private SysLogService sysLogService;
+
+    @Pointcut(&quot;@annotation(com.wyj.annotation.SysLog)&quot;)
+    public void pointCut(){}
+
+    @Around(&quot;pointCut()&quot;)
+    public Object aroud(ProceedingJoinPoint joinPoint) throws Throwable{
+
+        // 开始时间
+        long beginTime = System.currentTimeMillis();
+
+        //执行目标方法
+        Object result = joinPoint.proceed();
+
+        //执行时长(毫秒)
+        long time = System.currentTimeMillis() - beginTime;
+
+        //保存日志
+        saveSysLog(joinPoint, time);
+        return result;
+    }
+}
+</code></pre><p>applicationContext.xml 配置:</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot; xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+    xmlns:p=&quot;http://www.springframework.org/schema/p&quot; xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xsi:schemaLocation=&quot;   
+         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd   
+   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd   
+   http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd   
+   http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd&quot;&gt;
+
+    &lt;bean id=&quot;propertyConfigurer&quot;
+        class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&gt;
+        &lt;property name=&quot;locations&quot;&gt;
+            &lt;list&gt;
+                &lt;value&gt;classpath:jdbc.properties&lt;/value&gt;
+            &lt;/list&gt;
+        &lt;/property&gt;
+    &lt;/bean&gt;
+
+    &lt;context:annotation-config /&gt;
+
+    &lt;context:component-scan base-package=&quot;com.wyj&quot; use-default-filters=&quot;false&quot;&gt;
+        &lt;context:exclude-filter type=&quot;annotation&quot; expression=&quot;org.springframework.stereotype.Controller&quot;/&gt;
+        &lt;context:exclude-filter type=&quot;annotation&quot; expression=&quot;org.springframework.web.bind.annotation.ControllerAdvice&quot; /&gt;
+    &lt;/context:component-scan&gt;
+
+    &lt;aop:aspectj-autoproxy proxy-target-class=&quot;true&quot; /&gt;
+&lt;/beans&gt;
+</code></pre><p>controller代码:</p>
+<pre><code>@Controller
+@RequestMapping(value = &quot;/user&quot;)
+public class UserController {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Autowired
+    private UserService userService;
+
+    @SysLog(action=&quot;新增/编辑用户&quot;)
+    @ResponseBody
+    @RequestMapping(value = &quot;/add&quot;, method = RequestMethod.POST)
+    public Retval save(User user) {
+        Retval retval = Retval.newInstance();
+        try {
+            if (user.getUserId() == null) {
+                userService.saveUser(user);
+            } else {
+                userService.updateUser(user);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return retval;
+    }
+}
+</code></pre><p>和别人讨论了下，大致是Spring上下文的问题<br>我的AOP配置是这样的：AOP命名空间和<aop:aspectj-autoproxy proxy-target-class="true />这两个都配在了ApplicationContext.xml里面了，而不是SpringMVC框架自己约定的配置文件中（我这个项目里面，这个配置文件叫做springmvc-servlet.xml），正因为这样，出问题了。后来，我把AOP命名空间和<aop:aspectj-autoproxy  proxy-target-class=" true="">挪到SpringMVC自己的配置文件里面，AOP就生效了。<br>另外以上所述的是对controller进行切面时的配置，如果是对service进行切面，那么</aop:aspectj-autoproxy></p>
+<p><context:component-scan base-package="com.wyj"></context:component-scan></p>
+<aop:aspectj-autoproxy>
+
+<p>这两个注释就要用在ApplicationContext.xml里面了，注意此时不要开启aop的cglib代理模式。</p>
+<p>解释：</p>
+<p>1.SpringMVC这个框架简化了很多的配置，但是请注意@Controller和@Service都是SpringMVC框架包里面的，也就是说，这些类的实例化以及注入也是由SpringMVC这个框架完成的（确切的来说是这个框架自己有的上下文的IoC容器完成的）。</p>
+<p>2.而对AOP和事务的支持是Spring框架本身完成的，是Spring框架的应用上下文所扫描并处理的。</p>
+<p>从1.2可以得出一个结论，如果SpringMVC和Spring本身用的是一个应用上下文，一个Ioc容器，那随便你的<aop:aspectj-autoproxy>和命名空间配置在哪里，无论是Spring的ApplicationContext.xml还是SpringMVC的springmvc-servlet.xml里面，反正都是一个容器，怎么扫描，怎么处理都能找到。</aop:aspectj-autoproxy></p>
+<p>但关键的是以上假设不成立，总的来说SpringMVC的应用上下文的 “ 父 ” 上下文才是Spring的应用上下文。那么这个也就是说Spring的应用上下文初始化完成的时候，它开始扫描到底哪些Bean用了AspectJ的注解，哪些用了Transactional的注解，但是利用SpringMVC注解配置的这些Bean它是找不到的，因为用了这些注解的Bean还没有被实例化甚至是还没有被装载，为什么呢？因为管理这些bean的SpringMVC的上下文可能还没有完成初始化。OK，既然Spring的上下文找不到到底哪些Bean应用了注解，那他自然也没有办法给这些Bean提供声明式AOP和事务的支持了。</p>
+<p>至于为什么SpringMVC的应用上下文的 “ 父 ” 上下文才是Spring的应用上下文，这里有大牛为我们详解：<a href="http://blog.csdn.net/c289054531/article/details/9196149" target="_blank" rel="external">http://blog.csdn.net/c289054531/article/details/9196149</a></p>
+<p>另外，Spring中的切面类固然要用@Aspect标注，但也不要忘了用@Componet标注，这样才能被注册到容器中</p>
+</aop:aspectj-autoproxy>
+      
+
+      
+        
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/09/21/使用Spring配置shiro时-自定义Realm中属性无法使用注解注入解决办法/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">使用Spring配置shiro时,自定义Realm中属性无法使用注解注入解决办法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2017 John Doe 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a href="https://github.com/" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

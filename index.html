@@ -28,6 +28,146 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-SpringMVC中使用aop注解无效的问题" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/28/SpringMVC中使用aop注解无效的问题/">SpringMVC中使用aop注解无效的问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/09/28/SpringMVC中使用aop注解无效的问题/" class="article-date">
+  <time datetime="2017-09-28T06:47:46.000Z" itemprop="datePublished">2017-09-28</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在做一个系统，写日志注解完，进行测试时，发现日志注解没有生效，代码如下:</p>
+<p>定义注解:</p>
+<pre><code>@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface SysLog {
+
+    String action() default &quot;&quot;;//动作
+
+}    
+</code></pre><p>切面:</p>
+<pre><code>@Aspect
+@Component
+public class SysLogAspect {
+
+    @Autowired
+    private SysLogService sysLogService;
+
+    @Pointcut(&quot;@annotation(com.wyj.annotation.SysLog)&quot;)
+    public void pointCut(){}
+
+    @Around(&quot;pointCut()&quot;)
+    public Object aroud(ProceedingJoinPoint joinPoint) throws Throwable{
+
+        // 开始时间
+        long beginTime = System.currentTimeMillis();
+
+        //执行目标方法
+        Object result = joinPoint.proceed();
+
+        //执行时长(毫秒)
+        long time = System.currentTimeMillis() - beginTime;
+
+        //保存日志
+        saveSysLog(joinPoint, time);
+        return result;
+    }
+}
+</code></pre><p>applicationContext.xml 配置:</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot; xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+    xmlns:p=&quot;http://www.springframework.org/schema/p&quot; xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xsi:schemaLocation=&quot;   
+         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd   
+   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd   
+   http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd   
+   http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd&quot;&gt;
+
+    &lt;bean id=&quot;propertyConfigurer&quot;
+        class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&gt;
+        &lt;property name=&quot;locations&quot;&gt;
+            &lt;list&gt;
+                &lt;value&gt;classpath:jdbc.properties&lt;/value&gt;
+            &lt;/list&gt;
+        &lt;/property&gt;
+    &lt;/bean&gt;
+
+    &lt;context:annotation-config /&gt;
+
+    &lt;context:component-scan base-package=&quot;com.wyj&quot; use-default-filters=&quot;false&quot;&gt;
+        &lt;context:exclude-filter type=&quot;annotation&quot; expression=&quot;org.springframework.stereotype.Controller&quot;/&gt;
+        &lt;context:exclude-filter type=&quot;annotation&quot; expression=&quot;org.springframework.web.bind.annotation.ControllerAdvice&quot; /&gt;
+    &lt;/context:component-scan&gt;
+
+    &lt;aop:aspectj-autoproxy proxy-target-class=&quot;true&quot; /&gt;
+&lt;/beans&gt;
+</code></pre><p>controller代码:</p>
+<pre><code>@Controller
+@RequestMapping(value = &quot;/user&quot;)
+public class UserController {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Autowired
+    private UserService userService;
+
+    @SysLog(action=&quot;新增/编辑用户&quot;)
+    @ResponseBody
+    @RequestMapping(value = &quot;/add&quot;, method = RequestMethod.POST)
+    public Retval save(User user) {
+        Retval retval = Retval.newInstance();
+        try {
+            if (user.getUserId() == null) {
+                userService.saveUser(user);
+            } else {
+                userService.updateUser(user);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return retval;
+    }
+}
+</code></pre><p>和别人讨论了下，大致是Spring上下文的问题<br>我的AOP配置是这样的：AOP命名空间和<aop:aspectj-autoproxy proxy-target-class="true />这两个都配在了ApplicationContext.xml里面了，而不是SpringMVC框架自己约定的配置文件中（我这个项目里面，这个配置文件叫做springmvc-servlet.xml），正因为这样，出问题了。后来，我把AOP命名空间和<aop:aspectj-autoproxy  proxy-target-class=" true="">挪到SpringMVC自己的配置文件里面，AOP就生效了。<br>另外以上所述的是对controller进行切面时的配置，如果是对service进行切面，那么</aop:aspectj-autoproxy></p>
+<p><context:component-scan base-package="com.wyj"></context:component-scan></p>
+<aop:aspectj-autoproxy>
+
+<p>这两个注释就要用在ApplicationContext.xml里面了，注意此时不要开启aop的cglib代理模式。</p>
+<p>解释：</p>
+<p>1.SpringMVC这个框架简化了很多的配置，但是请注意@Controller和@Service都是SpringMVC框架包里面的，也就是说，这些类的实例化以及注入也是由SpringMVC这个框架完成的（确切的来说是这个框架自己有的上下文的IoC容器完成的）。</p>
+<p>2.而对AOP和事务的支持是Spring框架本身完成的，是Spring框架的应用上下文所扫描并处理的。</p>
+<p>从1.2可以得出一个结论，如果SpringMVC和Spring本身用的是一个应用上下文，一个Ioc容器，那随便你的<aop:aspectj-autoproxy>和命名空间配置在哪里，无论是Spring的ApplicationContext.xml还是SpringMVC的springmvc-servlet.xml里面，反正都是一个容器，怎么扫描，怎么处理都能找到。</aop:aspectj-autoproxy></p>
+<p>但关键的是以上假设不成立，总的来说SpringMVC的应用上下文的 “ 父 ” 上下文才是Spring的应用上下文。那么这个也就是说Spring的应用上下文初始化完成的时候，它开始扫描到底哪些Bean用了AspectJ的注解，哪些用了Transactional的注解，但是利用SpringMVC注解配置的这些Bean它是找不到的，因为用了这些注解的Bean还没有被实例化甚至是还没有被装载，为什么呢？因为管理这些bean的SpringMVC的上下文可能还没有完成初始化。OK，既然Spring的上下文找不到到底哪些Bean应用了注解，那他自然也没有办法给这些Bean提供声明式AOP和事务的支持了。</p>
+<p>至于为什么SpringMVC的应用上下文的 “ 父 ” 上下文才是Spring的应用上下文，这里有大牛为我们详解：<a href="http://blog.csdn.net/c289054531/article/details/9196149" target="_blank" rel="external">http://blog.csdn.net/c289054531/article/details/9196149</a></p>
+<p>另外，Spring中的切面类固然要用@Aspect标注，但也不要忘了用@Componet标注，这样才能被注册到容器中</p>
+</aop:aspectj-autoproxy>
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-使用Spring配置shiro时-自定义Realm中属性无法使用注解注入解决办法" class="article article-type-post" itemscope itemprop="blogPost">
   
   <div class="article-inner">
@@ -919,79 +1059,6 @@ Caused by: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot
 <p>游标表达式作用是用于返回嵌套游标。语法：</p>
 <p>CURSOR(sub_query)<br>示例：</p>
 <p>DECLARE<br>       CURSOR dept_emp_cursor(v_deptno number) IS<br>   SELECT dname,cursor(SELECT * FROM emp e WHERE e.deptno = d.deptno)<br>   FROM dept d WHERE deptno = v_deptno;<br>       TYPE emp_cursor_type IS REF CURSOR;<br>       emp_cursor emp_cursor_type;<br>       emp_record emp%ROWTYPE;<br>       v_name dept.dname%TYPE;<br>       v_dno emp.deptno%TYPE;<br>BEGIN<br>     v_dno := &no;<br>     OPEN dept_emp_cursor(v_dno);<br>     loop<br>          FETCH dept_emp_cursor INTO v_name,emp_cursor;<br>          EXIT WHEN dept_emp_cursor%NOTFOUND;<br>          dbms_output.put_line(‘部门名称：’||v_name);<br>          LOOP<br>              FETCH emp_cursor INTO emp_record;<br>              EXIT WHEN emp_cursor%NOTFOUND;<br>              dbms_output.put_line(‘员工名称：’||emp_record.ename||’，工资：’||emp_record.sal);<br>          END LOOP;<br>     end loop;<br>     CLOSE dept_emp_cursor;<br>END;</p>
-
-      
-
-      
-        
-    </div>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-跨Oracle数据库实现表级别的实时同步" class="article article-type-post" itemscope itemprop="blogPost">
-  
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/28/跨Oracle数据库实现表级别的实时同步/">跨Oracle数据库实现表级别的实时同步</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      <a href="/2017/04/28/跨Oracle数据库实现表级别的实时同步/" class="article-date">
-  <time datetime="2017-04-28T05:49:50.000Z" itemprop="datePublished">2017-04-28</time>
-</a>
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>一. 问题描述</p>
-<p>有两个Oracle数据库，分别布置在不同的服务器上，系统均为windows2003；</p>
-<p>这里暂且说成是一个主数据库和从数据库：</p>
-<p>(1) 主数据库: oracle_A ；</p>
-<p>(2) 从数据库: oracle_B ；</p>
-<p>在oracle_A中有一个表table_A与oracle_B中的表table_B 结构相同 ；</p>
-<p>我是处在oracle_B，oracle_A数据库分配给我有一个访问oracle_A表table_A的用户，该用户 只拥有查询的权限 ；</p>
-<p>另外，需要 说明的一点 ，就是在oracle_B处,只需对table_B表进行查询的操作，不进行其他增删改的操作。</p>
-<p>场景介绍完了， 我的问题 的是,如何在oracle_A中表table_A发生变化时,实时更新同步到oracle_B的table_B中?</p>
-<p>我原来的处理方式:</p>
-<p>通过建立远程连接DBLink+JOB定时任务+存储过程的方式,实现了定时同步 更新,但不能做到实时同步 。</p>
-<p>二. 采用同义词+DB_Link的方式结果步骤</p>
-<p>之所以能够选择采用同义词的方式，处理这个问题。主要还是源于在问题描述中提到一个点，那就是我们只需要对同步后的表进行 查询 操作。这点是使用同义词方式的重要要素。</p>
-<p>下面详细模拟一下整个实验测试的过程：</p>
-<p>（1）首先在Oracle_A端创建一个对table_A只有查询功能的用户</p>
-<p><1> 创建用户<br>  sqlplus /nolog<br>  conn /as sysdba;<br>  create user username identified by password;</1></p>
-<p><2> 查看所有的用户列表<br>    用户创建完成后,查看用户是否创建成功<br>  select * from all_users;</2></p>
-<p><3>授予权限<br>    为了能够保证能够登陆,必须赋予如下权限</3></p>
-<p>  –授予username用户创建session的权限,即登陆权限<br>  grant create session to username;</p>
-<p>  –授予username用户使用表空间的权限<br>  grant unlimited tablespace to username;</p>
-<p>  –oracle对权限管理比较严谨,普通用户之间也是默认不能互相访问的,需要互相授权.<br>  –如果scott用户要授权给username用户查看自己的test表的权限;<br>  sqlplus scott/tiget@localhost:1521/orcl</p>
-<p>  –授予username用户查看指定的权限<br>  grant select on test to username;</p>
-<p>  –撤销权限<br>    基本语法同grant,关键字为revoke;<br>（2）验证用户是否可以成功登录，并进行访问授权的表</p>
-<p>–使用sqlplus登录，并进行查询<br>sqlplus username/password@localhost:1521/orcl;<br>select * from scott.test;<br>注意：查询表时，务必带上用户名，说明是哪个用户下的表。</p>
-<p>（3）创建远程连接DB_Link</p>
-<p><1> 创建远程连接 db_link<br>create public database link db32　connect to tianzhi_test identified by “tianzhi_test” using ‘192.168.56.6:1521/ORCL’</1></p>
-<p><2> 测试远程连接是否成功<br>select * from tianzhi_smart.zh_item_news@db32;<br>（4）在Oracle_B端创建同义词</2></p>
-<p><1> 使用sqlplus登录自己的用户<br>sqlplus tianzhi_smart/tianzhi_smart@localhost:1521/orcl</1></p>
-<p><2> 创建同义词<br>create or replace public synonym TEST1130 for scott.TEST@db32;</2></p>
-<p><3> 查询测试<br>select * from TEST1130;<br>可以看到这与在Oracle_A源数据库中查到的table_A表中的数据一样.<br>注意事项:</3></p>
-<p>当远程查询的数据库中包含BLOB字段时,会报出如下错误.</p>
-<p>ORA-22992: 无法使用从远程表选择的 LOB 定位器</p>
-<p>当出现这个错误的时候，那是因为跨库连接查询中的表中存在BLOB类型的字段，所以一定要注意，所有表中存在blob类型字段，</p>
-<p>不能用 select * from 连接的表<br>不能将blob类型的字段出现在脚本中。<br>如果这些blob类型的字段一定要导过来，可以先建立临时表再插入本地表，方法如下.在pl/sql中执行</p>
-<p>第一步 建临时表</p>
-<p>create global temporary table foo ( X BLOB )</p>
-<p>on commit delete rows;</p>
-<p>第二步 插入本地表</p>
-<p>insert into foo select blobcolumn from remoteTable@dl_remote ;</p>
 
       
 
