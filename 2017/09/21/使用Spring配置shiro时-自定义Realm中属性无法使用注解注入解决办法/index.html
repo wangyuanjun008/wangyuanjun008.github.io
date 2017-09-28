@@ -5,18 +5,18 @@
   
   <title>使用Spring配置shiro时,自定义Realm中属性无法使用注解注入解决办法 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近在试用shiro框架与系统集成的时候，启动报错如下: org.springframework.beans.factory.BeanCreationException: Error creating bean with name &amp;apos;shiroFilter&amp;apos; defined in class path resource [spring-context-shiro.xml]: C">
+  <meta name="description" content="项目地址: https://github.com/wangyuanjun008/wyj-parent.github.com最近在使用shiro框架与系统集成的时候，启动报错如下: org.springframework.beans.factory.BeanCreationException: Error creating bean with name &amp;apos;shiroFilter&amp;apos;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用Spring配置shiro时,自定义Realm中属性无法使用注解注入解决办法">
 <meta property="og:url" content="http://yoursite.com/2017/09/21/使用Spring配置shiro时-自定义Realm中属性无法使用注解注入解决办法/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="最近在试用shiro框架与系统集成的时候，启动报错如下: org.springframework.beans.factory.BeanCreationException: Error creating bean with name &amp;apos;shiroFilter&amp;apos; defined in class path resource [spring-context-shiro.xml]: C">
+<meta property="og:description" content="项目地址: https://github.com/wangyuanjun008/wyj-parent.github.com最近在使用shiro框架与系统集成的时候，启动报错如下: org.springframework.beans.factory.BeanCreationException: Error creating bean with name &amp;apos;shiroFilter&amp;apos;">
 <meta property="og:image" content="http://yoursite.com/2017/09/21/images/shiro无法实例化bean-1.png">
 <meta property="og:image" content="http://yoursite.com/2017/09/21/images/shiro无法实例化bean-2.png">
-<meta property="og:updated_time" content="2017-09-21T15:55:30.148Z">
+<meta property="og:updated_time" content="2017-09-28T07:34:19.699Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Spring配置shiro时,自定义Realm中属性无法使用注解注入解决办法">
-<meta name="twitter:description" content="最近在试用shiro框架与系统集成的时候，启动报错如下: org.springframework.beans.factory.BeanCreationException: Error creating bean with name &amp;apos;shiroFilter&amp;apos; defined in class path resource [spring-context-shiro.xml]: C">
+<meta name="twitter:description" content="项目地址: https://github.com/wangyuanjun008/wyj-parent.github.com最近在使用shiro框架与系统集成的时候，启动报错如下: org.springframework.beans.factory.BeanCreationException: Error creating bean with name &amp;apos;shiroFilter&amp;apos;">
 <meta name="twitter:image" content="http://yoursite.com/2017/09/21/images/shiro无法实例化bean-1.png">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
@@ -55,7 +55,7 @@
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近在试用shiro框架与系统集成的时候，启动报错如下:</p>
+        <p>项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.github.com</a><br>最近在使用shiro框架与系统集成的时候，启动报错如下:</p>
 <pre><code>org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;shiroFilter&apos; defined in class path resource [spring-context-shiro.xml]: Cannot resolve reference to bean &apos;securityManager&apos; while setting bean property &apos;securityManager&apos;; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;securityManager&apos; defined in class path resource [spring-context-shiro.xml]: Cannot resolve reference to bean &apos;userRealm&apos; while setting bean property &apos;realm&apos;; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;userRealm&apos;: Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private com.wyj.service.system.UserService com.wyj.shiro.realm.UserRealm.userService; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [com.wyj.service.system.UserService] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
 at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:328) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
 at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:107) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]

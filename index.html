@@ -50,7 +50,7 @@
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近在做一个系统，写日志注解完，进行测试时，发现日志注解没有生效，代码如下:</p>
+        <p>最近在做一个项目,项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.git</a><br>写日志注解完，进行测试时，发现日志注解没有生效，代码如下:</p>
 <p>定义注解:</p>
 <pre><code>@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
@@ -144,7 +144,65 @@ public class UserController {
         return retval;
     }
 }
-</code></pre><p>和别人讨论了下，大致是Spring上下文的问题<br>我的AOP配置是这样的：AOP命名空间和<aop:aspectj-autoproxy proxy-target-class="true />这两个都配在了ApplicationContext.xml里面了，而不是SpringMVC框架自己约定的配置文件中（我这个项目里面，这个配置文件叫做springmvc-servlet.xml），正因为这样，出问题了。后来，我把AOP命名空间和<aop:aspectj-autoproxy  proxy-target-class=" true="">挪到SpringMVC自己的配置文件里面，AOP就生效了。<br>另外以上所述的是对controller进行切面时的配置，如果是对service进行切面，那么</aop:aspectj-autoproxy></p>
+</code></pre><p>和别人讨论了下，大致是Spring上下文的问题<br>我的AOP配置是这样的：AOP命名空间和<aop:aspectj-autoproxy proxy-target-class="true />这两个都配在了ApplicationContext.xml里面了，而不是SpringMVC框架自己约定的配置文件中（我这个项目里面，这个配置文件叫做springmvc-servlet.xml），正因为这样，出问题了。后来，我把AOP命名空间和<aop:aspectj-autoproxy  proxy-target-class=" true="">挪到SpringMVC自己的配置文件里面，AOP就生效了。</aop:aspectj-autoproxy></p>
+<p>代码如下:<br>springmvc-servlet.xml:</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+    xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot; xmlns:mvc=&quot;http://www.springframework.org/schema/mvc&quot;
+    xmlns:p=&quot;http://www.springframework.org/schema/p&quot;
+    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/mvc
+            http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                    http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop-4.0.xsd 
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd&quot;
+    default-lazy-init=&quot;true&quot;&gt;
+
+    &lt;mvc:annotation-driven /&gt;
+
+    &lt;mvc:annotation-driven
+        content-negotiation-manager=&quot;contentNegotiationManager&quot;&gt;
+        &lt;mvc:message-converters register-defaults=&quot;true&quot;&gt;
+            &lt;bean class=&quot;org.springframework.http.converter.StringHttpMessageConverter&quot;&gt;
+                &lt;constructor-arg value=&quot;UTF-8&quot; /&gt;
+            &lt;/bean&gt;
+            &lt;bean
+                class=&quot;org.springframework.http.converter.json.MappingJackson2HttpMessageConverter&quot;&gt;
+                &lt;property name=&quot;prettyPrint&quot; value=&quot;true&quot; /&gt;
+            &lt;/bean&gt;
+        &lt;/mvc:message-converters&gt;
+    &lt;/mvc:annotation-driven&gt;
+
+    &lt;bean id=&quot;contentNegotiationManager&quot;
+        class=&quot;org.springframework.web.accept.ContentNegotiationManagerFactoryBean&quot;&gt;
+        &lt;property name=&quot;ignoreAcceptHeader&quot; value=&quot;true&quot; /&gt;
+        &lt;property name=&quot;defaultContentType&quot; value=&quot;application/json&quot; /&gt;
+        &lt;property name=&quot;mediaTypes&quot;&gt;
+            &lt;value&gt;
+                json=application/json
+                xml=application/xml
+            &lt;/value&gt;
+        &lt;/property&gt;
+    &lt;/bean&gt;
+
+    &lt;context:component-scan base-package=&quot;com.wyj&quot;&gt;&lt;/context:component-scan&gt;
+
+    &lt;bean id=&quot;viewResolver&quot;
+        class=&quot;org.springframework.web.servlet.view.UrlBasedViewResolver&quot;&gt;
+        &lt;property name=&quot;viewClass&quot;
+            value=&quot;org.springframework.web.servlet.view.JstlView&quot; /&gt;
+        &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/views/&quot; /&gt;
+        &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot; /&gt;
+    &lt;/bean&gt;
+
+    &lt;mvc:resources location=&quot;/resources/**&quot; mapping=&quot;/resources/**&quot; /&gt;
+
+    &lt;aop:aspectj-autoproxy proxy-target-class=&quot;true&quot; /&gt;
+&lt;/beans&gt;
+</code></pre><p>另外以上所述的是对controller进行切面时的配置，如果是对service进行切面，那么</p>
 <p><context:component-scan base-package="com.wyj"></context:component-scan></p>
 <aop:aspectj-autoproxy>
 
@@ -190,7 +248,7 @@ public class UserController {
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近在试用shiro框架与系统集成的时候，启动报错如下:</p>
+        <p>项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.github.com</a><br>最近在使用shiro框架与系统集成的时候，启动报错如下:</p>
 <pre><code>org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;shiroFilter&apos; defined in class path resource [spring-context-shiro.xml]: Cannot resolve reference to bean &apos;securityManager&apos; while setting bean property &apos;securityManager&apos;; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;securityManager&apos; defined in class path resource [spring-context-shiro.xml]: Cannot resolve reference to bean &apos;userRealm&apos; while setting bean property &apos;realm&apos;; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;userRealm&apos;: Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private com.wyj.service.system.UserService com.wyj.shiro.realm.UserRealm.userService; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [com.wyj.service.system.UserService] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
 at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:328) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
 at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:107) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
@@ -328,7 +386,7 @@ Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No q
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近自己在做一个权限系统管理的项目，用到了ztree树，给大家分享异步加载数据与一次性加载数据的写法</p>
+        <p>项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.github.com</a><br>最近自己在做一个权限系统管理的项目，用到了ztree树，给大家分享异步加载数据与一次性加载数据的写法</p>
 <p>异步加载数据是为了防止大数据量而造成树卡死的情况,代码如下:<br>前台js:</p>
 <pre><code>&lt;div class=&quot;col-lg-12&quot; style=&quot;height:300px; overflow:scroll;&quot;&gt;
     &lt;ul id=&quot;treeDemo&quot; class=&quot;ztree&quot;&gt;&lt;/ul&gt;
@@ -542,7 +600,7 @@ end;
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近做项目时遇到一个问题,使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:</p>
+        <p>项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.github.com</a><br>最近做项目时遇到一个问题,使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:</p>
 <pre><code>&lt;label class=&quot;col-sm-1 control-label&quot;&gt;使用状态:&lt;/label&gt;
 &lt;select id=&quot;sel_status&quot; name=&quot;status&quot; class=&quot;col-sm-3 form-control select2&quot;&gt;&lt;/select&gt;
 
@@ -633,7 +691,7 @@ $(&quot;#sel_status&quot;).select2({
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在项目中使用mybatis的分页插件:PageHelper，整合spring后在启动后报错，错误如下:</p>
+        <p>项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.github.com</a><br>在项目中使用mybatis的分页插件:PageHelper，整合spring后在启动后报错，错误如下:</p>
 <pre><code>2017-08-17 21:20:16.618 [ContainerBackgroundProcessor[StandardEngine[Catalina]]] ERROR org.springframework.web.context.ContextLoader -
                 Context initialization failed
 org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;sqlSessionFactory&apos; defined in class path resource [spring-mybatis.xml]: Invocation of init method failed; nested exception is org.springframework.core.NestedIOException: Failed to parse config resource: class path resource [mybatis-config.xml]; nested exception is org.apache.ibatis.builder.BuilderException: Error parsing SQL Mapper Configuration. Cause: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot be cast to org.apache.ibatis.plugin.Interceptor

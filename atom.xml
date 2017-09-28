@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-09-28T07:22:16.835Z</updated>
+  <updated>2017-09-28T07:33:22.457Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,9 +20,9 @@
     <link href="http://yoursite.com/2017/09/28/SpringMVC%E4%B8%AD%E4%BD%BF%E7%94%A8aop%E6%B3%A8%E8%A7%A3%E6%97%A0%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98/"/>
     <id>http://yoursite.com/2017/09/28/SpringMVC中使用aop注解无效的问题/</id>
     <published>2017-09-28T06:47:46.000Z</published>
-    <updated>2017-09-28T07:22:16.835Z</updated>
+    <updated>2017-09-28T07:33:22.457Z</updated>
     
-    <content type="html"><![CDATA[<p>最近在做一个系统，写日志注解完，进行测试时，发现日志注解没有生效，代码如下:</p>
+    <content type="html"><![CDATA[<p>最近在做一个项目,项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.git</a><br>写日志注解完，进行测试时，发现日志注解没有生效，代码如下:</p>
 <p>定义注解:</p>
 <pre><code>@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
@@ -116,7 +116,65 @@ public class UserController {
         return retval;
     }
 }
-</code></pre><p>和别人讨论了下，大致是Spring上下文的问题<br>我的AOP配置是这样的：AOP命名空间和<aop:aspectj-autoproxy proxy-target-class="true />这两个都配在了ApplicationContext.xml里面了，而不是SpringMVC框架自己约定的配置文件中（我这个项目里面，这个配置文件叫做springmvc-servlet.xml），正因为这样，出问题了。后来，我把AOP命名空间和<aop:aspectj-autoproxy  proxy-target-class=" true="">挪到SpringMVC自己的配置文件里面，AOP就生效了。<br>另外以上所述的是对controller进行切面时的配置，如果是对service进行切面，那么</aop:aspectj-autoproxy></p>
+</code></pre><p>和别人讨论了下，大致是Spring上下文的问题<br>我的AOP配置是这样的：AOP命名空间和<aop:aspectj-autoproxy proxy-target-class="true />这两个都配在了ApplicationContext.xml里面了，而不是SpringMVC框架自己约定的配置文件中（我这个项目里面，这个配置文件叫做springmvc-servlet.xml），正因为这样，出问题了。后来，我把AOP命名空间和<aop:aspectj-autoproxy  proxy-target-class=" true="">挪到SpringMVC自己的配置文件里面，AOP就生效了。</aop:aspectj-autoproxy></p>
+<p>代码如下:<br>springmvc-servlet.xml:</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+    xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot; xmlns:mvc=&quot;http://www.springframework.org/schema/mvc&quot;
+    xmlns:p=&quot;http://www.springframework.org/schema/p&quot;
+    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/mvc
+            http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                    http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop-4.0.xsd 
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd&quot;
+    default-lazy-init=&quot;true&quot;&gt;
+
+    &lt;mvc:annotation-driven /&gt;
+
+    &lt;mvc:annotation-driven
+        content-negotiation-manager=&quot;contentNegotiationManager&quot;&gt;
+        &lt;mvc:message-converters register-defaults=&quot;true&quot;&gt;
+            &lt;bean class=&quot;org.springframework.http.converter.StringHttpMessageConverter&quot;&gt;
+                &lt;constructor-arg value=&quot;UTF-8&quot; /&gt;
+            &lt;/bean&gt;
+            &lt;bean
+                class=&quot;org.springframework.http.converter.json.MappingJackson2HttpMessageConverter&quot;&gt;
+                &lt;property name=&quot;prettyPrint&quot; value=&quot;true&quot; /&gt;
+            &lt;/bean&gt;
+        &lt;/mvc:message-converters&gt;
+    &lt;/mvc:annotation-driven&gt;
+
+    &lt;bean id=&quot;contentNegotiationManager&quot;
+        class=&quot;org.springframework.web.accept.ContentNegotiationManagerFactoryBean&quot;&gt;
+        &lt;property name=&quot;ignoreAcceptHeader&quot; value=&quot;true&quot; /&gt;
+        &lt;property name=&quot;defaultContentType&quot; value=&quot;application/json&quot; /&gt;
+        &lt;property name=&quot;mediaTypes&quot;&gt;
+            &lt;value&gt;
+                json=application/json
+                xml=application/xml
+            &lt;/value&gt;
+        &lt;/property&gt;
+    &lt;/bean&gt;
+
+    &lt;context:component-scan base-package=&quot;com.wyj&quot;&gt;&lt;/context:component-scan&gt;
+
+    &lt;bean id=&quot;viewResolver&quot;
+        class=&quot;org.springframework.web.servlet.view.UrlBasedViewResolver&quot;&gt;
+        &lt;property name=&quot;viewClass&quot;
+            value=&quot;org.springframework.web.servlet.view.JstlView&quot; /&gt;
+        &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/views/&quot; /&gt;
+        &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot; /&gt;
+    &lt;/bean&gt;
+
+    &lt;mvc:resources location=&quot;/resources/**&quot; mapping=&quot;/resources/**&quot; /&gt;
+
+    &lt;aop:aspectj-autoproxy proxy-target-class=&quot;true&quot; /&gt;
+&lt;/beans&gt;
+</code></pre><p>另外以上所述的是对controller进行切面时的配置，如果是对service进行切面，那么</p>
 <p><context:component-scan base-package="com.wyj"></context:component-scan></p>
 <aop:aspectj-autoproxy>
 
@@ -132,11 +190,7 @@ public class UserController {
     
     <summary type="html">
     
-      &lt;p&gt;最近在做一个系统，写日志注解完，进行测试时，发现日志注解没有生效，代码如下:&lt;/p&gt;
-&lt;p&gt;定义注解:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-@Docum
+      &lt;p&gt;最近在做一个项目,项目地址: &lt;a href=&quot;https://github.com/wangyuanjun008/wyj-parent.git&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/wangyuanjun00
     
     </summary>
     
@@ -148,9 +202,9 @@ public class UserController {
     <link href="http://yoursite.com/2017/09/21/%E4%BD%BF%E7%94%A8Spring%E9%85%8D%E7%BD%AEshiro%E6%97%B6-%E8%87%AA%E5%AE%9A%E4%B9%89Realm%E4%B8%AD%E5%B1%9E%E6%80%A7%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8%E6%B3%A8%E8%A7%A3%E6%B3%A8%E5%85%A5%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/"/>
     <id>http://yoursite.com/2017/09/21/使用Spring配置shiro时-自定义Realm中属性无法使用注解注入解决办法/</id>
     <published>2017-09-21T15:30:17.000Z</published>
-    <updated>2017-09-21T15:55:30.148Z</updated>
+    <updated>2017-09-28T07:34:19.699Z</updated>
     
-    <content type="html"><![CDATA[<p>最近在试用shiro框架与系统集成的时候，启动报错如下:</p>
+    <content type="html"><![CDATA[<p>项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.github.com</a><br>最近在使用shiro框架与系统集成的时候，启动报错如下:</p>
 <pre><code>org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;shiroFilter&apos; defined in class path resource [spring-context-shiro.xml]: Cannot resolve reference to bean &apos;securityManager&apos; while setting bean property &apos;securityManager&apos;; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;securityManager&apos; defined in class path resource [spring-context-shiro.xml]: Cannot resolve reference to bean &apos;userRealm&apos; while setting bean property &apos;realm&apos;; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;userRealm&apos;: Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private com.wyj.service.system.UserService com.wyj.shiro.realm.UserRealm.userService; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [com.wyj.service.system.UserService] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
 at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:328) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
 at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:107) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
@@ -258,8 +312,7 @@ Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No q
     
     <summary type="html">
     
-      &lt;p&gt;最近在试用shiro框架与系统集成的时候，启动报错如下:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;org.springframework.beans.factory.BeanCreationException: Error creating bean with name &amp;apos;
+      &lt;p&gt;项目地址: &lt;a href=&quot;https://github.com/wangyuanjun008/wyj-parent.github.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/wangyuanjun008/
     
     </summary>
     
@@ -271,9 +324,9 @@ Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No q
     <link href="http://yoursite.com/2017/09/18/%E6%A0%91%E6%8F%92%E4%BB%B6ztree%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE%E4%B8%8E%E4%B8%80%E6%AC%A1%E6%80%A7%E5%8A%A0%E8%BD%BD%E5%85%A8%E9%83%A8%E6%95%B0%E6%8D%AE%E7%9A%84%E5%86%99%E6%B3%95/"/>
     <id>http://yoursite.com/2017/09/18/树插件ztree异步加载数据与一次性加载全部数据的写法/</id>
     <published>2017-09-18T13:12:47.000Z</published>
-    <updated>2017-09-18T13:27:58.271Z</updated>
+    <updated>2017-09-28T07:34:37.459Z</updated>
     
-    <content type="html"><![CDATA[<p>最近自己在做一个权限系统管理的项目，用到了ztree树，给大家分享异步加载数据与一次性加载数据的写法</p>
+    <content type="html"><![CDATA[<p>项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.github.com</a><br>最近自己在做一个权限系统管理的项目，用到了ztree树，给大家分享异步加载数据与一次性加载数据的写法</p>
 <p>异步加载数据是为了防止大数据量而造成树卡死的情况,代码如下:<br>前台js:</p>
 <pre><code>&lt;div class=&quot;col-lg-12&quot; style=&quot;height:300px; overflow:scroll;&quot;&gt;
     &lt;ul id=&quot;treeDemo&quot; class=&quot;ztree&quot;&gt;&lt;/ul&gt;
@@ -372,9 +425,7 @@ public List&lt;Menu&gt; renderTree() {
     
     <summary type="html">
     
-      &lt;p&gt;最近自己在做一个权限系统管理的项目，用到了ztree树，给大家分享异步加载数据与一次性加载数据的写法&lt;/p&gt;
-&lt;p&gt;异步加载数据是为了防止大数据量而造成树卡死的情况,代码如下:&lt;br&gt;前台js:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;lt;div class=&amp;quot;col-
+      &lt;p&gt;项目地址: &lt;a href=&quot;https://github.com/wangyuanjun008/wyj-parent.github.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/wangyuanjun008/
     
     </summary>
     
@@ -459,9 +510,9 @@ end;
     <link href="http://yoursite.com/2017/09/14/%E4%BD%BF%E7%94%A8select2%E4%B8%8B%E6%8B%89%E6%A1%86ajax%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE%E6%97%B6-%E7%BC%96%E8%BE%91%E8%B5%8B%E5%80%BC%E7%9A%84%E6%96%B9%E6%B3%95/"/>
     <id>http://yoursite.com/2017/09/14/使用select2下拉框ajax加载数据时-编辑赋值的方法/</id>
     <published>2017-09-13T16:19:44.000Z</published>
-    <updated>2017-09-13T16:37:56.615Z</updated>
+    <updated>2017-09-28T07:34:46.446Z</updated>
     
-    <content type="html"><![CDATA[<p>最近做项目时遇到一个问题,使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:</p>
+    <content type="html"><![CDATA[<p>项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.github.com</a><br>最近做项目时遇到一个问题,使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:</p>
 <pre><code>&lt;label class=&quot;col-sm-1 control-label&quot;&gt;使用状态:&lt;/label&gt;
 &lt;select id=&quot;sel_status&quot; name=&quot;status&quot; class=&quot;col-sm-3 form-control select2&quot;&gt;&lt;/select&gt;
 
@@ -522,8 +573,7 @@ $(&quot;#sel_status&quot;).select2({
     
     <summary type="html">
     
-      &lt;p&gt;最近做项目时遇到一个问题,使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;lt;label class=&amp;quot;col-sm-1 control-label&amp;
+      &lt;p&gt;项目地址: &lt;a href=&quot;https://github.com/wangyuanjun008/wyj-parent.github.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/wangyuanjun008/
     
     </summary>
     
@@ -535,9 +585,9 @@ $(&quot;#sel_status&quot;).select2({
     <link href="http://yoursite.com/2017/08/17/mybatis%E4%BD%BF%E7%94%A8PageHelper%E6%8F%92%E4%BB%B6%E6%8A%A5%E9%94%99Error-creating-bean-with-name-sqlSessionFactory-defined-in-class-path-resource-spring-mybatis-xml/"/>
     <id>http://yoursite.com/2017/08/17/mybatis使用PageHelper插件报错Error-creating-bean-with-name-sqlSessionFactory-defined-in-class-path-resource-spring-mybatis-xml/</id>
     <published>2017-08-17T13:23:57.000Z</published>
-    <updated>2017-08-17T15:10:13.214Z</updated>
+    <updated>2017-09-28T07:34:57.418Z</updated>
     
-    <content type="html"><![CDATA[<p>在项目中使用mybatis的分页插件:PageHelper，整合spring后在启动后报错，错误如下:</p>
+    <content type="html"><![CDATA[<p>项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.github.com</a><br>在项目中使用mybatis的分页插件:PageHelper，整合spring后在启动后报错，错误如下:</p>
 <pre><code>2017-08-17 21:20:16.618 [ContainerBackgroundProcessor[StandardEngine[Catalina]]] ERROR org.springframework.web.context.ContextLoader -
                 Context initialization failed
 org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;sqlSessionFactory&apos; defined in class path resource [spring-mybatis.xml]: Invocation of init method failed; nested exception is org.springframework.core.NestedIOException: Failed to parse config resource: class path resource [mybatis-config.xml]; nested exception is org.apache.ibatis.builder.BuilderException: Error parsing SQL Mapper Configuration. Cause: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot be cast to org.apache.ibatis.plugin.Interceptor
@@ -691,8 +741,7 @@ Caused by: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot
     
     <summary type="html">
     
-      &lt;p&gt;在项目中使用mybatis的分页插件:PageHelper，整合spring后在启动后报错，错误如下:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;2017-08-17 21:20:16.618 [ContainerBackgroundProcessor[StandardEngine[C
+      &lt;p&gt;项目地址: &lt;a href=&quot;https://github.com/wangyuanjun008/wyj-parent.github.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/wangyuanjun008/
     
     </summary>
     
