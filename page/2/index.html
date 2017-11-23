@@ -28,6 +28,166 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Oracle数据库之PL-SQL游标" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/28/Oracle数据库之PL-SQL游标/">Oracle数据库之PL/SQL游标</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/04/28/Oracle数据库之PL-SQL游标/" class="article-date">
+  <time datetime="2017-04-28T06:35:56.000Z" itemprop="datePublished">2017-04-28</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>原文  <a href="http://www.cnblogs.com/zf29506564/p/5772344.html" target="_blank" rel="external">http://www.cnblogs.com/zf29506564/p/5772344.html</a></p>
+<ol>
+<li>游标概念</li>
+</ol>
+<p>字面意思是游动的光标，是指向上下文区域的句柄或指针。</p>
+<p>在PL/SQL块中执行CRUD操作时，ORACLE会在内存中为其分配上下文区。用数据库语言来描述游标就是：映射在上下文区结果集中一行数据上的位置实体。</p>
+<p>用户可以使用游标访问结果集中的任意一行数据，将游标指向某行后，即可对该行数据进行操作。游标为应用提供了一种对具有多行数据查询结果集中的每一行数据分别进行单独处理的方法，是设计嵌入式SQL语句的应用程序的常用编程方式。</p>
+<p>在每个用户会话中，可以同时打开多个游标，其最大数量由数据库初始化参数文件中的OPEN_CURSORS参数定义。</p>
+<p>游标可分为显式游标和隐式游标两类。</p>
+<ol>
+<li>显式游标</li>
+</ol>
+<p>显式游标使用主要有四个步骤：</p>
+<p>声明/定义游标<br>打开游标<br>读取数据<br>关闭游标<br>2.1 声明/定义游标</p>
+<p>语法：</p>
+<p>CURSOR cursor_name<br>  [(parameter_dec [, parameter_dec ]…)]<br>    [RETURN datatype]<br>      IS<br>        select_statement;<br>示例：</p>
+<p>DECLARE<br>  CURSOR c1 RETURN departments%ROWTYPE;    – 声明C1游标</p>
+<p>  CURSOR c2 IS                             – 声明C2游标并定义<br>    SELECT employee_id, job_id, salary FROM employees<br>    WHERE salary &gt; 2000; </p>
+<p>  CURSOR c1 RETURN departments%ROWTYPE IS  – 定义C1游标<br>    SELECT * FROM departments<br>    WHERE department_id = 110;</p>
+<p>  CURSOR c3 RETURN locations%ROWTYPE;      – 声明C3游标</p>
+<p>  CURSOR c3 IS                             – 定义C3游标<br>    SELECT * FROM locations<br>    WHERE country_id = ‘JP’;</p>
+<p>  CURSOR c4(sal number) IS                             – 声明C4游标并定义<br>    SELECT employee_id, job_id, salary FROM employees<br>    WHERE salary &gt; sal;<br>BEGIN<br>  NULL;<br>END;<br>说明：</p>
+<p>在指定参数数据类型时，不能使用长度约束，如C4游标的参数，不能写为number(10,4)这种结构。</p>
+<p>[RETURN datatype]是可选的，表示游标返回数据的数据。如果选择，则应该严格与select_statement中的选择列表在次序和数据类型上匹配。一般是记录数据类型（RECORD）或带“%ROWTYPE”的数据。</p>
+<p>2.2 打开游标</p>
+<p>执行游标所对应的SELECT语句，将其查询结果放入工作区，并且指针指向工作区的首部，标识游标结果集。</p>
+<p>语法：</p>
+<p>OPEN cursor_name [ ( cursor_parameter [ [,] actual_cursor_parameter ]… ) ]<br>示例：</p>
+<p>OPEN c4 (1300);<br>2.3 读取数据</p>
+<p>检索结果集合中的数据行，放入指定的输出变量中。</p>
+<p>语法：</p>
+<p>FETCH { cursor | cursor_variable | :host_cursor_variable }<br>  { into_clause | bulk_collect_into_clause [ LIMIT numeric_expression ] } ;<br>执行FETCH语句时，每次返回一个数据行，然后自动将游标移动指向下一个数据行。当检索到最后一行数据时，如果再次执行FETCH语句，将操作失败，并将游标属性%NOTFOUND置为TRUE。所以每次执行完FETCH语句后，检查游标属性%NOTFOUND就可以判断FETCH语句是否执行成功并返回一个数据行，以便确定是否给对应的变量赋了值。</p>
+<p>示例：</p>
+<p>fetch c4 into eid, jid, sal;<br>2.4 关闭游标</p>
+<p>当处理完游标结果集合数据后，应及时关闭游标，以释放该游标所占用的系统资源。</p>
+<p>关闭游标后不能再使用FETCH语句获取其中数据。关闭后的游标可以使用OPEN语句重新打开。</p>
+<p>语法：</p>
+<p>CLOSE cursor_name;<br>完整示例1：</p>
+<p>DECLARE<br>   – 定义游标<br>   CURSOR c_cursor IS<br>   SELECT first_name || last_name, Salary FROM EMPLOYEES WHERE rownum&lt;11;   </p>
+<p>   – 声明变量<br>   v_ename  EMPLOYEES.first_name%TYPE;<br>   v_sal    EMPLOYEES.Salary%TYPE;<br>BEGIN<br>  – 打开游标<br>  OPEN c_cursor;<br>  – 获取数据<br>  FETCH c_cursor INTO v_ename, v_sal;<br>  – 处理数据<br>  WHILE c_cursor%FOUND LOOP<br>     DBMS_OUTPUT.PUT_LINE(v_ename||’—‘||to_char(v_sal) );<br>     FETCH c_cursor INTO v_ename, v_sal;<br>  END LOOP;<br>  – 关闭游标<br>  CLOSE c_cursor;<br>END;<br>完整示例2：</p>
+<p>DECLARE<br>   – 定义RECORD记录类型<br>   TYPE emp_record_type IS RECORD(<br>        f_name   employees.first_name%TYPE,<br>        h_date   employees.hire_date%TYPE);<br>   – 声明记录变量<br>   v_emp_record EMP_RECORD_TYPE;<br>   – 定义游标，有参数与返回值<br>   CURSOR c3(dept_id NUMBER, j_id VARCHAR2)<br>      RETURN EMP_RECORD_TYPE<br>   IS<br>      SELECT first_name, hire_date FROM employees<br>      WHERE department_id = dept_id AND job_id = j_id;</p>
+<p>BEGIN<br>   – 打开游标，传递参数值<br>   OPEN c3(j_id =&gt; ‘AD_VP’, dept_id =&gt; 90);<br>   LOOP<br>      FETCH c3 INTO v_emp_record;    – 获取数据<br>      IF c3%FOUND THEN<br>         DBMS_OUTPUT.PUT_LINE(v_emp_record.f_name||’的雇佣日期是’||v_emp_record.h_date);<br>      ELSE<br>         DBMS_OUTPUT.PUT_LINE(‘已经处理完结果集了’);<br>         EXIT; – 处理完则退出循环<br>      END IF;<br>   END LOOP;<br>   CLOSE c3;   –关闭游标<br>END;</p>
+<ol>
+<li>显式游标属性</li>
+</ol>
+<p>游标的状态（如是否打开，获取了多少行数据等）可以使用游标属性来获取。</p>
+<p>游标属性以“%属性名”的形式加在游标名之后。显式游标属性有：</p>
+<p>属性名        说明<br>%FOUND        如果记录成功获取，返回TRUE，否则返回FALSE<br>%NOTFOUND    如果记录获取失败，返回TRUE，否则返回FALSE<br>%ROWCOUNT    返回已经从游标中获取的记录数<br>%ISOPEN        如果游标是打开的，返回TRUE，否则返回FALSE<br>示例：</p>
+<p>DECLARE<br>   v_empno  EMPLOYEES.EMPLOYEE_ID%TYPE;<br>   v_sal      EMPLOYEES.Salary%TYPE;<br>   – 定义游标<br>   CURSOR c_cursor IS SELECT EMPLOYEE_ID, Salary FROM EMPLOYEES;<br>BEGIN<br>   – 打开游标<br>   OPEN c_cursor;<br>   LOOP<br>      – 获取数据<br>      FETCH c_cursor INTO v_empno, v_sal;<br>      EXIT WHEN c_cursor%NOTFOUND;  – 未读取到记录，则退出循环<br>      IF v_sal&lt;=1200 THEN<br>            UPDATE EMPLOYEES SET Salary=Salary+50 WHERE EMPLOYEE_ID=v_empno;<br>            DBMS_OUTPUT.PUT_LINE(‘编码为’||v_empno||’工资已更新!’);<br>      END IF;<br>      DBMS_OUTPUT.PUT_LINE(‘记录数:’|| c_cursor %ROWCOUNT);<br>   END LOOP;<br>   – 关闭游标<br>   CLOSE c_cursor;<br>END;</p>
+<ol>
+<li>基于游标定义记录变量</li>
+</ol>
+<p>使用%ROWTYPE属性不仅可以基于表和视图定义记录变量，也可以基于游标定义记录变量。当基于游标定义记录变量时，记录成员名实际就是SELECT语句的列名和列别名。</p>
+<p>为了简化显式游标的数据处理，建议使用基于游标的记录变量存放游标数据。基于游标定义记录变量，比声明记录类型变量要方便，不容易出错。</p>
+<p>示例：</p>
+<p>DECLARE<br>   – 定义游标<br>   CURSOR emp_cursor IS SELECT ename,sal FROM emp；<br>   emp_reocrd emp_cursor%ROWTYPE；– 游标变量<br>BEGIN<br>   – 打开游标<br>   OPEN emp_cursor；<br>   LOOP<br>      – 获取记录<br>      FETCH emp_cursor INTO emp_record；<br>      EXIT WHEN emp_record%NOTFOUND；<br>      dbms_ouput.put_line(‘雇员名:’||emp_record.ename||’,雇员工资:’||emp_record.sal)；<br>   END LOOP；<br>   – 关闭游标<br>   CLOSE emp_cursor；<br>END；</p>
+<ol>
+<li>隐式游标</li>
+</ol>
+<p>如果在PL/SQL块中使用了SELECT语句进行操作，PL/SQL会隐含处理游标定义，而对于非查询语句，如修改、删除操作，则由ORACLE系统自动地为这些操作设置游标并创建其工作区。由系统隐含创建的游标称为隐式游标，隐式游标的名字为SQL。</p>
+<p>对于隐式游标的操作，如定义、打开、取值及关闭操作，都由ORACLE 系统自动地完成，无需用户进行处理。用户只能通过隐式游标的相关属性，来完成相应的操作。在隐式游标的工作区中，所存放的数据是与用户自定义的显示游标无关的、最新处理的一条SQL语句所包含的数据。</p>
+<p>隐式游标的属性：</p>
+<p>属性名            说明<br>SQL%FOUND        如果记录成功获取，返回TRUE，否则返回FALSE<br>SQL%NOTFOUND    如果记录获取失败，返回TRUE，否则返回FALSE<br>SQL%ROWCOUNT    返回已经从游标中获取的记录数<br>SQL%ISOPEN        如果游标是打开的，返回TRUE，否则返回FALSE<br>隐式游标在INSERT，UPDATE，DELETE，SELECT语句中不必明确定义游标。</p>
+<p>示例：</p>
+<p>DECLARE<br>   v_rows NUMBER;<br>BEGIN<br>   – 更新表数据<br>   UPDATE employees SET salary = 5000 WHERE department_id = 90 AND job_id = ‘AD_VP’;<br>   – 获取受影响行数<br>   v_rows := SQL%ROWCOUNT;<br>   DBMS_OUTPUT.PUT_LINE(‘更新了’||v_rows||’个员工的工资’);<br>END;</p>
+<ol>
+<li>游标FOR循环</li>
+</ol>
+<p>游标FOR循环和显示游标的一种快捷使用方式，它使用FOR循环依次读取结果集中的行数据，当FOR循环开始时，游标自动打开（不需要OPEN）,每循环一次系统自动读取游标当前行的数据（不需要FETCH)，当退出FOR循环时，游标被自动关闭（不需要使用CLOSE）使用游标FOR循环的时候不能使用OPEN语句，FETCH语句和CLOSE语句，否则会产生错误。</p>
+<p>语法：</p>
+<p>FOR index_variable IN cursor_name[(value[, value]…)] LOOP<br>    – 游标处理语句<br>END LOOP;<br>示例：</p>
+<p>DECLARE<br>    CURSOR emp_cur(vartype number) IS<br>        SELECT emp_no,emp_zc FROM cus_emp_basic WHERE com_no=vartype;<br>BEGIN<br>    FOR person IN emp_cur(123) LOOP<br>        DBMS_OUTPUT.PUT_LINE(‘编号:’||person.emp_no||’,地址:’||person.emp_zc);<br>END LOOP;<br>END;</p>
+<ol>
+<li>使用显示游标修改数据</li>
+</ol>
+<p>在PL/SQL中依然可以使用UPDATE和DELETE语句更新或删除数据行。显式游标只有在需要获得多行数据的情况下使用。PL/SQL提供了仅仅使用游标就可以执行删除或更新记录的方法。</p>
+<p>UPDATE或DELETE语句中的WHERE CURRENT OF子句专门处理要执行UPDATE或DELETE操作的表中取出的最近的数据。要使用这个方法，在声明游标时必须使用FOR UPDATE子句，当使用FOR UPDATE子句打开一个游标时，所有返回集中的数据行都将处于行级（ROW-LEVEL)独占式锁定，其他对象只能查询这些数据行，不能进行UPDATE、DELETE或SELECT…FOR UPDATE操作。</p>
+<p>语法：</p>
+<p>FOR UPDATE [OF [schema.]table.column[,[schema.]table.column]..<br>[NOWAIT]<br>在多表查询中，使用OF子句来锁定特定的表,如果忽略了OF子句，那么所有表中选择的数据行都将被锁定。如果这些数据行已经被其他会话锁定，那么正常情况下ORACLE将等待，直到数据行解锁。当加上NOWAIT子句时，如果这些行真的被另一个会话锁定，则OPEN立即返回并给出：</p>
+<p>ORA-00054 ：resource busy  and  acquire with nowait specified.<br>在UPDATE和DELETE中使用WHERE CURRENT OF子串的语法如下：</p>
+<p>WHERE{CURRENT OF cursor_name|search_condition}<br>示例：</p>
+<p>DELCARE<br>    CURSOR c1 IS<br>        SELECT empno,salary FROM emp<br>        WHERE comm IS NULL<br>        FOR UPDATE OF comm;<br>    v_comm NUMBER(10,2);<br>BEGIN<br>    FOR r1 IN c1 LOOP<br>        IF r1.salary&lt;500 THEN<br>            v_comm:=r1.salary<em>0.25;<br>　　      ELSEIF r1.salary&lt;1000 THEN<br>            v_comm:=r1.salary</em>0.20;<br>　　      ELSEIF r1.salary&lt;3000 THEN<br>            v_comm:=r1.salary<em>0.15;<br>        ELSE<br>            v_comm:=r1.salary</em>0.12;<br>        END IF;<br>        UPDATE emp SET comm=v_comm WHERE CURRENT OF c1;<br>    END LOOP;<br>END</p>
+<ol>
+<li>游标变量</li>
+</ol>
+<p>与游标类似，游标变量指向多行查询的结果集的当前行。但是，游标与游标变量是不同的，就像常量和变量的关系一样。游标是静态的，游标变量是动态的，因为它不与特定的查询绑定在一起。</p>
+<p>8.1 声明游标变量</p>
+<p>语法：</p>
+<p>TYPE ref_type_name IS REF CURSOR<br>    [ RETURN return_type];<br>说明：</p>
+<p>游标变量类型有强类型定义和弱类型定义两种。强类型定义必须指定游标变量的返回值类型，而弱类型定义则不说明返回值类型。</p>
+<p>return_type为游标变量的返回值类型，它必须为记录变量。</p>
+<p>示例：</p>
+<p>– 定义一个REF CURSOU类型<br>TYPE ref_cursor_type IS REF CURSOR;<br>– 声明一个游标变量<br>cv_ref REF_CURSOR_TYPE;<br>8.2 游标变量的使用</p>
+<p>与游标一样，游标变量操作也包括打开、提取和关闭三个步骤。</p>
+<p>8.2.1 打开游标变量</p>
+<p>语法：</p>
+<p>OPEN {cursor_variable_name | :host_cursor_variable_name}<br>FOR select_statement;<br>说明：</p>
+<p>host_cursor_variable_name为PL/SQL主机环境（如OCI: ORACLE Call Interface，Pro*c 程序等）中声明的游标变量。</p>
+<p>OPEN…FOR 语句可以在关闭当前的游标变量之前重新打开游标变量，而不会导致CURSOR_ALREAD_OPEN异常错误。新打开游标变量时，前一个查询的内存处理区将被释放。</p>
+<p>8.2.2 提取数据</p>
+<p>语法：</p>
+<p>FETCH {cursor_variable_name | :host_cursor_variable_name}<br>INTO {variable [, variable]…| record_variable};<br>说明：</p>
+<p>将提取到的数据放入普通变量和记录变量中存放。</p>
+<p>8.2.3 关闭游标</p>
+<p>语法：</p>
+<p>CLOSE {cursor_variable_name | :host_cursor_variable_name}<br>说明：</p>
+<p>如果应用程序试图关闭一个未打开的游标变量，则将导致INVALID_CURSOR异常错误。</p>
+<p>示例1：</p>
+<p>DECLARE<br>TYPE ref_type_table IS REF CURSOR;<br>v_cursor            ref_type_table;<br>emp_record          emp%rowtype;<br>BEGIN<br>     OPEN v_cursor FOR select * from emp where deptno=&no;<br>     LOOP<br>         FETCH v_cursor INTO emp_record;<br>         EXIT WHEN v_cursor%NOTFOUND;<br>         dbms_output.put_line(‘员工号：’||emp_record.ename||’部门号：’||emp_record.deptno);<br>     END LOOP;<br>     CLOSE v_cursor;<br>END;<br>示例2：</p>
+<p>DECLARE<br>    emp_record          emp%rowtype;<br>    TYPE ref_type_table IS REF CURSOR RETURN emp%rowtype;<br>    v_cursor            ref_type_table;<br>BEGIN<br>     OPEN v_cursor FOR select * from emp where deptno=&no;<br>     LOOP<br>         FETCH v_cursor INTO emp_record;<br>         EXIT WHEN v_cursor%NOTFOUND;<br>         dbms_output.put_line(‘员工号：’||emp_record.ename||’部门号：’||emp_record.deptno);<br>     END LOOP;<br>     CLOSE v_cursor;<br>END;</p>
+<p>DECLARE<br>Type emp_record_type IS RECORD(<br>       ename emp.ename%TYPE,<br>       salary emp.sal%TYPE,<br>       deptno emp.deptno%TYPE);<br>emp_record emp_record_type;</p>
+<p>TYPE ref_type_table IS REF CURSOR RETURN emp_record_type;<br>v_cursor            ref_type_table;<br>BEGIN<br>     OPEN v_cursor FOR select ename,sal,deptno from emp where deptno=&no;<br>     LOOP<br>         FETCH v_cursor INTO emp_record;<br>         EXIT WHEN v_cursor%NOTFOUND;<br>         dbms_output.put_line(‘员工号：’||emp_record.ename||’，部门号：’||emp_record.deptno||’，工资：’||emp_record.salary);<br>     END LOOP;<br>     CLOSE v_cursor;<br>END;</p>
+<ol>
+<li>使用游标批量获取</li>
+</ol>
+<p>语法：</p>
+<p>FETCH … BULK COLLECT INTO …[LIMIT row_number];<br>说明：</p>
+<p>使用BULK COLLECT，我们可以用对数据库的一个来回，返回多行数据。BULK COLLECT减少了PL/SQL和SQL引擎之间的上下文开关数目，因而加速了数据获取的速度。</p>
+<p>示例：</p>
+<p>DECLARE<br>     CURSOR emp_cursor(v_deptno number) IS SELECT * FROM EMP WHERE deptno = v_deptno;<br>     TYPE type_emp_table IS TABLE OF emp%ROWTYPE INDEX BY BINARY_INTEGER;<br>     emp_table type_emp_table;<br>     v_dno emp.deptno%TYPE;<br>BEGIN<br>     v_dno := &no;<br>     OPEN emp_cursor(v_dno);<br>     FETCH emp_cursor BULK COLLECT INTO emp_table;<br>     CLOSE emp_cursor;<br>     FOR i IN 1..emp_table.COUNT LOOP<br>         dbms_output.put_line(‘员工号：’||emp_table(i).ename||’工资：’||emp_table(i).sal);<br>     END LOOP;<br>     CLOSE emp_cursor;<br>END;</p>
+<ol>
+<li>游标表达式</li>
+</ol>
+<p>游标表达式作用是用于返回嵌套游标。语法：</p>
+<p>CURSOR(sub_query)<br>示例：</p>
+<p>DECLARE<br>       CURSOR dept_emp_cursor(v_deptno number) IS<br>   SELECT dname,cursor(SELECT * FROM emp e WHERE e.deptno = d.deptno)<br>   FROM dept d WHERE deptno = v_deptno;<br>       TYPE emp_cursor_type IS REF CURSOR;<br>       emp_cursor emp_cursor_type;<br>       emp_record emp%ROWTYPE;<br>       v_name dept.dname%TYPE;<br>       v_dno emp.deptno%TYPE;<br>BEGIN<br>     v_dno := &no;<br>     OPEN dept_emp_cursor(v_dno);<br>     loop<br>          FETCH dept_emp_cursor INTO v_name,emp_cursor;<br>          EXIT WHEN dept_emp_cursor%NOTFOUND;<br>          dbms_output.put_line(‘部门名称：’||v_name);<br>          LOOP<br>              FETCH emp_cursor INTO emp_record;<br>              EXIT WHEN emp_cursor%NOTFOUND;<br>              dbms_output.put_line(‘员工名称：’||emp_record.ename||’，工资：’||emp_record.sal);<br>          END LOOP;<br>     end loop;<br>     CLOSE dept_emp_cursor;<br>END;</p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-跨Oracle数据库实现表级别的实时同步" class="article article-type-post" itemscope itemprop="blogPost">
   
   <div class="article-inner">
@@ -854,84 +1014,6 @@ private static boolean exposeWebAppRoot(ServletContext servletContext) {
 <p> 3.说明：</p>
 <p>(1)上传域不光可以上传图片，还要以上传其他文件。这里我们以图片为例。</p>
 <p>(2)在实际开发中，我们还要对图片格式，大小等进行校验，这个示例测重于上传，没有加入任何校验</p>
-
-      
-
-      
-        
-    </div>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-extjs-下拉列表联动" class="article article-type-post" itemscope itemprop="blogPost">
-  
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/10/extjs-下拉列表联动/">extjs-下拉列表联动</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      <a href="/2016/12/10/extjs-下拉列表联动/" class="article-date">
-  <time datetime="2016-12-10T13:22:32.000Z" itemprop="datePublished">2016-12-10</time>
-</a>
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>不管是几级下拉列表的联动实现本质上都是根据某个下拉列表的变化，去动态加载其他下拉列表，如：省、市、地区。</p>
-<p>当我们监听到省变化时，向service端发送省的编号，service端根据收到的”省”编号到数据库中查询该省所对应的市信息，</p>
-<p>地区同理，抓住这一点，我们只需要监听 combobox 的 select 事件并在其中实现逻辑即可。</p>
-<p>1.代码如下：</p>
-<p>&lt;!DOCTYPE html PUBLIC “-//W3C//DTD XHTML 1.0 Transitional//EN” “<a href="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;" target="_blank" rel="external">http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;</a></p>
-<html xmlns="http://www.w3.org/1999/xhtml"><br><head><br>    <title></title><br>    <!--ExtJs框架开始--><br>    <script type="text/javascript" src="/Ext/adapter/ext/ext-base.js"></script><br>    <script type="text/javascript" src="/Ext/ext-all.js"></script><br>    <script src="/Ext/src/locale/ext-lang-zh_CN.js" type="text/javascript"></script><br>    <link rel="stylesheet" type="text/css" href="/Ext/resources/css/ext-all.css"><br>    <!--ExtJs框架结束--><br>    <script type="text/javascript"><br>        Ext.onReady(function () {<br>            //初始化标签中的Ext:Qtip属性。<br>            Ext.QuickTips.init();<br>            Ext.form.Field.prototype.msgTarget = ‘side’;<br><br>            //———————-下拉列表开始———————-//<br>            //创建市数据源<br>            var combocitystore = new Ext.data.Store({<br>                //设定读取的地址<br>                proxy: new Ext.data.HttpProxy({ url: ‘/App_Ashx/Demo/City.ashx’ }),<br>                //设定读取的格式<br>                reader: new Ext.data.JsonReader({ root: ‘data’ },<br>                 [{ name: ‘id’ }, { name: ‘name’}])<br>            });<br>            //创建区数据源<br>            var comboareastore = new Ext.data.Store({<br>                //设定读取的地址<br>                proxy: new Ext.data.HttpProxy({ url: ‘/App_Ashx/Demo/Area.ashx’ }),<br>                reader: new Ext.data.JsonReader({ root: ‘data’ },<br>                 [{ name: ‘id’ }, { name: ‘name’}])<br>            });<br>            //创建市Combobox<br>            var comboboxcity = new Ext.form.ComboBox({<br>                id: ‘comboboxcity’,<br>                fieldLabel: ‘市’,<br>                width: 120,<br>                store: combocitystore,<br>                displayField: ‘name’,<br>                valueField: ‘id’,<br>                triggerAction: ‘all’,<br>                emptyText: ‘请选择…’,<br>                allowBlank: false,<br>                blankText: ‘请选择市’,<br>                editable: false,<br>                mode: ‘local’, //该属性和以下方法为了兼容ie8<br>                listeners: {<br>                    ‘render’: function () {<br>                        combocitystore.load();<br>                    }<br>                }<br>            });<br><br>            //创建区Combobox<br>            var comboareacity = new Ext.form.ComboBox({<br>                fieldLabel: ‘区’,<br>                width: 120,<br>                store: comboareastore,<br>                displayField: ‘name’,<br>                valueField: ‘id’,<br>                triggerAction: ‘all’,<br>                emptyText: ‘请选择…’,<br>                allowBlank: false,<br>                blankText: ‘请选择区’,<br>                editable: false<br>            });<br>            //联动的实现<br>            comboboxcity.on(‘select’, function () {<br>                comboareastore.baseParams.id = comboboxcity.getValue();<br>                comboareacity.setValue(‘’);<br>                comboareastore.load();<br>            })<br>            //———————-下拉列表结束———————-//<br>            //表单<br>            var form = new Ext.form.FormPanel({<br>                frame: true,<br>                title: ‘表单标题’,<br>                style: ‘margin:10px’,<br>                items: [comboboxcity, comboareacity]<br>            });<br>            //窗体<br>            var win = new Ext.Window({<br>                title: ‘窗口’,<br>                width: 476,<br>                height: 374,<br>                resizable: true,<br>                modal: true,<br>                closable: true,<br>                maximizable: true,<br>                minimizable: true,<br>                buttonAlign: ‘center’,<br>                items: form<br>            });<br>            win.show();<br>        });<br>    </script><br></head><br><body><br>    <!--
-说明：
-(1)var combocitystore = new Ext.data.Store():创建一个新的数据源。
-(2)proxy: new Ext.data.HttpProxy({ url: '/App_Ashx/Demo/City.ashx' })：数据代理为http代理，地址为/App_Ashx/Demo/City.ashx。
-(3)reader: new Ext.data.JsonReader({ root: 'data' },[{ name: 'id' }, { name: 'name'}]):读取json返回值根节点为data，对象列为id和name。
-    这里要结合client与service观察,我在service端的输出如下：{data:[{id:1,name:'北京'},{id:2,name:'上海'}]}
-(4)comboboxcity.on('select', function () {}：市选择变化时触发事件。
-(5)comboareastore.baseParams.id = comboboxcity.getValue()：注意，前面的comboareastore是区的数据源，
-    当市变化时，我们给区的数据源加上个向service端发送的参数。
-(6)comboareacity.setValue('')：把区的下拉列表设置为空，由于非空验证，Ext会提示用户“请选择区”，这个地方也可以把加载出来的第一个区
-    显示在区的下拉列表中，具体请自行实现吧。        
-(7)comboareastore.load()：区的数据源重新加载。
---><br></body><br></html>
-
-<p>其中与service交互用到两个.net 一般处理程序文件，源码如下：<br>(1)/App_Ashx/Demo/City.ashx</p>
-<p>using System.Web;</p>
-<p>namespace HZYT.ExtJs.WebSite.App_Ashx.Demo<br>{<br>    public class City : IHttpHandler<br>    {<br>        public void ProcessRequest(HttpContext context)<br>        {<br>            context.Response.Write(“{data:[{id:1,name:’北京’},{id:2,name:’上海’}]}”);<br>        }</p>
-<pre><code>    public bool IsReusable
-    {
-        get
-        {
-            return false;
-        }
-    }
-}
-</code></pre><p>}</p>
-<p>(2)/App_Ashx/Demo/Area.ashx</p>
-<p>using System.Web;</p>
-<p>namespace HZYT.ExtJs.WebSite.App_Ashx.Demo<br>{<br>    public class Area : IHttpHandler<br>    {<br>        public void ProcessRequest(HttpContext context)<br>        {<br>            //接收Client端传来的参数，交根据条件返回<br>            if (context.Request.Form[“id”].ToString() == “1”)<br>            {<br>                context.Response.Write(“{data:[{id:1,name:’东城区’},{id:2,name:’西城区’},{id:2,name:’海淀区’}]}”);<br>            }<br>            else<br>            {<br>                context.Response.Write(“{data:[{id:1,name:’杨浦区’},{id:2,name:’虹口区’},{id:2,name:’闸北区’}]}”);<br>            }<br>        }</p>
-<pre><code>    public bool IsReusable
-    {
-        get
-        {
-            return false;
-        }
-    }
-}
-</code></pre><p>}</p>
-<p>2.效果如下：<br><img src="/images/extjs-xlld.png" alt="&quot;下拉联动&quot;"> </p>
 
       
 
