@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-11-28T07:00:57.322Z</updated>
+  <updated>2017-11-30T13:50:32.968Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,9 +20,9 @@
     <link href="http://yoursite.com/2017/11/28/%E4%BD%BF%E7%94%A8webpack%E6%9E%84%E5%BB%BAvue-cli%E9%A1%B9%E7%9B%AE-%E5%86%99scss%E8%84%9A%E6%9C%AC%E8%AF%AD%E8%A8%80%E6%8A%A5%E9%94%99/"/>
     <id>http://yoursite.com/2017/11/28/使用webpack构建vue-cli项目-写scss脚本语言报错/</id>
     <published>2017-11-28T06:44:20.000Z</published>
-    <updated>2017-11-28T07:00:57.322Z</updated>
+    <updated>2017-11-30T13:50:32.968Z</updated>
     
-    <content type="html"><![CDATA[<p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是  ,使用的前端语言是vue,但是我在使用webpack构建vue项目的时候，使用scss脚本语言是报错,错误如下:</p>
+    <content type="html"><![CDATA[<p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,但是我在使用webpack构建vue项目的时候，使用scss脚本语言是报错,错误如下:</p>
 <pre><code>error  in ./src/components/home.vue
 
 Syntax Error: Unclosed block
