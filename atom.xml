@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-12-04T15:01:09.591Z</updated>
+  <updated>2017-12-04T15:02:25.949Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://yoursite.com/2017/12/04/%E8%A7%A3%E5%86%B3SpringMVC%E6%8E%A5%E6%94%B6%E4%B8%8D%E5%88%B0axios%E5%8F%91%E9%80%81post%E8%AF%B7%E6%B1%82%E7%9A%84%E6%95%B0%E6%8D%AE%E9%97%AE%E9%A2%98/"/>
     <id>http://yoursite.com/2017/12/04/解决SpringMVC接收不到axios发送post请求的数据问题/</id>
     <published>2017-12-04T13:10:03.000Z</published>
-    <updated>2017-12-04T15:01:09.591Z</updated>
+    <updated>2017-12-04T15:02:25.949Z</updated>
     
     <content type="html"><![CDATA[<pre><code>最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com
 </code></pre><p>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中需要用到axios与后端接口交互的时候，使用POST请求时，后台接收不到前台传的数据<br>js代码如下:</p>
@@ -29,8 +29,10 @@
 <p>后台代码代码如下:<br>    <img src="../images/axios请求post接收不到数据.png" alt="axios请求post接收不到数据"></p>
 <p>解决如下:<br>方法一 ：在项目中安装qs库作为格式化的依赖： </p>
 <pre><code>npm install qs --save-dev 
-</code></pre><p>修改js代码:</p>
-<pre><code>export const addDataGroup = params =&gt; { return axios.post(`/remote/dataGroup/add`, qs.stringify(params) ); };
+
+修改js代码:
+
+export const addDataGroup = params =&gt; { return axios.post(`/remote/dataGroup/add`, qs.stringify(params) ); };
 </code></pre><p>方法二：如果不想修改前端代码的话，需要对后台的代码做修改：<br>通过翻看axios的文档得知：在axios使用Post发送数据时，默认是直接把json放到请求体中提交到后端的，而后端获取数据的方式有两种，一种是@RequestParam（通过字符串中解析出参数）,另一种是@ResponseBody（从请求体中取参数），很显然，我们的后端用了第一种方式。</p>
 ]]></content>
     
@@ -49,7 +51,7 @@
     <link href="http://yoursite.com/2017/12/04/%E5%9C%A8vue%E4%B8%AD%E4%BD%BF%E7%94%A8axios%E8%B7%A8%E5%9F%9F%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%EF%BC%8C%E7%94%A8proxyTable%E8%A7%A3%E5%86%B3%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98/"/>
     <id>http://yoursite.com/2017/12/04/在vue中使用axios跨域访问数据，用proxyTable解决跨域问题/</id>
     <published>2017-12-04T13:04:58.000Z</published>
-    <updated>2017-12-04T15:01:17.508Z</updated>
+    <updated>2017-12-04T15:03:20.485Z</updated>
     
     <content type="html"><![CDATA[<pre><code>最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com
 </code></pre><p>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中需要用到axios与后端接口交互的时候，遇到了跨域的问题，浏览器报错如下:</p>
@@ -59,8 +61,8 @@
 <p>解决方法:</p>
 <p>进入你的vue项目下 -&gt; config -&gt; index.js，里面的dev对象下有一个proxyTable的属性，这个参数主要是一个地址映射表，可以帮助我们将复杂的url简化。</p>
 <p><img src="../images/axios解决跨域.png" alt="dev对象的proxyTable属性"></p>
-<p>如果请求的地址是 <a href="http://127.0.0.1:8081/remote/1" target="_blank" rel="external">http://127.0.0.1:8081/remote/1</a> ，使用proxyTable配置，请求的地址变为 /remote/1。在proxyTable中有个参数是changeOrigin，如果设置为true,那么本地会虚拟一个服务端接收你的请求并代你发送该请求，这样就不会有跨域问题了，当然这只适用于开发环境。</p>
-<p>参考文档：<a href="https://vuejs-templates.github.io/webpack/proxy.html" target="_blank" rel="external">https://vuejs-templates.github.io/webpack/proxy.html</a></p>
+<pre><code>如果请求的地址是 http://127.0.0.1:8081/remote/1 ，使用proxyTable配置，请求的地址变为 /remote/1。在proxyTable中有个参数是changeOrigin，如果设置为true,那么本地会虚拟一个服务端接收你的请求并代你发送该请求，这样就不会有跨域问题了，当然这只适用于开发环境。
+</code></pre><p>参考文档：<a href="https://vuejs-templates.github.io/webpack/proxy.html" target="_blank" rel="external">https://vuejs-templates.github.io/webpack/proxy.html</a></p>
 ]]></content>
     
     <summary type="html">

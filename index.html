@@ -57,8 +57,10 @@
 <p>后台代码代码如下:<br>    <img src="../images/axios请求post接收不到数据.png" alt="axios请求post接收不到数据"></p>
 <p>解决如下:<br>方法一 ：在项目中安装qs库作为格式化的依赖： </p>
 <pre><code>npm install qs --save-dev 
-</code></pre><p>修改js代码:</p>
-<pre><code>export const addDataGroup = params =&gt; { return axios.post(`/remote/dataGroup/add`, qs.stringify(params) ); };
+
+修改js代码:
+
+export const addDataGroup = params =&gt; { return axios.post(`/remote/dataGroup/add`, qs.stringify(params) ); };
 </code></pre><p>方法二：如果不想修改前端代码的话，需要对后台的代码做修改：<br>通过翻看axios的文档得知：在axios使用Post发送数据时，默认是直接把json放到请求体中提交到后端的，而后端获取数据的方式有两种，一种是@RequestParam（通过字符串中解析出参数）,另一种是@ResponseBody（从请求体中取参数），很显然，我们的后端用了第一种方式。</p>
 
       
@@ -102,8 +104,8 @@
 <p>解决方法:</p>
 <p>进入你的vue项目下 -&gt; config -&gt; index.js，里面的dev对象下有一个proxyTable的属性，这个参数主要是一个地址映射表，可以帮助我们将复杂的url简化。</p>
 <p><img src="../images/axios解决跨域.png" alt="dev对象的proxyTable属性"></p>
-<p>如果请求的地址是 <a href="http://127.0.0.1:8081/remote/1" target="_blank" rel="external">http://127.0.0.1:8081/remote/1</a> ，使用proxyTable配置，请求的地址变为 /remote/1。在proxyTable中有个参数是changeOrigin，如果设置为true,那么本地会虚拟一个服务端接收你的请求并代你发送该请求，这样就不会有跨域问题了，当然这只适用于开发环境。</p>
-<p>参考文档：<a href="https://vuejs-templates.github.io/webpack/proxy.html" target="_blank" rel="external">https://vuejs-templates.github.io/webpack/proxy.html</a></p>
+<pre><code>如果请求的地址是 http://127.0.0.1:8081/remote/1 ，使用proxyTable配置，请求的地址变为 /remote/1。在proxyTable中有个参数是changeOrigin，如果设置为true,那么本地会虚拟一个服务端接收你的请求并代你发送该请求，这样就不会有跨域问题了，当然这只适用于开发环境。
+</code></pre><p>参考文档：<a href="https://vuejs-templates.github.io/webpack/proxy.html" target="_blank" rel="external">https://vuejs-templates.github.io/webpack/proxy.html</a></p>
 
       
 

@@ -13,7 +13,7 @@
 <meta property="og:description" content="最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com 前端地址是 https://github.com/wangyuanjun008/wyj-vue-security.git ,使用的前端语言是vue,使用webpack构建vue-cli全家桶在项目中需要用到axios与后端接口交互的时候，使用">
 <meta property="og:image" content="http://yoursite.com/2017/12/04/images/axios请求post的数据.png">
 <meta property="og:image" content="http://yoursite.com/2017/12/04/images/axios请求post接收不到数据.png">
-<meta property="og:updated_time" content="2017-12-04T15:01:09.591Z">
+<meta property="og:updated_time" content="2017-12-04T15:02:25.949Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="解决SpringMVC接收不到axios发送post请求的数据问题">
 <meta name="twitter:description" content="最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com 前端地址是 https://github.com/wangyuanjun008/wyj-vue-security.git ,使用的前端语言是vue,使用webpack构建vue-cli全家桶在项目中需要用到axios与后端接口交互的时候，使用">
@@ -62,8 +62,10 @@
 <p>后台代码代码如下:<br>    <img src="../images/axios请求post接收不到数据.png" alt="axios请求post接收不到数据"></p>
 <p>解决如下:<br>方法一 ：在项目中安装qs库作为格式化的依赖： </p>
 <pre><code>npm install qs --save-dev 
-</code></pre><p>修改js代码:</p>
-<pre><code>export const addDataGroup = params =&gt; { return axios.post(`/remote/dataGroup/add`, qs.stringify(params) ); };
+
+修改js代码:
+
+export const addDataGroup = params =&gt; { return axios.post(`/remote/dataGroup/add`, qs.stringify(params) ); };
 </code></pre><p>方法二：如果不想修改前端代码的话，需要对后台的代码做修改：<br>通过翻看axios的文档得知：在axios使用Post发送数据时，默认是直接把json放到请求体中提交到后端的，而后端获取数据的方式有两种，一种是@RequestParam（通过字符串中解析出参数）,另一种是@ResponseBody（从请求体中取参数），很显然，我们的后端用了第一种方式。</p>
 
       
