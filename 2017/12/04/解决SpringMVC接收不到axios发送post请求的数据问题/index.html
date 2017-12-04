@@ -5,18 +5,18 @@
   
   <title>解决SpringMVC接收不到axios发送post请求的数据问题 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com前端地址是 https://github.com/wangyuanjun008/wyj-vue-security.git ,使用的前端语言是vue,使用webpack构建vue-cli全家桶在项目中需要用到axios与后端接口交互的时候，使用P">
+  <meta name="description" content="最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com 前端地址是 https://github.com/wangyuanjun008/wyj-vue-security.git ,使用的前端语言是vue,使用webpack构建vue-cli全家桶在项目中需要用到axios与后端接口交互的时候，使用">
 <meta property="og:type" content="article">
 <meta property="og:title" content="解决SpringMVC接收不到axios发送post请求的数据问题">
 <meta property="og:url" content="http://yoursite.com/2017/12/04/解决SpringMVC接收不到axios发送post请求的数据问题/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com前端地址是 https://github.com/wangyuanjun008/wyj-vue-security.git ,使用的前端语言是vue,使用webpack构建vue-cli全家桶在项目中需要用到axios与后端接口交互的时候，使用P">
+<meta property="og:description" content="最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com 前端地址是 https://github.com/wangyuanjun008/wyj-vue-security.git ,使用的前端语言是vue,使用webpack构建vue-cli全家桶在项目中需要用到axios与后端接口交互的时候，使用">
 <meta property="og:image" content="http://yoursite.com/2017/12/04/images/axios请求post的数据.png">
 <meta property="og:image" content="http://yoursite.com/2017/12/04/images/axios请求post接收不到数据.png">
-<meta property="og:updated_time" content="2017-12-04T14:58:20.506Z">
+<meta property="og:updated_time" content="2017-12-04T15:01:09.591Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="解决SpringMVC接收不到axios发送post请求的数据问题">
-<meta name="twitter:description" content="最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com前端地址是 https://github.com/wangyuanjun008/wyj-vue-security.git ,使用的前端语言是vue,使用webpack构建vue-cli全家桶在项目中需要用到axios与后端接口交互的时候，使用P">
+<meta name="twitter:description" content="最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com 前端地址是 https://github.com/wangyuanjun008/wyj-vue-security.git ,使用的前端语言是vue,使用webpack构建vue-cli全家桶在项目中需要用到axios与后端接口交互的时候，使用">
 <meta name="twitter:image" content="http://yoursite.com/2017/12/04/images/axios请求post的数据.png">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
@@ -55,7 +55,8 @@
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中需要用到axios与后端接口交互的时候，使用POST请求时，后台接收不到前台传的数据<br>js代码如下:</p>
+        <pre><code>最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com
+</code></pre><p>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中需要用到axios与后端接口交互的时候，使用POST请求时，后台接收不到前台传的数据<br>js代码如下:</p>
 <pre><code>export const addDataGroup = params =&gt; { return axios.post(`/remote/dataGroup/add`, params ); };
 </code></pre><p>请求的数据是:<br>    <img src="../images/axios请求post的数据.png" alt="axios请求post的数据"></p>
 <p>后台代码代码如下:<br>    <img src="../images/axios请求post接收不到数据.png" alt="axios请求post接收不到数据"></p>

@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-12-04T14:58:20.506Z</updated>
+  <updated>2017-12-04T15:01:09.591Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,9 +20,10 @@
     <link href="http://yoursite.com/2017/12/04/%E8%A7%A3%E5%86%B3SpringMVC%E6%8E%A5%E6%94%B6%E4%B8%8D%E5%88%B0axios%E5%8F%91%E9%80%81post%E8%AF%B7%E6%B1%82%E7%9A%84%E6%95%B0%E6%8D%AE%E9%97%AE%E9%A2%98/"/>
     <id>http://yoursite.com/2017/12/04/解决SpringMVC接收不到axios发送post请求的数据问题/</id>
     <published>2017-12-04T13:10:03.000Z</published>
-    <updated>2017-12-04T14:58:20.506Z</updated>
+    <updated>2017-12-04T15:01:09.591Z</updated>
     
-    <content type="html"><![CDATA[<p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中需要用到axios与后端接口交互的时候，使用POST请求时，后台接收不到前台传的数据<br>js代码如下:</p>
+    <content type="html"><![CDATA[<pre><code>最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com
+</code></pre><p>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中需要用到axios与后端接口交互的时候，使用POST请求时，后台接收不到前台传的数据<br>js代码如下:</p>
 <pre><code>export const addDataGroup = params =&gt; { return axios.post(`/remote/dataGroup/add`, params ); };
 </code></pre><p>请求的数据是:<br>    <img src="../images/axios请求post的数据.png" alt="axios请求post的数据"></p>
 <p>后台代码代码如下:<br>    <img src="../images/axios请求post接收不到数据.png" alt="axios请求post接收不到数据"></p>
@@ -35,7 +36,8 @@
     
     <summary type="html">
     
-      &lt;p&gt;最近在做一个项目,项目的后端是地址: &lt;a href=&quot;https://github.com/wangyuanjun008/wyj-springboot.github.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.co
+      &lt;pre&gt;&lt;code&gt;最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;前端地址是 &lt;a href=&quot;https://github.com/
     
     </summary>
     
@@ -47,9 +49,10 @@
     <link href="http://yoursite.com/2017/12/04/%E5%9C%A8vue%E4%B8%AD%E4%BD%BF%E7%94%A8axios%E8%B7%A8%E5%9F%9F%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%EF%BC%8C%E7%94%A8proxyTable%E8%A7%A3%E5%86%B3%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98/"/>
     <id>http://yoursite.com/2017/12/04/在vue中使用axios跨域访问数据，用proxyTable解决跨域问题/</id>
     <published>2017-12-04T13:04:58.000Z</published>
-    <updated>2017-12-04T14:20:59.842Z</updated>
+    <updated>2017-12-04T15:01:17.508Z</updated>
     
-    <content type="html"><![CDATA[<p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中需要用到axios与后端接口交互的时候，遇到了跨域的问题，浏览器报错如下:</p>
+    <content type="html"><![CDATA[<pre><code>最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com
+</code></pre><p>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中需要用到axios与后端接口交互的时候，遇到了跨域的问题，浏览器报错如下:</p>
 <p><img src="../images/axios跨域报错.png" alt="axios跨域报错"></p>
 <p><img src="../images/axios跨域返回数据.png" alt="axios跨域返回数据"></p>
 <p>能看到是有数据数据返回到前台的，说明前台没有接收到</p>
@@ -62,7 +65,8 @@
     
     <summary type="html">
     
-      &lt;p&gt;最近在做一个项目,项目的后端是地址: &lt;a href=&quot;https://github.com/wangyuanjun008/wyj-springboot.github.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.co
+      &lt;pre&gt;&lt;code&gt;最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;前端地址是 &lt;a href=&quot;https://github.com/
     
     </summary>
     
@@ -74,9 +78,10 @@
     <link href="http://yoursite.com/2017/11/28/%E4%BD%BF%E7%94%A8webpack%E6%9E%84%E5%BB%BAvue-cli%E9%A1%B9%E7%9B%AE-%E5%86%99scss%E8%84%9A%E6%9C%AC%E8%AF%AD%E8%A8%80%E6%8A%A5%E9%94%99/"/>
     <id>http://yoursite.com/2017/11/28/使用webpack构建vue-cli项目-写scss脚本语言报错/</id>
     <published>2017-11-28T06:44:20.000Z</published>
-    <updated>2017-11-30T13:50:32.968Z</updated>
+    <updated>2017-12-04T15:01:14.727Z</updated>
     
-    <content type="html"><![CDATA[<p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,但是我在使用webpack构建vue项目的时候，使用scss脚本语言是报错,错误如下:</p>
+    <content type="html"><![CDATA[<pre><code>最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com
+</code></pre><p>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,但是我在使用webpack构建vue项目的时候，使用scss脚本语言是报错,错误如下:</p>
 <pre><code>error  in ./src/components/home.vue
 
 Syntax Error: Unclosed block
@@ -99,7 +104,8 @@ npm install --save-dev sass-loader
     
     <summary type="html">
     
-      &lt;p&gt;最近在做一个项目,项目的后端是地址: &lt;a href=&quot;https://github.com/wangyuanjun008/wyj-springboot.github.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.co
+      &lt;pre&gt;&lt;code&gt;最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;前端地址是 &lt;a href=&quot;https://github.com/
     
     </summary>
     
