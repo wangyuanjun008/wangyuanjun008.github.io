@@ -28,6 +28,373 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-SpringMVC与LogBack集成" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/14/SpringMVC与LogBack集成/">SpringMVC与LogBack集成</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/02/14/SpringMVC与LogBack集成/" class="article-date">
+  <time datetime="2017-02-14T05:01:16.000Z" itemprop="datePublished">2017-02-14</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在做项目中需要用到日志，本来选取的是Log4j，最后经过对比之后还是发现LogBack在性能上比Log4j有优势。至于有什么好处，请参考下面这篇文章。<br>从Log4j迁移到LogBack的理由</p>
+<pre><code>下面废话不多说了，就看一下，如何来把LogBack集成到我们的web项目中吧。本人前台用的是SpringMVC。
+
+jar包配置
+</code></pre><p>   如果要使用LogBack做为日志的插件的话，需要的jar包有如下，直接看一下Maven依赖</p>
+<p>   <span style="font-family:Comic Sans MS;font-size:18px;"><dependency><br>            <groupid>org.slf4j</groupid><br>            <artifactid>slf4j-api</artifactid><br>            <version>1.7.12</version><br>        </dependency><br>        <dependency><br>            <groupid>ch.qos.logback</groupid><br>            <artifactid>logback-classic</artifactid><br>            <version>1.1.3</version><br>            <scope>compile</scope><br>            <exclusions><br>                <exclusion><br>                    <artifactid>slf4j-api</artifactid><br>                    <groupid>org.slf4j</groupid><br>                </exclusion><br>            </exclusions><br>        </dependency></span></p>
+<pre><code>    &lt;dependency&gt;
+        &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
+        &lt;artifactId&gt;logback-core&lt;/artifactId&gt;
+        &lt;version&gt;1.1.3&lt;/version&gt;
+        &lt;exclusions&gt;
+            &lt;exclusion&gt;
+                &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+                &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;
+            &lt;/exclusion&gt;
+        &lt;/exclusions&gt;
+        &lt;scope&gt;compile&lt;/scope&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+        &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
+        &lt;artifactId&gt;logback-access&lt;/artifactId&gt;
+        &lt;version&gt;1.1.3&lt;/version&gt;
+        &lt;exclusions&gt;
+            &lt;exclusion&gt;
+                &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+                &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;
+            &lt;/exclusion&gt;
+        &lt;/exclusions&gt;
+        &lt;scope&gt;compile&lt;/scope&gt;
+    &lt;/dependency&gt;&lt;/span&gt;
+
+Web.xml
+在web项目中需要通过web.xml来加载我们所需要的LogBack.xml具体如下
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+</code></pre><web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemalocation="http://java.sun.com/xml/ns/javaee
+    http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+
+
+
+<pre><code>&lt;!-- logback-begin --&gt;
+&lt;context-param&gt;
+    &lt;param-name&gt;logbackConfigLocation&lt;/param-name&gt;
+    &lt;param-value&gt; classpath:logback.xml&lt;/param-value&gt;
+&lt;/context-param&gt;
+&lt;listener&gt;
+    &lt;listener-class&gt;com.util.LogbackConfigListener&lt;/listener-class&gt;
+&lt;/listener&gt;
+&lt;!-- logback-end --&gt;
+
+
+&lt;filter&gt;
+    &lt;filter-name&gt;encodingFilter&lt;/filter-name&gt;
+    &lt;filter-class&gt;org.springframework.web.filter.CharacterEncodingFilter&lt;/filter-class&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;encoding&lt;/param-name&gt;
+        &lt;param-value&gt;UTF-8&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;forceEncoding&lt;/param-name&gt;
+        &lt;param-value&gt;true&lt;/param-value&gt;
+    &lt;/init-param&gt;
+&lt;/filter&gt;
+&lt;filter-mapping&gt;
+    &lt;filter-name&gt;encodingFilter&lt;/filter-name&gt;
+    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;
+
+&lt;servlet&gt;
+    &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+        &lt;param-value&gt; classpath:springMVC-servlet.xml&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+&lt;/servlet&gt;
+&lt;!-- 这里一定要是/根据Servlet规范来的 --&gt;
+&lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+</code></pre><p></p></web-app><p></p>
+<p>上面的XML中用到了自定义的监听器，分别是三个类，如下所示</p>
+<p>LogbackConfigListener类</p>
+<p>package com.util;</p>
+<p>import javax.servlet.ServletContextEvent;<br>import javax.servlet.ServletContextListener;</p>
+<p>public class LogbackConfigListener implements ServletContextListener {</p>
+<pre><code>public void contextInitialized(ServletContextEvent event) {
+    LogbackWebConfigurer.initLogging(event.getServletContext());
+}
+
+public void contextDestroyed(ServletContextEvent event) {
+    LogbackWebConfigurer.shutdownLogging(event.getServletContext());
+}
+</code></pre><p>}</p>
+<p>LogbackConfigurer类</p>
+<p>package com.util;</p>
+<p>import java.io.File;<br>import java.io.FileNotFoundException;<br>import java.net.URL;</p>
+<p>import org.slf4j.LoggerFactory;<br>import org.springframework.util.ResourceUtils;<br>import org.springframework.util.SystemPropertyUtils;</p>
+<p>import ch.qos.logback.classic.LoggerContext;<br>import ch.qos.logback.classic.joran.JoranConfigurator;<br>import ch.qos.logback.core.joran.spi.JoranException;</p>
+<p>public abstract class LogbackConfigurer {</p>
+<pre><code>/** Pseudo URL prefix for loading from the class path: &quot;classpath:&quot; */
+public static final String CLASSPATH_URL_PREFIX = &quot;classpath:&quot;;
+
+/** Extension that indicates a logback XML config file: &quot;.xml&quot; */
+public static final String XML_FILE_EXTENSION = &quot;.xml&quot;;
+
+private static LoggerContext lc = (LoggerContext) LoggerFactory
+        .getILoggerFactory();
+private static JoranConfigurator configurator = new JoranConfigurator();
+
+/**
+ * Initialize logback from the given file location, with no config file
+ * refreshing. Assumes an XML file in case of a &quot;.xml&quot; file extension, and a
+ * properties file otherwise.
+ * 
+ * @param location
+ *            the location of the config file: either a &quot;classpath:&quot;
+ *            location (e.g. &quot;classpath:mylogback.properties&quot;), an absolute
+ *            file URL (e.g.
+ *            &quot;file:C:/logback.properties), or a plain absolute path in the file system (e.g. &quot;
+ *            C:/logback.properties&quot;)
+ * @throws FileNotFoundException
+ *             if the location specifies an invalid file path
+ */
+public static void initLogging(String location)
+        throws FileNotFoundException {
+    String resolvedLocation = SystemPropertyUtils
+            .resolvePlaceholders(location);
+    URL url = ResourceUtils.getURL(resolvedLocation);
+    if (resolvedLocation.toLowerCase().endsWith(XML_FILE_EXTENSION)) {
+        // DOMConfigurator.configure(url);
+        configurator.setContext(lc);
+        lc.reset();
+        try {
+            configurator.doConfigure(url);
+        } catch (JoranException ex) {
+            throw new FileNotFoundException(url.getPath());
+        }
+        lc.start();
+    }
+    // else {
+    // PropertyConfigurator.configure(url);
+    // }
+}
+
+/**
+ * Shut down logback, properly releasing all file locks.
+ * &lt;p&gt;
+ * This isn&apos;t strictly necessary, but recommended for shutting down logback
+ * in a scenario where the host VM stays alive (for example, when shutting
+ * down an application in a J2EE environment).
+ */
+public static void shutdownLogging() {
+    lc.stop();
+}
+
+/**
+ * Set the specified system property to the current working directory.
+ * &lt;p&gt;
+ * This can be used e.g. for test environments, for applications that
+ * leverage logbackWebConfigurer&apos;s &quot;webAppRootKey&quot; support in a web
+ * environment.
+ * 
+ * @param key
+ *            system property key to use, as expected in logback
+ *            configuration (for example: &quot;demo.root&quot;, used as
+ *            &quot;${demo.root}/WEB-INF/demo.log&quot;)
+ * @see org.springframework.web.util.logbackWebConfigurer
+ */
+public static void setWorkingDirSystemProperty(String key) {
+    System.setProperty(key, new File(&quot;&quot;).getAbsolutePath());
+}
+</code></pre><p>}</p>
+<p>LogbackWebConfigurer类</p>
+<p>package com.util;</p>
+<p>import java.io.FileNotFoundException;</p>
+<p>import javax.servlet.ServletContext;</p>
+<p>import org.springframework.util.ResourceUtils;<br>import org.springframework.util.SystemPropertyUtils;<br>import org.springframework.web.util.WebUtils;</p>
+<p>public abstract class LogbackWebConfigurer {</p>
+<pre><code>/** Parameter specifying the location of the logback config file */
+public static final String CONFIG_LOCATION_PARAM = &quot;logbackConfigLocation&quot;;
+
+/**
+ * Parameter specifying the refresh interval for checking the logback config
+ * file
+ */
+public static final String REFRESH_INTERVAL_PARAM = &quot;logbackRefreshInterval&quot;;
+
+/** Parameter specifying whether to expose the web app root system property */
+public static final String EXPOSE_WEB_APP_ROOT_PARAM = &quot;logbackExposeWebAppRoot&quot;;
+
+/**
+ * Initialize logback, including setting the web app root system property.
+ * 
+ * @param servletContext
+ *            the current ServletContext
+ * @see WebUtils#setWebAppRootSystemProperty
+ */
+public static void initLogging(ServletContext servletContext) {
+    // Expose the web app root system property.
+    if (exposeWebAppRoot(servletContext)) {
+        WebUtils.setWebAppRootSystemProperty(servletContext);
+    }
+
+    // Only perform custom logback initialization in case of a config file.
+    String location = servletContext
+            .getInitParameter(CONFIG_LOCATION_PARAM);
+    if (location != null) {
+        // Perform actual logback initialization; else rely on logback&apos;s
+        // default initialization.
+        try {
+            // Return a URL (e.g. &quot;classpath:&quot; or &quot;file:&quot;) as-is;
+            // consider a plain file path as relative to the web application
+            // root directory.
+            if (!ResourceUtils.isUrl(location)) {
+                // Resolve system property placeholders before resolving
+                // real path.
+                location = SystemPropertyUtils
+                        .resolvePlaceholders(location);
+                location = WebUtils.getRealPath(servletContext, location);
+            }
+
+            // Write log message to server log.
+            servletContext.log(&quot;Initializing logback from [&quot; + location
+                    + &quot;]&quot;);
+
+            // Initialize without refresh check, i.e. without logback&apos;s
+            // watchdog thread.
+            LogbackConfigurer.initLogging(location);
+
+        } catch (FileNotFoundException ex) {
+            throw new IllegalArgumentException(
+                    &quot;Invalid &apos;logbackConfigLocation&apos; parameter: &quot;
+                            + ex.getMessage());
+        }
+    }
+}
+
+/**
+ * Shut down logback, properly releasing all file locks and resetting the
+ * web app root system property.
+ * 
+ * @param servletContext
+ *            the current ServletContext
+ * @see WebUtils#removeWebAppRootSystemProperty
+ */
+public static void shutdownLogging(ServletContext servletContext) {
+    servletContext.log(&quot;Shutting down logback&quot;);
+    try {
+        LogbackConfigurer.shutdownLogging();
+    } finally {
+        // Remove the web app root system property.
+        if (exposeWebAppRoot(servletContext)) {
+            WebUtils.removeWebAppRootSystemProperty(servletContext);
+        }
+    }
+}
+
+/**
+ * Return whether to expose the web app root system property, checking the
+ * corresponding ServletContext init parameter.
+ * 
+ * @see #EXPOSE_WEB_APP_ROOT_PARAM
+ */
+private static boolean exposeWebAppRoot(ServletContext servletContext) {
+    String exposeWebAppRootParam = servletContext
+            .getInitParameter(EXPOSE_WEB_APP_ROOT_PARAM);
+    return (exposeWebAppRootParam == null || Boolean
+            .valueOf(exposeWebAppRootParam));
+}
+</code></pre><p>}</p>
+<p>   logback.XML配置<br>下面来看一下这个xml是如何配置的</p>
+<p>&lt;?xml version=”1.0” encoding=”UTF-8”?&gt;<br><!-- ROOT 节点 --><br><!-- 属性描述 scan：性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true scanPeriod:设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。当scan为true时，此属性生效。默认的时间间隔为1分钟。 
+    debug:当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。 --></p>
+<configuration scan="true" scanperiod="60 seconds" debug="false"><br>    <!-- 定义日志文件 输入位置,注意此处的/ --><br>    <property name="log_dir" value="E:/logs"><br>    <!-- 日志最大的历史 60天 --><br>    <property name="maxHistory" value="60"></property><br><br><br>    <!-- 控制台输出日志 --><br>    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender"><br>        <encoder><br>            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -<br>                %msg%n</pattern><br>        </encoder><br><br>    </appender><br><br><br>    <!-- 出错日志 appender --><br>    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender"><br>        <!-- 在多数的Log工具中，级别是可以传递，例如如果指定了日志输出级别为DEBUG， 那么INFO、ERROR级别的log也会出现在日志文件。这种默认给程序的调试带来了很多的麻烦 
+            通过配置Filter 来严格控制日志输入级别 <filter class="ch.qos.logback.classic.filter.LevelFilter"> 
+            <level>ERROR/level> <onMatch>ACCEPT</onMatch> <onMismatch>DENY</onMismatch> 
+            </filter> --><br>        <rollingpolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"><br>            <!-- 按天回滚 daily --><br>            <filenamepattern>${log_dir}/error-log-%d{yyyy-MM-dd}.log<br>            </filenamepattern><br>            <!-- 日志最大的历史 60天 --><br>            <maxhistory>${maxHistory}</maxhistory><br>        </rollingpolicy><br>        <encoder><br>            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -<br>                %msg%n</pattern><br>        </encoder><br>    </appender><br><br>    <!-- INFO 日志 appender --><br>    <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender"><br>        <rollingpolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"><br>            <!-- 按天回滚 daily --><br>            <filenamepattern>${log_dir}/info-log-%d{yyyy-MM-dd}.log<br>            </filenamepattern><br>            <!-- 日志最大的历史 60天 --><br>            <maxhistory>${maxHistory}</maxhistory><br>        </rollingpolicy><br>        <encoder><br>            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -<br>                %msg%n</pattern><br>        </encoder><br>    </appender><br><br><br>    <!-- 访问日志 appender --><br>    <appender name="ACCESS" class="ch.qos.logback.core.rolling.RollingFileAppender"><br>        <rollingpolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"><br>            <!-- 按天回滚 daily --><br>            <filenamepattern>${log_dir}/access-log-%d{yyyy-MM-dd}.log<br>            </filenamepattern><br>            <!-- 日志最大的历史 60天 --><br>            <maxhistory>${maxHistory}</maxhistory><br>        </rollingpolicy><br>        <encoder><br>            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -<br>                %msg%n</pattern><br>        </encoder><br>    </appender><br><br>    <!-- 系统用户操作日志 appender --><br>    <appender name="SYS-USER" class="ch.qos.logback.core.rolling.RollingFileAppender"><br>        <rollingpolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"><br>            <!-- 按天回滚 daily --><br>            <filenamepattern>${log_dir}/sys_user-log-%d{yyyy-MM-dd}.log<br>            </filenamepattern><br>            <!-- 日志最大的历史 60天 --><br>            <maxhistory>${maxHistory}</maxhistory><br>        </rollingpolicy><br>        <encoder><br>            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -<br>                %msg%n</pattern><br>        </encoder><br>    </appender><br><br><br>    <!-- 打印SQL输出 --><br>    <logger name="java.sql.Connection" level="DEBUG"><br>    <logger name="java.sql.Statement" level="DEBUG"><br>    <logger name="java.sql.PreparedStatement" level="DEBUG"><br><br><br><br>    <!--error错误日志 additivity="false"表示不向上传递 --><br>    <!-- <logger name="com.test" level="error" > --><br>    <!-- <appender-ref ref="ERROR" /> --><br>    <!-- </logger> --><br>    <!--info日志 --><br>    <logger name="com.test" level="info" additivity="false"><br>        <appender-ref ref="INFO"><br>    </appender-ref></logger><br>    <!--访问日志 --><br>    <!-- <logger name="com.test" level="info" additivity="false"> --><br>    <!-- <appender-ref ref="ACCESS" /> --><br>    <!-- </logger> --><br>    <!--系统用户操作日志 --><br>    <!-- <logger name="com.test" level="info" additivity="false"> --><br>    <!-- <appender-ref ref="SYS-USER" /> --><br>    <!-- </logger> --><br><br>    <root><br>        <level value="INFO"><br>        <appender-ref ref="stdout"><br>    </appender-ref></level></root><br></logger></logger></logger></property></configuration>
+
+<p>关于这个XML文件的详细讲解请参考<a href="http://blog.csdn.net/haidage/article/details/6794509" target="_blank" rel="external">http://blog.csdn.net/haidage/article/details/6794509</a></p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-如何相互转换逗号分隔的字符串和List" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/12/如何相互转换逗号分隔的字符串和List/">如何相互转换逗号分隔的字符串和List</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/01/12/如何相互转换逗号分隔的字符串和List/" class="article-date">
+  <time datetime="2017-01-12T03:01:54.000Z" itemprop="datePublished">2017-01-12</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>将逗号分隔的字符串转换为List<br>方法 1： 利用JDK的Arrays类<br>String str = “a,b,c”;<br>List<string> result = Arrays.asList(str.split(“,”));</string></p>
+<p>方法 2： 利用Guava的Splitter<br>String str = “a, b, c”;<br>List<string> result = Splitter.on(“,”).trimResults().splitToList(str);</string></p>
+<p>方法 3： 利用Apache Commons的StringUtils （只是用了split)<br>String str = “a,b,c”;<br>List<string> result = Arrays.asList(StringUtils.split(str,”,”));</string></p>
+<p>方法 4: 利用Spring Framework的StringUtils<br>String str = “a,b,c”;<br>List<string> str = Arrays.asList(StringUtils.commaDelimitedListToStringArray(str));</string></p>
+<p>将List转换为逗号分隔符<br>方法 1: 不用工具类<br>       public String listToString(List list, char separator) {<br>        StringBuilder sb = new StringBuilder();<br>        for (int i = 0; i &lt; list.size(); i++) {<br>            if (i == list.size() - 1) {<br>                sb.append(list.get(i));<br>            } else {<br>                sb.append(list.get(i));<br>                sb.append(separator);<br>            }<br>        }<br>        return sb.toString();<br>       } </p>
+<pre><code>public String listToString(List list, char separator) {  
+  StringBuilder sb = new StringBuilder();  
+  for (int i = 0; i &lt; list.size(); i++) {  
+      sb.append(list.get(i)).append(separator);  
+  }  
+  return sb.toString().substring(0,sb.toString().length()-1);  
+ }  
+</code></pre><p>方法 2： 利用Guava的Joiner<br>List<string> list = new ArrayList<string>();<br>list.add(“a”);<br>list.add(“b”);<br>list.add(“c”);<br>String str = Joiner.on(“,”).join(list);</string></string></p>
+<p>方法 3： 利用Apache Commons的StringUtils<br>List<string> list = new ArrayList<string>();<br>list.add(“a”);<br>list.add(“b”);<br>list.add(“c”);<br>String str = StringUtils.join(list.toArray(), “,”);</string></string></p>
+<p>方法 4：利用Spring Framework的StringUtils<br>List<string> list = new ArrayList<string>();<br>list.add(“a”);<br>list.add(“b”);<br>list.add(“c”);<br>String str = StringUtils.collectionToDelimitedString(list, “,”);</string></string></p>
+<p>比较下来，我的观点就是Guava库和StringUtils更灵活，适用面更广。</p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-extjs-上传图片" class="article article-type-post" itemscope itemprop="blogPost">
   
   <div class="article-inner">

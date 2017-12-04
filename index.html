@@ -28,6 +28,92 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-解决SpringMVC接收不到axios发送post请求的数据问题" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/04/解决SpringMVC接收不到axios发送post请求的数据问题/">解决SpringMVC接收不到axios发送post请求的数据问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/12/04/解决SpringMVC接收不到axios发送post请求的数据问题/" class="article-date">
+  <time datetime="2017-12-04T13:10:03.000Z" itemprop="datePublished">2017-12-04</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中需要用到axios与后端接口交互的时候，使用POST请求时，后台接收不到前台传的数据<br>js代码如下:</p>
+<pre><code>export const addDataGroup = params =&gt; { return axios.post(`/remote/dataGroup/add`, params ); };
+</code></pre><p>请求的数据是:<br>    <img src="../images/axios请求post的数据.png" alt="axios请求post的数据"></p>
+<p>后台代码代码如下:<br>    <img src="../images/axios请求post接收不到数据.png" alt="axios请求post接收不到数据"></p>
+<p>解决如下:<br>方法一 ：在项目中安装qs库作为格式化的依赖： </p>
+<pre><code>npm install qs --save-dev 
+</code></pre><p>修改js代码:</p>
+<pre><code>export const addDataGroup = params =&gt; { return axios.post(`/remote/dataGroup/add`, qs.stringify(params) ); };
+</code></pre><p>方法二：如果不想修改前端代码的话，需要对后台的代码做修改：<br>通过翻看axios的文档得知：在axios使用Post发送数据时，默认是直接把json放到请求体中提交到后端的，而后端获取数据的方式有两种，一种是@RequestParam（通过字符串中解析出参数）,另一种是@ResponseBody（从请求体中取参数），很显然，我们的后端用了第一种方式。</p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-在vue中使用axios跨域访问数据，用proxyTable解决跨域问题" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/04/在vue中使用axios跨域访问数据，用proxyTable解决跨域问题/">在vue中使用axios跨域访问数据，用proxyTable解决跨域问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/12/04/在vue中使用axios跨域访问数据，用proxyTable解决跨域问题/" class="article-date">
+  <time datetime="2017-12-04T13:04:58.000Z" itemprop="datePublished">2017-12-04</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中需要用到axios与后端接口交互的时候，遇到了跨域的问题，浏览器报错如下:</p>
+<p><img src="../images/axios跨域报错.png" alt="axios跨域报错"></p>
+<p><img src="../images/axios跨域返回数据.png" alt="axios跨域返回数据"></p>
+<p>能看到是有数据数据返回到前台的，说明前台没有接收到</p>
+<p>解决方法:</p>
+<p>进入你的vue项目下 -&gt; config -&gt; index.js，里面的dev对象下有一个proxyTable的属性，这个参数主要是一个地址映射表，可以帮助我们将复杂的url简化。</p>
+<p><img src="../images/axios解决跨域.png" alt="dev对象的proxyTable属性"></p>
+<p>如果请求的地址是 <a href="http://127.0.0.1:8081/remote/1" target="_blank" rel="external">http://127.0.0.1:8081/remote/1</a> ，使用proxyTable配置，请求的地址变为 /remote/1。在proxyTable中有个参数是changeOrigin，如果设置为true,那么本地会虚拟一个服务端接收你的请求并代你发送该请求，这样就不会有跨域问题了，当然这只适用于开发环境。</p>
+<p>参考文档：<a href="https://vuejs-templates.github.io/webpack/proxy.html" target="_blank" rel="external">https://vuejs-templates.github.io/webpack/proxy.html</a></p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-使用webpack构建vue-cli项目-写scss脚本语言报错" class="article article-type-post" itemscope itemprop="blogPost">
   
   <div class="article-inner">
@@ -1011,85 +1097,6 @@ Caused by: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot
 
 启动不再报错!!!
 </code></pre>
-      
-
-      
-        
-    </div>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-试用hexo-换电脑跟新博客" class="article article-type-post" itemscope itemprop="blogPost">
-  
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/29/试用hexo-换电脑跟新博客/">试用hexo,换电脑跟新博客</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      <a href="/2017/06/29/试用hexo-换电脑跟新博客/" class="article-date">
-  <time datetime="2017-06-29T15:33:55.000Z" itemprop="datePublished">2017-06-29</time>
-</a>
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>作者：skycrown<br>链接：<a href="https://www.zhihu.com/question/21193762/answer/103097754" target="_blank" rel="external">https://www.zhihu.com/question/21193762/answer/103097754</a><br>来源：知乎<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
-<p>1、从官网Git下载git，在新电脑上安装，因为https速度慢，而且每次都要输入口令，常用的是使用ssh。使用下面方法创建：<br>（1）打开git bash，在用户主目录下运行：ssh-keygen -t rsa -C “youremail@example.com” 把其中的邮件地址换成自己的邮件地址，然后一路回车<br>（2）最后完成后，会在用户主目录下生成.ssh目录，里面有id_rsa和id_rsa.pub两个文件，这两个就是SSH key密钥对，id_rsa是私钥，千万不能泄露出去，id_rsa.pub是公钥，可以放心地告诉任何人。<br>（3）登陆GitHub，打开「Settings」-&gt;「SSH and GPG keys」，然后点击「new SSH  key」，填上任意Title，在Key文本框里粘贴公钥id_rsa.pub文件的内容（千万不要粘贴成私钥了！），最后点击「Add SSH Key」，你就应该看到已经添加的Key。注意：不要在git版本库中运行ssh，然后又将它提交，这样就把密码泄露出去了。<br>2、下载Node.js，并安装<br>3、打开git bash客户端，输入 npm install hexo-cli -g，开始安装hexo<br>4、下面就将原来的文件拷贝到新电脑中，但是要注意哪些文件是必须的，哪些文件是可以删除的。<br>（1）讨论下哪些文件是必须拷贝的：首先是之前自己修改的文件，像站点配置_config.yml，theme文件夹里面的主题，以及source里面自己写的博客文件，这些肯定要拷贝的。除此之外，还有三个文件需要有，就是scaffolds文件夹（文章的模板）、package.json（说明使用哪些包）和.gitignore（限定在提交的时候哪些文件可以忽略）。其实，这三个文件不是我们修改的，所以即使丢失了，也没有关系，我们可以建立一个新的文件夹，然后在里面执行hexo init，就会生成这三个文件，我们只需要将它们拷贝过来使用即可。总结：_config.yml，theme/，source/，scaffolds/，package.json，.gitignore，是需要拷贝的。<br>（2）再讨论下哪些文件是不必拷贝的，或者说可以删除的：首先是.git文件，无论是在站点根目录下，还是主题目录下的.git文件，都可以删掉。然后是文件夹node_modules（在用npm install会重新生成），public（这个在用hexo g时会重新生成），.deploy_git文件夹（在使用hexo d时也会重新生成），db.json文件。其实上面这些文件也就是是.gitignore文件里面记载的可以忽略的内容。总结：.git/，node_modules/，public/，.deploy_git/，db.json文件需要删除。<br>5、在git bash中切换目录到新拷贝的文件夹里，使用 npm install 命令，进行模块安装。很明显我们这里没用hexo init初始化，因为有的文件我们已经拷贝生成过来了，所以不必用hexo init去整体初始化，如果不慎在此时用了hexo init，则站点的配置文件_config.yml里面内容会被清空使用默认值，所以这一步一定要慎重，不要用hexo init。<br>6、安装其他的一些必要组件，如果在node_modules里面有的，就不要重复安装了：<br>（1）为了使用hexo d来部署到git上，需要安装npm install hexo-deployer-git –save<br>（2）为了建立RSS订阅，需要安装npm install hexo-generator-feed –save<br>（3）为了建立站点地图，需要安装npm install hexo-generator-sitemap –save插件安装后，有的需要对配置文件_config.yml进行配置，具体怎么配置，可以参考上面插件在github主页上的具体说明7、使用hexo g，然后使用hexo d进行部署，如果都没有出错，就转移成功了！</p>
-
-      
-
-      
-        
-    </div>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/29/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      <a href="/2017/06/29/hello-world/" class="article-date">
-  <time datetime="2017-06-29T15:21:26.034Z" itemprop="datePublished">2017-06-29</time>
-</a>
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
       
 
       

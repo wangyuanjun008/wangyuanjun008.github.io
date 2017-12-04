@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>在vue中使用axios跨域访问数据，用proxyTable解决跨域问题 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com前端地址是 https://github.com/wangyuanjun008/wyj-vue-security.git ,使用的前端语言是vue,使用webpack构建vue-cli全家桶在项目中需要用到axios与后端接口交互的时候，遇到了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在vue中使用axios跨域访问数据，用proxyTable解决跨域问题">
+<meta property="og:url" content="http://yoursite.com/2017/12/04/在vue中使用axios跨域访问数据，用proxyTable解决跨域问题/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com前端地址是 https://github.com/wangyuanjun008/wyj-vue-security.git ,使用的前端语言是vue,使用webpack构建vue-cli全家桶在项目中需要用到axios与后端接口交互的时候，遇到了">
+<meta property="og:image" content="http://yoursite.com/2017/12/04/images/axios跨域报错.png">
+<meta property="og:image" content="http://yoursite.com/2017/12/04/images/axios跨域返回数据.png">
+<meta property="og:image" content="http://yoursite.com/2017/12/04/images/axios解决跨域.png">
+<meta property="og:updated_time" content="2017-12-04T14:20:59.842Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在vue中使用axios跨域访问数据，用proxyTable解决跨域问题">
+<meta name="twitter:description" content="最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com前端地址是 https://github.com/wangyuanjun008/wyj-vue-security.git ,使用的前端语言是vue,使用webpack构建vue-cli全家桶在项目中需要用到axios与后端接口交互的时候，遇到了">
+<meta name="twitter:image" content="http://yoursite.com/2017/12/04/images/axios跨域报错.png">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <section id="main"><article id="post-在vue中使用axios跨域访问数据，用proxyTable解决跨域问题" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      在vue中使用axios跨域访问数据，用proxyTable解决跨域问题
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/12/04/在vue中使用axios跨域访问数据，用proxyTable解决跨域问题/" class="article-date">
+  <time datetime="2017-12-04T13:04:58.000Z" itemprop="datePublished">2017-12-04</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中需要用到axios与后端接口交互的时候，遇到了跨域的问题，浏览器报错如下:</p>
+<p><img src="../images/axios跨域报错.png" alt="axios跨域报错"></p>
+<p><img src="../images/axios跨域返回数据.png" alt="axios跨域返回数据"></p>
+<p>能看到是有数据数据返回到前台的，说明前台没有接收到</p>
+<p>解决方法:</p>
+<p>进入你的vue项目下 -&gt; config -&gt; index.js，里面的dev对象下有一个proxyTable的属性，这个参数主要是一个地址映射表，可以帮助我们将复杂的url简化。</p>
+<p><img src="../images/axios解决跨域.png" alt="dev对象的proxyTable属性"></p>
+<p>如果请求的地址是 <a href="http://127.0.0.1:8081/remote/1" target="_blank" rel="external">http://127.0.0.1:8081/remote/1</a> ，使用proxyTable配置，请求的地址变为 /remote/1。在proxyTable中有个参数是changeOrigin，如果设置为true,那么本地会虚拟一个服务端接收你的请求并代你发送该请求，这样就不会有跨域问题了，当然这只适用于开发环境。</p>
+<p>参考文档：<a href="https://vuejs-templates.github.io/webpack/proxy.html" target="_blank" rel="external">https://vuejs-templates.github.io/webpack/proxy.html</a></p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/12/04/解决SpringMVC接收不到axios发送post请求的数据问题/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          解决SpringMVC接收不到axios发送post请求的数据问题
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/11/28/使用webpack构建vue-cli项目-写scss脚本语言报错/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">使用webpack构建vue-cli项目,写scss脚本语言报错</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2017 John Doe 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a href="https://github.com/" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
