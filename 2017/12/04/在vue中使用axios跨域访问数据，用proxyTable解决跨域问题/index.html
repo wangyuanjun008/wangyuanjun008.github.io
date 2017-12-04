@@ -14,7 +14,7 @@
 <meta property="og:image" content="http://yoursite.com/2017/12/04/images/axios跨域报错.png">
 <meta property="og:image" content="http://yoursite.com/2017/12/04/images/axios跨域返回数据.png">
 <meta property="og:image" content="http://yoursite.com/2017/12/04/images/axios解决跨域.png">
-<meta property="og:updated_time" content="2017-12-04T15:03:20.485Z">
+<meta property="og:updated_time" content="2017-12-04T15:05:07.559Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在vue中使用axios跨域访问数据，用proxyTable解决跨域问题">
 <meta name="twitter:description" content="最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com 前端地址是 https://github.com/wangyuanjun008/wyj-vue-security.git ,使用的前端语言是vue,使用webpack构建vue-cli全家桶在项目中需要用到axios与后端接口交互的时候，遇到">
@@ -64,8 +64,8 @@
 <p>解决方法:</p>
 <p>进入你的vue项目下 -&gt; config -&gt; index.js，里面的dev对象下有一个proxyTable的属性，这个参数主要是一个地址映射表，可以帮助我们将复杂的url简化。</p>
 <p><img src="../images/axios解决跨域.png" alt="dev对象的proxyTable属性"></p>
-<pre><code>如果请求的地址是 http://127.0.0.1:8081/remote/1 ，使用proxyTable配置，请求的地址变为 /remote/1。在proxyTable中有个参数是changeOrigin，如果设置为true,那么本地会虚拟一个服务端接收你的请求并代你发送该请求，这样就不会有跨域问题了，当然这只适用于开发环境。
-</code></pre><p>参考文档：<a href="https://vuejs-templates.github.io/webpack/proxy.html" target="_blank" rel="external">https://vuejs-templates.github.io/webpack/proxy.html</a></p>
+<p>如果请求的地址是 <a href="http://127.0.0.1:8081/remote/1" target="_blank" rel="external">http://127.0.0.1:8081/remote/1</a> ，使用proxyTable配置，请求的地址变为 /remote/1。在proxyTable中有个参数是changeOrigin，如果设置为true,那么本地会虚拟一个服务端接收你的请求并代你发送该请求，这样就不会有跨域问题了，当然这只适用于开发环境。</p>
+<p>参考文档：<a href="https://vuejs-templates.github.io/webpack/proxy.html" target="_blank" rel="external">https://vuejs-templates.github.io/webpack/proxy.html</a></p>
 
       
 
