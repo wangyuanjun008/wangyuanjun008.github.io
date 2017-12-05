@@ -28,6 +28,47 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-解决element-ui-select下拉框不回显数据问题" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/05/解决element-ui-select下拉框不回显数据问题/">解决element ui select下拉框不回显数据问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/12/05/解决element-ui-select下拉框不回显数据问题/" class="article-date">
+  <time datetime="2017-12-05T14:06:34.000Z" itemprop="datePublished">2017-12-05</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中用到 el-select 时遇到一个问题，就是在编辑表单时，下拉框的不显示数据，前台代码如下:</p>
+<pre><code>&lt;el-select v-model=&quot;commonForm.status&quot; clearable placeholder=&quot;请选择&quot;&gt;
+    &lt;el-option v-for=&quot;item in items&quot; :key=&quot;item.id&quot; :label=&quot;item.text&quot; :value=&quot;item.id&quot; &gt;&lt;/el-option&gt;
+&lt;/el-select&gt; 
+</code></pre><p>在浏览器中查看列表返回的数据:<br><img src="../images/el-select下拉不显示数据.png" alt="el-select下拉不显示数据"></p>
+<p>在浏览器中查看下拉框数据源的数据:<br><img src="../images/el-select下拉不显示数据1.png" alt="修改前下拉框数据源返回数据"></p>
+<p>发现select下拉的id和v-model里边的id类型不一致，修改后台下拉框数据源返回类型，下拉框显示数据成功。<br><img src="../images/el-select下拉不显示数据2.png" alt="修改后下拉框数据源返回数据"></p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-解决SpringMVC接收不到axios发送post请求的数据问题" class="article article-type-post" itemscope itemprop="blogPost">
   
   <div class="article-inner">
@@ -927,193 +968,9 @@ $(&quot;#sel_status&quot;).select2({
 
 
   
-    <article id="post-mybatis使用PageHelper插件报错Error-creating-bean-with-name-sqlSessionFactory-defined-in-class-path-resource-spring-mybatis-xml" class="article article-type-post" itemscope itemprop="blogPost">
-  
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/17/mybatis使用PageHelper插件报错Error-creating-bean-with-name-sqlSessionFactory-defined-in-class-path-resource-spring-mybatis-xml/">mybatis使用PageHelper插件报错Error creating bean with name sqlSessionFactory defined in class path resource [spring-mybatis.xml]</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      <a href="/2017/08/17/mybatis使用PageHelper插件报错Error-creating-bean-with-name-sqlSessionFactory-defined-in-class-path-resource-spring-mybatis-xml/" class="article-date">
-  <time datetime="2017-08-17T13:23:57.000Z" itemprop="datePublished">2017-08-17</time>
-</a>
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近在做一个项目,项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.github.com</a><br>在项目中使用mybatis的分页插件:PageHelper，整合spring后在启动后报错，错误如下:</p>
-<pre><code>2017-08-17 21:20:16.618 [ContainerBackgroundProcessor[StandardEngine[Catalina]]] ERROR org.springframework.web.context.ContextLoader -
-                Context initialization failed
-org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;sqlSessionFactory&apos; defined in class path resource [spring-mybatis.xml]: Invocation of init method failed; nested exception is org.springframework.core.NestedIOException: Failed to parse config resource: class path resource [mybatis-config.xml]; nested exception is org.apache.ibatis.builder.BuilderException: Error parsing SQL Mapper Configuration. Cause: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot be cast to org.apache.ibatis.plugin.Interceptor
-    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1553) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:539) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:475) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:304) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:228) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:300) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:195) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:681) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:760) ~[spring-context-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:482) ~[spring-context-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.web.context.ContextLoader.configureAndRefreshWebApplicationContext(ContextLoader.java:403) ~[spring-web-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.web.context.ContextLoader.initWebApplicationContext(ContextLoader.java:306) ~[spring-web-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.web.context.ContextLoaderListener.contextInitialized(ContextLoaderListener.java:106) [spring-web-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.apache.catalina.core.StandardContext.listenerStart(StandardContext.java:4729) [catalina.jar:na]
-    at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:5167) [catalina.jar:na]
-    at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:150) [catalina.jar:na]
-    at org.apache.catalina.core.StandardContext.reload(StandardContext.java:3746) [catalina.jar:na]
-    at org.apache.catalina.loader.WebappLoader.backgroundProcess(WebappLoader.java:292) [catalina.jar:na]
-    at org.apache.catalina.core.StandardContext.backgroundProcess(StandardContext.java:5528) [catalina.jar:na]
-    at org.apache.catalina.core.ContainerBase$ContainerBackgroundProcessor.processChildren(ContainerBase.java:1377) [catalina.jar:na]
-    at org.apache.catalina.core.ContainerBase$ContainerBackgroundProcessor.processChildren(ContainerBase.java:1381) [catalina.jar:na]
-    at org.apache.catalina.core.ContainerBase$ContainerBackgroundProcessor.processChildren(ContainerBase.java:1381) [catalina.jar:na]
-    at org.apache.catalina.core.ContainerBase$ContainerBackgroundProcessor.run(ContainerBase.java:1349) [catalina.jar:na]
-    at java.lang.Thread.run(Thread.java:745) [na:1.8.0_77]
-Caused by: org.springframework.core.NestedIOException: Failed to parse config resource: class path resource [mybatis-config.xml]; nested exception is org.apache.ibatis.builder.BuilderException: Error parsing SQL Mapper Configuration. Cause: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot be cast to org.apache.ibatis.plugin.Interceptor
-    at org.mybatis.spring.SqlSessionFactoryBean.buildSqlSessionFactory(SqlSessionFactoryBean.java:434) ~[mybatis-spring-1.2.2.jar:1.2.2]
-    at org.mybatis.spring.SqlSessionFactoryBean.afterPropertiesSet(SqlSessionFactoryBean.java:340) ~[mybatis-spring-1.2.2.jar:1.2.2]
-    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1612) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1549) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    ... 23 common frames omitted
-Caused by: org.apache.ibatis.builder.BuilderException: Error parsing SQL Mapper Configuration. Cause: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot be cast to org.apache.ibatis.plugin.Interceptor
-    at org.apache.ibatis.builder.xml.XMLConfigBuilder.parseConfiguration(XMLConfigBuilder.java:109) ~[mybatis-3.2.6.jar:3.2.6]
-    at org.apache.ibatis.builder.xml.XMLConfigBuilder.parse(XMLConfigBuilder.java:92) ~[mybatis-3.2.6.jar:3.2.6]
-    at org.mybatis.spring.SqlSessionFactoryBean.buildSqlSessionFactory(SqlSessionFactoryBean.java:428) ~[mybatis-spring-1.2.2.jar:1.2.2]
-    ... 26 common frames omitted
-Caused by: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot be cast to org.apache.ibatis.plugin.Interceptor
-    at org.apache.ibatis.builder.xml.XMLConfigBuilder.pluginElement(XMLConfigBuilder.java:142) ~[mybatis-3.2.6.jar:3.2.6]
-    at org.apache.ibatis.builder.xml.XMLConfigBuilder.parseConfiguration(XMLConfigBuilder.java:100) ~[mybatis-3.2.6.jar:3.2.6]
-    ... 28 common frames omitted
-</code></pre><p>spring与mybaits集成的配置文件 spring-mybaits.xml</p>
-<pre><code>&lt;!-- =======================================================================引入配置文件============================================ --&gt;
-&lt;bean id=&quot;propertyConfigurer&quot;
-    class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&gt;
-    &lt;property name=&quot;locations&quot;&gt;
-        &lt;list&gt;
-            &lt;value&gt;classpath:jdbc.properties&lt;/value&gt;
-        &lt;/list&gt;
-    &lt;/property&gt;
-&lt;/bean&gt;
-
-&lt;!-- =======================================================================配置数据源============================================ --&gt;
-&lt;bean id=&quot;dataSource&quot; class=&quot;org.apache.commons.dbcp.BasicDataSource&quot;&gt;
-    &lt;property name=&quot;driverClassName&quot; value=&quot;${driver}&quot; /&gt;
-    &lt;property name=&quot;url&quot; value=&quot;${url}&quot; /&gt;
-    &lt;property name=&quot;username&quot; value=&quot;${username}&quot; /&gt;
-    &lt;property name=&quot;password&quot; value=&quot;${password}&quot; /&gt;
-    &lt;!-- 初始化连接大小 --&gt;
-    &lt;property name=&quot;initialSize&quot; value=&quot;${initialSize}&quot;&gt;&lt;/property&gt;
-    &lt;!-- 连接池最大数量 --&gt;
-    &lt;property name=&quot;maxActive&quot; value=&quot;${maxActive}&quot;&gt;&lt;/property&gt;
-    &lt;!-- 连接池最大空闲 --&gt;
-    &lt;property name=&quot;maxIdle&quot; value=&quot;${maxIdle}&quot;&gt;&lt;/property&gt;
-    &lt;!-- 连接池最小空闲 --&gt;
-    &lt;property name=&quot;minIdle&quot; value=&quot;${minIdle}&quot;&gt;&lt;/property&gt;
-    &lt;!-- 获取连接最大等待时间 --&gt;
-    &lt;property name=&quot;maxWait&quot; value=&quot;${maxWait}&quot;&gt;&lt;/property&gt;
-&lt;/bean&gt;
-&lt;!-- ================================================配置sessionfactory============================================================================== --&gt;
-&lt;bean id=&quot;sqlSessionFactory&quot; class=&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;&gt;
-    &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;&gt;&lt;/property&gt;
-    &lt;!-- 自动扫描mapping.xml文件 --&gt;
-    &lt;property name=&quot;mapperLocations&quot; value=&quot;classpath:com/wyj/mapping/auth/*.xml&quot;&gt;&lt;/property&gt;
-    &lt;!-- 引入配置文件 --&gt;
-    &lt;property name=&quot;configLocation&quot; value=&quot;classpath:mybatis-config.xml&quot; /&gt; 
-&lt;/bean&gt;
-
-
-&lt;!-- =================================================装配dao接口================================================================================== --&gt;
-&lt;bean class=&quot;org.mybatis.spring.mapper.MapperScannerConfigurer&quot;&gt;
-    &lt;property name=&quot;basePackage&quot; value=&quot;com.wyj.dao.auth&quot; /&gt;&lt;!-- DAO接口所在包名，Spring会自动查找其下的类 --&gt;
-    &lt;property name=&quot;sqlSessionFactoryBeanName&quot; value=&quot;sqlSessionFactory&quot;&gt;&lt;/property&gt;
-&lt;/bean&gt;
-
-&lt;!-- =================================================声明式事务管理================================================================================== --&gt;
-&lt;!-- (事务管理)transaction manager, use JtaTransactionManager for global tx --&gt;
-&lt;bean id=&quot;transactionManager&quot;
-    class=&quot;org.springframework.jdbc.datasource.DataSourceTransactionManager&quot;&gt;
-    &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot; /&gt;
-&lt;/bean&gt;
-</code></pre><p>mybatis-config.xml 配置文件(分页插件)</p>
-<pre><code>&lt;configuration&gt;  
-    &lt;plugins&gt;  
-        &lt;!-- com.github.pagehelper为PageHelper类所在包名 --&gt;  
-        &lt;plugin interceptor=&quot;com.github.pagehelper.PageHelper&quot;&gt;  
-            &lt;!-- 设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库 --&gt;  
-            &lt;property name=&quot;dialect&quot; value=&quot;mysql&quot; /&gt;  
-            &lt;!-- 该参数默认为false --&gt;  
-            &lt;!-- 设置为true时，会将RowBounds第一个参数offset当成pageNum页码使用 --&gt;  
-            &lt;!-- 和startPage中的pageNum效果一样--&gt;  
-            &lt;property name=&quot;offsetAsPageNum&quot; value=&quot;true&quot;/&gt;  
-            &lt;!-- 该参数默认为false --&gt;  
-            &lt;!-- 设置为true时，使用RowBounds分页会进行count查询 --&gt;  
-            &lt;property name=&quot;rowBoundsWithCount&quot; value=&quot;true&quot;/&gt;  
-            &lt;!-- 设置为true时，如果pageSize=0或者RowBounds.limit = 0就会查询出全部的结果 --&gt;  
-            &lt;!-- （相当于没有执行分页查询，但是返回结果仍然是Page类型）--&gt;  
-            &lt;property name=&quot;pageSizeZero&quot; value=&quot;true&quot;/&gt;  
-            &lt;!-- 3.3.0版本可用 - 分页参数合理化，默认false禁用 --&gt;  
-            &lt;!-- 启用合理化时，如果pageNum&lt;1会查询第一页，如果pageNum&gt;pages会查询最后一页 --&gt;  
-            &lt;!-- 禁用合理化时，如果pageNum&lt;1或pageNum&gt;pages会返回空数据 --&gt;  
-            &lt;property name=&quot;reasonable&quot; value=&quot;true&quot;/&gt;  
-            &lt;!-- 3.5.0版本可用 - 为了支持startPage(Object params)方法 --&gt;  
-            &lt;!-- 增加了一个`params`参数来配置参数映射，用于从Map或ServletRequest中取值 --&gt;  
-            &lt;!-- 可以配置pageNum,pageSize,count,pageSizeZero,reasonable,orderBy,不配置映射的用默认值 --&gt;  
-            &lt;!-- 不理解该含义的前提下，不要随便复制该配置 --&gt;  
-            &lt;property name=&quot;params&quot; value=&quot;pageNum=start;pageSize=limit;&quot;/&gt;  
-            &lt;!-- 支持通过Mapper接口参数来传递分页参数 --&gt;  
-            &lt;property name=&quot;supportMethodsArguments&quot; value=&quot;true&quot;/&gt;  
-            &lt;!-- always总是返回PageInfo类型,check检查返回类型是否为PageInfo,none返回Page --&gt;  
-            &lt;property name=&quot;returnPageInfo&quot; value=&quot;check&quot;/&gt;  
-        &lt;/plugin&gt;  
-    &lt;/plugins&gt;  
-&lt;/configuration&gt;
-</code></pre><p>经过查找，原来是与mybaitis的jar包版本相差过大，项目运用的是4.1.1的版本，换上5.0.4的版本，重新运行项目，不再抛错。</p>
-<pre><code>修改spring-mybatis.xml配置文件如下
-修改 sqlSessionFactory
-
-    &lt;!-- ================================================配置sessionfactory============================================================================== --&gt;
-&lt;bean id=&quot;sqlSessionFactory&quot; class=&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;&gt;
-    &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;&gt;&lt;/property&gt;
-    &lt;!-- 自动扫描mapping.xml文件 --&gt;
-    &lt;property name=&quot;mapperLocations&quot; value=&quot;classpath:com/wyj/mapping/auth/*.xml&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;plugins&quot;&gt;
-        &lt;array&gt;
-            &lt;bean class=&quot;com.github.pagehelper.PageInterceptor&quot;&gt;
-                &lt;property name=&quot;properties&quot;&gt;
-                    &lt;value&gt;
-                    &lt;!-- helperDialect：有别于3.0+版本，现在必须是helperDialect，否则spring启动加载时会报错 --&gt;
-                        helperDialect=mysql
-                    &lt;/value&gt;
-                &lt;/property&gt;
-            &lt;/bean&gt;
-        &lt;/array&gt;
-    &lt;/property&gt;
-&lt;/bean&gt;
-
-启动不再报错!!!
-</code></pre>
-      
-
-      
-        
-    </div>
-  </div>
-  
-</article>
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 </section>

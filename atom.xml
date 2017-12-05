@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-12-04T15:07:02.127Z</updated>
+  <updated>2017-12-05T14:46:42.248Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>解决element ui select下拉框不回显数据问题</title>
+    <link href="http://yoursite.com/2017/12/05/%E8%A7%A3%E5%86%B3element-ui-select%E4%B8%8B%E6%8B%89%E6%A1%86%E4%B8%8D%E5%9B%9E%E6%98%BE%E6%95%B0%E6%8D%AE%E9%97%AE%E9%A2%98/"/>
+    <id>http://yoursite.com/2017/12/05/解决element-ui-select下拉框不回显数据问题/</id>
+    <published>2017-12-05T14:06:34.000Z</published>
+    <updated>2017-12-05T14:46:42.248Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中用到 el-select 时遇到一个问题，就是在编辑表单时，下拉框的不显示数据，前台代码如下:</p>
+<pre><code>&lt;el-select v-model=&quot;commonForm.status&quot; clearable placeholder=&quot;请选择&quot;&gt;
+    &lt;el-option v-for=&quot;item in items&quot; :key=&quot;item.id&quot; :label=&quot;item.text&quot; :value=&quot;item.id&quot; &gt;&lt;/el-option&gt;
+&lt;/el-select&gt; 
+</code></pre><p>在浏览器中查看列表返回的数据:<br><img src="../images/el-select下拉不显示数据.png" alt="el-select下拉不显示数据"></p>
+<p>在浏览器中查看下拉框数据源的数据:<br><img src="../images/el-select下拉不显示数据1.png" alt="修改前下拉框数据源返回数据"></p>
+<p>发现select下拉的id和v-model里边的id类型不一致，修改后台下拉框数据源返回类型，下拉框显示数据成功。<br><img src="../images/el-select下拉不显示数据2.png" alt="修改后下拉框数据源返回数据"></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近在做一个项目,项目的后端是地址: &lt;a href=&quot;https://github.com/wangyuanjun008/wyj-springboot.github.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.co
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>解决SpringMVC接收不到axios发送post请求的数据问题</title>
@@ -1417,43 +1442,6 @@ render : function(p) {
     <summary type="html">
     
       &lt;h2 id=&quot;编程规约&quot;&gt;&lt;a href=&quot;#编程规约&quot; class=&quot;headerlink&quot; title=&quot;编程规约&quot;&gt;&lt;/a&gt;编程规约&lt;/h2&gt;&lt;pre&gt;&lt;code&gt;1. POJO 类中布尔类型的变量，都不要加 is，否则部分框架解析会引起序列化错误。假设定义一个 bool
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>spring 读取properties的两种方法</title>
-    <link href="http://yoursite.com/2017/02/21/spring-%E8%AF%BB%E5%8F%96properties%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E6%B3%95/"/>
-    <id>http://yoursite.com/2017/02/21/spring-读取properties的两种方法/</id>
-    <published>2017-02-21T13:47:12.000Z</published>
-    <updated>2017-02-21T13:47:51.500Z</updated>
-    
-    <content type="html"><![CDATA[<p>1.在配置文件中配置PropertyPlaceholderConfigurer</p>
-<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"><br>  <property name="locations" value="classpath:com/foo/jdbc.properties"><br></property></bean>
-
-<p>然后在需要的地方直接以下方式引用：</p>
-<property name="url" value="${jdbc.url}">
-
-<p>2.在配置文件中加入<br>beans的命名空间声明如下：</p>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx" xsi:schemalocation="http://www.springframework.org/schema/beans 
-            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
-            http://www.springframework.org/schema/context 
-            http://www.springframework.org/schema/context/spring-context-3.0.xsd 
-            http://www.springframework.org/schema/aop 
-            http://www.springframework.org/schema/aop/spring-aop-3.0.xsd 
-            http://www.springframework.org/schema/tx 
-            http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
-
-
-<p>用到了<br>xmlns:context=<a href="http://www.springframework.org/schema/context" target="_blank" rel="external">http://www.springframework.org/schema/context</a><br>配置如下：</p>
-<context:property-placeholder location="dbconf.properties"></context:property-placeholder></beans></property>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;1.在配置文件中配置PropertyPlaceholderConfigurer&lt;/p&gt;
-&lt;bean class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&gt;&lt;br&gt;  &lt;p
     
     </summary>
     

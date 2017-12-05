@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>解决element ui select下拉框不回显数据问题 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com前端地址是 https://github.com/wangyuanjun008/wyj-vue-security.git ,使用的前端语言是vue,使用webpack构建vue-cli全家桶在项目中用到 el-select 时遇到一个问题，就是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="解决element ui select下拉框不回显数据问题">
+<meta property="og:url" content="http://yoursite.com/2017/12/05/解决element-ui-select下拉框不回显数据问题/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com前端地址是 https://github.com/wangyuanjun008/wyj-vue-security.git ,使用的前端语言是vue,使用webpack构建vue-cli全家桶在项目中用到 el-select 时遇到一个问题，就是">
+<meta property="og:image" content="http://yoursite.com/2017/12/05/images/el-select下拉不显示数据.png">
+<meta property="og:image" content="http://yoursite.com/2017/12/05/images/el-select下拉不显示数据1.png">
+<meta property="og:image" content="http://yoursite.com/2017/12/05/images/el-select下拉不显示数据2.png">
+<meta property="og:updated_time" content="2017-12-05T14:46:42.248Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="解决element ui select下拉框不回显数据问题">
+<meta name="twitter:description" content="最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com前端地址是 https://github.com/wangyuanjun008/wyj-vue-security.git ,使用的前端语言是vue,使用webpack构建vue-cli全家桶在项目中用到 el-select 时遇到一个问题，就是">
+<meta name="twitter:image" content="http://yoursite.com/2017/12/05/images/el-select下拉不显示数据.png">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <section id="main"><article id="post-解决element-ui-select下拉框不回显数据问题" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      解决element ui select下拉框不回显数据问题
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/12/05/解决element-ui-select下拉框不回显数据问题/" class="article-date">
+  <time datetime="2017-12-05T14:06:34.000Z" itemprop="datePublished">2017-12-05</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中用到 el-select 时遇到一个问题，就是在编辑表单时，下拉框的不显示数据，前台代码如下:</p>
+<pre><code>&lt;el-select v-model=&quot;commonForm.status&quot; clearable placeholder=&quot;请选择&quot;&gt;
+    &lt;el-option v-for=&quot;item in items&quot; :key=&quot;item.id&quot; :label=&quot;item.text&quot; :value=&quot;item.id&quot; &gt;&lt;/el-option&gt;
+&lt;/el-select&gt; 
+</code></pre><p>在浏览器中查看列表返回的数据:<br><img src="../images/el-select下拉不显示数据.png" alt="el-select下拉不显示数据"></p>
+<p>在浏览器中查看下拉框数据源的数据:<br><img src="../images/el-select下拉不显示数据1.png" alt="修改前下拉框数据源返回数据"></p>
+<p>发现select下拉的id和v-model里边的id类型不一致，修改后台下拉框数据源返回类型，下拉框显示数据成功。<br><img src="../images/el-select下拉不显示数据2.png" alt="修改后下拉框数据源返回数据"></p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/12/04/解决SpringMVC接收不到axios发送post请求的数据问题/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">解决SpringMVC接收不到axios发送post请求的数据问题</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2017 John Doe 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a href="https://github.com/" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
