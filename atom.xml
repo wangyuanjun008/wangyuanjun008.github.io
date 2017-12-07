@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-12-07T05:15:03.262Z</updated>
+  <updated>2017-12-07T15:29:21.527Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用element ui select下拉框多选，编辑状态下回显数据</title>
+    <link href="http://yoursite.com/2017/12/07/%E4%BD%BF%E7%94%A8element-ui-select%E4%B8%8B%E6%8B%89%E6%A1%86%E5%A4%9A%E9%80%89%EF%BC%8C%E7%BC%96%E8%BE%91%E7%8A%B6%E6%80%81%E4%B8%8B%E5%9B%9E%E6%98%BE%E6%95%B0%E6%8D%AE/"/>
+    <id>http://yoursite.com/2017/12/07/使用element-ui-select下拉框多选，编辑状态下回显数据/</id>
+    <published>2017-12-07T14:55:20.000Z</published>
+    <updated>2017-12-07T15:29:21.527Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中使用的是 element ui 组件库，在使用select多选下拉框时，编辑页面不知道怎么为其赋值回显数据。<br>下拉框的代码如下:</p>
+<pre><code>&lt;el-form-item label=&quot;可选角色&quot;&gt;
+    &lt;el-select v-model=&quot;commonForm.roles&quot; multiple placeholder=&quot;请选择&quot;&gt;
+        &lt;el-option v-for=&quot;item in rolesItems&quot; :key=&quot;item.id&quot; :label=&quot;item.text&quot; :value=&quot;item.id&quot; &gt;&lt;/el-option&gt;
+    &lt;/el-select&gt; 
+&lt;/el-form-item&gt;
+</code></pre><p>猜想:<br>多选下拉框是多条数据，将数据放到数组里面，将数据赋值给多选下拉框，就会有效果。</p>
+<p>验证:<br>将多选数据以数组的形式从后台返回到前台，后台字段类型是List<br>返回结果如下:</p>
+<p><img src="../images/ElementUI多选下拉回显数据.png"></p>
+<p>查看页面多选回显数据成功</p>
+<p>参考地址: <a href="https://github.com/wangyuanjun008/wyj-vue-security/blob/master/src/view/user/user.vue" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security/blob/master/src/view/user/user.vue</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近在做一个项目,项目的后端是地址: &lt;a href=&quot;https://github.com/wangyuanjun008/wyj-springboot.github.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.co
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>webpack引入jquery以及插件的方法(如ztree)</title>
@@ -1339,81 +1368,6 @@ render : function(p) {
     <summary type="html">
     
       &lt;p&gt;在Extjs中有时候我们需要textfield的提示信息，但是我们发现textfield并没有这样的配置项。这时候我们就要另想方法：我们需要在鼠标悬停在textfield组件的时候进行信息的提示，我们就需要在textfield中来监听，&lt;br&gt;这里有两种进行textfiel
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Redis基础命令</title>
-    <link href="http://yoursite.com/2017/02/21/Redis%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4/"/>
-    <id>http://yoursite.com/2017/02/21/Redis基础命令/</id>
-    <published>2017-02-21T14:51:21.000Z</published>
-    <updated>2017-02-21T14:53:10.459Z</updated>
-    
-    <content type="html"><![CDATA[<p>笔者最初接触Redis是因为了解了一些nosql方面的知识，觉得nosql是一个很有意思的方面。像其中的mongodb，redis等等。当初也没有深入的去了解Redis，直到自己前段时间在写一个web项目的时候需要用到缓存来进行性能优化我才仔细的来学习Redis。下面我就来说说我自己在学习Redis过程中的一些心得。</p>
-<p>Redis是一个nosql数据库，它采用字典结构以键值对的形式将数据全部存储在内存中所以它读写的速度很快，因此很多项目用Redis做缓存用，我也是基于这个想法来学习Redis的。 Redis支持的数据类型分别是字符串(string)、散列(hash)、列表(list)、集合(set)、有序集合(sorted set)这五种。接下来我将仔细介绍下这几种数据结构的用法和对应的命令。</p>
-<h2 id="字符串类型-：字符串类型是Redis中-最-基本-的数-据类型，是其他四种数据类型的基础。它能存储任何形式的字符串-二进制数据、Json对象、图片等-，它的最大数据容量是512MB。"><a href="#字符串类型-：字符串类型是Redis中-最-基本-的数-据类型，是其他四种数据类型的基础。它能存储任何形式的字符串-二进制数据、Json对象、图片等-，它的最大数据容量是512MB。" class="headerlink" title="字符串类型 ：字符串类型是Redis中 最 基本 的数 据类型，是其他四种数据类型的基础。它能存储任何形式的字符串(二进制数据、Json对象、图片等)，它的最大数据容量是512MB。"></a>字符串类型 ：字符串类型是Redis中 最 基本 的数 据类型，是其他四种数据类型的基础。它能存储任何形式的字符串(二进制数据、Json对象、图片等)，它的最大数据容量是512MB。</h2><p>常用命令:</p>
-<p>set key value      //赋值</p>
-<p>get key                //取值</p>
-<p>keys *                 //查看所有的键</p>
-<p>exists key            //判断某个键是否存在</p>
-<p>del key               //删除一个键</p>
-<p>type key            //获取键的类型</p>
-<p>incr/decr key     //给键增加/减少一</p>
-<p>incrby/decrby key increment/decrement     //给键增加/减少一个整数</p>
-<p>incrbyfloat key increment        //增加浮点数</p>
-<p>strlen key                             //返回键的长度</p>
-<p>mset/mget                          //同时设置或者获取多个值</p>
-<h2 id="散列类型-：散列类型的键值是一种字典结构，存储了字段和字段值的映射。但是字段值只能是字符串，不支持其他数据类型-Redis的其他数据类型也都不支持嵌套，只能是字符串。-。"><a href="#散列类型-：散列类型的键值是一种字典结构，存储了字段和字段值的映射。但是字段值只能是字符串，不支持其他数据类型-Redis的其他数据类型也都不支持嵌套，只能是字符串。-。" class="headerlink" title="散列类型 ：散列类型的键值是一种字典结构，存储了字段和字段值的映射。但是字段值只能是字符串，不支持其他数据类型(Redis的其他数据类型也都不支持嵌套，只能是字符串。)。"></a>散列类型 ：散列类型的键值是一种字典结构，存储了字段和字段值的映射。但是字段值只能是字符串，不支持其他数据类型(Redis的其他数据类型也都不支持嵌套，只能是字符串。)。</h2><p>常用命令：</p>
-<p>hset   key  field value               //赋值。不区分插入和更新操作，当键不存在是会自动建立。</p>
-<p>hget   key  field                       //取值</p>
-<p>hgetall key                              //取出所有的值</p>
-<p>hexists key field                      //判断字段是否存在</p>
-<p>hsetnx key field value              //字段不存在时便赋值</p>
-<p>hincrby key field increment        //增加指定的数字，没有自增</p>
-<p>hdel key field                            //删除一个或者多个字段，返回被删除的个数                </p>
-<p>hkeys key                                 //只获取字段名</p>
-<p>hvals  key                                 //只获取字段值</p>
-<p>hlen   key                                 //只获取字段数量</p>
-<h2 id="列表类型-：列表是个有序的字符串，向两端添加或者删除元素。它是使用双向链表实现的。"><a href="#列表类型-：列表是个有序的字符串，向两端添加或者删除元素。它是使用双向链表实现的。" class="headerlink" title="列表类型 ：列表是个有序的字符串，向两端添加或者删除元素。它是使用双向链表实现的。"></a>列表类型 ：列表是个有序的字符串，向两端添加或者删除元素。它是使用双向链表实现的。</h2><p>常用命令:</p>
-<p>lpush/rpush  list value                         //向左/右增加元素</p>
-<p>lpop/rpop  list                                     //从左/右弹出元素</p>
-<p>llen list                                              //获列表的元素个数</p>
-<p>lrange list start stop                           //获得列表片段(左边索引为0，如果为负则从右边开始)   lrange  key -1 0 则为获取所有的元素</p>
-<p>lrem list  count value                          //删除列表中前count个值为value的元素</p>
-<p>rpoplpush oldlist newlist                     //将原列表的值放入新列表</p>
-<h2 id="集合类型-集合中的元素都是不同的，而且没有顺序。它可以求交集、并集、差集。"><a href="#集合类型-集合中的元素都是不同的，而且没有顺序。它可以求交集、并集、差集。" class="headerlink" title="集合类型 : 集合中的元素都是不同的，而且没有顺序。它可以求交集、并集、差集。"></a>集合类型 : 集合中的元素都是不同的，而且没有顺序。它可以求交集、并集、差集。</h2><p>常用命令:</p>
-<p>sadd set member                                  //增加一个元素给集合(没有则创建)</p>
-<p>srem set member                                 //删除一个或多个元素</p>
-<p>smembers set                                     //返回集合中所有的元素</p>
-<p>sismember set member                        //判断元素是否存在于集合中</p>
-<p>sdiff setA  setB                                    //求差集</p>
-<p>sinter setA  setB                                  //求交集</p>
-<p>sunion  setA setB                                 //求并集</p>
-<p>sdiffstore  destination setA setB             //将求到的差集结果保存在destination中</p>
-<p>srandmember  set  num                        //随机获取一个或多个元素(看后面加的参数)            </p>
-<p>spop set                                              //从集合中随机弹出一个元素</p>
-<h2 id="有序集合-和集合相比给每个元素都关联了个分数。我们除了可以进行集合的操作外，还可以获取分数最高或者最低的几个元素。"><a href="#有序集合-和集合相比给每个元素都关联了个分数。我们除了可以进行集合的操作外，还可以获取分数最高或者最低的几个元素。" class="headerlink" title="有序集合: 和集合相比给每个元素都关联了个分数。我们除了可以进行集合的操作外，还可以获取分数最高或者最低的几个元素。"></a>有序集合: 和集合相比给每个元素都关联了个分数。我们除了可以进行集合的操作外，还可以获取分数最高或者最低的几个元素。</h2><p>常用命令:</p>
-<p>zadd key score member                         //加入元素和对应分数，支持整数和双精度浮点，如果存在则修改。其中+inf和-inf代表正负无穷大</p>
-<p>zscore  key  member                             //获得元素的分数</p>
-<p>zrange/zrevrange  key start stop             //按分数从顺序/逆序排序</p>
-<p>zrangebyscore  key  min (max                //返回min和max之间的数左括号代表不包含</p>
-<p>zincrby key increment member              //给元素增加值</p>
-<p>zcount key min max                             //获取指定范围元素的个数</p>
-<p>zcard  key                                           //获取集合中元素的数量 </p>
-<p>zrem key member                               //删除元素</p>
-<p>zremrangebyrank  key start stop           //按排名范围删除元素</p>
-<p>zremrangebyscore  key min max           //删除分数范围值</p>
-<p>zrank key member                               //元素按分数大小排名</p>
-<p>zrevrank key member                          //从大到小排名</p>
-<p>结语:个人学习总结有遗漏错误的地方还希望大家留言斧正，多多交流一起学习。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;笔者最初接触Redis是因为了解了一些nosql方面的知识，觉得nosql是一个很有意思的方面。像其中的mongodb，redis等等。当初也没有深入的去了解Redis，直到自己前段时间在写一个web项目的时候需要用到缓存来进行性能优化我才仔细的来学习Redis。下面我就来
     
     </summary>
     

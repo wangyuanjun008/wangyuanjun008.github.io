@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>使用element ui select下拉框多选，编辑状态下回显数据 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com前端地址是 https://github.com/wangyuanjun008/wyj-vue-security.git ,使用的前端语言是vue,使用webpack构建vue-cli全家桶在项目中使用的是 element ui 组件库，在使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用element ui select下拉框多选，编辑状态下回显数据">
+<meta property="og:url" content="http://yoursite.com/2017/12/07/使用element-ui-select下拉框多选，编辑状态下回显数据/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com前端地址是 https://github.com/wangyuanjun008/wyj-vue-security.git ,使用的前端语言是vue,使用webpack构建vue-cli全家桶在项目中使用的是 element ui 组件库，在使用">
+<meta property="og:image" content="http://yoursite.com/2017/12/07/images/ElementUI多选下拉回显数据.png">
+<meta property="og:updated_time" content="2017-12-07T15:29:21.527Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用element ui select下拉框多选，编辑状态下回显数据">
+<meta name="twitter:description" content="最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com前端地址是 https://github.com/wangyuanjun008/wyj-vue-security.git ,使用的前端语言是vue,使用webpack构建vue-cli全家桶在项目中使用的是 element ui 组件库，在使用">
+<meta name="twitter:image" content="http://yoursite.com/2017/12/07/images/ElementUI多选下拉回显数据.png">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <section id="main"><article id="post-使用element-ui-select下拉框多选，编辑状态下回显数据" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用element ui select下拉框多选，编辑状态下回显数据
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/12/07/使用element-ui-select下拉框多选，编辑状态下回显数据/" class="article-date">
+  <time datetime="2017-12-07T14:55:20.000Z" itemprop="datePublished">2017-12-07</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中使用的是 element ui 组件库，在使用select多选下拉框时，编辑页面不知道怎么为其赋值回显数据。<br>下拉框的代码如下:</p>
+<pre><code>&lt;el-form-item label=&quot;可选角色&quot;&gt;
+    &lt;el-select v-model=&quot;commonForm.roles&quot; multiple placeholder=&quot;请选择&quot;&gt;
+        &lt;el-option v-for=&quot;item in rolesItems&quot; :key=&quot;item.id&quot; :label=&quot;item.text&quot; :value=&quot;item.id&quot; &gt;&lt;/el-option&gt;
+    &lt;/el-select&gt; 
+&lt;/el-form-item&gt;
+</code></pre><p>猜想:<br>多选下拉框是多条数据，将数据放到数组里面，将数据赋值给多选下拉框，就会有效果。</p>
+<p>验证:<br>将多选数据以数组的形式从后台返回到前台，后台字段类型是List<br>返回结果如下:</p>
+<p><img src="../images/ElementUI多选下拉回显数据.png"></p>
+<p>查看页面多选回显数据成功</p>
+<p>参考地址: <a href="https://github.com/wangyuanjun008/wyj-vue-security/blob/master/src/view/user/user.vue" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security/blob/master/src/view/user/user.vue</a></p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/12/06/webpack引入jquery以及插件的方法-如ztree/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">webpack引入jquery以及插件的方法(如ztree)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2017 John Doe 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a href="https://github.com/" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

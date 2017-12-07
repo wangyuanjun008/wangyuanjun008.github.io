@@ -28,6 +28,51 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-使用element-ui-select下拉框多选，编辑状态下回显数据" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/07/使用element-ui-select下拉框多选，编辑状态下回显数据/">使用element ui select下拉框多选，编辑状态下回显数据</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/12/07/使用element-ui-select下拉框多选，编辑状态下回显数据/" class="article-date">
+  <time datetime="2017-12-07T14:55:20.000Z" itemprop="datePublished">2017-12-07</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中使用的是 element ui 组件库，在使用select多选下拉框时，编辑页面不知道怎么为其赋值回显数据。<br>下拉框的代码如下:</p>
+<pre><code>&lt;el-form-item label=&quot;可选角色&quot;&gt;
+    &lt;el-select v-model=&quot;commonForm.roles&quot; multiple placeholder=&quot;请选择&quot;&gt;
+        &lt;el-option v-for=&quot;item in rolesItems&quot; :key=&quot;item.id&quot; :label=&quot;item.text&quot; :value=&quot;item.id&quot; &gt;&lt;/el-option&gt;
+    &lt;/el-select&gt; 
+&lt;/el-form-item&gt;
+</code></pre><p>猜想:<br>多选下拉框是多条数据，将数据放到数组里面，将数据赋值给多选下拉框，就会有效果。</p>
+<p>验证:<br>将多选数据以数组的形式从后台返回到前台，后台字段类型是List<br>返回结果如下:</p>
+<p><img src="../images/ElementUI多选下拉回显数据.png"></p>
+<p>查看页面多选回显数据成功</p>
+<p>参考地址: <a href="https://github.com/wangyuanjun008/wyj-vue-security/blob/master/src/view/user/user.vue" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security/blob/master/src/view/user/user.vue</a></p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-webpack引入jquery以及插件的方法-如ztree" class="article article-type-post" itemscope itemprop="blogPost">
   
   <div class="article-inner">
@@ -837,91 +882,6 @@ public List&lt;Menu&gt; renderTree() {
 }
 </code></pre><p>希望能对大家有所帮助!</p>
 
-      
-
-      
-        
-    </div>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-在java中调用存储过程" class="article article-type-post" itemscope itemprop="blogPost">
-  
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/14/在java中调用存储过程/">在java中调用存储过程</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      <a href="/2017/09/14/在java中调用存储过程/" class="article-date">
-  <time datetime="2017-09-14T01:57:48.000Z" itemprop="datePublished">2017-09-14</time>
-</a>
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近在做一个需要调用存储过程的功能，大多数的写法是:</p>
-<pre><code>Connection conn=null;
-    CallableStatement csmt=null;
-    try {
-        conn=JDBCUtils.getConnection();
-        conn.setAutoCommit(false);
-        csmt=conn.prepareCall(&quot;call prc_1(?,?,?)&quot;);
-        csmt.setInt(1,80);
-        csmt.setString(2,&quot;ioc&quot;);
-        csmt.setString(3,&quot;fhp&quot;);
-        csmt.execute();
-        conn.commit();
-        System.out.println(&quot;success insert data&quot;);
-    } catch (SQLException e) {
-        e.printStackTrace();
-}
-</code></pre><p>但是在运用的过程是没有效果的，后来找了另外的方法，使用了jpa注解，代码如下:</p>
-<ol>
-<li>存储过程需要依赖在实体上，在实体上加上@NamedStoredProcedureQueries注解，@NamedStoredProcedureQuery中name为java的方法名，procedureName为存储过程的名字，@StoredProcedureParameter中mode代表入参，name是参数名，type是参数类型</li>
-</ol>
-<pre><code>@Entity
-Table(name = &quot;d_cp_delivery&quot;)
-@NamedStoredProcedureQueries({ @NamedStoredProcedureQuery(name = &quot;closePurchaseorder&quot;, procedureName = &quot;SRMANLI.closePurchaseorder&quot;, parameters = { @StoredProcedureParameter(mode = ParameterMode.IN, name = &quot;i_deliveryid&quot;, type = Long.class) }) })    
-</code></pre><p>2.调用方法如下</p>
-<pre><code>//java代码
-EntityManager em;
-
-@Override
-@PersistenceContext(unitName = &quot;srment&quot;)
-public void setEntityManager(EntityManager em) {
-    super.setEntityManager(em);
-    this.em = em;
-}
-
-@Override
-public void closePurchaseorder(Long deliveryId) {
-    Query qry = em.createNativeQuery(&quot;{call srmanli.closePurchaseorder(?1)}&quot;);
-    qry.setParameter(1, deliveryId);
-    qry.executeUpdate();
-    em.clear();
-}
-
-//存储过程
-  procedure closePurchaseorder(i_deliveryid in number) is
-v_PurchaseorderDtlNum number; --
-v_reqtime             date := sysdate; --请求时间
-v_err_msg             clob; --异常
-
-begin
-
-end;
-</code></pre>
       
 
       
