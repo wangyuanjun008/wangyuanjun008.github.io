@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>webpack引入jquery以及插件的方法(如ztree) | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com前端地址是 https://github.com/wangyuanjun008/wyj-vue-security.git ,使用的前端语言是vue,使用webpack构建vue-cli全家桶在项目中需要用到树插件，但是我觉得element ui">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webpack引入jquery以及插件的方法(如ztree)">
+<meta property="og:url" content="http://yoursite.com/2017/12/06/webpack引入jquery以及插件的方法-如ztree/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com前端地址是 https://github.com/wangyuanjun008/wyj-vue-security.git ,使用的前端语言是vue,使用webpack构建vue-cli全家桶在项目中需要用到树插件，但是我觉得element ui">
+<meta property="og:image" content="http://yoursite.com/2017/12/06/images/webpack引入插件问题.png">
+<meta property="og:image" content="http://yoursite.com/2017/12/06/images/解决webpack引入插件问题.png">
+<meta property="og:image" content="http://yoursite.com/2017/12/06/images/webpack引入ztree插件.png">
+<meta property="og:updated_time" content="2017-12-07T05:15:03.262Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="webpack引入jquery以及插件的方法(如ztree)">
+<meta name="twitter:description" content="最近在做一个项目,项目的后端是地址: https://github.com/wangyuanjun008/wyj-springboot.github.com前端地址是 https://github.com/wangyuanjun008/wyj-vue-security.git ,使用的前端语言是vue,使用webpack构建vue-cli全家桶在项目中需要用到树插件，但是我觉得element ui">
+<meta name="twitter:image" content="http://yoursite.com/2017/12/06/images/webpack引入插件问题.png">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <section id="main"><article id="post-webpack引入jquery以及插件的方法-如ztree" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      webpack引入jquery以及插件的方法(如ztree)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/12/06/webpack引入jquery以及插件的方法-如ztree/" class="article-date">
+  <time datetime="2017-12-06T15:27:16.000Z" itemprop="datePublished">2017-12-06</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中需要用到树插件，但是我觉得element ui 自带的树组件不好用，最主要的问题就是后台返回到前台的数据用到递归，不太好做，所以想到了用ztree树插件来做。</p>
+<p>安装 ztree (会自动下载依赖的 jquery ，所以不用下 jquery )</p>
+<pre><code>npm install ztree --save-dev
+</code></pre><p>在需要的地方引入资源</p>
+<pre><code>import $ from &apos;jquery&apos;
+import &apos;ztree&apos;
+</code></pre><p>但是报错说ztree找不到jquery，报错如下:<br><img src="../images/webpack引入插件问题.png" alt="webpack引入ztree报错"></p>
+<p>配置jquery<br>由于 ztree 依赖于 jQuery，所以在代码中 import jQuery from ‘jquery’ 是不够的，这只是解决了自己代码对 jQuery 的依赖，在此处使用了webpack.ProvidePlugin</p>
+<p>解决方案：<br><img src="../images/解决webpack引入插件问题.png" alt="解决webpack引入插件问题"><br>在 webpack.base.conf.js 头部添加</p>
+<pre><code>var webpack = require(&apos;webpack&apos;)
+</code></pre><p>在 resolve 后边添加</p>
+<pre><code>plugins: [
+    new webpack.ProvidePlugin({
+          $: &quot;jquery&quot;,
+          jQuery: &quot;jquery&quot;,
+          &quot;window.jQuery&quot;: &quot;jquery&quot;
+    })
+] 
+</code></pre><p>引入ztree<br>在 main.js 中，加入如下代码</p>
+<pre><code>import &apos;ztree/css/zTreeStyle/zTreeStyle.css&apos;
+import &apos;ztree&apos;
+</code></pre><p>项目效果:<br><img src="../images/webpack引入ztree插件.png"></p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/12/05/解决element-ui-select下拉框不回显数据问题/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">解决element ui select下拉框不回显数据问题</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2017 John Doe 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a href="https://github.com/" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

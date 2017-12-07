@@ -28,6 +28,62 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-webpack引入jquery以及插件的方法-如ztree" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/06/webpack引入jquery以及插件的方法-如ztree/">webpack引入jquery以及插件的方法(如ztree)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/12/06/webpack引入jquery以及插件的方法-如ztree/" class="article-date">
+  <time datetime="2017-12-06T15:27:16.000Z" itemprop="datePublished">2017-12-06</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中需要用到树插件，但是我觉得element ui 自带的树组件不好用，最主要的问题就是后台返回到前台的数据用到递归，不太好做，所以想到了用ztree树插件来做。</p>
+<p>安装 ztree (会自动下载依赖的 jquery ，所以不用下 jquery )</p>
+<pre><code>npm install ztree --save-dev
+</code></pre><p>在需要的地方引入资源</p>
+<pre><code>import $ from &apos;jquery&apos;
+import &apos;ztree&apos;
+</code></pre><p>但是报错说ztree找不到jquery，报错如下:<br><img src="../images/webpack引入插件问题.png" alt="webpack引入ztree报错"></p>
+<p>配置jquery<br>由于 ztree 依赖于 jQuery，所以在代码中 import jQuery from ‘jquery’ 是不够的，这只是解决了自己代码对 jQuery 的依赖，在此处使用了webpack.ProvidePlugin</p>
+<p>解决方案：<br><img src="../images/解决webpack引入插件问题.png" alt="解决webpack引入插件问题"><br>在 webpack.base.conf.js 头部添加</p>
+<pre><code>var webpack = require(&apos;webpack&apos;)
+</code></pre><p>在 resolve 后边添加</p>
+<pre><code>plugins: [
+    new webpack.ProvidePlugin({
+          $: &quot;jquery&quot;,
+          jQuery: &quot;jquery&quot;,
+          &quot;window.jQuery&quot;: &quot;jquery&quot;
+    })
+] 
+</code></pre><p>引入ztree<br>在 main.js 中，加入如下代码</p>
+<pre><code>import &apos;ztree/css/zTreeStyle/zTreeStyle.css&apos;
+import &apos;ztree&apos;
+</code></pre><p>项目效果:<br><img src="../images/webpack引入ztree插件.png"></p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-解决element-ui-select下拉框不回显数据问题" class="article article-type-post" itemscope itemprop="blogPost">
   
   <div class="article-inner">
@@ -866,97 +922,6 @@ begin
 
 end;
 </code></pre>
-      
-
-      
-        
-    </div>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-使用select2下拉框ajax加载数据时-编辑赋值的方法" class="article article-type-post" itemscope itemprop="blogPost">
-  
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/14/使用select2下拉框ajax加载数据时-编辑赋值的方法/">使用select2下拉框ajax加载数据时,编辑赋值的方法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      <a href="/2017/09/14/使用select2下拉框ajax加载数据时-编辑赋值的方法/" class="article-date">
-  <time datetime="2017-09-13T16:19:44.000Z" itemprop="datePublished">2017-09-14</time>
-</a>
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近在做一个项目,项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.github.com</a><br>使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:</p>
-<pre><code>&lt;label class=&quot;col-sm-1 control-label&quot;&gt;使用状态:&lt;/label&gt;
-&lt;select id=&quot;sel_status&quot; name=&quot;status&quot; class=&quot;col-sm-3 form-control select2&quot;&gt;&lt;/select&gt;
-
-$(&quot;#sel_status&quot;).select2({
-    placeholder : &quot;--请选择--&quot;,
-    dropdownParent : $(&quot;#myModal&quot;),
-    allowClear : true,
-    width : 150,
-    ajax : {
-        url : &apos;${ctx}/dataDict/getData?groupCode=&apos;+&apos;yesOrNo&apos;,
-        dataType : &apos;json&apos;,
-        type : &apos;get&apos;,
-        data: function (params) {
-            return {
-                q: params.term, // search term 请求参数
-                page: params.page
-            };
-        },
-        processResults: function (data, params) {
-            params.page = params.page || 1;
-            return {
-                results: data,//itemList
-                pagination: {
-                    more: (params.page * 30) &lt; data.total_count
-                }
-            };
-        },
-        cache: true
-    }
- });
-</code></pre><p>通过查询api知道，在select4.0之后可以使用 $(“select”).val(“id”).trigger(“change”);为下拉框赋值<br>你会发现下拉框中的数据是点击之后才会加载数据的，使用如上方法 ‘id’是未知的，原因是在编辑的时候下拉框的数据还没有加载出来</p>
-<p>解决方法如下:</p>
-<pre><code>function getDataByGroupCode(groupCode){
-    var dataStore;
-    $.ajax({
-        dataType : &apos;json&apos;,
-        type : &apos;get&apos;,
-        url : model.dataURL+groupCode,
-        async : false,
-        success: function(data){
-            dataStore=data;
-        }
-     });
-    return dataStore;
-}    
-var dataStore = getDataByGroupCode(&apos;yesOrNo&apos;);
-
-$(&quot;#sel_status&quot;).select2({
-    placeholder : &quot;--请选择--&quot;,
-    dropdownParent : $(&quot;#myModal&quot;),
-    allowClear : true,
-    width : 150,
-    minimumResultsForSearch: -1,
-    data : dataStore
-});
-</code></pre><p>在页面加载的时候就加载下拉框数据，在编辑时就能为其赋值，问题解决!</p>
-
       
 
       
