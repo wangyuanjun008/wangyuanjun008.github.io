@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Hexo</title>
-  
+  <title>WangYuanJun&#39;s blog</title>
+  <subtitle>即使自己选择的一条路充满荆棘，无怨无悔，跪着也要走完！</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-12-07T15:29:21.527Z</updated>
+  <updated>2017-12-16T03:15:20.377Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
-    <name>John Doe</name>
+    <name>WangYuanJun</name>
     
   </author>
   
@@ -20,7 +20,7 @@
     <link href="http://yoursite.com/2017/12/07/%E4%BD%BF%E7%94%A8element-ui-select%E4%B8%8B%E6%8B%89%E6%A1%86%E5%A4%9A%E9%80%89%EF%BC%8C%E7%BC%96%E8%BE%91%E7%8A%B6%E6%80%81%E4%B8%8B%E5%9B%9E%E6%98%BE%E6%95%B0%E6%8D%AE/"/>
     <id>http://yoursite.com/2017/12/07/使用element-ui-select下拉框多选，编辑状态下回显数据/</id>
     <published>2017-12-07T14:55:20.000Z</published>
-    <updated>2017-12-07T15:29:21.527Z</updated>
+    <updated>2017-12-16T03:15:20.377Z</updated>
     
     <content type="html"><![CDATA[<p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中使用的是 element ui 组件库，在使用select多选下拉框时，编辑页面不知道怎么为其赋值回显数据。<br>下拉框的代码如下:</p>
 <pre><code>&lt;el-form-item label=&quot;可选角色&quot;&gt;
@@ -42,6 +42,8 @@
     </summary>
     
     
+      <category term="element ui" scheme="http://yoursite.com/tags/element-ui/"/>
+    
   </entry>
   
   <entry>
@@ -49,7 +51,7 @@
     <link href="http://yoursite.com/2017/12/06/webpack%E5%BC%95%E5%85%A5jquery%E4%BB%A5%E5%8F%8A%E6%8F%92%E4%BB%B6%E7%9A%84%E6%96%B9%E6%B3%95-%E5%A6%82ztree/"/>
     <id>http://yoursite.com/2017/12/06/webpack引入jquery以及插件的方法-如ztree/</id>
     <published>2017-12-06T15:27:16.000Z</published>
-    <updated>2017-12-07T05:15:03.262Z</updated>
+    <updated>2017-12-16T03:15:11.957Z</updated>
     
     <content type="html"><![CDATA[<p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中需要用到树插件，但是我觉得element ui 自带的树组件不好用，最主要的问题就是后台返回到前台的数据用到递归，不太好做，所以想到了用ztree树插件来做。</p>
 <p>安装 ztree (会自动下载依赖的 jquery ，所以不用下 jquery )</p>
@@ -82,6 +84,8 @@ import &apos;ztree&apos;
     </summary>
     
     
+      <category term="webpack" scheme="http://yoursite.com/tags/webpack/"/>
+    
   </entry>
   
   <entry>
@@ -89,7 +93,7 @@ import &apos;ztree&apos;
     <link href="http://yoursite.com/2017/12/05/%E8%A7%A3%E5%86%B3element-ui-select%E4%B8%8B%E6%8B%89%E6%A1%86%E4%B8%8D%E5%9B%9E%E6%98%BE%E6%95%B0%E6%8D%AE%E9%97%AE%E9%A2%98/"/>
     <id>http://yoursite.com/2017/12/05/解决element-ui-select下拉框不回显数据问题/</id>
     <published>2017-12-05T14:06:34.000Z</published>
-    <updated>2017-12-05T14:46:42.248Z</updated>
+    <updated>2017-12-16T03:15:02.107Z</updated>
     
     <content type="html"><![CDATA[<p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中用到 el-select 时遇到一个问题，就是在编辑表单时，下拉框的不显示数据，前台代码如下:</p>
 <pre><code>&lt;el-select v-model=&quot;commonForm.status&quot; clearable placeholder=&quot;请选择&quot;&gt;
@@ -107,6 +111,8 @@ import &apos;ztree&apos;
     </summary>
     
     
+      <category term="element ui" scheme="http://yoursite.com/tags/element-ui/"/>
+    
   </entry>
   
   <entry>
@@ -114,7 +120,7 @@ import &apos;ztree&apos;
     <link href="http://yoursite.com/2017/12/04/%E8%A7%A3%E5%86%B3SpringMVC%E6%8E%A5%E6%94%B6%E4%B8%8D%E5%88%B0axios%E5%8F%91%E9%80%81post%E8%AF%B7%E6%B1%82%E7%9A%84%E6%95%B0%E6%8D%AE%E9%97%AE%E9%A2%98/"/>
     <id>http://yoursite.com/2017/12/04/解决SpringMVC接收不到axios发送post请求的数据问题/</id>
     <published>2017-12-04T13:10:03.000Z</published>
-    <updated>2017-12-04T15:07:02.127Z</updated>
+    <updated>2017-12-16T03:14:20.246Z</updated>
     
     <content type="html"><![CDATA[<p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中需要用到axios与后端接口交互的时候，使用POST请求时，后台接收不到前台传的数据<br>js代码如下:</p>
 <pre><code>export const addDataGroup = params =&gt; { return axios.post(`/remote/dataGroup/add`, params ); };
@@ -137,6 +143,8 @@ export const addDataGroup = params =&gt; { return axios.post(`/remote/dataGroup/
     </summary>
     
     
+      <category term="axios" scheme="http://yoursite.com/tags/axios/"/>
+    
   </entry>
   
   <entry>
@@ -144,7 +152,7 @@ export const addDataGroup = params =&gt; { return axios.post(`/remote/dataGroup/
     <link href="http://yoursite.com/2017/12/04/%E5%9C%A8vue%E4%B8%AD%E4%BD%BF%E7%94%A8axios%E8%B7%A8%E5%9F%9F%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%EF%BC%8C%E7%94%A8proxyTable%E8%A7%A3%E5%86%B3%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98/"/>
     <id>http://yoursite.com/2017/12/04/在vue中使用axios跨域访问数据，用proxyTable解决跨域问题/</id>
     <published>2017-12-04T13:04:58.000Z</published>
-    <updated>2017-12-04T15:06:52.386Z</updated>
+    <updated>2017-12-16T03:14:36.276Z</updated>
     
     <content type="html"><![CDATA[<p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中需要用到axios与后端接口交互的时候，遇到了跨域的问题，浏览器报错如下:</p>
 <p><img src="../images/axios跨域报错.png" alt="axios跨域报错"></p>
@@ -164,6 +172,8 @@ export const addDataGroup = params =&gt; { return axios.post(`/remote/dataGroup/
     </summary>
     
     
+      <category term="axios" scheme="http://yoursite.com/tags/axios/"/>
+    
   </entry>
   
   <entry>
@@ -171,7 +181,7 @@ export const addDataGroup = params =&gt; { return axios.post(`/remote/dataGroup/
     <link href="http://yoursite.com/2017/11/28/%E4%BD%BF%E7%94%A8webpack%E6%9E%84%E5%BB%BAvue-cli%E9%A1%B9%E7%9B%AE-%E5%86%99scss%E8%84%9A%E6%9C%AC%E8%AF%AD%E8%A8%80%E6%8A%A5%E9%94%99/"/>
     <id>http://yoursite.com/2017/11/28/使用webpack构建vue-cli项目-写scss脚本语言报错/</id>
     <published>2017-11-28T06:44:20.000Z</published>
-    <updated>2017-12-04T15:07:04.621Z</updated>
+    <updated>2017-12-16T03:14:49.527Z</updated>
     
     <content type="html"><![CDATA[<p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,但是我在使用webpack构建vue项目的时候，使用scss脚本语言是报错,错误如下:</p>
 <pre><code>error  in ./src/components/home.vue
@@ -201,6 +211,8 @@ npm install --save-dev sass-loader
     </summary>
     
     
+      <category term="webpack" scheme="http://yoursite.com/tags/webpack/"/>
+    
   </entry>
   
   <entry>
@@ -208,7 +220,7 @@ npm install --save-dev sass-loader
     <link href="http://yoursite.com/2017/11/23/Springboot-RedisTemplate-%E6%8A%A5No-qualifying-bean-of-type-%E4%B8%8D%E8%83%BD%E6%8C%89%E7%B1%BB%E5%9E%8B%E8%A3%85%E9%85%8D%E6%B3%A8%E5%85%A5/"/>
     <id>http://yoursite.com/2017/11/23/Springboot-RedisTemplate-报No-qualifying-bean-of-type-不能按类型装配注入/</id>
     <published>2017-11-23T09:40:09.000Z</published>
-    <updated>2017-11-23T09:56:08.941Z</updated>
+    <updated>2017-12-16T03:13:44.136Z</updated>
     
     <content type="html"><![CDATA[<p>最近在做一个项目,项目地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>在项目中与redis集成，使用的依赖是:</p>
 <pre><code>&lt;dependency&gt;
@@ -301,6 +313,8 @@ private RedisTemplate&lt;String, DataGroup&gt; redisTemplate;
     </summary>
     
     
+      <category term="SpringBoot" scheme="http://yoursite.com/tags/SpringBoot/"/>
+    
   </entry>
   
   <entry>
@@ -308,7 +322,7 @@ private RedisTemplate&lt;String, DataGroup&gt; redisTemplate;
     <link href="http://yoursite.com/2017/09/28/SpringMVC%E4%B8%AD%E4%BD%BF%E7%94%A8aop%E6%B3%A8%E8%A7%A3%E6%97%A0%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98/"/>
     <id>http://yoursite.com/2017/09/28/SpringMVC中使用aop注解无效的问题/</id>
     <published>2017-09-28T06:47:46.000Z</published>
-    <updated>2017-09-28T07:33:22.457Z</updated>
+    <updated>2017-12-16T03:12:22.271Z</updated>
     
     <content type="html"><![CDATA[<p>最近在做一个项目,项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.git</a><br>写日志注解完，进行测试时，发现日志注解没有生效，代码如下:</p>
 <p>定义注解:</p>
@@ -483,6 +497,8 @@ public class UserController {
     </summary>
     
     
+      <category term="SpringMVC" scheme="http://yoursite.com/tags/SpringMVC/"/>
+    
   </entry>
   
   <entry>
@@ -490,7 +506,7 @@ public class UserController {
     <link href="http://yoursite.com/2017/09/21/%E4%BD%BF%E7%94%A8Spring%E9%85%8D%E7%BD%AEshiro%E6%97%B6-%E8%87%AA%E5%AE%9A%E4%B9%89Realm%E4%B8%AD%E5%B1%9E%E6%80%A7%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8%E6%B3%A8%E8%A7%A3%E6%B3%A8%E5%85%A5%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/"/>
     <id>http://yoursite.com/2017/09/21/使用Spring配置shiro时-自定义Realm中属性无法使用注解注入解决办法/</id>
     <published>2017-09-21T15:30:17.000Z</published>
-    <updated>2017-09-28T07:34:19.699Z</updated>
+    <updated>2017-12-16T03:12:43.344Z</updated>
     
     <content type="html"><![CDATA[<p>项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.github.com</a><br>最近在使用shiro框架与系统集成的时候，启动报错如下:</p>
 <pre><code>org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;shiroFilter&apos; defined in class path resource [spring-context-shiro.xml]: Cannot resolve reference to bean &apos;securityManager&apos; while setting bean property &apos;securityManager&apos;; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;securityManager&apos; defined in class path resource [spring-context-shiro.xml]: Cannot resolve reference to bean &apos;userRealm&apos; while setting bean property &apos;realm&apos;; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;userRealm&apos;: Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private com.wyj.service.system.UserService com.wyj.shiro.realm.UserRealm.userService; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [com.wyj.service.system.UserService] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
@@ -605,6 +621,8 @@ Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No q
     </summary>
     
     
+      <category term="shiro" scheme="http://yoursite.com/tags/shiro/"/>
+    
   </entry>
   
   <entry>
@@ -612,7 +630,7 @@ Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No q
     <link href="http://yoursite.com/2017/09/18/%E6%A0%91%E6%8F%92%E4%BB%B6ztree%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE%E4%B8%8E%E4%B8%80%E6%AC%A1%E6%80%A7%E5%8A%A0%E8%BD%BD%E5%85%A8%E9%83%A8%E6%95%B0%E6%8D%AE%E7%9A%84%E5%86%99%E6%B3%95/"/>
     <id>http://yoursite.com/2017/09/18/树插件ztree异步加载数据与一次性加载全部数据的写法/</id>
     <published>2017-09-18T13:12:47.000Z</published>
-    <updated>2017-09-28T07:40:33.822Z</updated>
+    <updated>2017-12-16T03:13:01.579Z</updated>
     
     <content type="html"><![CDATA[<p>最近在做一个项目,项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.github.com</a><br>用到了ztree树，给大家分享异步加载数据与一次性加载数据的写法</p>
 <p>异步加载数据是为了防止大数据量而造成树卡死的情况,代码如下:<br>前台js:</p>
@@ -718,6 +736,8 @@ public List&lt;Menu&gt; renderTree() {
     </summary>
     
     
+      <category term="ztree" scheme="http://yoursite.com/tags/ztree/"/>
+    
   </entry>
   
   <entry>
@@ -725,7 +745,7 @@ public List&lt;Menu&gt; renderTree() {
     <link href="http://yoursite.com/2017/09/14/%E5%9C%A8java%E4%B8%AD%E8%B0%83%E7%94%A8%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/"/>
     <id>http://yoursite.com/2017/09/14/在java中调用存储过程/</id>
     <published>2017-09-14T01:57:48.000Z</published>
-    <updated>2017-09-14T02:35:10.203Z</updated>
+    <updated>2017-12-16T03:12:07.354Z</updated>
     
     <content type="html"><![CDATA[<p>最近在做一个需要调用存储过程的功能，大多数的写法是:</p>
 <pre><code>Connection conn=null;
@@ -791,6 +811,8 @@ end;
     </summary>
     
     
+      <category term="oracle" scheme="http://yoursite.com/tags/oracle/"/>
+    
   </entry>
   
   <entry>
@@ -798,7 +820,7 @@ end;
     <link href="http://yoursite.com/2017/09/14/%E4%BD%BF%E7%94%A8select2%E4%B8%8B%E6%8B%89%E6%A1%86ajax%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE%E6%97%B6-%E7%BC%96%E8%BE%91%E8%B5%8B%E5%80%BC%E7%9A%84%E6%96%B9%E6%B3%95/"/>
     <id>http://yoursite.com/2017/09/14/使用select2下拉框ajax加载数据时-编辑赋值的方法/</id>
     <published>2017-09-13T16:19:44.000Z</published>
-    <updated>2017-09-28T07:40:17.426Z</updated>
+    <updated>2017-12-16T03:12:52.566Z</updated>
     
     <content type="html"><![CDATA[<p>最近在做一个项目,项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.github.com</a><br>使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:</p>
 <pre><code>&lt;label class=&quot;col-sm-1 control-label&quot;&gt;使用状态:&lt;/label&gt;
@@ -866,6 +888,8 @@ $(&quot;#sel_status&quot;).select2({
     </summary>
     
     
+      <category term="select2" scheme="http://yoursite.com/tags/select2/"/>
+    
   </entry>
   
   <entry>
@@ -873,7 +897,7 @@ $(&quot;#sel_status&quot;).select2({
     <link href="http://yoursite.com/2017/08/17/mybatis%E4%BD%BF%E7%94%A8PageHelper%E6%8F%92%E4%BB%B6%E6%8A%A5%E9%94%99Error-creating-bean-with-name-sqlSessionFactory-defined-in-class-path-resource-spring-mybatis-xml/"/>
     <id>http://yoursite.com/2017/08/17/mybatis使用PageHelper插件报错Error-creating-bean-with-name-sqlSessionFactory-defined-in-class-path-resource-spring-mybatis-xml/</id>
     <published>2017-08-17T13:23:57.000Z</published>
-    <updated>2017-09-28T07:40:42.673Z</updated>
+    <updated>2017-12-16T03:13:21.751Z</updated>
     
     <content type="html"><![CDATA[<p>最近在做一个项目,项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.github.com</a><br>在项目中使用mybatis的分页插件:PageHelper，整合spring后在启动后报错，错误如下:</p>
 <pre><code>2017-08-17 21:20:16.618 [ContainerBackgroundProcessor[StandardEngine[Catalina]]] ERROR org.springframework.web.context.ContextLoader -
@@ -1034,6 +1058,8 @@ Caused by: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot
     </summary>
     
     
+      <category term="mybatis" scheme="http://yoursite.com/tags/mybatis/"/>
+    
   </entry>
   
   <entry>
@@ -1041,7 +1067,7 @@ Caused by: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot
     <link href="http://yoursite.com/2017/06/29/%E8%AF%95%E7%94%A8hexo-%E6%8D%A2%E7%94%B5%E8%84%91%E8%B7%9F%E6%96%B0%E5%8D%9A%E5%AE%A2/"/>
     <id>http://yoursite.com/2017/06/29/试用hexo-换电脑跟新博客/</id>
     <published>2017-06-29T15:33:55.000Z</published>
-    <updated>2017-06-29T15:39:19.391Z</updated>
+    <updated>2017-12-16T03:11:58.074Z</updated>
     
     <content type="html"><![CDATA[<p>作者：skycrown<br>链接：<a href="https://www.zhihu.com/question/21193762/answer/103097754" target="_blank" rel="external">https://www.zhihu.com/question/21193762/answer/103097754</a><br>来源：知乎<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
 <p>1、从官网Git下载git，在新电脑上安装，因为https速度慢，而且每次都要输入口令，常用的是使用ssh。使用下面方法创建：<br>（1）打开git bash，在用户主目录下运行：ssh-keygen -t rsa -C “youremail@example.com” 把其中的邮件地址换成自己的邮件地址，然后一路回车<br>（2）最后完成后，会在用户主目录下生成.ssh目录，里面有id_rsa和id_rsa.pub两个文件，这两个就是SSH key密钥对，id_rsa是私钥，千万不能泄露出去，id_rsa.pub是公钥，可以放心地告诉任何人。<br>（3）登陆GitHub，打开「Settings」-&gt;「SSH and GPG keys」，然后点击「new SSH  key」，填上任意Title，在Key文本框里粘贴公钥id_rsa.pub文件的内容（千万不要粘贴成私钥了！），最后点击「Add SSH Key」，你就应该看到已经添加的Key。注意：不要在git版本库中运行ssh，然后又将它提交，这样就把密码泄露出去了。<br>2、下载Node.js，并安装<br>3、打开git bash客户端，输入 npm install hexo-cli -g，开始安装hexo<br>4、下面就将原来的文件拷贝到新电脑中，但是要注意哪些文件是必须的，哪些文件是可以删除的。<br>（1）讨论下哪些文件是必须拷贝的：首先是之前自己修改的文件，像站点配置_config.yml，theme文件夹里面的主题，以及source里面自己写的博客文件，这些肯定要拷贝的。除此之外，还有三个文件需要有，就是scaffolds文件夹（文章的模板）、package.json（说明使用哪些包）和.gitignore（限定在提交的时候哪些文件可以忽略）。其实，这三个文件不是我们修改的，所以即使丢失了，也没有关系，我们可以建立一个新的文件夹，然后在里面执行hexo init，就会生成这三个文件，我们只需要将它们拷贝过来使用即可。总结：_config.yml，theme/，source/，scaffolds/，package.json，.gitignore，是需要拷贝的。<br>（2）再讨论下哪些文件是不必拷贝的，或者说可以删除的：首先是.git文件，无论是在站点根目录下，还是主题目录下的.git文件，都可以删掉。然后是文件夹node_modules（在用npm install会重新生成），public（这个在用hexo g时会重新生成），.deploy_git文件夹（在使用hexo d时也会重新生成），db.json文件。其实上面这些文件也就是是.gitignore文件里面记载的可以忽略的内容。总结：.git/，node_modules/，public/，.deploy_git/，db.json文件需要删除。<br>5、在git bash中切换目录到新拷贝的文件夹里，使用 npm install 命令，进行模块安装。很明显我们这里没用hexo init初始化，因为有的文件我们已经拷贝生成过来了，所以不必用hexo init去整体初始化，如果不慎在此时用了hexo init，则站点的配置文件_config.yml里面内容会被清空使用默认值，所以这一步一定要慎重，不要用hexo init。<br>6、安装其他的一些必要组件，如果在node_modules里面有的，就不要重复安装了：<br>（1）为了使用hexo d来部署到git上，需要安装npm install hexo-deployer-git –save<br>（2）为了建立RSS订阅，需要安装npm install hexo-generator-feed –save<br>（3）为了建立站点地图，需要安装npm install hexo-generator-sitemap –save插件安装后，有的需要对配置文件_config.yml进行配置，具体怎么配置，可以参考上面插件在github主页上的具体说明7、使用hexo g，然后使用hexo d进行部署，如果都没有出错，就转移成功了！</p>
@@ -1053,6 +1079,8 @@ Caused by: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot
     
     </summary>
     
+    
+      <category term="hexo" scheme="http://yoursite.com/tags/hexo/"/>
     
   </entry>
   
@@ -1088,7 +1116,7 @@ Caused by: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot
     <link href="http://yoursite.com/2017/05/17/%E4%BF%AE%E6%94%B9Weblogic-jdk%E7%89%88%E6%9C%AC/"/>
     <id>http://yoursite.com/2017/05/17/修改Weblogic-jdk版本/</id>
     <published>2017-05-17T08:10:45.000Z</published>
-    <updated>2017-05-17T08:26:28.558Z</updated>
+    <updated>2017-12-16T03:11:50.884Z</updated>
     
     <content type="html"><![CDATA[<p>1、E:\develop-tools\toolsInstall\weblogic是我的weblogic安装目录<br>2、E:\develop-tools\toolsInstall\weblogic\user_projects\domains\base_domain是我的域创建目录</p>
 <p>找到E:\develop-tools\toolsInstall\weblogic\user_projects\domains\base_domain\bin<br>setDomainEnv.cmd,修改红框标注的</p>
@@ -1101,6 +1129,8 @@ Caused by: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot
     
     </summary>
     
+    
+      <category term="weblogic" scheme="http://yoursite.com/tags/weblogic/"/>
     
   </entry>
   
@@ -1253,7 +1283,7 @@ Caused by: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot
     <link href="http://yoursite.com/2017/04/28/%E8%B7%A8Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%9E%E7%8E%B0%E8%A1%A8%E7%BA%A7%E5%88%AB%E7%9A%84%E5%AE%9E%E6%97%B6%E5%90%8C%E6%AD%A5/"/>
     <id>http://yoursite.com/2017/04/28/跨Oracle数据库实现表级别的实时同步/</id>
     <published>2017-04-28T05:49:50.000Z</published>
-    <updated>2017-04-28T05:51:38.141Z</updated>
+    <updated>2017-12-16T03:11:35.724Z</updated>
     
     <content type="html"><![CDATA[<p>一. 问题描述</p>
 <p>有两个Oracle数据库，分别布置在不同的服务器上，系统均为windows2003；</p>
@@ -1307,6 +1337,8 @@ Caused by: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot
     </summary>
     
     
+      <category term="oracle" scheme="http://yoursite.com/tags/oracle/"/>
+    
   </entry>
   
   <entry>
@@ -1314,7 +1346,7 @@ Caused by: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot
     <link href="http://yoursite.com/2017/03/30/%E8%A7%A3%E5%86%B3%E2%80%9CDynamic-Web-Module-3-0-requires-Java-1-6-or-newer-%E2%80%9D%E9%94%99%E8%AF%AF/"/>
     <id>http://yoursite.com/2017/03/30/解决“Dynamic-Web-Module-3-0-requires-Java-1-6-or-newer-”错误/</id>
     <published>2017-03-30T13:23:16.000Z</published>
-    <updated>2017-03-30T13:25:04.690Z</updated>
+    <updated>2017-12-16T03:11:27.766Z</updated>
     
     <content type="html"><![CDATA[<p>eclipse maven<br>在项目的pom.xml的<build></build>标签中加入：<br>        <plugins><br>            <plugin><br>                <groupid>org.apache.maven.plugins</groupid><br>                <artifactid>maven-compiler-plugin</artifactid><br>                <version>2.3.2</version><br>                <configuration><br>                    <source>1.6<br>                    <target>1.6</target><br>                </configuration><br>            </plugin><br>        </plugins>  </p>
 <p>保存，项目构建完成后在项目文件夹上点右键，选择Maven-&gt;Update Project Configuration，问题解决。 </p>
@@ -1327,6 +1359,8 @@ Caused by: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot
     </summary>
     
     
+      <category term="maven" scheme="http://yoursite.com/tags/maven/"/>
+    
   </entry>
   
   <entry>
@@ -1334,7 +1368,7 @@ Caused by: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot
     <link href="http://yoursite.com/2017/02/22/Extjs%E4%B8%ADtextfield%E7%9A%84%E6%82%AC%E6%B5%AE%E6%8F%90%E7%A4%BA/"/>
     <id>http://yoursite.com/2017/02/22/Extjs中textfield的悬浮提示/</id>
     <published>2017-02-22T05:56:35.000Z</published>
-    <updated>2017-02-22T06:05:33.881Z</updated>
+    <updated>2017-12-16T03:10:59.304Z</updated>
     
     <content type="html"><![CDATA[<p>在Extjs中有时候我们需要textfield的提示信息，但是我们发现textfield并没有这样的配置项。这时候我们就要另想方法：我们需要在鼠标悬停在textfield组件的时候进行信息的提示，我们就需要在textfield中来监听，<br>这里有两种进行textfield悬停提示的方法：</p>
 <ol>
@@ -1371,6 +1405,8 @@ render : function(p) {
     
     </summary>
     
+    
+      <category term="extjs" scheme="http://yoursite.com/tags/extjs/"/>
     
   </entry>
   
