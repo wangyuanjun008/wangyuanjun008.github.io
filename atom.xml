@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-12-18T13:59:27.297Z</updated>
+  <updated>2017-12-18T14:05:36.119Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,10 +20,10 @@
     <link href="http://yoursite.com/2017/12/18/github-hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E4%B9%8Bhexo%E6%8F%90%E4%BA%A4%E7%99%BE%E5%BA%A6%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/"/>
     <id>http://yoursite.com/2017/12/18/github-hexo搭建博客之hexo提交百度搜索引擎/</id>
     <published>2017-12-18T09:13:23.000Z</published>
-    <updated>2017-12-18T13:59:27.297Z</updated>
+    <updated>2017-12-18T14:05:36.119Z</updated>
     
     <content type="html"><![CDATA[<p>前几天在整理自己的博客想添加一个评论的功能，希望我写的博客能被广大人员所知，突然发现自己写的博客在百度上搜索不到，那我添加评论功能就没有意义，百度一下才知道github禁止了百度爬虫，晕死。折腾了好久才解决，接下来我向大家介绍我的解决方法。</p>
-<p>#域名<br>1.注册域名：我是在dnspod中注册域名的，下面我以dnspod为例；<br>2.绑定域名<br>  绑定域名分2种情况：CNAME和A记录。<br>  A记录：A记录填写IP，由于不带www方式只能采用A记录，所以必须先才cmd的ping一下你的用户名.github.io的IP，然后到你的域名DNS设置页，将A记录指向你ping出来的IP<br>  CNAME：将CNAME指向你的用户名.github.io，这样可以保证无论是否添加www都可以访问<br>  <img src="github-hexo搭建博客之hexo提交百度搜索引擎/绑定域名.png" alt="绑定域名"><br>3.在source文件夹中新建一个CNAME文件（无后缀名），然后用文本编辑器打开，在首行添加你的网站域名，如<a href="http://xxxx.com，注意前面没有http://，也没有www，然后使用hexo" target="_blank" rel="external">http://xxxx.com，注意前面没有http://，也没有www，然后使用hexo</a> g &amp;&amp; hexo d上传部署。在你绑定了新域名之后，原来的你的用户名.github.io并没有失效，而是会自动跳转到你的新域名。</p>
+<p>#域名<br>1.注册域名：我是在dnspod中注册域名的，下面我以dnspod为例；<br>2.绑定域名<br>  绑定域名分2种情况：CNAME和A记录。<br>  A记录：A记录填写IP，由于不带www方式只能采用A记录，所以必须先才cmd的ping一下你的用户名.github.io的IP，然后到你的域名DNS设置页，将A记录指向你ping出来的IP<br>  CNAME：将CNAME指向你的用户名.github.io，这样可以保证无论是否添加www都可以访问<br>  <img src="/2017/12/18/github-hexo搭建博客之hexo提交百度搜索引擎/绑定域名.png" alt="绑定域名"><br>3.在source文件夹中新建一个CNAME文件（无后缀名），然后用文本编辑器打开，在首行添加你的网站域名，如<a href="http://xxxx.com，注意前面没有http://，也没有www，然后使用hexo" target="_blank" rel="external">http://xxxx.com，注意前面没有http://，也没有www，然后使用hexo</a> g &amp;&amp; hexo d上传部署。在你绑定了新域名之后，原来的你的用户名.github.io并没有失效，而是会自动跳转到你的新域名。</p>
 <p>#验证网站<br>1.百度搜索引擎入口：<a href="http://ziyuan.baidu.com/linksubmit/url" target="_blank" rel="external">百度搜索引擎入口</a><br>2.先添加域名，然后验证网站，这里统一都使用文件验证，就是下载对应的html文件，放到域名根目录下，也就收博客根目录下的public/下面 。<br>然后部署到服务器,输入地址：<a href="http://chaoo.oschina.io/baidu_verify_wjJ25Q3cv2.html能访问到就可以点验证按钮(按照百度的引导步骤就好)。" target="_blank" rel="external">http://chaoo.oschina.io/baidu_verify_wjJ25Q3cv2.html能访问到就可以点验证按钮(按照百度的引导步骤就好)。</a><br>3.网页抓取:(1.主动推送 2.自动推送 3.sitemap 4.手动提交 )<br>我选择的是自动推送<br>    自动推送:<br>    自动推送很简单，就是在你代码里面嵌入自动推送JS代码，在页面被访问时，页面URL将立即被推送给百度，可将代码添加到\themes\landscape\layout_partial\after_footer.ejs中的最下面就行。<br>    代码如下：</p>
 <pre><code>&lt;script&gt;
 (function(){
@@ -39,7 +39,7 @@
     s.parentNode.insertBefore(bp, s);
 })();
 &lt;/script&gt;
-</code></pre><p>参考: <a href="https://www.cnblogs.com/tengj/p/5357879.html" target="_blank" rel="external">hexo提交搜索引擎（百度+谷歌</a></p>
+</code></pre><p>参考: <a href="https://www.cnblogs.com/tengj/p/5357879.html" target="_blank" rel="external">hexo提交搜索引擎（百度+谷歌)</a></p>
 ]]></content>
     
     <summary type="html">
@@ -57,14 +57,16 @@
     <link href="http://yoursite.com/2017/12/18/github-hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E4%B9%8B%E7%95%85%E8%A8%80%E5%AE%9E%E7%8E%B0%E5%8D%9A%E5%AE%A2%E7%9A%84%E8%AF%84%E8%AE%BA/"/>
     <id>http://yoursite.com/2017/12/18/github-hexo搭建博客之畅言实现博客的评论/</id>
     <published>2017-12-18T07:16:28.000Z</published>
-    <updated>2017-12-18T13:58:58.061Z</updated>
+    <updated>2017-12-18T14:05:41.895Z</updated>
     
     <content type="html"><![CDATA[<p>前几天在整理自己的博客想添加一个评论的功能，希望我写的博客能被广大人员所知，解决了域名添加百度搜索引擎之后，我决定用畅言作为我的评论插件。</p>
-<p>##注册畅言<br>    进入畅言官网 , 点击右上角 “免费注册”，并填写注册信息</p>
-<p>##绑定域名<br>    详情见</p>
-<p>##登录并进入畅言后台<br>    注册完后，登录进入畅言官网，获取你的畅言 app id 和 app key。<br><img src="github-hexo搭建博客之畅言实现博客的评论/畅言.png" alt="畅言"></p>
-<p>##使用畅言系统<br>    在主题的目录下_config.yml，添加上changyan_appid和changyan_conf的值。</p>
-<pre><code>#Cmments
+<h2 id="注册畅言"><a href="#注册畅言" class="headerlink" title="注册畅言"></a>注册畅言</h2><pre><code>进入畅言官网 , 点击右上角 “免费注册”，并填写注册信息
+</code></pre><h2 id="绑定域名"><a href="#绑定域名" class="headerlink" title="绑定域名"></a>绑定域名</h2><pre><code>详情见 [github-hexo搭建博客之hexo提交百度搜索引擎](http://wangyuanjun.cn/2017/12/18/github-hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E4%B9%8Bhexo%E6%8F%90%E4%BA%A4%E7%99%BE%E5%BA%A6%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/)
+</code></pre><h2 id="登录并进入畅言后台"><a href="#登录并进入畅言后台" class="headerlink" title="登录并进入畅言后台"></a>登录并进入畅言后台</h2><pre><code>注册完后，登录进入畅言官网，获取你的畅言 app id 和 app key。
+</code></pre><p><img src="/2017/12/18/github-hexo搭建博客之畅言实现博客的评论/畅言.png" alt="畅言"></p>
+<h2 id="使用畅言系统"><a href="#使用畅言系统" class="headerlink" title="使用畅言系统"></a>使用畅言系统</h2><pre><code>在主题的目录下_config.yml，添加上changyan_appid和changyan_conf的值。
+
+#Cmments
 comment:
   cloudTie: ## 网易云跟帖(productKey)
   changyan: ## 畅言需在下方配置两个参数，此处不填。
@@ -75,8 +77,7 @@ comment:
     <summary type="html">
     
       &lt;p&gt;前几天在整理自己的博客想添加一个评论的功能，希望我写的博客能被广大人员所知，解决了域名添加百度搜索引擎之后，我决定用畅言作为我的评论插件。&lt;/p&gt;
-&lt;p&gt;##注册畅言&lt;br&gt;    进入畅言官网 , 点击右上角 “免费注册”，并填写注册信息&lt;/p&gt;
-&lt;p&gt;##绑定域名&lt;br
+&lt;h2 id=&quot;注册畅言&quot;&gt;&lt;a href=&quot;#注册畅言&quot; class=&quot;headerlink&quot; title=&quot;注册畅言&quot;&gt;&lt;
     
     </summary>
     
