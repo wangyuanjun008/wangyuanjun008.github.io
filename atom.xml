@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-12-18T01:37:43.308Z</updated>
+  <updated>2017-12-18T01:53:13.694Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://yoursite.com/2017/12/07/%E4%BD%BF%E7%94%A8element-ui-select%E4%B8%8B%E6%8B%89%E6%A1%86%E5%A4%9A%E9%80%89%EF%BC%8C%E7%BC%96%E8%BE%91%E7%8A%B6%E6%80%81%E4%B8%8B%E5%9B%9E%E6%98%BE%E6%95%B0%E6%8D%AE/"/>
     <id>http://yoursite.com/2017/12/07/使用element-ui-select下拉框多选，编辑状态下回显数据/</id>
     <published>2017-12-07T14:55:20.000Z</published>
-    <updated>2017-12-18T01:37:43.308Z</updated>
+    <updated>2017-12-18T01:53:13.694Z</updated>
     
     <content type="html"><![CDATA[<p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中使用的是 element ui 组件库，在使用select多选下拉框时，编辑页面不知道怎么为其赋值回显数据。<br>下拉框的代码如下:</p>
 <pre><code>&lt;el-form-item label=&quot;可选角色&quot;&gt;
