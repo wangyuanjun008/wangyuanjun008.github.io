@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-12-18T01:53:13.694Z</updated>
+  <updated>2017-12-18T07:16:28.966Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,20 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>github+hexo搭建自己的博客网站，畅言实现博客的评论</title>
+    <link href="http://yoursite.com/2017/12/18/github-hexo%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99%EF%BC%8C%E7%95%85%E8%A8%80%E5%AE%9E%E7%8E%B0%E5%8D%9A%E5%AE%A2%E7%9A%84%E8%AF%84%E8%AE%BA/"/>
+    <id>http://yoursite.com/2017/12/18/github-hexo搭建自己的博客网站，畅言实现博客的评论/</id>
+    <published>2017-12-18T07:16:28.000Z</published>
+    <updated>2017-12-18T07:16:28.966Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>使用element ui select下拉框多选，编辑状态下回显数据</title>
@@ -1396,55 +1410,6 @@ Caused by: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot
     
     
       <category term="maven" scheme="http://yoursite.com/tags/maven/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Extjs中textfield的悬浮提示</title>
-    <link href="http://yoursite.com/2017/02/22/Extjs%E4%B8%ADtextfield%E7%9A%84%E6%82%AC%E6%B5%AE%E6%8F%90%E7%A4%BA/"/>
-    <id>http://yoursite.com/2017/02/22/Extjs中textfield的悬浮提示/</id>
-    <published>2017-02-22T05:56:35.000Z</published>
-    <updated>2017-12-18T01:48:28.735Z</updated>
-    
-    <content type="html"><![CDATA[<p>在Extjs中有时候我们需要textfield的提示信息，但是我们发现textfield并没有这样的配置项。这时候我们就要另想方法：我们需要在鼠标悬停在textfield组件的时候进行信息的提示，我们就需要在textfield中来监听，<br>这里有两种进行textfield悬停提示的方法：</p>
-<ol>
-<li>进行固定信息的提示：需要在监听中用render方法<pre><code>render: function (field, p) {
-       Ext.QuickTips.init();
-       Ext.QuickTips.register({
-             target: field.el,
-             text: &apos;这是textfield的固定信息提示！&apos;
-       })
-    }
-</code></pre></li>
-<li><p>进行文本信息提示：提示信息为textfield的文本信息<br> var updateTip = function (field, t) {</p>
-<pre><code>    Ext.QuickTips.init();
-    Ext.QuickTips.register({
-        target: field.el,
-        text: field.getValue()
-    })
-};   
-</code></pre><p> listeners: {</p>
-<pre><code>// 鼠标移动到文本框显示悬浮框
-render : function(p) {
-    p.getEl().on(&apos;mouseover&apos;, function(p1) {
-        updateTip(p);
-    });
-}
-</code></pre><p> }</p>
-</li>
-</ol>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;在Extjs中有时候我们需要textfield的提示信息，但是我们发现textfield并没有这样的配置项。这时候我们就要另想方法：我们需要在鼠标悬停在textfield组件的时候进行信息的提示，我们就需要在textfield中来监听，&lt;br&gt;这里有两种进行textfiel
-    
-    </summary>
-    
-      <category term="extjs" scheme="http://yoursite.com/categories/extjs/"/>
-    
-    
-      <category term="extjs" scheme="http://yoursite.com/tags/extjs/"/>
     
   </entry>
   
