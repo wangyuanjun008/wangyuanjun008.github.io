@@ -3,6 +3,8 @@
 
 
     
+    
+    
   <url>
     <loc>http://wangyuanjun.cn/2017/05/17/%E4%BF%AE%E6%94%B9Weblogic-jdk%E7%89%88%E6%9C%AC/</loc>
     <lastmod>2017-12-18T15:08:56.491Z</lastmod>
@@ -164,6 +166,26 @@
 
     
   <url>
+    <loc>http://wangyuanjun.cn/2017/12/18/github-hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E4%B9%8B%E7%95%85%E8%A8%80%E5%AE%9E%E7%8E%B0%E5%8D%9A%E5%AE%A2%E7%9A%84%E8%AF%84%E8%AE%BA/</loc>
+    <lastmod>2017-12-18T14:48:46.573Z</lastmod>
+    <data>
+        <display>
+        <title>github-hexo搭建博客之畅言实现博客的评论</title>
+        <pubTime>2017-12-18T07:16:28.000Z</pubTime>
+        
+        <tag>hexo</tag>
+         
+         
+           
+             
+              <breadCrumb title="hexo" url="http://wangyuanjun.cn/categories/hexo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://wangyuanjun.cn/2016/12/10/extjs-%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87/</loc>
     <lastmod>2017-12-18T14:46:27.160Z</lastmod>
     <data>
@@ -177,26 +199,6 @@
            
              
               <breadCrumb title="extjs" url="http://wangyuanjun.cn/categories/extjs/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://wangyuanjun.cn/2017/12/18/github-hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E4%B9%8B%E7%95%85%E8%A8%80%E5%AE%9E%E7%8E%B0%E5%8D%9A%E5%AE%A2%E7%9A%84%E8%AF%84%E8%AE%BA/</loc>
-    <lastmod>2017-12-18T14:40:50.474Z</lastmod>
-    <data>
-        <display>
-        <title>github-hexo搭建博客之畅言实现博客的评论</title>
-        <pubTime>2017-12-18T07:16:28.000Z</pubTime>
-        
-        <tag>hexo</tag>
-         
-         
-           
-             
-              <breadCrumb title="hexo" url="http://wangyuanjun.cn/categories/hexo/"/>
           
         </display>
     </data>
@@ -661,7 +663,6 @@
     </data>
     </url>
 
-    
     
     
   <url>
