@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://wangyuanjun.cn/2016/05/10/Maven%E9%95%9C%E5%83%8F%E6%9B%B4%E6%8D%A2%E4%B8%BA%E9%98%BF%E9%87%8C%E4%BA%91%E9%95%9C%E5%83%8F/</loc>
+    
+    <lastmod>2017-12-21T15:50:06.841Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://wangyuanjun.cn/2016/04/19/test/</loc>
+    
+    <lastmod>2017-12-21T15:49:37.291Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://wangyuanjun.cn/2016/08/26/Spring-Aop%E4%B9%8BAspectJ%E6%B3%A8%E8%A7%A3%E9%85%8D%E7%BD%AE%E5%AE%9E%E7%8E%B0%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/</loc>
     
     <lastmod>2017-12-21T15:47:27.987Z</lastmod>
@@ -12,13 +26,6 @@
     <loc>http://wangyuanjun.cn/2016/08/27/Spring-Aop%E4%B9%8Bxml%E9%85%8D%E7%BD%AE%E5%AE%9E%E7%8E%B0%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/</loc>
     
     <lastmod>2017-12-21T15:47:14.634Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://wangyuanjun.cn/2017/12/21/Maven%E9%95%9C%E5%83%8F%E6%9B%B4%E6%8D%A2%E4%B8%BA%E9%98%BF%E9%87%8C%E4%BA%91%E9%95%9C%E5%83%8F/</loc>
-    
-    <lastmod>2017-12-21T08:08:39.110Z</lastmod>
     
   </url>
   
@@ -292,13 +299,6 @@
     <loc>http://wangyuanjun.cn/tags/index.html</loc>
     
     <lastmod>2017-12-16T02:59:09.115Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://wangyuanjun.cn/2016/09/19/test/</loc>
-    
-    <lastmod>2016-09-19T15:54:14.580Z</lastmod>
     
   </url>
   

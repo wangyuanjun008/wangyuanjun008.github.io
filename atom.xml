@@ -304,37 +304,6 @@ public class HttpServiceTest {
   </entry>
   
   <entry>
-    <title>Maven镜像更换为阿里云镜像</title>
-    <link href="http://wangyuanjun.cn/2017/12/21/Maven%E9%95%9C%E5%83%8F%E6%9B%B4%E6%8D%A2%E4%B8%BA%E9%98%BF%E9%87%8C%E4%BA%91%E9%95%9C%E5%83%8F/"/>
-    <id>http://wangyuanjun.cn/2017/12/21/Maven镜像更换为阿里云镜像/</id>
-    <published>2017-12-21T07:55:10.000Z</published>
-    <updated>2017-12-21T08:08:39.110Z</updated>
-    
-    <content type="html"><![CDATA[<p>每次update Maven Project 的时候，下载速度非常慢，因为maven仓库默认在国外。<br>国内支持maven镜像的有阿里云，开源中国等，这里换为阿里云的，镜像地址: <a href="http://maven.aliyun.com/" target="_blank" rel="external">http://maven.aliyun.com/</a> 。</p>
-<p>找到settings.xml文件的mirrors节点，接着在mirrors节点里面加上一个mirror子节点，内容如下:</p>
-<pre><code>&lt;mirror&gt;
-    &lt;id&gt;aliyun&lt;/id&gt;
-    &lt;mirrorOf&gt;central&lt;/mirrorOf&gt;
-    &lt;name&gt;aliyun&lt;/name&gt;
-    &lt;url&gt;http://maven.aliyun.com/nexus/content/groups/public/&lt;/url&gt;
-&lt;/mirror&gt;
-</code></pre><p>修改完毕之后，就可以体验下飞一般的感觉了。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;每次update Maven Project 的时候，下载速度非常慢，因为maven仓库默认在国外。&lt;br&gt;国内支持maven镜像的有阿里云，开源中国等，这里换为阿里云的，镜像地址: &lt;a href=&quot;http://maven.aliyun.com/&quot; target=&quot;_b
-    
-    </summary>
-    
-      <category term="maven" scheme="http://wangyuanjun.cn/categories/maven/"/>
-    
-    
-      <category term="maven" scheme="http://wangyuanjun.cn/tags/maven/"/>
-    
-  </entry>
-  
-  <entry>
     <title>SpringBoot整合cxf发布WebService服务和客户端调用WebService服务</title>
     <link href="http://wangyuanjun.cn/2017/12/21/SpringBoot%E6%95%B4%E5%90%88cxf%E5%8F%91%E5%B8%83WebService%E6%9C%8D%E5%8A%A1%E5%92%8C%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B0%83%E7%94%A8WebService%E6%9C%8D%E5%8A%A1/"/>
     <id>http://wangyuanjun.cn/2017/12/21/SpringBoot整合cxf发布WebService服务和客户端调用WebService服务/</id>
@@ -1821,6 +1790,31 @@ Caused by: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot
     
     </summary>
     
+    
+  </entry>
+  
+  <entry>
+    <title>修改Weblogic jdk版本</title>
+    <link href="http://wangyuanjun.cn/2017/05/17/%E4%BF%AE%E6%94%B9Weblogic-jdk%E7%89%88%E6%9C%AC/"/>
+    <id>http://wangyuanjun.cn/2017/05/17/修改Weblogic-jdk版本/</id>
+    <published>2017-05-17T08:10:45.000Z</published>
+    <updated>2017-12-18T15:08:56.491Z</updated>
+    
+    <content type="html"><![CDATA[<p>1、E:\develop-tools\toolsInstall\weblogic是我的weblogic安装目录<br>2、E:\develop-tools\toolsInstall\weblogic\user_projects\domains\base_domain是我的域创建目录</p>
+<p>找到E:\develop-tools\toolsInstall\weblogic\user_projects\domains\base_domain\bin<br>setDomainEnv.cmd,修改红框标注的</p>
+<p><img src="/2017/05/17/修改Weblogic-jdk版本/updateWebLogicJdk.png" alt="updateWebLogicJdk"></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;1、E:\develop-tools\toolsInstall\weblogic是我的weblogic安装目录&lt;br&gt;2、E:\develop-tools\toolsInstall\weblogic\user_projects\domains\base_domain是我的域
+    
+    </summary>
+    
+      <category term="weblogic" scheme="http://wangyuanjun.cn/categories/weblogic/"/>
+    
+    
+      <category term="weblogic" scheme="http://wangyuanjun.cn/tags/weblogic/"/>
     
   </entry>
   

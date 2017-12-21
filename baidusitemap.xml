@@ -4,6 +4,41 @@
 
     
   <url>
+    <loc>http://wangyuanjun.cn/2016/05/10/Maven%E9%95%9C%E5%83%8F%E6%9B%B4%E6%8D%A2%E4%B8%BA%E9%98%BF%E9%87%8C%E4%BA%91%E9%95%9C%E5%83%8F/</loc>
+    <lastmod>2017-12-21T15:50:06.841Z</lastmod>
+    <data>
+        <display>
+        <title>Maven镜像更换为阿里云镜像</title>
+        <pubTime>2016-05-10T15:53:34.000Z</pubTime>
+        
+        <tag>maven</tag>
+         
+         
+           
+             
+              <breadCrumb title="maven" url="http://wangyuanjun.cn/categories/maven/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wangyuanjun.cn/2016/04/19/test/</loc>
+    <lastmod>2017-12-21T15:49:37.291Z</lastmod>
+    <data>
+        <display>
+        <title>test</title>
+        <pubTime>2016-04-19T15:53:34.000Z</pubTime>
+        
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://wangyuanjun.cn/2016/08/26/Spring-Aop%E4%B9%8BAspectJ%E6%B3%A8%E8%A7%A3%E9%85%8D%E7%BD%AE%E5%AE%9E%E7%8E%B0%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/</loc>
     <lastmod>2017-12-21T15:47:27.987Z</lastmod>
     <data>
@@ -41,26 +76,6 @@
            
              
               <breadCrumb title="spring" url="http://wangyuanjun.cn/categories/spring/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://wangyuanjun.cn/2017/12/21/Maven%E9%95%9C%E5%83%8F%E6%9B%B4%E6%8D%A2%E4%B8%BA%E9%98%BF%E9%87%8C%E4%BA%91%E9%95%9C%E5%83%8F/</loc>
-    <lastmod>2017-12-21T08:08:39.110Z</lastmod>
-    <data>
-        <display>
-        <title>Maven镜像更换为阿里云镜像</title>
-        <pubTime>2017-12-21T07:55:10.000Z</pubTime>
-        
-        <tag>maven</tag>
-         
-         
-           
-             
-              <breadCrumb title="maven" url="http://wangyuanjun.cn/categories/maven/"/>
           
         </display>
     </data>
@@ -772,21 +787,6 @@
     </url>
 
     
-    
-  <url>
-    <loc>http://wangyuanjun.cn/2016/09/19/test/</loc>
-    <lastmod>2016-09-19T15:54:14.580Z</lastmod>
-    <data>
-        <display>
-        <title>test</title>
-        <pubTime>2016-09-19T15:53:34.000Z</pubTime>
-        
-         
-           
-        </display>
-    </data>
-    </url>
-
     
   <url>
     <loc>http://wangyuanjun.cn/2017/06/29/hello-world/</loc>
