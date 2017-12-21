@@ -4,6 +4,26 @@
 
     
   <url>
+    <loc>http://wangyuanjun.cn/2016/05/06/%E5%B8%B8%E7%94%A8Git%E5%91%BD%E4%BB%A4%E5%A4%A7%E5%85%A8/</loc>
+    <lastmod>2017-12-21T15:54:07.955Z</lastmod>
+    <data>
+        <display>
+        <title>常用Git命令大全</title>
+        <pubTime>2016-05-06T13:04:33.000Z</pubTime>
+        
+        <tag>git</tag>
+         
+         
+           
+             
+              <breadCrumb title="git" url="http://wangyuanjun.cn/categories/git/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://wangyuanjun.cn/2016/05/10/Maven%E9%95%9C%E5%83%8F%E6%9B%B4%E6%8D%A2%E4%B8%BA%E9%98%BF%E9%87%8C%E4%BA%91%E9%95%9C%E5%83%8F/</loc>
     <lastmod>2017-12-21T15:50:06.841Z</lastmod>
     <data>
@@ -743,26 +763,6 @@
            
              
               <breadCrumb title="docker" url="http://wangyuanjun.cn/categories/docker/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://wangyuanjun.cn/2016/09/21/%E5%B8%B8%E7%94%A8Git%E5%91%BD%E4%BB%A4%E5%A4%A7%E5%85%A8/</loc>
-    <lastmod>2017-12-18T01:45:17.416Z</lastmod>
-    <data>
-        <display>
-        <title>常用Git命令大全</title>
-        <pubTime>2016-09-21T13:04:33.000Z</pubTime>
-        
-        <tag>git</tag>
-         
-         
-           
-             
-              <breadCrumb title="git" url="http://wangyuanjun.cn/categories/git/"/>
           
         </display>
     </data>
