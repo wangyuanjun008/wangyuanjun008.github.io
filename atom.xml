@@ -308,7 +308,7 @@ public class HttpServiceTest {
     <link href="http://wangyuanjun.cn/2017/12/21/Spring-Aop%E4%B9%8BAspectJ%E6%B3%A8%E8%A7%A3%E9%85%8D%E7%BD%AE%E5%AE%9E%E7%8E%B0%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/"/>
     <id>http://wangyuanjun.cn/2017/12/21/Spring-Aop之AspectJ注解配置实现日志管理/</id>
     <published>2017-12-21T08:26:44.000Z</published>
-    <updated>2017-12-21T15:01:47.038Z</updated>
+    <updated>2017-12-21T15:27:54.827Z</updated>
     
     <content type="html"><![CDATA[<h2 id="创建日志注解"><a href="#创建日志注解" class="headerlink" title="创建日志注解"></a>创建日志注解</h2><pre><code>package com.wyj.annotation;
 
@@ -445,6 +445,12 @@ import java.lang.
     
     </summary>
     
+      <category term="spring" scheme="http://wangyuanjun.cn/categories/spring/"/>
+    
+    
+      <category term="spring" scheme="http://wangyuanjun.cn/tags/spring/"/>
+    
+      <category term="spring aop" scheme="http://wangyuanjun.cn/tags/spring-aop/"/>
     
   </entry>
   
@@ -453,7 +459,7 @@ import java.lang.
     <link href="http://wangyuanjun.cn/2017/12/21/Spring-Aop%E4%B9%8Bxml%E9%85%8D%E7%BD%AE%E5%AE%9E%E7%8E%B0%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/"/>
     <id>http://wangyuanjun.cn/2017/12/21/Spring-Aop之xml配置实现日志管理/</id>
     <published>2017-12-21T08:25:55.000Z</published>
-    <updated>2017-12-21T15:22:45.316Z</updated>
+    <updated>2017-12-21T15:26:36.715Z</updated>
     
     <content type="html"><![CDATA[<h2 id="创建日志注解"><a href="#创建日志注解" class="headerlink" title="创建日志注解"></a>创建日志注解</h2><pre><code>package com.wyj.annotation;
 
@@ -582,6 +588,12 @@ import java.lang.
     
     </summary>
     
+      <category term="spring" scheme="http://wangyuanjun.cn/categories/spring/"/>
+    
+    
+      <category term="spring" scheme="http://wangyuanjun.cn/tags/spring/"/>
+    
+      <category term="spring aop" scheme="http://wangyuanjun.cn/tags/spring-aop/"/>
     
   </entry>
   
