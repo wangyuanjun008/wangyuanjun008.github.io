@@ -304,300 +304,6 @@ public class HttpServiceTest {
   </entry>
   
   <entry>
-    <title>Spring Aop之AspectJ注解配置实现日志管理</title>
-    <link href="http://wangyuanjun.cn/2017/12/21/Spring-Aop%E4%B9%8BAspectJ%E6%B3%A8%E8%A7%A3%E9%85%8D%E7%BD%AE%E5%AE%9E%E7%8E%B0%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/"/>
-    <id>http://wangyuanjun.cn/2017/12/21/Spring-Aop之AspectJ注解配置实现日志管理/</id>
-    <published>2017-12-21T08:26:44.000Z</published>
-    <updated>2017-12-21T15:27:54.827Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="创建日志注解"><a href="#创建日志注解" class="headerlink" title="创建日志注解"></a>创建日志注解</h2><pre><code>package com.wyj.annotation;
-
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-/**
- * 日志注解
- * 
- * 
- * @author：WangYuanJun
- * @date：2017年9月26日 下午8:25:35
- */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-public @interface SysLog {
-
-    String action() default &quot;&quot;;//动作
-
-}
-</code></pre><h2 id="创建切面通知类"><a href="#创建切面通知类" class="headerlink" title="创建切面通知类"></a>创建切面通知类</h2><p>记录操作的方法名，参数和花费的时间，使用环绕通知<br>　　@Before 前置</p>
-<p>　　@AfterReturning  后置，可以获得返回值，必须在注解中确定返回值参数名称。</p>
-<p>　　@AfterThrowing 抛出异常，可以获得具体异常信息，必须在注解确定第二个参数名称</p>
-<p>　　@Around 环绕[]</p>
-<p>　　@After 最终</p>
-<pre><code>package com.wyj.aspect;
-
-import java.lang.reflect.Method;
-
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.wyj.annotation.SysLog;
-import com.wyj.entity.SysLogEntity;
-import com.wyj.service.SysLogService;
-
-/**
- * 日志切面通知
- * 
- * 
- * @author：WangYuanJun
- * @date：2017年9月26日 下午10:28:57
- */
-@Aspect
-@Component
-public class SysLogAspect {
-
-    @Autowired
-    private SysLogService sysLogService;
-
-    /**
-     * 切入点
-     */
-    @Pointcut(&quot;@annotation(com.wyj.annotation.SysLog)&quot;)
-    public void pointCut() {}
-
-    /**
-     * 环绕通知
-     * 
-     * @param joinPoint
-     * @return
-     * @throws Throwable
-     */
-    @Around(&quot;pointCut()&quot;)
-    public Object aroud(ProceedingJoinPoint joinPoint) throws Throwable {
-
-        // 开始时间
-        long beginTime = System.currentTimeMillis();
-
-        // 执行目标方法
-        Object result = joinPoint.proceed();
-
-        // 执行时长(毫秒)
-        long time = System.currentTimeMillis() - beginTime;
-
-        // 保存日志
-        saveSysLog(joinPoint, time);
-        return result;
-    }
-
-    /**
-     * 保存日志
-     * 
-     * @param joinPoint
-     * @param time
-     */
-    private void saveSysLog(ProceedingJoinPoint joinPoint, long time) {
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        Method method = signature.getMethod();
-        SysLogEntity sysLogEntity = new SysLogEntity();
-        SysLog sysLog = method.getAnnotation(SysLog.class);
-        if (sysLog != null) {
-
-            // 注解上的描述
-            sysLogEntity.setOperation(sysLog.action());
-        }
-
-        // 获取目标类名
-        String className = joinPoint.getTarget().getClass().getName();
-
-        // 获取方法名
-        String methodName = signature.getName();
-        sysLogEntity.setMethod(className + &quot;.&quot; + methodName + &quot;()&quot;);
-
-        // 请求的参数
-        Object[] args = joinPoint.getArgs();
-        if (args != null &amp;&amp; args.length != 0 &amp;&amp; args[0] != null) {
-            sysLogEntity.setParams(args[0].toString());
-        }
-        sysLogEntity.setTime(time);
-
-        // 保存系统日志
-        sysLogService.save(sysLogEntity);
-    }
-}
-</code></pre><h2 id="扫描和启动aop注解"><a href="#扫描和启动aop注解" class="headerlink" title="扫描和启动aop注解"></a>扫描和启动aop注解</h2><p><img src="/2017/12/21/Spring-Aop之AspectJ注解配置实现日志管理/启动aop注解.png" alt="启动aop注解"></p>
-<h2 id="日志注解的应用"><a href="#日志注解的应用" class="headerlink" title="日志注解的应用"></a>日志注解的应用</h2><p><img src="/2017/12/21/Spring-Aop之AspectJ注解配置实现日志管理/应用注解.png" alt="应用注解"></p>
-<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;创建日志注解&quot;&gt;&lt;a href=&quot;#创建日志注解&quot; class=&quot;headerlink&quot; title=&quot;创建日志注解&quot;&gt;&lt;/a&gt;创建日志注解&lt;/h2&gt;&lt;pre&gt;&lt;code&gt;package com.wyj.annotation;
-
-import java.lang.
-    
-    </summary>
-    
-      <category term="spring" scheme="http://wangyuanjun.cn/categories/spring/"/>
-    
-    
-      <category term="spring" scheme="http://wangyuanjun.cn/tags/spring/"/>
-    
-      <category term="spring aop" scheme="http://wangyuanjun.cn/tags/spring-aop/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Spring-Aop之xml配置实现日志管理</title>
-    <link href="http://wangyuanjun.cn/2017/12/21/Spring-Aop%E4%B9%8Bxml%E9%85%8D%E7%BD%AE%E5%AE%9E%E7%8E%B0%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/"/>
-    <id>http://wangyuanjun.cn/2017/12/21/Spring-Aop之xml配置实现日志管理/</id>
-    <published>2017-12-21T08:25:55.000Z</published>
-    <updated>2017-12-21T15:26:36.715Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="创建日志注解"><a href="#创建日志注解" class="headerlink" title="创建日志注解"></a>创建日志注解</h2><pre><code>package com.wyj.annotation;
-
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-/**
- * 日志注解
- * 
- * 
- * @author：WangYuanJun
- * @date：2017年9月26日 下午8:25:35
- */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-public @interface SysLog {
-
-    String action() default &quot;&quot;;//动作
-
-}
-</code></pre><h2 id="创建切面通知类"><a href="#创建切面通知类" class="headerlink" title="创建切面通知类"></a>创建切面通知类</h2><pre><code>package com.wyj.aspect;
-
-import java.lang.reflect.Method;
-
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.wyj.annotation.SysLog;
-import com.wyj.entity.SysLogEntity;
-import com.wyj.service.SysLogService;
-
-/**
- * 日志切面通知
- * 
- * 
- * @author：WangYuanJun
- * @date：2017年9月26日 下午10:28:57
- */
-public class SysLogAspect {
-
-    @Autowired
-    private SysLogService sysLogService;
-
-    /**
-     * 环绕通知
-     * 
-     * @param joinPoint
-     * @return
-     * @throws Throwable
-     */
-    public Object aroud(ProceedingJoinPoint joinPoint) throws Throwable {
-
-        // 开始时间
-        long beginTime = System.currentTimeMillis();
-
-        // 执行目标方法
-        Object result = joinPoint.proceed();
-
-        // 执行时长(毫秒)
-        long time = System.currentTimeMillis() - beginTime;
-
-        // 保存日志
-        saveSysLog(joinPoint, time);
-        return result;
-    }
-
-    /**
-     * 保存日志
-     * 
-     * @param joinPoint
-     * @param time
-     */
-    private void saveSysLog(ProceedingJoinPoint joinPoint, long time) {
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        Method method = signature.getMethod();
-        SysLogEntity sysLogEntity = new SysLogEntity();
-        SysLog sysLog = method.getAnnotation(SysLog.class);
-        if (sysLog != null) {
-
-            // 注解上的描述
-            sysLogEntity.setOperation(sysLog.action());
-        }
-
-        // 获取目标类名
-        String className = joinPoint.getTarget().getClass().getName();
-
-        // 获取方法名
-        String methodName = signature.getName();
-        sysLogEntity.setMethod(className + &quot;.&quot; + methodName + &quot;()&quot;);
-
-        // 请求的参数
-        Object[] args = joinPoint.getArgs();
-        if (args != null &amp;&amp; args.length != 0 &amp;&amp; args[0] != null) {
-            sysLogEntity.setParams(args[0].toString());
-        }
-        sysLogEntity.setTime(time);
-
-        // 保存系统日志
-        sysLogService.save(sysLogEntity);
-    }
-}
-</code></pre><h2 id="AspectJ配置文件"><a href="#AspectJ配置文件" class="headerlink" title="AspectJ配置文件"></a>AspectJ配置文件</h2><pre><code>&lt;!-- 切面 --&gt;
-&lt;bean id=&quot;sysLogAspect&quot; class=&quot;com.wyj.aspect.SysLogAspect&quot;&gt;&lt;/bean&gt;
-
-&lt;aop:config&gt;
-    &lt;aop:aspect ref=&quot;sysLogAspect&quot;&gt;
-        &lt;aop:pointcut expression=&quot;@annotation(com.wyj.annotation.SysLog)&quot; id=&quot;sysLogPointcut&quot;/&gt;
-        &lt;aop:around method=&quot;aroud&quot; pointcut-ref=&quot;sysLogPointcut&quot;/&gt;
-    &lt;/aop:aspect&gt;
-&lt;/aop:config&gt;
-</code></pre><h2 id="日志注解的应用"><a href="#日志注解的应用" class="headerlink" title="日志注解的应用"></a>日志注解的应用</h2><p><img src="/2017/12/21/Spring-Aop之xml配置实现日志管理/应用注解.png" alt="应用注解"></p>
-<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;创建日志注解&quot;&gt;&lt;a href=&quot;#创建日志注解&quot; class=&quot;headerlink&quot; title=&quot;创建日志注解&quot;&gt;&lt;/a&gt;创建日志注解&lt;/h2&gt;&lt;pre&gt;&lt;code&gt;package com.wyj.annotation;
-
-import java.lang.
-    
-    </summary>
-    
-      <category term="spring" scheme="http://wangyuanjun.cn/categories/spring/"/>
-    
-    
-      <category term="spring" scheme="http://wangyuanjun.cn/tags/spring/"/>
-    
-      <category term="spring aop" scheme="http://wangyuanjun.cn/tags/spring-aop/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Maven镜像更换为阿里云镜像</title>
     <link href="http://wangyuanjun.cn/2017/12/21/Maven%E9%95%9C%E5%83%8F%E6%9B%B4%E6%8D%A2%E4%B8%BA%E9%98%BF%E9%87%8C%E4%BA%91%E9%95%9C%E5%83%8F/"/>
     <id>http://wangyuanjun.cn/2017/12/21/Maven镜像更换为阿里云镜像/</id>
@@ -2064,6 +1770,57 @@ Caused by: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot
     
     
       <category term="mybatis" scheme="http://wangyuanjun.cn/tags/mybatis/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>试用hexo,换电脑跟新博客</title>
+    <link href="http://wangyuanjun.cn/2017/06/29/%E8%AF%95%E7%94%A8hexo-%E6%8D%A2%E7%94%B5%E8%84%91%E8%B7%9F%E6%96%B0%E5%8D%9A%E5%AE%A2/"/>
+    <id>http://wangyuanjun.cn/2017/06/29/试用hexo-换电脑跟新博客/</id>
+    <published>2017-06-29T15:33:55.000Z</published>
+    <updated>2017-12-18T01:49:18.001Z</updated>
+    
+    <content type="html"><![CDATA[<p>作者：skycrown<br>链接：<a href="https://www.zhihu.com/question/21193762/answer/103097754" target="_blank" rel="external">https://www.zhihu.com/question/21193762/answer/103097754</a><br>来源：知乎<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+<p>1、从官网Git下载git，在新电脑上安装，因为https速度慢，而且每次都要输入口令，常用的是使用ssh。使用下面方法创建：<br>（1）打开git bash，在用户主目录下运行：ssh-keygen -t rsa -C “youremail@example.com” 把其中的邮件地址换成自己的邮件地址，然后一路回车<br>（2）最后完成后，会在用户主目录下生成.ssh目录，里面有id_rsa和id_rsa.pub两个文件，这两个就是SSH key密钥对，id_rsa是私钥，千万不能泄露出去，id_rsa.pub是公钥，可以放心地告诉任何人。<br>（3）登陆GitHub，打开「Settings」-&gt;「SSH and GPG keys」，然后点击「new SSH  key」，填上任意Title，在Key文本框里粘贴公钥id_rsa.pub文件的内容（千万不要粘贴成私钥了！），最后点击「Add SSH Key」，你就应该看到已经添加的Key。注意：不要在git版本库中运行ssh，然后又将它提交，这样就把密码泄露出去了。<br>2、下载Node.js，并安装<br>3、打开git bash客户端，输入 npm install hexo-cli -g，开始安装hexo<br>4、下面就将原来的文件拷贝到新电脑中，但是要注意哪些文件是必须的，哪些文件是可以删除的。<br>（1）讨论下哪些文件是必须拷贝的：首先是之前自己修改的文件，像站点配置_config.yml，theme文件夹里面的主题，以及source里面自己写的博客文件，这些肯定要拷贝的。除此之外，还有三个文件需要有，就是scaffolds文件夹（文章的模板）、package.json（说明使用哪些包）和.gitignore（限定在提交的时候哪些文件可以忽略）。其实，这三个文件不是我们修改的，所以即使丢失了，也没有关系，我们可以建立一个新的文件夹，然后在里面执行hexo init，就会生成这三个文件，我们只需要将它们拷贝过来使用即可。总结：_config.yml，theme/，source/，scaffolds/，package.json，.gitignore，是需要拷贝的。<br>（2）再讨论下哪些文件是不必拷贝的，或者说可以删除的：首先是.git文件，无论是在站点根目录下，还是主题目录下的.git文件，都可以删掉。然后是文件夹node_modules（在用npm install会重新生成），public（这个在用hexo g时会重新生成），.deploy_git文件夹（在使用hexo d时也会重新生成），db.json文件。其实上面这些文件也就是是.gitignore文件里面记载的可以忽略的内容。总结：.git/，node_modules/，public/，.deploy_git/，db.json文件需要删除。<br>5、在git bash中切换目录到新拷贝的文件夹里，使用 npm install 命令，进行模块安装。很明显我们这里没用hexo init初始化，因为有的文件我们已经拷贝生成过来了，所以不必用hexo init去整体初始化，如果不慎在此时用了hexo init，则站点的配置文件_config.yml里面内容会被清空使用默认值，所以这一步一定要慎重，不要用hexo init。<br>6、安装其他的一些必要组件，如果在node_modules里面有的，就不要重复安装了：<br>（1）为了使用hexo d来部署到git上，需要安装npm install hexo-deployer-git –save<br>（2）为了建立RSS订阅，需要安装npm install hexo-generator-feed –save<br>（3）为了建立站点地图，需要安装npm install hexo-generator-sitemap –save插件安装后，有的需要对配置文件_config.yml进行配置，具体怎么配置，可以参考上面插件在github主页上的具体说明7、使用hexo g，然后使用hexo d进行部署，如果都没有出错，就转移成功了！</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;作者：skycrown&lt;br&gt;链接：&lt;a href=&quot;https://www.zhihu.com/question/21193762/answer/103097754&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://www.zhihu.com
+    
+    </summary>
+    
+      <category term="hexo" scheme="http://wangyuanjun.cn/categories/hexo/"/>
+    
+    
+      <category term="hexo" scheme="http://wangyuanjun.cn/tags/hexo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="http://wangyuanjun.cn/2017/06/29/hello-world/"/>
+    <id>http://wangyuanjun.cn/2017/06/29/hello-world/</id>
+    <published>2017-06-29T15:21:26.034Z</published>
+    <updated>2016-09-19T15:36:52.584Z</updated>
+    
+    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.
+    
+    </summary>
+    
     
   </entry>
   
