@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://wangyuanjun.cn/2017/12/23/SpringBoot%E5%8F%91%E5%B8%83HttpClient%E6%9C%8D%E5%8A%A1%E5%92%8C%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B0%83%E7%94%A8HttpClient%E6%9C%8D%E5%8A%A1/</loc>
+    
+    <lastmod>2017-12-21T07:49:02.701Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://wangyuanjun.cn/2017/12/21/SpringBoot%E6%95%B4%E5%90%88cxf%E5%8F%91%E5%B8%83WebService%E6%9C%8D%E5%8A%A1%E5%92%8C%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B0%83%E7%94%A8WebService%E6%9C%8D%E5%8A%A1/</loc>
+    
+    <lastmod>2017-12-21T07:43:17.517Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://wangyuanjun.cn/about/index.html</loc>
     
     <lastmod>2017-12-20T01:54:53.797Z</lastmod>

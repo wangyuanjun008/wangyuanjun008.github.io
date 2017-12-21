@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wangyuanjun.cn/"/>
-  <updated>2017-12-18T14:35:25.791Z</updated>
+  <updated>2017-12-21T07:49:02.701Z</updated>
   <id>http://wangyuanjun.cn/</id>
   
   <author>
@@ -14,6 +14,575 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>SpringBoot发布HttpClient服务和客户端调用HttpClient服务</title>
+    <link href="http://wangyuanjun.cn/2017/12/23/SpringBoot%E5%8F%91%E5%B8%83HttpClient%E6%9C%8D%E5%8A%A1%E5%92%8C%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B0%83%E7%94%A8HttpClient%E6%9C%8D%E5%8A%A1/"/>
+    <id>http://wangyuanjun.cn/2017/12/23/SpringBoot发布HttpClient服务和客户端调用HttpClient服务/</id>
+    <published>2017-12-23T06:28:27.000Z</published>
+    <updated>2017-12-21T07:49:02.701Z</updated>
+    
+    <content type="html"><![CDATA[<p>之前在做公司项目的一个功能需要写WebSerice接口，写完之后我们老大说也可以用HttpClient来写接口，所以写了一个接口例子。</p>
+<h2 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h2><pre><code>&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&quot;&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    &lt;groupId&gt;com.wyj&lt;/groupId&gt;
+    &lt;artifactId&gt;wyj-interface-client&lt;/artifactId&gt;
+    &lt;packaging&gt;war&lt;/packaging&gt;
+    &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
+    &lt;name&gt;wyj-interface-client Maven Webapp&lt;/name&gt;
+    &lt;url&gt;http://maven.apache.org&lt;/url&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;junit&lt;/groupId&gt;
+            &lt;artifactId&gt;junit&lt;/artifactId&gt;
+            &lt;version&gt;4.12&lt;/version&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+        &lt;!-- http --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.httpcomponents&lt;/groupId&gt;
+            &lt;artifactId&gt;httpclient&lt;/artifactId&gt;
+            &lt;version&gt;4.5.4&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+            &lt;artifactId&gt;fastjson&lt;/artifactId&gt;
+            &lt;version&gt;1.1.41&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;!--webservice cxf --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.cxf&lt;/groupId&gt;
+            &lt;artifactId&gt;cxf-rt-transports-http&lt;/artifactId&gt;
+            &lt;version&gt;3.1.8&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.cxf&lt;/groupId&gt;
+            &lt;artifactId&gt;cxf-rt-frontend-jaxws&lt;/artifactId&gt;
+            &lt;version&gt;3.1.8&lt;/version&gt;
+        &lt;/dependency&gt;
+
+    &lt;/dependencies&gt;
+    &lt;build&gt;
+        &lt;finalName&gt;wyj-interface-client&lt;/finalName&gt;
+    &lt;/build&gt;
+&lt;/project&gt;
+</code></pre><h2 id="HttpClient客户端"><a href="#HttpClient客户端" class="headerlink" title="HttpClient客户端"></a>HttpClient客户端</h2><p>可以传输json和map数据，可以使用get和post请求，详情见备注</p>
+<pre><code>package http;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.junit.Test;
+
+import com.alibaba.fastjson.JSON;
+
+/**
+ * http客户端
+ * 
+ * 
+ * @author：WangYuanJun
+ * @date：2017年12月20日 下午8:26:51
+ */
+public class HttpClientTest {
+
+    /**
+     * post请求传输map数据
+     * 
+     * @param url
+     * @param map
+     * @param encoding
+     * @return
+     * @throws ClientProtocolException
+     * @throws IOException
+     */
+    public static String sendPostDataByMap(String url, Map&lt;String, String&gt; map, String encoding) throws ClientProtocolException, IOException {
+        String result = &quot;&quot;;
+
+        // 创建httpclient对象
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        // 创建post方式请求对象
+        HttpPost httpPost = new HttpPost(url);
+
+        // 装填参数
+        List&lt;NameValuePair&gt; nameValuePairs = new ArrayList&lt;NameValuePair&gt;();
+        if (map != null) {
+            for (Entry&lt;String, String&gt; entry : map.entrySet()) {
+                nameValuePairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+            }
+        }
+
+        // 设置参数到请求对象中
+        httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, encoding));
+
+        // 设置header信息
+        // 指定报文头【Content-type】、【User-Agent】
+        httpPost.setHeader(&quot;Content-type&quot;, &quot;application/x-www-form-urlencoded&quot;);
+        httpPost.setHeader(&quot;User-Agent&quot;, &quot;Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)&quot;);
+
+        // 执行请求操作，并拿到结果（同步阻塞）
+        CloseableHttpResponse response = httpClient.execute(httpPost);
+        // 获取结果实体
+        // 判断网络连接状态码是否正常(0--200都数正常)
+        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+            result = EntityUtils.toString(response.getEntity(), &quot;utf-8&quot;);
+        }
+        // 释放链接
+        response.close();
+
+        return result;
+    }
+
+    /**
+     * post请求传输json数据
+     * 
+     * @param url
+     * @param json
+     * @param encoding
+     * @return
+     * @throws ClientProtocolException
+     * @throws IOException
+     */
+    public static String sendPostDataByJson(String url, String json, String encoding) throws ClientProtocolException, IOException {
+        String result = &quot;&quot;;
+
+        // 创建httpclient对象
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+
+        // 创建post方式请求对象
+        HttpPost httpPost = new HttpPost(url);
+
+        // 设置参数到请求对象中
+        StringEntity stringEntity = new StringEntity(json, ContentType.APPLICATION_JSON);
+        stringEntity.setContentEncoding(&quot;utf-8&quot;);
+        httpPost.setEntity(stringEntity);
+
+        // 执行请求操作，并拿到结果（同步阻塞）
+        CloseableHttpResponse response = httpClient.execute(httpPost);
+
+        // 获取结果实体
+        // 判断网络连接状态码是否正常(0--200都数正常)
+        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+            result = EntityUtils.toString(response.getEntity(), &quot;utf-8&quot;);
+        }
+        // 释放链接
+        response.close();
+
+        return result;
+    }
+
+    /**
+     * get请求传输数据
+     * 
+     * @param url
+     * @param encoding
+     * @return
+     * @throws ClientProtocolException
+     * @throws IOException
+     */
+    public String sendGetData(String url, String encoding) throws ClientProtocolException, IOException {
+        String result = &quot;&quot;;
+
+        // 创建httpclient对象
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+
+        // 创建get方式请求对象
+        HttpGet httpGet = new HttpGet(url);
+        httpGet.addHeader(&quot;Content-type&quot;, &quot;application/json&quot;);
+        // 通过请求对象获取响应对象
+        CloseableHttpResponse response = httpClient.execute(httpGet);
+
+        // 获取结果实体
+        // 判断网络连接状态码是否正常(0--200都数正常)
+        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+            result = EntityUtils.toString(response.getEntity(), &quot;utf-8&quot;);
+        }
+        // 释放链接
+        response.close();
+
+        return result;
+    }
+
+    @Test
+    public void testSendPostDataByMap() throws ClientProtocolException, IOException {
+        String url = &quot;http://localhost:8080/httpService/sendPostDataByMap&quot;;
+        Map&lt;String, String&gt; map = new HashMap&lt;String, String&gt;();
+        map.put(&quot;name&quot;, &quot;wyj&quot;);
+        map.put(&quot;city&quot;, &quot;南京&quot;);
+        String body = sendPostDataByMap(url, map, &quot;utf-8&quot;);
+        System.out.println(&quot;响应结果：&quot; + body);
+    }
+
+    @Test
+    public void testSendPostDataByJson() throws ClientProtocolException, IOException {
+        String url = &quot;http://localhost:8080/httpService/sendPostDataByJson&quot;;
+        Map&lt;String, String&gt; map = new HashMap&lt;String, String&gt;();
+        map.put(&quot;name&quot;, &quot;wyj&quot;);
+        map.put(&quot;city&quot;, &quot;南京&quot;);
+        String body = sendPostDataByJson(url, JSON.toJSONString(map), &quot;utf-8&quot;);
+        System.out.println(&quot;响应结果：&quot; + body);
+    }
+
+    @Test
+    public void testSendGetData() throws ClientProtocolException, IOException {
+        String url = &quot;http://localhost:8080/httpService/sendGetData?name=wyj&amp;city=南京&quot;;
+        String body = sendGetData(url, &quot;utf-8&quot;);
+        System.out.println(&quot;响应结果：&quot; + body);
+    }
+
+}
+</code></pre><h2 id="HttpClient服务端"><a href="#HttpClient服务端" class="headerlink" title="HttpClient服务端"></a>HttpClient服务端</h2><p>package com.wyj.http;</p>
+<p>import javax.servlet.http.HttpServletRequest;<br>import javax.servlet.http.HttpServletResponse;</p>
+<p>import org.springframework.web.bind.annotation.RequestBody;<br>import org.springframework.web.bind.annotation.RequestMapping;<br>import org.springframework.web.bind.annotation.RequestMethod;<br>import org.springframework.web.bind.annotation.RestController;</p>
+<p>import com.alibaba.fastjson.JSON;<br>import com.alibaba.fastjson.JSONObject;</p>
+<pre><code>/**
+ * http服务端
+ * 
+ * 
+ * @author：WangYuanJun
+ * @date：2017年12月21日 下午8:27:08
+ */
+@RestController
+@RequestMapping(&quot;/httpService&quot;)
+public class HttpServiceTest {
+
+    @RequestMapping(value = &quot;/sendPostDataByMap&quot;, method = RequestMethod.POST)
+    public String sendPostDataByMap(HttpServletRequest request, HttpServletResponse response) {
+        String result = &quot;调用成功：数据是 &quot; + &quot;name:&quot; + request.getParameter(&quot;name&quot;) + &quot; city:&quot; + request.getParameter(&quot;city&quot;);
+        return JSON.toJSONString(result);
+    }
+
+    @RequestMapping(value = &quot;/sendPostDataByJson&quot;, method = RequestMethod.POST)
+    public String sendPostDataByJson(HttpServletRequest request, HttpServletResponse response, @RequestBody String requestBody) {
+        JSONObject jsonObject = JSONObject.parseObject(requestBody);
+        String result = &quot;调用成功：数据是 &quot; + &quot;name:&quot; + jsonObject.getString(&quot;name&quot;) + &quot; city:&quot; + jsonObject.getString(&quot;city&quot;);
+        return JSON.toJSONString(result);
+    }
+
+    @RequestMapping(value = &quot;/sendGetData&quot;, method = RequestMethod.GET)
+    public String sendGetData(HttpServletRequest request, HttpServletResponse response) {
+        String result = &quot;调用成功：数据是 &quot; + &quot;name:&quot; + request.getParameter(&quot;name&quot;) + &quot; city:&quot; + request.getParameter(&quot;city&quot;);
+        return JSON.toJSONString(result);
+    }
+}
+</code></pre><h2 id="调用后返回结果输出为"><a href="#调用后返回结果输出为" class="headerlink" title="调用后返回结果输出为"></a>调用后返回结果输出为</h2><p><img src="/2017/12/23/SpringBoot发布HttpClient服务和客户端调用HttpClient服务/HttpClient-result.png" alt="HttpClient-result"></p>
+<h2 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h2><p><a href="https://github.com/wangyuanjun008/wyj-interface-client/blob/master/src/main/java/http/HttpClientTest.java" target="_blank" rel="external">SpringBoot整合的HttpClient客户端地址</a><br><a href="https://github.com/wangyuanjun008/wyj-interface-service/blob/master/src/main/java/com/wyj/http/HttpServiceTest.java" target="_blank" rel="external">SpringBoot整合的HttpClient服务端地址</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;之前在做公司项目的一个功能需要写WebSerice接口，写完之后我们老大说也可以用HttpClient来写接口，所以写了一个接口例子。&lt;/p&gt;
+&lt;h2 id=&quot;添加依赖&quot;&gt;&lt;a href=&quot;#添加依赖&quot; class=&quot;headerlink&quot; title=&quot;添加依赖&quot;&gt;&lt;/a
+    
+    </summary>
+    
+      <category term="HttpClient" scheme="http://wangyuanjun.cn/categories/HttpClient/"/>
+    
+    
+      <category term="SpringBoot" scheme="http://wangyuanjun.cn/tags/SpringBoot/"/>
+    
+      <category term="HttpClient" scheme="http://wangyuanjun.cn/tags/HttpClient/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SpringBoot整合cxf发布WebService服务和客户端调用WebService服务</title>
+    <link href="http://wangyuanjun.cn/2017/12/21/SpringBoot%E6%95%B4%E5%90%88cxf%E5%8F%91%E5%B8%83WebService%E6%9C%8D%E5%8A%A1%E5%92%8C%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B0%83%E7%94%A8WebService%E6%9C%8D%E5%8A%A1/"/>
+    <id>http://wangyuanjun.cn/2017/12/21/SpringBoot整合cxf发布WebService服务和客户端调用WebService服务/</id>
+    <published>2017-12-21T05:19:10.000Z</published>
+    <updated>2017-12-21T07:43:17.517Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近在做公司项目的一个功能需要写WebSerice接口，为了系统得学习WebService，决定写一个测试接口的例子。<br>测试项目中使用的是SpringBoot(spring整合cxf需添加cxf-rt-frontend-jaxws，cxf-rt-transports-http依赖)</p>
+<h2 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h2><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+
+    &lt;groupId&gt;com.wyj&lt;/groupId&gt;
+    &lt;artifactId&gt;wyj-interface-service&lt;/artifactId&gt;
+    &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
+    &lt;packaging&gt;jar&lt;/packaging&gt;
+
+    &lt;name&gt;wyj-interface-service&lt;/name&gt;
+    &lt;description&gt;Demo project for Spring Boot&lt;/description&gt;
+
+    &lt;parent&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+        &lt;version&gt;1.5.9.RELEASE&lt;/version&gt;
+        &lt;relativePath /&gt; &lt;!-- lookup parent from repository --&gt;
+    &lt;/parent&gt;
+
+    &lt;properties&gt;
+        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+        &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt;
+        &lt;java.version&gt;1.8&lt;/java.version&gt;
+    &lt;/properties&gt;
+
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+
+        &lt;!-- http --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.httpcomponents&lt;/groupId&gt;
+            &lt;artifactId&gt;httpclient&lt;/artifactId&gt;
+            &lt;version&gt;4.5.4&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+            &lt;artifactId&gt;fastjson&lt;/artifactId&gt;
+            &lt;version&gt;1.1.41&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;!-- 热部署模块 --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;
+            &lt;optional&gt;true&lt;/optional&gt; &lt;!-- 这个需要为 true 热部署才有效 --&gt;
+        &lt;/dependency&gt;
+
+        &lt;!-- CXF webservice --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.cxf&lt;/groupId&gt;
+            &lt;artifactId&gt;cxf-spring-boot-starter-jaxws&lt;/artifactId&gt;
+            &lt;version&gt;3.1.11&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;!-- CXF webservice --&gt;
+
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.scala-lang&lt;/groupId&gt;
+            &lt;artifactId&gt;scala-library&lt;/artifactId&gt;
+            &lt;version&gt;2.11.0&lt;/version&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+    &lt;build&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/build&gt;
+&lt;/project&gt;
+</code></pre><h2 id="服务端接口"><a href="#服务端接口" class="headerlink" title="服务端接口"></a>服务端接口</h2><pre><code>package com.wyj.webservice;
+
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebResult;
+import javax.jws.WebService;
+
+/**
+ * webservice测试接口
+ * 
+ * 
+ * @author：WangYuanJun
+ * @date：2017年12月19日 下午9:36:49
+ */
+@WebService(name = &quot;TestService&quot;, // 暴露服务名称
+targetNamespace = &quot;http://service.wyj.com&quot;// 命名空间,一般是接口的包名倒序
+)
+public interface TestService {
+
+    @WebMethod
+    @WebResult(name = &quot;String&quot;, targetNamespace = &quot;&quot;)
+    String sendMessage(@WebParam(name = &quot;username&quot;) String username);
+}
+</code></pre><h2 id="服务端接口实现"><a href="#服务端接口实现" class="headerlink" title="服务端接口实现"></a>服务端接口实现</h2><pre><code>package com.wyj.webservice;
+
+import javax.jws.WebService;
+
+import org.springframework.stereotype.Component;
+
+    /**
+     * webservice测试接口实现
+     * 
+     * 
+     * @author：WangYuanJun
+     * @date：2017年12月19日 下午9:37:20
+     */
+    @WebService(serviceName = &quot;TestService&quot;, // 与接口中指定的name一致
+    targetNamespace = &quot;http://service.wyj.com&quot;, // 与接口中的命名空间一致,一般是接口的包名倒
+    endpointInterface = &quot;com.wyj.webservice.TestService&quot;// 接口地址
+    )
+    @Component
+    public class TestServiceImpl implements TestService {
+
+        @Override
+        public String sendMessage(String username) {
+
+            return &quot;hello &quot;+username;
+        }
+
+    }
+</code></pre><h2 id="cxf配置"><a href="#cxf配置" class="headerlink" title="cxf配置"></a>cxf配置</h2><pre><code>package com.wyj.webservice;
+
+import javax.xml.ws.Endpoint;
+
+import org.apache.cxf.Bus;
+import org.apache.cxf.jaxws.EndpointImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+/**
+ * cxf配置
+ * 
+ * 
+ * @author：WangYuanJun
+ * @date：2017年12月19日 下午9:38:24
+ */
+@Configuration
+public class CxfConfig {
+
+    @Autowired
+    private Bus bus;
+
+    @Autowired
+    private TestService testService;
+
+    @Bean
+    public Endpoint endpoint(){
+        EndpointImpl endpoint = new EndpointImpl(bus, testService);
+        endpoint.publish(&quot;/TestService&quot;);
+        return endpoint;
+    }
+}
+</code></pre><p>默认服务在Host:port/services/<em>*</em>路径下<br>将TestService接口发布在了路径/services/TestService下,wsdl文档路径为，<a href="http://localhost:8080/services/TestService?wsdl" target="_blank" rel="external">http://localhost:8080/services/TestService?wsdl</a></p>
+<h2 id="TestService的wsdl信息"><a href="#TestService的wsdl信息" class="headerlink" title="TestService的wsdl信息"></a>TestService的wsdl信息</h2><pre><code>&lt;?xml version=&apos;1.0&apos; encoding=&apos;UTF-8&apos;?&gt;&lt;wsdl:definitions xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:wsdl=&quot;http://schemas.xmlsoap.org/wsdl/&quot; xmlns:tns=&quot;http://service.wyj.com&quot; xmlns:soap=&quot;http://schemas.xmlsoap.org/wsdl/soap/&quot; xmlns:ns1=&quot;http://schemas.xmlsoap.org/soap/http&quot; name=&quot;TestService&quot; targetNamespace=&quot;http://service.wyj.com&quot;&gt;
+  &lt;wsdl:types&gt;
+&lt;xs:schema xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:tns=&quot;http://service.wyj.com&quot; elementFormDefault=&quot;unqualified&quot; targetNamespace=&quot;http://service.wyj.com&quot; version=&quot;1.0&quot;&gt;
+
+  &lt;xs:element name=&quot;sendMessage&quot; type=&quot;tns:sendMessage&quot;/&gt;
+
+  &lt;xs:element name=&quot;sendMessageResponse&quot; type=&quot;tns:sendMessageResponse&quot;/&gt;
+
+  &lt;xs:complexType name=&quot;sendMessage&quot;&gt;
+    &lt;xs:sequence&gt;
+      &lt;xs:element minOccurs=&quot;0&quot; name=&quot;username&quot; type=&quot;xs:string&quot;/&gt;
+    &lt;/xs:sequence&gt;
+  &lt;/xs:complexType&gt;
+
+  &lt;xs:complexType name=&quot;sendMessageResponse&quot;&gt;
+    &lt;xs:sequence&gt;
+      &lt;xs:element minOccurs=&quot;0&quot; name=&quot;String&quot; type=&quot;xs:string&quot;/&gt;
+    &lt;/xs:sequence&gt;
+  &lt;/xs:complexType&gt;
+
+&lt;/xs:schema&gt;
+  &lt;/wsdl:types&gt;
+  &lt;wsdl:message name=&quot;sendMessage&quot;&gt;
+    &lt;wsdl:part element=&quot;tns:sendMessage&quot; name=&quot;parameters&quot;&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:message&gt;
+  &lt;wsdl:message name=&quot;sendMessageResponse&quot;&gt;
+    &lt;wsdl:part element=&quot;tns:sendMessageResponse&quot; name=&quot;parameters&quot;&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:message&gt;
+  &lt;wsdl:portType name=&quot;TestService&quot;&gt;
+    &lt;wsdl:operation name=&quot;sendMessage&quot;&gt;
+      &lt;wsdl:input message=&quot;tns:sendMessage&quot; name=&quot;sendMessage&quot;&gt;
+    &lt;/wsdl:input&gt;
+      &lt;wsdl:output message=&quot;tns:sendMessageResponse&quot; name=&quot;sendMessageResponse&quot;&gt;
+    &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+  &lt;/wsdl:portType&gt;
+  &lt;wsdl:binding name=&quot;TestServiceSoapBinding&quot; type=&quot;tns:TestService&quot;&gt;
+    &lt;soap:binding style=&quot;document&quot; transport=&quot;http://schemas.xmlsoap.org/soap/http&quot;/&gt;
+    &lt;wsdl:operation name=&quot;sendMessage&quot;&gt;
+      &lt;soap:operation soapAction=&quot;&quot; style=&quot;document&quot;/&gt;
+      &lt;wsdl:input name=&quot;sendMessage&quot;&gt;
+        &lt;soap:body use=&quot;literal&quot;/&gt;
+      &lt;/wsdl:input&gt;
+      &lt;wsdl:output name=&quot;sendMessageResponse&quot;&gt;
+        &lt;soap:body use=&quot;literal&quot;/&gt;
+      &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+  &lt;/wsdl:binding&gt;
+  &lt;wsdl:service name=&quot;TestService&quot;&gt;
+    &lt;wsdl:port binding=&quot;tns:TestServiceSoapBinding&quot; name=&quot;TestServiceImplPort&quot;&gt;
+      &lt;soap:address location=&quot;http://localhost:8080/services/TestService&quot;/&gt;
+    &lt;/wsdl:port&gt;
+  &lt;/wsdl:service&gt;
+&lt;/wsdl:definitions&gt;
+</code></pre><h2 id="基于cxf的客户端调用webservice接口"><a href="#基于cxf的客户端调用webservice接口" class="headerlink" title="基于cxf的客户端调用webservice接口"></a>基于cxf的客户端调用webservice接口</h2><pre><code>package webservice;
+
+import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.jaxws.endpoint.dynamic.JaxWsDynamicClientFactory;
+import org.junit.Test;
+
+/**
+ * webservice客户端
+ * 
+ * 
+ * @author：WangYuanJun
+ * @date：2017年12月19日 下午9:39:49
+ */
+public class WebServiceTest {
+
+    @Test
+    public void testSend1(){
+
+        // 创建动态客户端
+        JaxWsDynamicClientFactory dcf = JaxWsDynamicClientFactory.newInstance();
+        Client client = dcf.createClient(&quot;http://localhost:8080/services/TestService?wsdl&quot;);
+
+        // 需要密码的情况需要加上用户名和密码
+        // client.getOutInterceptors().add(new ClientLoginInterceptor(USER_NAME,PASS_WORD));
+        Object[] objects = new Object[0];
+        try {
+
+            // invoke(&quot;方法名&quot;,参数1,参数2,参数3....);
+            objects = client.invoke(&quot;sendMessage&quot;, &quot;wyj&quot;);
+            System.out.println(&quot;返回数据:&quot; + objects[0]);
+        } catch (java.lang.Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre><h2 id="调用后返回结果输出为"><a href="#调用后返回结果输出为" class="headerlink" title="调用后返回结果输出为"></a>调用后返回结果输出为</h2><p><img src="/2017/12/21/SpringBoot整合cxf发布WebService服务和客户端调用WebService服务/TestService-result.png" alt="TestService-result"></p>
+<h2 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h2><p><a href="https://github.com/wangyuanjun008/wyj-interface-client/blob/master/src/main/java/webservice/WebServiceTest.java" target="_blank" rel="external">SpringBoot整合cxf的WebService客户端地址</a><br><a href="https://github.com/wangyuanjun008/wyj-interface-service/tree/master/src/main/java/com/wyj/webservice" target="_blank" rel="external">SpringBoot整合cxf的WebService服务端地址</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近在做公司项目的一个功能需要写WebSerice接口，为了系统得学习WebService，决定写一个测试接口的例子。&lt;br&gt;测试项目中使用的是SpringBoot(spring整合cxf需添加cxf-rt-frontend-jaxws，cxf-rt-transports-
+    
+    </summary>
+    
+      <category term="WebService" scheme="http://wangyuanjun.cn/categories/WebService/"/>
+    
+    
+      <category term="SpringBoot" scheme="http://wangyuanjun.cn/tags/SpringBoot/"/>
+    
+      <category term="WebService" scheme="http://wangyuanjun.cn/tags/WebService/"/>
+    
+  </entry>
   
   <entry>
     <title>github-hexo搭建博客之hexo提交百度搜索引擎</title>
@@ -1246,217 +1815,6 @@ Caused by: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot
     
     
       <category term="weblogic" scheme="http://wangyuanjun.cn/tags/weblogic/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Oracle数据库之PL/SQL游标</title>
-    <link href="http://wangyuanjun.cn/2017/04/28/Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8BPL-SQL%E6%B8%B8%E6%A0%87/"/>
-    <id>http://wangyuanjun.cn/2017/04/28/Oracle数据库之PL-SQL游标/</id>
-    <published>2017-04-28T06:35:56.000Z</published>
-    <updated>2017-12-18T01:44:59.424Z</updated>
-    
-    <content type="html"><![CDATA[<p>原文  <a href="http://www.cnblogs.com/zf29506564/p/5772344.html" target="_blank" rel="external">http://www.cnblogs.com/zf29506564/p/5772344.html</a></p>
-<ol>
-<li>游标概念</li>
-</ol>
-<p>字面意思是游动的光标，是指向上下文区域的句柄或指针。</p>
-<p>在PL/SQL块中执行CRUD操作时，ORACLE会在内存中为其分配上下文区。用数据库语言来描述游标就是：映射在上下文区结果集中一行数据上的位置实体。</p>
-<p>用户可以使用游标访问结果集中的任意一行数据，将游标指向某行后，即可对该行数据进行操作。游标为应用提供了一种对具有多行数据查询结果集中的每一行数据分别进行单独处理的方法，是设计嵌入式SQL语句的应用程序的常用编程方式。</p>
-<p>在每个用户会话中，可以同时打开多个游标，其最大数量由数据库初始化参数文件中的OPEN_CURSORS参数定义。</p>
-<p>游标可分为显式游标和隐式游标两类。</p>
-<ol>
-<li>显式游标</li>
-</ol>
-<p>显式游标使用主要有四个步骤：</p>
-<p>声明/定义游标<br>打开游标<br>读取数据<br>关闭游标<br>2.1 声明/定义游标</p>
-<p>语法：</p>
-<p>CURSOR cursor_name<br>  [(parameter_dec [, parameter_dec ]…)]<br>    [RETURN datatype]<br>      IS<br>        select_statement;<br>示例：</p>
-<p>DECLARE<br>  CURSOR c1 RETURN departments%ROWTYPE;    – 声明C1游标</p>
-<p>  CURSOR c2 IS                             – 声明C2游标并定义<br>    SELECT employee_id, job_id, salary FROM employees<br>    WHERE salary &gt; 2000; </p>
-<p>  CURSOR c1 RETURN departments%ROWTYPE IS  – 定义C1游标<br>    SELECT * FROM departments<br>    WHERE department_id = 110;</p>
-<p>  CURSOR c3 RETURN locations%ROWTYPE;      – 声明C3游标</p>
-<p>  CURSOR c3 IS                             – 定义C3游标<br>    SELECT * FROM locations<br>    WHERE country_id = ‘JP’;</p>
-<p>  CURSOR c4(sal number) IS                             – 声明C4游标并定义<br>    SELECT employee_id, job_id, salary FROM employees<br>    WHERE salary &gt; sal;<br>BEGIN<br>  NULL;<br>END;<br>说明：</p>
-<p>在指定参数数据类型时，不能使用长度约束，如C4游标的参数，不能写为number(10,4)这种结构。</p>
-<p>[RETURN datatype]是可选的，表示游标返回数据的数据。如果选择，则应该严格与select_statement中的选择列表在次序和数据类型上匹配。一般是记录数据类型（RECORD）或带“%ROWTYPE”的数据。</p>
-<p>2.2 打开游标</p>
-<p>执行游标所对应的SELECT语句，将其查询结果放入工作区，并且指针指向工作区的首部，标识游标结果集。</p>
-<p>语法：</p>
-<p>OPEN cursor_name [ ( cursor_parameter [ [,] actual_cursor_parameter ]… ) ]<br>示例：</p>
-<p>OPEN c4 (1300);<br>2.3 读取数据</p>
-<p>检索结果集合中的数据行，放入指定的输出变量中。</p>
-<p>语法：</p>
-<p>FETCH { cursor | cursor_variable | :host_cursor_variable }<br>  { into_clause | bulk_collect_into_clause [ LIMIT numeric_expression ] } ;<br>执行FETCH语句时，每次返回一个数据行，然后自动将游标移动指向下一个数据行。当检索到最后一行数据时，如果再次执行FETCH语句，将操作失败，并将游标属性%NOTFOUND置为TRUE。所以每次执行完FETCH语句后，检查游标属性%NOTFOUND就可以判断FETCH语句是否执行成功并返回一个数据行，以便确定是否给对应的变量赋了值。</p>
-<p>示例：</p>
-<p>fetch c4 into eid, jid, sal;<br>2.4 关闭游标</p>
-<p>当处理完游标结果集合数据后，应及时关闭游标，以释放该游标所占用的系统资源。</p>
-<p>关闭游标后不能再使用FETCH语句获取其中数据。关闭后的游标可以使用OPEN语句重新打开。</p>
-<p>语法：</p>
-<p>CLOSE cursor_name;<br>完整示例1：</p>
-<p>DECLARE<br>   – 定义游标<br>   CURSOR c_cursor IS<br>   SELECT first_name || last_name, Salary FROM EMPLOYEES WHERE rownum&lt;11;   </p>
-<p>   – 声明变量<br>   v_ename  EMPLOYEES.first_name%TYPE;<br>   v_sal    EMPLOYEES.Salary%TYPE;<br>BEGIN<br>  – 打开游标<br>  OPEN c_cursor;<br>  – 获取数据<br>  FETCH c_cursor INTO v_ename, v_sal;<br>  – 处理数据<br>  WHILE c_cursor%FOUND LOOP<br>     DBMS_OUTPUT.PUT_LINE(v_ename||’—‘||to_char(v_sal) );<br>     FETCH c_cursor INTO v_ename, v_sal;<br>  END LOOP;<br>  – 关闭游标<br>  CLOSE c_cursor;<br>END;<br>完整示例2：</p>
-<p>DECLARE<br>   – 定义RECORD记录类型<br>   TYPE emp_record_type IS RECORD(<br>        f_name   employees.first_name%TYPE,<br>        h_date   employees.hire_date%TYPE);<br>   – 声明记录变量<br>   v_emp_record EMP_RECORD_TYPE;<br>   – 定义游标，有参数与返回值<br>   CURSOR c3(dept_id NUMBER, j_id VARCHAR2)<br>      RETURN EMP_RECORD_TYPE<br>   IS<br>      SELECT first_name, hire_date FROM employees<br>      WHERE department_id = dept_id AND job_id = j_id;</p>
-<p>BEGIN<br>   – 打开游标，传递参数值<br>   OPEN c3(j_id =&gt; ‘AD_VP’, dept_id =&gt; 90);<br>   LOOP<br>      FETCH c3 INTO v_emp_record;    – 获取数据<br>      IF c3%FOUND THEN<br>         DBMS_OUTPUT.PUT_LINE(v_emp_record.f_name||’的雇佣日期是’||v_emp_record.h_date);<br>      ELSE<br>         DBMS_OUTPUT.PUT_LINE(‘已经处理完结果集了’);<br>         EXIT; – 处理完则退出循环<br>      END IF;<br>   END LOOP;<br>   CLOSE c3;   –关闭游标<br>END;</p>
-<ol>
-<li>显式游标属性</li>
-</ol>
-<p>游标的状态（如是否打开，获取了多少行数据等）可以使用游标属性来获取。</p>
-<p>游标属性以“%属性名”的形式加在游标名之后。显式游标属性有：</p>
-<p>属性名        说明<br>%FOUND        如果记录成功获取，返回TRUE，否则返回FALSE<br>%NOTFOUND    如果记录获取失败，返回TRUE，否则返回FALSE<br>%ROWCOUNT    返回已经从游标中获取的记录数<br>%ISOPEN        如果游标是打开的，返回TRUE，否则返回FALSE<br>示例：</p>
-<p>DECLARE<br>   v_empno  EMPLOYEES.EMPLOYEE_ID%TYPE;<br>   v_sal      EMPLOYEES.Salary%TYPE;<br>   – 定义游标<br>   CURSOR c_cursor IS SELECT EMPLOYEE_ID, Salary FROM EMPLOYEES;<br>BEGIN<br>   – 打开游标<br>   OPEN c_cursor;<br>   LOOP<br>      – 获取数据<br>      FETCH c_cursor INTO v_empno, v_sal;<br>      EXIT WHEN c_cursor%NOTFOUND;  – 未读取到记录，则退出循环<br>      IF v_sal&lt;=1200 THEN<br>            UPDATE EMPLOYEES SET Salary=Salary+50 WHERE EMPLOYEE_ID=v_empno;<br>            DBMS_OUTPUT.PUT_LINE(‘编码为’||v_empno||’工资已更新!’);<br>      END IF;<br>      DBMS_OUTPUT.PUT_LINE(‘记录数:’|| c_cursor %ROWCOUNT);<br>   END LOOP;<br>   – 关闭游标<br>   CLOSE c_cursor;<br>END;</p>
-<ol>
-<li>基于游标定义记录变量</li>
-</ol>
-<p>使用%ROWTYPE属性不仅可以基于表和视图定义记录变量，也可以基于游标定义记录变量。当基于游标定义记录变量时，记录成员名实际就是SELECT语句的列名和列别名。</p>
-<p>为了简化显式游标的数据处理，建议使用基于游标的记录变量存放游标数据。基于游标定义记录变量，比声明记录类型变量要方便，不容易出错。</p>
-<p>示例：</p>
-<p>DECLARE<br>   – 定义游标<br>   CURSOR emp_cursor IS SELECT ename,sal FROM emp；<br>   emp_reocrd emp_cursor%ROWTYPE；– 游标变量<br>BEGIN<br>   – 打开游标<br>   OPEN emp_cursor；<br>   LOOP<br>      – 获取记录<br>      FETCH emp_cursor INTO emp_record；<br>      EXIT WHEN emp_record%NOTFOUND；<br>      dbms_ouput.put_line(‘雇员名:’||emp_record.ename||’,雇员工资:’||emp_record.sal)；<br>   END LOOP；<br>   – 关闭游标<br>   CLOSE emp_cursor；<br>END；</p>
-<ol>
-<li>隐式游标</li>
-</ol>
-<p>如果在PL/SQL块中使用了SELECT语句进行操作，PL/SQL会隐含处理游标定义，而对于非查询语句，如修改、删除操作，则由ORACLE系统自动地为这些操作设置游标并创建其工作区。由系统隐含创建的游标称为隐式游标，隐式游标的名字为SQL。</p>
-<p>对于隐式游标的操作，如定义、打开、取值及关闭操作，都由ORACLE 系统自动地完成，无需用户进行处理。用户只能通过隐式游标的相关属性，来完成相应的操作。在隐式游标的工作区中，所存放的数据是与用户自定义的显示游标无关的、最新处理的一条SQL语句所包含的数据。</p>
-<p>隐式游标的属性：</p>
-<p>属性名            说明<br>SQL%FOUND        如果记录成功获取，返回TRUE，否则返回FALSE<br>SQL%NOTFOUND    如果记录获取失败，返回TRUE，否则返回FALSE<br>SQL%ROWCOUNT    返回已经从游标中获取的记录数<br>SQL%ISOPEN        如果游标是打开的，返回TRUE，否则返回FALSE<br>隐式游标在INSERT，UPDATE，DELETE，SELECT语句中不必明确定义游标。</p>
-<p>示例：</p>
-<p>DECLARE<br>   v_rows NUMBER;<br>BEGIN<br>   – 更新表数据<br>   UPDATE employees SET salary = 5000 WHERE department_id = 90 AND job_id = ‘AD_VP’;<br>   – 获取受影响行数<br>   v_rows := SQL%ROWCOUNT;<br>   DBMS_OUTPUT.PUT_LINE(‘更新了’||v_rows||’个员工的工资’);<br>END;</p>
-<ol>
-<li>游标FOR循环</li>
-</ol>
-<p>游标FOR循环和显示游标的一种快捷使用方式，它使用FOR循环依次读取结果集中的行数据，当FOR循环开始时，游标自动打开（不需要OPEN）,每循环一次系统自动读取游标当前行的数据（不需要FETCH)，当退出FOR循环时，游标被自动关闭（不需要使用CLOSE）使用游标FOR循环的时候不能使用OPEN语句，FETCH语句和CLOSE语句，否则会产生错误。</p>
-<p>语法：</p>
-<p>FOR index_variable IN cursor_name[(value[, value]…)] LOOP<br>    – 游标处理语句<br>END LOOP;<br>示例：</p>
-<p>DECLARE<br>    CURSOR emp_cur(vartype number) IS<br>        SELECT emp_no,emp_zc FROM cus_emp_basic WHERE com_no=vartype;<br>BEGIN<br>    FOR person IN emp_cur(123) LOOP<br>        DBMS_OUTPUT.PUT_LINE(‘编号:’||person.emp_no||’,地址:’||person.emp_zc);<br>END LOOP;<br>END;</p>
-<ol>
-<li>使用显示游标修改数据</li>
-</ol>
-<p>在PL/SQL中依然可以使用UPDATE和DELETE语句更新或删除数据行。显式游标只有在需要获得多行数据的情况下使用。PL/SQL提供了仅仅使用游标就可以执行删除或更新记录的方法。</p>
-<p>UPDATE或DELETE语句中的WHERE CURRENT OF子句专门处理要执行UPDATE或DELETE操作的表中取出的最近的数据。要使用这个方法，在声明游标时必须使用FOR UPDATE子句，当使用FOR UPDATE子句打开一个游标时，所有返回集中的数据行都将处于行级（ROW-LEVEL)独占式锁定，其他对象只能查询这些数据行，不能进行UPDATE、DELETE或SELECT…FOR UPDATE操作。</p>
-<p>语法：</p>
-<p>FOR UPDATE [OF [schema.]table.column[,[schema.]table.column]..<br>[NOWAIT]<br>在多表查询中，使用OF子句来锁定特定的表,如果忽略了OF子句，那么所有表中选择的数据行都将被锁定。如果这些数据行已经被其他会话锁定，那么正常情况下ORACLE将等待，直到数据行解锁。当加上NOWAIT子句时，如果这些行真的被另一个会话锁定，则OPEN立即返回并给出：</p>
-<p>ORA-00054 ：resource busy  and  acquire with nowait specified.<br>在UPDATE和DELETE中使用WHERE CURRENT OF子串的语法如下：</p>
-<p>WHERE{CURRENT OF cursor_name|search_condition}<br>示例：</p>
-<p>DELCARE<br>    CURSOR c1 IS<br>        SELECT empno,salary FROM emp<br>        WHERE comm IS NULL<br>        FOR UPDATE OF comm;<br>    v_comm NUMBER(10,2);<br>BEGIN<br>    FOR r1 IN c1 LOOP<br>        IF r1.salary&lt;500 THEN<br>            v_comm:=r1.salary<em>0.25;<br>　　      ELSEIF r1.salary&lt;1000 THEN<br>            v_comm:=r1.salary</em>0.20;<br>　　      ELSEIF r1.salary&lt;3000 THEN<br>            v_comm:=r1.salary<em>0.15;<br>        ELSE<br>            v_comm:=r1.salary</em>0.12;<br>        END IF;<br>        UPDATE emp SET comm=v_comm WHERE CURRENT OF c1;<br>    END LOOP;<br>END</p>
-<ol>
-<li>游标变量</li>
-</ol>
-<p>与游标类似，游标变量指向多行查询的结果集的当前行。但是，游标与游标变量是不同的，就像常量和变量的关系一样。游标是静态的，游标变量是动态的，因为它不与特定的查询绑定在一起。</p>
-<p>8.1 声明游标变量</p>
-<p>语法：</p>
-<p>TYPE ref_type_name IS REF CURSOR<br>    [ RETURN return_type];<br>说明：</p>
-<p>游标变量类型有强类型定义和弱类型定义两种。强类型定义必须指定游标变量的返回值类型，而弱类型定义则不说明返回值类型。</p>
-<p>return_type为游标变量的返回值类型，它必须为记录变量。</p>
-<p>示例：</p>
-<p>– 定义一个REF CURSOU类型<br>TYPE ref_cursor_type IS REF CURSOR;<br>– 声明一个游标变量<br>cv_ref REF_CURSOR_TYPE;<br>8.2 游标变量的使用</p>
-<p>与游标一样，游标变量操作也包括打开、提取和关闭三个步骤。</p>
-<p>8.2.1 打开游标变量</p>
-<p>语法：</p>
-<p>OPEN {cursor_variable_name | :host_cursor_variable_name}<br>FOR select_statement;<br>说明：</p>
-<p>host_cursor_variable_name为PL/SQL主机环境（如OCI: ORACLE Call Interface，Pro*c 程序等）中声明的游标变量。</p>
-<p>OPEN…FOR 语句可以在关闭当前的游标变量之前重新打开游标变量，而不会导致CURSOR_ALREAD_OPEN异常错误。新打开游标变量时，前一个查询的内存处理区将被释放。</p>
-<p>8.2.2 提取数据</p>
-<p>语法：</p>
-<p>FETCH {cursor_variable_name | :host_cursor_variable_name}<br>INTO {variable [, variable]…| record_variable};<br>说明：</p>
-<p>将提取到的数据放入普通变量和记录变量中存放。</p>
-<p>8.2.3 关闭游标</p>
-<p>语法：</p>
-<p>CLOSE {cursor_variable_name | :host_cursor_variable_name}<br>说明：</p>
-<p>如果应用程序试图关闭一个未打开的游标变量，则将导致INVALID_CURSOR异常错误。</p>
-<p>示例1：</p>
-<p>DECLARE<br>TYPE ref_type_table IS REF CURSOR;<br>v_cursor            ref_type_table;<br>emp_record          emp%rowtype;<br>BEGIN<br>     OPEN v_cursor FOR select * from emp where deptno=&no;<br>     LOOP<br>         FETCH v_cursor INTO emp_record;<br>         EXIT WHEN v_cursor%NOTFOUND;<br>         dbms_output.put_line(‘员工号：’||emp_record.ename||’部门号：’||emp_record.deptno);<br>     END LOOP;<br>     CLOSE v_cursor;<br>END;<br>示例2：</p>
-<p>DECLARE<br>    emp_record          emp%rowtype;<br>    TYPE ref_type_table IS REF CURSOR RETURN emp%rowtype;<br>    v_cursor            ref_type_table;<br>BEGIN<br>     OPEN v_cursor FOR select * from emp where deptno=&no;<br>     LOOP<br>         FETCH v_cursor INTO emp_record;<br>         EXIT WHEN v_cursor%NOTFOUND;<br>         dbms_output.put_line(‘员工号：’||emp_record.ename||’部门号：’||emp_record.deptno);<br>     END LOOP;<br>     CLOSE v_cursor;<br>END;</p>
-<p>DECLARE<br>Type emp_record_type IS RECORD(<br>       ename emp.ename%TYPE,<br>       salary emp.sal%TYPE,<br>       deptno emp.deptno%TYPE);<br>emp_record emp_record_type;</p>
-<p>TYPE ref_type_table IS REF CURSOR RETURN emp_record_type;<br>v_cursor            ref_type_table;<br>BEGIN<br>     OPEN v_cursor FOR select ename,sal,deptno from emp where deptno=&no;<br>     LOOP<br>         FETCH v_cursor INTO emp_record;<br>         EXIT WHEN v_cursor%NOTFOUND;<br>         dbms_output.put_line(‘员工号：’||emp_record.ename||’，部门号：’||emp_record.deptno||’，工资：’||emp_record.salary);<br>     END LOOP;<br>     CLOSE v_cursor;<br>END;</p>
-<ol>
-<li>使用游标批量获取</li>
-</ol>
-<p>语法：</p>
-<p>FETCH … BULK COLLECT INTO …[LIMIT row_number];<br>说明：</p>
-<p>使用BULK COLLECT，我们可以用对数据库的一个来回，返回多行数据。BULK COLLECT减少了PL/SQL和SQL引擎之间的上下文开关数目，因而加速了数据获取的速度。</p>
-<p>示例：</p>
-<p>DECLARE<br>     CURSOR emp_cursor(v_deptno number) IS SELECT * FROM EMP WHERE deptno = v_deptno;<br>     TYPE type_emp_table IS TABLE OF emp%ROWTYPE INDEX BY BINARY_INTEGER;<br>     emp_table type_emp_table;<br>     v_dno emp.deptno%TYPE;<br>BEGIN<br>     v_dno := &no;<br>     OPEN emp_cursor(v_dno);<br>     FETCH emp_cursor BULK COLLECT INTO emp_table;<br>     CLOSE emp_cursor;<br>     FOR i IN 1..emp_table.COUNT LOOP<br>         dbms_output.put_line(‘员工号：’||emp_table(i).ename||’工资：’||emp_table(i).sal);<br>     END LOOP;<br>     CLOSE emp_cursor;<br>END;</p>
-<ol>
-<li>游标表达式</li>
-</ol>
-<p>游标表达式作用是用于返回嵌套游标。语法：</p>
-<p>CURSOR(sub_query)<br>示例：</p>
-<p>DECLARE<br>       CURSOR dept_emp_cursor(v_deptno number) IS<br>   SELECT dname,cursor(SELECT * FROM emp e WHERE e.deptno = d.deptno)<br>   FROM dept d WHERE deptno = v_deptno;<br>       TYPE emp_cursor_type IS REF CURSOR;<br>       emp_cursor emp_cursor_type;<br>       emp_record emp%ROWTYPE;<br>       v_name dept.dname%TYPE;<br>       v_dno emp.deptno%TYPE;<br>BEGIN<br>     v_dno := &no;<br>     OPEN dept_emp_cursor(v_dno);<br>     loop<br>          FETCH dept_emp_cursor INTO v_name,emp_cursor;<br>          EXIT WHEN dept_emp_cursor%NOTFOUND;<br>          dbms_output.put_line(‘部门名称：’||v_name);<br>          LOOP<br>              FETCH emp_cursor INTO emp_record;<br>              EXIT WHEN emp_cursor%NOTFOUND;<br>              dbms_output.put_line(‘员工名称：’||emp_record.ename||’，工资：’||emp_record.sal);<br>          END LOOP;<br>     end loop;<br>     CLOSE dept_emp_cursor;<br>END;</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;原文  &lt;a href=&quot;http://www.cnblogs.com/zf29506564/p/5772344.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://www.cnblogs.com/zf29506564/p/5772344
-    
-    </summary>
-    
-      <category term="oracle" scheme="http://wangyuanjun.cn/categories/oracle/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>跨Oracle数据库实现表级别的实时同步</title>
-    <link href="http://wangyuanjun.cn/2017/04/28/%E8%B7%A8Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%9E%E7%8E%B0%E8%A1%A8%E7%BA%A7%E5%88%AB%E7%9A%84%E5%AE%9E%E6%97%B6%E5%90%8C%E6%AD%A5/"/>
-    <id>http://wangyuanjun.cn/2017/04/28/跨Oracle数据库实现表级别的实时同步/</id>
-    <published>2017-04-28T05:49:50.000Z</published>
-    <updated>2017-12-18T01:48:53.535Z</updated>
-    
-    <content type="html"><![CDATA[<p>一. 问题描述</p>
-<p>有两个Oracle数据库，分别布置在不同的服务器上，系统均为windows2003；</p>
-<p>这里暂且说成是一个主数据库和从数据库：</p>
-<p>(1) 主数据库: oracle_A ；</p>
-<p>(2) 从数据库: oracle_B ；</p>
-<p>在oracle_A中有一个表table_A与oracle_B中的表table_B 结构相同 ；</p>
-<p>我是处在oracle_B，oracle_A数据库分配给我有一个访问oracle_A表table_A的用户，该用户 只拥有查询的权限 ；</p>
-<p>另外，需要 说明的一点 ，就是在oracle_B处,只需对table_B表进行查询的操作，不进行其他增删改的操作。</p>
-<p>场景介绍完了， 我的问题 的是,如何在oracle_A中表table_A发生变化时,实时更新同步到oracle_B的table_B中?</p>
-<p>我原来的处理方式:</p>
-<p>通过建立远程连接DBLink+JOB定时任务+存储过程的方式,实现了定时同步 更新,但不能做到实时同步 。</p>
-<p>二. 采用同义词+DB_Link的方式结果步骤</p>
-<p>之所以能够选择采用同义词的方式，处理这个问题。主要还是源于在问题描述中提到一个点，那就是我们只需要对同步后的表进行 查询 操作。这点是使用同义词方式的重要要素。</p>
-<p>下面详细模拟一下整个实验测试的过程：</p>
-<p>（1）首先在Oracle_A端创建一个对table_A只有查询功能的用户</p>
-<p><1> 创建用户<br>  sqlplus /nolog<br>  conn /as sysdba;<br>  create user username identified by password;</1></p>
-<p><2> 查看所有的用户列表<br>    用户创建完成后,查看用户是否创建成功<br>  select * from all_users;</2></p>
-<p><3>授予权限<br>    为了能够保证能够登陆,必须赋予如下权限</3></p>
-<p>  –授予username用户创建session的权限,即登陆权限<br>  grant create session to username;</p>
-<p>  –授予username用户使用表空间的权限<br>  grant unlimited tablespace to username;</p>
-<p>  –oracle对权限管理比较严谨,普通用户之间也是默认不能互相访问的,需要互相授权.<br>  –如果scott用户要授权给username用户查看自己的test表的权限;<br>  sqlplus scott/tiget@localhost:1521/orcl</p>
-<p>  –授予username用户查看指定的权限<br>  grant select on test to username;</p>
-<p>  –撤销权限<br>    基本语法同grant,关键字为revoke;<br>（2）验证用户是否可以成功登录，并进行访问授权的表</p>
-<p>–使用sqlplus登录，并进行查询<br>sqlplus username/password@localhost:1521/orcl;<br>select * from scott.test;<br>注意：查询表时，务必带上用户名，说明是哪个用户下的表。</p>
-<p>（3）创建远程连接DB_Link</p>
-<p><1> 创建远程连接 db_link<br>create public database link db32　connect to tianzhi_test identified by “tianzhi_test” using ‘192.168.56.6:1521/ORCL’</1></p>
-<p><2> 测试远程连接是否成功<br>select * from tianzhi_smart.zh_item_news@db32;<br>（4）在Oracle_B端创建同义词</2></p>
-<p><1> 使用sqlplus登录自己的用户<br>sqlplus tianzhi_smart/tianzhi_smart@localhost:1521/orcl</1></p>
-<p><2> 创建同义词<br>create or replace public synonym TEST1130 for scott.TEST@db32;</2></p>
-<p><3> 查询测试<br>select * from TEST1130;<br>可以看到这与在Oracle_A源数据库中查到的table_A表中的数据一样.<br>注意事项:</3></p>
-<p>当远程查询的数据库中包含BLOB字段时,会报出如下错误.</p>
-<p>ORA-22992: 无法使用从远程表选择的 LOB 定位器</p>
-<p>当出现这个错误的时候，那是因为跨库连接查询中的表中存在BLOB类型的字段，所以一定要注意，所有表中存在blob类型字段，</p>
-<p>不能用 select * from 连接的表<br>不能将blob类型的字段出现在脚本中。<br>如果这些blob类型的字段一定要导过来，可以先建立临时表再插入本地表，方法如下.在pl/sql中执行</p>
-<p>第一步 建临时表</p>
-<p>create global temporary table foo ( X BLOB )</p>
-<p>on commit delete rows;</p>
-<p>第二步 插入本地表</p>
-<p>insert into foo select blobcolumn from remoteTable@dl_remote ;</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;一. 问题描述&lt;/p&gt;
-&lt;p&gt;有两个Oracle数据库，分别布置在不同的服务器上，系统均为windows2003；&lt;/p&gt;
-&lt;p&gt;这里暂且说成是一个主数据库和从数据库：&lt;/p&gt;
-&lt;p&gt;(1) 主数据库: oracle_A ；&lt;/p&gt;
-&lt;p&gt;(2) 从数据库: oracle_
-    
-    </summary>
-    
-      <category term="oracle" scheme="http://wangyuanjun.cn/categories/oracle/"/>
-    
-    
-      <category term="oracle" scheme="http://wangyuanjun.cn/tags/oracle/"/>
     
   </entry>
   
