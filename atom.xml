@@ -297,9 +297,9 @@ public class HttpServiceTest {
       <category term="HttpClient" scheme="http://wangyuanjun.cn/categories/HttpClient/"/>
     
     
-      <category term="SpringBoot" scheme="http://wangyuanjun.cn/tags/SpringBoot/"/>
-    
       <category term="HttpClient" scheme="http://wangyuanjun.cn/tags/HttpClient/"/>
+    
+      <category term="SpringBoot" scheme="http://wangyuanjun.cn/tags/SpringBoot/"/>
     
   </entry>
   
@@ -578,9 +578,9 @@ public class WebServiceTest {
       <category term="WebService" scheme="http://wangyuanjun.cn/categories/WebService/"/>
     
     
-      <category term="WebService" scheme="http://wangyuanjun.cn/tags/WebService/"/>
-    
       <category term="SpringBoot" scheme="http://wangyuanjun.cn/tags/SpringBoot/"/>
+    
+      <category term="WebService" scheme="http://wangyuanjun.cn/tags/WebService/"/>
     
   </entry>
   
