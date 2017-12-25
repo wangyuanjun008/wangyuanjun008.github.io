@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wangyuanjun.cn/"/>
-  <updated>2017-12-21T07:49:02.701Z</updated>
+  <updated>2017-12-25T09:41:38.098Z</updated>
   <id>http://wangyuanjun.cn/</id>
   
   <author>
@@ -14,6 +14,175 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Oracle VM VirtualBox配置虚拟网卡(桥接),实现主机-虚拟机网络互通</title>
+    <link href="http://wangyuanjun.cn/2017/12/25/Oracle-VM-VirtualBox%E9%85%8D%E7%BD%AE%E8%99%9A%E6%8B%9F%E7%BD%91%E5%8D%A1-%E6%A1%A5%E6%8E%A5-%E5%AE%9E%E7%8E%B0%E4%B8%BB%E6%9C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BA%92%E9%80%9A/"/>
+    <id>http://wangyuanjun.cn/2017/12/25/Oracle-VM-VirtualBox配置虚拟网卡-桥接-实现主机-虚拟机网络互通/</id>
+    <published>2017-12-25T09:01:52.000Z</published>
+    <updated>2017-12-25T09:41:38.098Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="桥接网卡"><a href="#桥接网卡" class="headerlink" title="桥接网卡"></a>桥接网卡</h2><ol>
+<li>首先打开虚拟机</li>
+<li>右键点击右下角 网络连接</li>
+<li>在弹出框内点击 网络</li>
+<li>在设置界面依次点击-网络-连接方式选择 -桥接网卡-确定</li>
+</ol>
+<p><img src="/2017/12/25/Oracle-VM-VirtualBox配置虚拟网卡-桥接-实现主机-虚拟机网络互通/桥接.png" alt="桥接"></p>
+<h2 id="编辑网卡"><a href="#编辑网卡" class="headerlink" title="编辑网卡"></a>编辑网卡</h2><ol>
+<li>打开centos虚拟机终端，就是命令行</li>
+<li>切换到root用户，对网卡文件进行编辑</li>
+<li>shell#cd /etc/sysconfig/network-scripts/</li>
+<li>shell# vim ifcfg-enp0s3</li>
+<li>BOOTPROTO=dhcp,ONBOOT=yes(dhcp为动态获取ip，ONBOOT=yes为开机启动)</li>
+<li>保存退出！<br><img src="/2017/12/25/Oracle-VM-VirtualBox配置虚拟网卡-桥接-实现主机-虚拟机网络互通/修改网卡.png" alt="修改网卡"></li>
+</ol>
+<h2 id="重启服务器"><a href="#重启服务器" class="headerlink" title="重启服务器"></a>重启服务器</h2><pre><code>shell#service network restart
+</code></pre><p>或者</p>
+<pre><code>shell#systemctl restart network (centos7版本命令)
+</code></pre><p>参考:<a href="https://jingyan.baidu.com/article/c843ea0ba8b70677931e4adc.html" target="_blank" rel="external">VirtualBox linux虚拟机如何实现“桥接”上网</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;桥接网卡&quot;&gt;&lt;a href=&quot;#桥接网卡&quot; class=&quot;headerlink&quot; title=&quot;桥接网卡&quot;&gt;&lt;/a&gt;桥接网卡&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;首先打开虚拟机&lt;/li&gt;
+&lt;li&gt;右键点击右下角 网络连接&lt;/li&gt;
+&lt;li&gt;在弹出框内点击 网络&lt;/li&gt;
+&lt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Oracle VM VirtualBox配置虚拟网卡(桥接),实现主机-虚拟机网络互通</title>
+    <link href="http://wangyuanjun.cn/2017/12/25/Oracle-VM-VirtualBox-l%E9%85%8D%E7%BD%AE%E8%99%9A%E6%8B%9F%E7%BD%91%E5%8D%A1-%E6%A1%A5%E6%8E%A5-%E5%AE%9E%E7%8E%B0%E4%B8%BB%E6%9C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BA%92%E9%80%9A/"/>
+    <id>http://wangyuanjun.cn/2017/12/25/Oracle-VM-VirtualBox-l配置虚拟网卡-桥接-实现主机-虚拟机网络互通/</id>
+    <published>2017-12-25T09:01:52.000Z</published>
+    <updated>2017-12-25T09:42:22.829Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="桥接网卡"><a href="#桥接网卡" class="headerlink" title="桥接网卡"></a>桥接网卡</h2><ol>
+<li>首先打开虚拟机</li>
+<li>右键点击右下角 网络连接</li>
+<li>在弹出框内点击 网络</li>
+<li>在设置界面依次点击-网络-连接方式选择 -桥接网卡-确定</li>
+</ol>
+<p><img src="/2017/12/25/Oracle-VM-VirtualBox-l配置虚拟网卡-桥接-实现主机-虚拟机网络互通/桥接.png" alt="桥接"></p>
+<h2 id="编辑网卡"><a href="#编辑网卡" class="headerlink" title="编辑网卡"></a>编辑网卡</h2><ol>
+<li>打开centos虚拟机终端，就是命令行</li>
+<li>切换到root用户，对网卡文件进行编辑</li>
+<li>shell#cd /etc/sysconfig/network-scripts/</li>
+<li>shell# vim ifcfg-enp0s3</li>
+<li>BOOTPROTO=dhcp,ONBOOT=yes(dhcp为动态获取ip，ONBOOT=yes为开机启动)</li>
+<li>保存退出！<br><img src="/2017/12/25/Oracle-VM-VirtualBox-l配置虚拟网卡-桥接-实现主机-虚拟机网络互通/修改网卡.png" alt="修改网卡"></li>
+</ol>
+<h2 id="重启服务器"><a href="#重启服务器" class="headerlink" title="重启服务器"></a>重启服务器</h2><pre><code>shell#service network restart
+</code></pre><p>或者</p>
+<pre><code>shell#systemctl restart network (centos7版本命令)
+</code></pre><p>参考:<a href="https://jingyan.baidu.com/article/c843ea0ba8b70677931e4adc.html" target="_blank" rel="external">VirtualBox linux虚拟机如何实现“桥接”上网</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;桥接网卡&quot;&gt;&lt;a href=&quot;#桥接网卡&quot; class=&quot;headerlink&quot; title=&quot;桥接网卡&quot;&gt;&lt;/a&gt;桥接网卡&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;首先打开虚拟机&lt;/li&gt;
+&lt;li&gt;右键点击右下角 网络连接&lt;/li&gt;
+&lt;li&gt;在弹出框内点击 网络&lt;/li&gt;
+&lt;
+    
+    </summary>
+    
+      <category term="linux" scheme="http://wangyuanjun.cn/categories/linux/"/>
+    
+    
+      <category term="Oracle VM VirtualBox" scheme="http://wangyuanjun.cn/tags/Oracle-VM-VirtualBox/"/>
+    
+      <category term="linux" scheme="http://wangyuanjun.cn/tags/linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>解决虚拟机安装linux后首次输入ifconfig IP地址显示为127.0.0.1</title>
+    <link href="http://wangyuanjun.cn/2017/12/25/%E8%A7%A3%E5%86%B3%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85linux%E5%90%8E%E9%A6%96%E6%AC%A1%E8%BE%93%E5%85%A5ifconfig-IP%E5%9C%B0%E5%9D%80%E6%98%BE%E7%A4%BA%E4%B8%BA127-0-0-1/"/>
+    <id>http://wangyuanjun.cn/2017/12/25/解决虚拟机安装linux后首次输入ifconfig-IP地址显示为127-0-0-1/</id>
+    <published>2017-12-25T08:34:13.000Z</published>
+    <updated>2017-12-25T08:52:53.821Z</updated>
+    
+    <content type="html"><![CDATA[<p>使用虚拟机Oracle VM VirtualBox安装linux首次输入ifconfig IP地址显示为127.0.0.1，解决方法如下:<br>在linux系统中输入命令:</p>
+<pre><code>vi /etc/sysconfig/network-scripts/ifcfg-eth0
+</code></pre><p>显示如下:<br><img src="/2017/12/25/解决虚拟机安装linux后首次输入ifconfig-IP地址显示为127-0-0-1/图片.png" alt="图片"></p>
+<p>将其中的ONBOOT=no改为yes,保存并退出。</p>
+<p>最后输入命令:</p>
+<pre><code>service network restart（重启服务命令）
+</code></pre><p>重启服务器,会出现正在配置IP的提示,待自动配置成功后,输入命令ifconfig即可。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;使用虚拟机Oracle VM VirtualBox安装linux首次输入ifconfig IP地址显示为127.0.0.1，解决方法如下:&lt;br&gt;在linux系统中输入命令:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;vi /etc/sysconfig/network-scripts/
+    
+    </summary>
+    
+      <category term="linux" scheme="http://wangyuanjun.cn/categories/linux/"/>
+    
+    
+      <category term="Oracle VM VirtualBox" scheme="http://wangyuanjun.cn/tags/Oracle-VM-VirtualBox/"/>
+    
+      <category term="linux" scheme="http://wangyuanjun.cn/tags/linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>解决项目war包部署到linux系统的tomcat中访问页面报404错误</title>
+    <link href="http://wangyuanjun.cn/2017/12/25/%E8%A7%A3%E5%86%B3%E9%A1%B9%E7%9B%AEwar%E5%8C%85%E9%83%A8%E7%BD%B2%E5%88%B0linux%E7%B3%BB%E7%BB%9F%E7%9A%84tomcat%E4%B8%AD%E8%AE%BF%E9%97%AE%E9%A1%B5%E9%9D%A2%E6%8A%A5404%E9%94%99%E8%AF%AF/"/>
+    <id>http://wangyuanjun.cn/2017/12/25/解决项目war包部署到linux系统的tomcat中访问页面报404错误/</id>
+    <published>2017-12-25T05:56:46.000Z</published>
+    <updated>2017-12-25T05:56:46.337Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Java Web项目导出war包并部署到linux系统的tomcat中</title>
+    <link href="http://wangyuanjun.cn/2017/12/25/Java-Web%E9%A1%B9%E7%9B%AE%E5%AF%BC%E5%87%BAwar%E5%8C%85%E5%B9%B6%E9%83%A8%E7%BD%B2%E5%88%B0linux%E7%B3%BB%E7%BB%9F%E7%9A%84tomcat%E4%B8%AD/"/>
+    <id>http://wangyuanjun.cn/2017/12/25/Java-Web项目导出war包并部署到linux系统的tomcat中/</id>
+    <published>2017-12-25T04:15:54.000Z</published>
+    <updated>2017-12-25T08:24:19.651Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="使用eclpise导出war包"><a href="#使用eclpise导出war包" class="headerlink" title="使用eclpise导出war包"></a>使用eclpise导出war包</h2><p>右击项目–&gt;Export–&gt;选择WAR file–&gt;选择导出目录,导出，如下图所示:</p>
+<p><img src="/2017/12/25/Java-Web项目导出war包并部署到linux系统的tomcat中/eclipse导出war包.png" alt="eclipse导出war包"><br><img src="/2017/12/25/Java-Web项目导出war包并部署到linux系统的tomcat中/eclipse导出war包选择WAR file.png" alt="eclipse导出war包选择WAR file"><br><img src="/2017/12/25/Java-Web项目导出war包并部署到linux系统的tomcat中/eclipse导出war包finish.png" alt="eclipse导出war包finish"></p>
+<h2 id="使用maven导出war包"><a href="#使用maven导出war包" class="headerlink" title="使用maven导出war包"></a>使用maven导出war包</h2><p>右击项目–&gt;Run as–&gt;Maven install，如下图所示:</p>
+<p><img src="/2017/12/25/Java-Web项目导出war包并部署到linux系统的tomcat中/maven导出war包.png" alt="maven导出war包"><br><img src="/2017/12/25/Java-Web项目导出war包并部署到linux系统的tomcat中/maven导出war包finish.png" alt="maven导出war包finish"></p>
+<h2 id="将war包部署至tomcat中"><a href="#将war包部署至tomcat中" class="headerlink" title="将war包部署至tomcat中"></a>将war包部署至tomcat中</h2><p>我的电脑系统是windows，为了模拟linux环境，使用Oracle VM VirtualBox虚拟机及centos6.9搭建linux环境。<br>在linux上安装tomcate及jdk，配置环境变量</p>
+<ol>
+<li>将spring-demo.war放到Tomcat的webapps目录下。<br>在windows上安装ssh,通过它将war包上传到linux上</li>
+</ol>
+<p><img src="/2017/12/25/Java-Web项目导出war包并部署到linux系统的tomcat中/webapps放war包.png" alt="webapps放war包"></p>
+<ol>
+<li>启动tomcat<br>使用 ./catalina.sh run 命令可查看tomcate启动日志<br><img src="/2017/12/25/Java-Web项目导出war包并部署到linux系统的tomcat中/启动tomcate1.png" alt="启动tomcate1"></li>
+</ol>
+<p>启动没报错，使用 ./startup.sh 命令启动tomcate，如果不能访问请关闭linux防火墙或者到防火墙中添加可访问的域名及端口。<br><img src="/2017/12/25/Java-Web项目导出war包并部署到linux系统的tomcat中/浏览器输出.png" alt="浏览器输出"></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;使用eclpise导出war包&quot;&gt;&lt;a href=&quot;#使用eclpise导出war包&quot; class=&quot;headerlink&quot; title=&quot;使用eclpise导出war包&quot;&gt;&lt;/a&gt;使用eclpise导出war包&lt;/h2&gt;&lt;p&gt;右击项目–&amp;gt;Export–&amp;g
+    
+    </summary>
+    
+      <category term="nginx" scheme="http://wangyuanjun.cn/categories/nginx/"/>
+    
+    
+      <category term="nginx" scheme="http://wangyuanjun.cn/tags/nginx/"/>
+    
+  </entry>
   
   <entry>
     <title>SpringBoot发布HttpClient服务和客户端调用HttpClient服务</title>
@@ -1302,7 +1471,7 @@ Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No q
     <link href="http://wangyuanjun.cn/2017/09/18/%E6%A0%91%E6%8F%92%E4%BB%B6ztree%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE%E4%B8%8E%E4%B8%80%E6%AC%A1%E6%80%A7%E5%8A%A0%E8%BD%BD%E5%85%A8%E9%83%A8%E6%95%B0%E6%8D%AE%E7%9A%84%E5%86%99%E6%B3%95/"/>
     <id>http://wangyuanjun.cn/2017/09/18/树插件ztree异步加载数据与一次性加载全部数据的写法/</id>
     <published>2017-09-18T13:12:47.000Z</published>
-    <updated>2017-12-18T01:51:32.288Z</updated>
+    <updated>2017-12-25T08:23:04.531Z</updated>
     
     <content type="html"><![CDATA[<p>最近在做一个项目,项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.github.com</a><br>用到了ztree树，给大家分享异步加载数据与一次性加载数据的写法</p>
 <p>异步加载数据是为了防止大数据量而造成树卡死的情况,代码如下:<br>前台js:</p>
@@ -1407,8 +1576,10 @@ public List&lt;Menu&gt; renderTree() {
     
     </summary>
     
-      <category term="jquery插件" scheme="http://wangyuanjun.cn/categories/jquery%E6%8F%92%E4%BB%B6/"/>
+      <category term="ztree" scheme="http://wangyuanjun.cn/categories/ztree/"/>
     
+    
+      <category term="jquery" scheme="http://wangyuanjun.cn/tags/jquery/"/>
     
       <category term="ztree" scheme="http://wangyuanjun.cn/tags/ztree/"/>
     
@@ -1488,333 +1659,6 @@ end;
     
     
       <category term="java" scheme="http://wangyuanjun.cn/tags/java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用select2下拉框ajax加载数据时,编辑赋值的方法</title>
-    <link href="http://wangyuanjun.cn/2017/09/14/%E4%BD%BF%E7%94%A8select2%E4%B8%8B%E6%8B%89%E6%A1%86ajax%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE%E6%97%B6-%E7%BC%96%E8%BE%91%E8%B5%8B%E5%80%BC%E7%9A%84%E6%96%B9%E6%B3%95/"/>
-    <id>http://wangyuanjun.cn/2017/09/14/使用select2下拉框ajax加载数据时-编辑赋值的方法/</id>
-    <published>2017-09-13T16:19:44.000Z</published>
-    <updated>2017-12-18T01:51:14.168Z</updated>
-    
-    <content type="html"><![CDATA[<p>最近在做一个项目,项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.github.com</a><br>使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:</p>
-<pre><code>&lt;label class=&quot;col-sm-1 control-label&quot;&gt;使用状态:&lt;/label&gt;
-&lt;select id=&quot;sel_status&quot; name=&quot;status&quot; class=&quot;col-sm-3 form-control select2&quot;&gt;&lt;/select&gt;
-
-$(&quot;#sel_status&quot;).select2({
-    placeholder : &quot;--请选择--&quot;,
-    dropdownParent : $(&quot;#myModal&quot;),
-    allowClear : true,
-    width : 150,
-    ajax : {
-        url : &apos;${ctx}/dataDict/getData?groupCode=&apos;+&apos;yesOrNo&apos;,
-        dataType : &apos;json&apos;,
-        type : &apos;get&apos;,
-        data: function (params) {
-            return {
-                q: params.term, // search term 请求参数
-                page: params.page
-            };
-        },
-        processResults: function (data, params) {
-            params.page = params.page || 1;
-            return {
-                results: data,//itemList
-                pagination: {
-                    more: (params.page * 30) &lt; data.total_count
-                }
-            };
-        },
-        cache: true
-    }
- });
-</code></pre><p>通过查询api知道，在select4.0之后可以使用 $(“select”).val(“id”).trigger(“change”);为下拉框赋值<br>你会发现下拉框中的数据是点击之后才会加载数据的，使用如上方法 ‘id’是未知的，原因是在编辑的时候下拉框的数据还没有加载出来</p>
-<p>解决方法如下:</p>
-<pre><code>function getDataByGroupCode(groupCode){
-    var dataStore;
-    $.ajax({
-        dataType : &apos;json&apos;,
-        type : &apos;get&apos;,
-        url : model.dataURL+groupCode,
-        async : false,
-        success: function(data){
-            dataStore=data;
-        }
-     });
-    return dataStore;
-}    
-var dataStore = getDataByGroupCode(&apos;yesOrNo&apos;);
-
-$(&quot;#sel_status&quot;).select2({
-    placeholder : &quot;--请选择--&quot;,
-    dropdownParent : $(&quot;#myModal&quot;),
-    allowClear : true,
-    width : 150,
-    minimumResultsForSearch: -1,
-    data : dataStore
-});
-</code></pre><p>在页面加载的时候就加载下拉框数据，在编辑时就能为其赋值，问题解决!</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;最近在做一个项目,项目地址: &lt;a href=&quot;https://github.com/wangyuanjun008/wyj-parent.github.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/wangyu
-    
-    </summary>
-    
-      <category term="jquery插件" scheme="http://wangyuanjun.cn/categories/jquery%E6%8F%92%E4%BB%B6/"/>
-    
-    
-      <category term="select2" scheme="http://wangyuanjun.cn/tags/select2/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>mybatis使用PageHelper插件报错Error creating bean with name sqlSessionFactory defined in class path resource [spring-mybatis.xml]</title>
-    <link href="http://wangyuanjun.cn/2017/08/17/mybatis%E4%BD%BF%E7%94%A8PageHelper%E6%8F%92%E4%BB%B6%E6%8A%A5%E9%94%99Error-creating-bean-with-name-sqlSessionFactory-defined-in-class-path-resource-spring-mybatis-xml/"/>
-    <id>http://wangyuanjun.cn/2017/08/17/mybatis使用PageHelper插件报错Error-creating-bean-with-name-sqlSessionFactory-defined-in-class-path-resource-spring-mybatis-xml/</id>
-    <published>2017-08-17T13:23:57.000Z</published>
-    <updated>2017-12-18T01:51:46.919Z</updated>
-    
-    <content type="html"><![CDATA[<p>最近在做一个项目,项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.github.com</a><br>在项目中使用mybatis的分页插件:PageHelper，整合spring后在启动后报错，错误如下:</p>
-<pre><code>2017-08-17 21:20:16.618 [ContainerBackgroundProcessor[StandardEngine[Catalina]]] ERROR org.springframework.web.context.ContextLoader -
-                Context initialization failed
-org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;sqlSessionFactory&apos; defined in class path resource [spring-mybatis.xml]: Invocation of init method failed; nested exception is org.springframework.core.NestedIOException: Failed to parse config resource: class path resource [mybatis-config.xml]; nested exception is org.apache.ibatis.builder.BuilderException: Error parsing SQL Mapper Configuration. Cause: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot be cast to org.apache.ibatis.plugin.Interceptor
-    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1553) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:539) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:475) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:304) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:228) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:300) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:195) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:681) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:760) ~[spring-context-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:482) ~[spring-context-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.web.context.ContextLoader.configureAndRefreshWebApplicationContext(ContextLoader.java:403) ~[spring-web-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.web.context.ContextLoader.initWebApplicationContext(ContextLoader.java:306) ~[spring-web-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.web.context.ContextLoaderListener.contextInitialized(ContextLoaderListener.java:106) [spring-web-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.apache.catalina.core.StandardContext.listenerStart(StandardContext.java:4729) [catalina.jar:na]
-    at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:5167) [catalina.jar:na]
-    at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:150) [catalina.jar:na]
-    at org.apache.catalina.core.StandardContext.reload(StandardContext.java:3746) [catalina.jar:na]
-    at org.apache.catalina.loader.WebappLoader.backgroundProcess(WebappLoader.java:292) [catalina.jar:na]
-    at org.apache.catalina.core.StandardContext.backgroundProcess(StandardContext.java:5528) [catalina.jar:na]
-    at org.apache.catalina.core.ContainerBase$ContainerBackgroundProcessor.processChildren(ContainerBase.java:1377) [catalina.jar:na]
-    at org.apache.catalina.core.ContainerBase$ContainerBackgroundProcessor.processChildren(ContainerBase.java:1381) [catalina.jar:na]
-    at org.apache.catalina.core.ContainerBase$ContainerBackgroundProcessor.processChildren(ContainerBase.java:1381) [catalina.jar:na]
-    at org.apache.catalina.core.ContainerBase$ContainerBackgroundProcessor.run(ContainerBase.java:1349) [catalina.jar:na]
-    at java.lang.Thread.run(Thread.java:745) [na:1.8.0_77]
-Caused by: org.springframework.core.NestedIOException: Failed to parse config resource: class path resource [mybatis-config.xml]; nested exception is org.apache.ibatis.builder.BuilderException: Error parsing SQL Mapper Configuration. Cause: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot be cast to org.apache.ibatis.plugin.Interceptor
-    at org.mybatis.spring.SqlSessionFactoryBean.buildSqlSessionFactory(SqlSessionFactoryBean.java:434) ~[mybatis-spring-1.2.2.jar:1.2.2]
-    at org.mybatis.spring.SqlSessionFactoryBean.afterPropertiesSet(SqlSessionFactoryBean.java:340) ~[mybatis-spring-1.2.2.jar:1.2.2]
-    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1612) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1549) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    ... 23 common frames omitted
-Caused by: org.apache.ibatis.builder.BuilderException: Error parsing SQL Mapper Configuration. Cause: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot be cast to org.apache.ibatis.plugin.Interceptor
-    at org.apache.ibatis.builder.xml.XMLConfigBuilder.parseConfiguration(XMLConfigBuilder.java:109) ~[mybatis-3.2.6.jar:3.2.6]
-    at org.apache.ibatis.builder.xml.XMLConfigBuilder.parse(XMLConfigBuilder.java:92) ~[mybatis-3.2.6.jar:3.2.6]
-    at org.mybatis.spring.SqlSessionFactoryBean.buildSqlSessionFactory(SqlSessionFactoryBean.java:428) ~[mybatis-spring-1.2.2.jar:1.2.2]
-    ... 26 common frames omitted
-Caused by: java.lang.ClassCastException: com.github.pagehelper.PageHelper cannot be cast to org.apache.ibatis.plugin.Interceptor
-    at org.apache.ibatis.builder.xml.XMLConfigBuilder.pluginElement(XMLConfigBuilder.java:142) ~[mybatis-3.2.6.jar:3.2.6]
-    at org.apache.ibatis.builder.xml.XMLConfigBuilder.parseConfiguration(XMLConfigBuilder.java:100) ~[mybatis-3.2.6.jar:3.2.6]
-    ... 28 common frames omitted
-</code></pre><p>spring与mybaits集成的配置文件 spring-mybaits.xml</p>
-<pre><code>&lt;!-- =======================================================================引入配置文件============================================ --&gt;
-&lt;bean id=&quot;propertyConfigurer&quot;
-    class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&gt;
-    &lt;property name=&quot;locations&quot;&gt;
-        &lt;list&gt;
-            &lt;value&gt;classpath:jdbc.properties&lt;/value&gt;
-        &lt;/list&gt;
-    &lt;/property&gt;
-&lt;/bean&gt;
-
-&lt;!-- =======================================================================配置数据源============================================ --&gt;
-&lt;bean id=&quot;dataSource&quot; class=&quot;org.apache.commons.dbcp.BasicDataSource&quot;&gt;
-    &lt;property name=&quot;driverClassName&quot; value=&quot;${driver}&quot; /&gt;
-    &lt;property name=&quot;url&quot; value=&quot;${url}&quot; /&gt;
-    &lt;property name=&quot;username&quot; value=&quot;${username}&quot; /&gt;
-    &lt;property name=&quot;password&quot; value=&quot;${password}&quot; /&gt;
-    &lt;!-- 初始化连接大小 --&gt;
-    &lt;property name=&quot;initialSize&quot; value=&quot;${initialSize}&quot;&gt;&lt;/property&gt;
-    &lt;!-- 连接池最大数量 --&gt;
-    &lt;property name=&quot;maxActive&quot; value=&quot;${maxActive}&quot;&gt;&lt;/property&gt;
-    &lt;!-- 连接池最大空闲 --&gt;
-    &lt;property name=&quot;maxIdle&quot; value=&quot;${maxIdle}&quot;&gt;&lt;/property&gt;
-    &lt;!-- 连接池最小空闲 --&gt;
-    &lt;property name=&quot;minIdle&quot; value=&quot;${minIdle}&quot;&gt;&lt;/property&gt;
-    &lt;!-- 获取连接最大等待时间 --&gt;
-    &lt;property name=&quot;maxWait&quot; value=&quot;${maxWait}&quot;&gt;&lt;/property&gt;
-&lt;/bean&gt;
-&lt;!-- ================================================配置sessionfactory============================================================================== --&gt;
-&lt;bean id=&quot;sqlSessionFactory&quot; class=&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;&gt;
-    &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;&gt;&lt;/property&gt;
-    &lt;!-- 自动扫描mapping.xml文件 --&gt;
-    &lt;property name=&quot;mapperLocations&quot; value=&quot;classpath:com/wyj/mapping/auth/*.xml&quot;&gt;&lt;/property&gt;
-    &lt;!-- 引入配置文件 --&gt;
-    &lt;property name=&quot;configLocation&quot; value=&quot;classpath:mybatis-config.xml&quot; /&gt; 
-&lt;/bean&gt;
-
-
-&lt;!-- =================================================装配dao接口================================================================================== --&gt;
-&lt;bean class=&quot;org.mybatis.spring.mapper.MapperScannerConfigurer&quot;&gt;
-    &lt;property name=&quot;basePackage&quot; value=&quot;com.wyj.dao.auth&quot; /&gt;&lt;!-- DAO接口所在包名，Spring会自动查找其下的类 --&gt;
-    &lt;property name=&quot;sqlSessionFactoryBeanName&quot; value=&quot;sqlSessionFactory&quot;&gt;&lt;/property&gt;
-&lt;/bean&gt;
-
-&lt;!-- =================================================声明式事务管理================================================================================== --&gt;
-&lt;!-- (事务管理)transaction manager, use JtaTransactionManager for global tx --&gt;
-&lt;bean id=&quot;transactionManager&quot;
-    class=&quot;org.springframework.jdbc.datasource.DataSourceTransactionManager&quot;&gt;
-    &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot; /&gt;
-&lt;/bean&gt;
-</code></pre><p>mybatis-config.xml 配置文件(分页插件)</p>
-<pre><code>&lt;configuration&gt;  
-    &lt;plugins&gt;  
-        &lt;!-- com.github.pagehelper为PageHelper类所在包名 --&gt;  
-        &lt;plugin interceptor=&quot;com.github.pagehelper.PageHelper&quot;&gt;  
-            &lt;!-- 设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库 --&gt;  
-            &lt;property name=&quot;dialect&quot; value=&quot;mysql&quot; /&gt;  
-            &lt;!-- 该参数默认为false --&gt;  
-            &lt;!-- 设置为true时，会将RowBounds第一个参数offset当成pageNum页码使用 --&gt;  
-            &lt;!-- 和startPage中的pageNum效果一样--&gt;  
-            &lt;property name=&quot;offsetAsPageNum&quot; value=&quot;true&quot;/&gt;  
-            &lt;!-- 该参数默认为false --&gt;  
-            &lt;!-- 设置为true时，使用RowBounds分页会进行count查询 --&gt;  
-            &lt;property name=&quot;rowBoundsWithCount&quot; value=&quot;true&quot;/&gt;  
-            &lt;!-- 设置为true时，如果pageSize=0或者RowBounds.limit = 0就会查询出全部的结果 --&gt;  
-            &lt;!-- （相当于没有执行分页查询，但是返回结果仍然是Page类型）--&gt;  
-            &lt;property name=&quot;pageSizeZero&quot; value=&quot;true&quot;/&gt;  
-            &lt;!-- 3.3.0版本可用 - 分页参数合理化，默认false禁用 --&gt;  
-            &lt;!-- 启用合理化时，如果pageNum&lt;1会查询第一页，如果pageNum&gt;pages会查询最后一页 --&gt;  
-            &lt;!-- 禁用合理化时，如果pageNum&lt;1或pageNum&gt;pages会返回空数据 --&gt;  
-            &lt;property name=&quot;reasonable&quot; value=&quot;true&quot;/&gt;  
-            &lt;!-- 3.5.0版本可用 - 为了支持startPage(Object params)方法 --&gt;  
-            &lt;!-- 增加了一个`params`参数来配置参数映射，用于从Map或ServletRequest中取值 --&gt;  
-            &lt;!-- 可以配置pageNum,pageSize,count,pageSizeZero,reasonable,orderBy,不配置映射的用默认值 --&gt;  
-            &lt;!-- 不理解该含义的前提下，不要随便复制该配置 --&gt;  
-            &lt;property name=&quot;params&quot; value=&quot;pageNum=start;pageSize=limit;&quot;/&gt;  
-            &lt;!-- 支持通过Mapper接口参数来传递分页参数 --&gt;  
-            &lt;property name=&quot;supportMethodsArguments&quot; value=&quot;true&quot;/&gt;  
-            &lt;!-- always总是返回PageInfo类型,check检查返回类型是否为PageInfo,none返回Page --&gt;  
-            &lt;property name=&quot;returnPageInfo&quot; value=&quot;check&quot;/&gt;  
-        &lt;/plugin&gt;  
-    &lt;/plugins&gt;  
-&lt;/configuration&gt;
-</code></pre><p>经过查找，原来是与mybaitis的jar包版本相差过大，项目运用的是4.1.1的版本，换上5.0.4的版本，重新运行项目，不再抛错。</p>
-<pre><code>修改spring-mybatis.xml配置文件如下
-修改 sqlSessionFactory
-
-    &lt;!-- ================================================配置sessionfactory============================================================================== --&gt;
-&lt;bean id=&quot;sqlSessionFactory&quot; class=&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;&gt;
-    &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;&gt;&lt;/property&gt;
-    &lt;!-- 自动扫描mapping.xml文件 --&gt;
-    &lt;property name=&quot;mapperLocations&quot; value=&quot;classpath:com/wyj/mapping/auth/*.xml&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;plugins&quot;&gt;
-        &lt;array&gt;
-            &lt;bean class=&quot;com.github.pagehelper.PageInterceptor&quot;&gt;
-                &lt;property name=&quot;properties&quot;&gt;
-                    &lt;value&gt;
-                    &lt;!-- helperDialect：有别于3.0+版本，现在必须是helperDialect，否则spring启动加载时会报错 --&gt;
-                        helperDialect=mysql
-                    &lt;/value&gt;
-                &lt;/property&gt;
-            &lt;/bean&gt;
-        &lt;/array&gt;
-    &lt;/property&gt;
-&lt;/bean&gt;
-
-启动不再报错!!!
-</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;最近在做一个项目,项目地址: &lt;a href=&quot;https://github.com/wangyuanjun008/wyj-parent.github.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/wangyu
-    
-    </summary>
-    
-      <category term="mybatis" scheme="http://wangyuanjun.cn/categories/mybatis/"/>
-    
-    
-      <category term="mybatis" scheme="http://wangyuanjun.cn/tags/mybatis/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>试用hexo,换电脑跟新博客</title>
-    <link href="http://wangyuanjun.cn/2017/06/29/%E8%AF%95%E7%94%A8hexo-%E6%8D%A2%E7%94%B5%E8%84%91%E8%B7%9F%E6%96%B0%E5%8D%9A%E5%AE%A2/"/>
-    <id>http://wangyuanjun.cn/2017/06/29/试用hexo-换电脑跟新博客/</id>
-    <published>2017-06-29T15:33:55.000Z</published>
-    <updated>2017-12-18T01:49:18.001Z</updated>
-    
-    <content type="html"><![CDATA[<p>作者：skycrown<br>链接：<a href="https://www.zhihu.com/question/21193762/answer/103097754" target="_blank" rel="external">https://www.zhihu.com/question/21193762/answer/103097754</a><br>来源：知乎<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
-<p>1、从官网Git下载git，在新电脑上安装，因为https速度慢，而且每次都要输入口令，常用的是使用ssh。使用下面方法创建：<br>（1）打开git bash，在用户主目录下运行：ssh-keygen -t rsa -C “youremail@example.com” 把其中的邮件地址换成自己的邮件地址，然后一路回车<br>（2）最后完成后，会在用户主目录下生成.ssh目录，里面有id_rsa和id_rsa.pub两个文件，这两个就是SSH key密钥对，id_rsa是私钥，千万不能泄露出去，id_rsa.pub是公钥，可以放心地告诉任何人。<br>（3）登陆GitHub，打开「Settings」-&gt;「SSH and GPG keys」，然后点击「new SSH  key」，填上任意Title，在Key文本框里粘贴公钥id_rsa.pub文件的内容（千万不要粘贴成私钥了！），最后点击「Add SSH Key」，你就应该看到已经添加的Key。注意：不要在git版本库中运行ssh，然后又将它提交，这样就把密码泄露出去了。<br>2、下载Node.js，并安装<br>3、打开git bash客户端，输入 npm install hexo-cli -g，开始安装hexo<br>4、下面就将原来的文件拷贝到新电脑中，但是要注意哪些文件是必须的，哪些文件是可以删除的。<br>（1）讨论下哪些文件是必须拷贝的：首先是之前自己修改的文件，像站点配置_config.yml，theme文件夹里面的主题，以及source里面自己写的博客文件，这些肯定要拷贝的。除此之外，还有三个文件需要有，就是scaffolds文件夹（文章的模板）、package.json（说明使用哪些包）和.gitignore（限定在提交的时候哪些文件可以忽略）。其实，这三个文件不是我们修改的，所以即使丢失了，也没有关系，我们可以建立一个新的文件夹，然后在里面执行hexo init，就会生成这三个文件，我们只需要将它们拷贝过来使用即可。总结：_config.yml，theme/，source/，scaffolds/，package.json，.gitignore，是需要拷贝的。<br>（2）再讨论下哪些文件是不必拷贝的，或者说可以删除的：首先是.git文件，无论是在站点根目录下，还是主题目录下的.git文件，都可以删掉。然后是文件夹node_modules（在用npm install会重新生成），public（这个在用hexo g时会重新生成），.deploy_git文件夹（在使用hexo d时也会重新生成），db.json文件。其实上面这些文件也就是是.gitignore文件里面记载的可以忽略的内容。总结：.git/，node_modules/，public/，.deploy_git/，db.json文件需要删除。<br>5、在git bash中切换目录到新拷贝的文件夹里，使用 npm install 命令，进行模块安装。很明显我们这里没用hexo init初始化，因为有的文件我们已经拷贝生成过来了，所以不必用hexo init去整体初始化，如果不慎在此时用了hexo init，则站点的配置文件_config.yml里面内容会被清空使用默认值，所以这一步一定要慎重，不要用hexo init。<br>6、安装其他的一些必要组件，如果在node_modules里面有的，就不要重复安装了：<br>（1）为了使用hexo d来部署到git上，需要安装npm install hexo-deployer-git –save<br>（2）为了建立RSS订阅，需要安装npm install hexo-generator-feed –save<br>（3）为了建立站点地图，需要安装npm install hexo-generator-sitemap –save插件安装后，有的需要对配置文件_config.yml进行配置，具体怎么配置，可以参考上面插件在github主页上的具体说明7、使用hexo g，然后使用hexo d进行部署，如果都没有出错，就转移成功了！</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;作者：skycrown&lt;br&gt;链接：&lt;a href=&quot;https://www.zhihu.com/question/21193762/answer/103097754&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://www.zhihu.com
-    
-    </summary>
-    
-      <category term="hexo" scheme="http://wangyuanjun.cn/categories/hexo/"/>
-    
-    
-      <category term="hexo" scheme="http://wangyuanjun.cn/tags/hexo/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Hello World</title>
-    <link href="http://wangyuanjun.cn/2017/06/29/hello-world/"/>
-    <id>http://wangyuanjun.cn/2017/06/29/hello-world/</id>
-    <published>2017-06-29T15:21:26.034Z</published>
-    <updated>2016-09-19T15:36:52.584Z</updated>
-    
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>修改Weblogic jdk版本</title>
-    <link href="http://wangyuanjun.cn/2017/05/17/%E4%BF%AE%E6%94%B9Weblogic-jdk%E7%89%88%E6%9C%AC/"/>
-    <id>http://wangyuanjun.cn/2017/05/17/修改Weblogic-jdk版本/</id>
-    <published>2017-05-17T08:10:45.000Z</published>
-    <updated>2017-12-18T15:08:56.491Z</updated>
-    
-    <content type="html"><![CDATA[<p>1、E:\develop-tools\toolsInstall\weblogic是我的weblogic安装目录<br>2、E:\develop-tools\toolsInstall\weblogic\user_projects\domains\base_domain是我的域创建目录</p>
-<p>找到E:\develop-tools\toolsInstall\weblogic\user_projects\domains\base_domain\bin<br>setDomainEnv.cmd,修改红框标注的</p>
-<p><img src="/2017/05/17/修改Weblogic-jdk版本/updateWebLogicJdk.png" alt="updateWebLogicJdk"></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;1、E:\develop-tools\toolsInstall\weblogic是我的weblogic安装目录&lt;br&gt;2、E:\develop-tools\toolsInstall\weblogic\user_projects\domains\base_domain是我的域
-    
-    </summary>
-    
-      <category term="weblogic" scheme="http://wangyuanjun.cn/categories/weblogic/"/>
-    
-    
-      <category term="weblogic" scheme="http://wangyuanjun.cn/tags/weblogic/"/>
     
   </entry>
   

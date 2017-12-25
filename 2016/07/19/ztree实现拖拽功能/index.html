@@ -1,0 +1,1314 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>ztree实现拖拽功能 | 守望的稻草人</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">ztree实现拖拽功能</h1><a id="logo" href="/.">守望的稻草人</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">ztree实现拖拽功能</h1><div class="post-meta"><a href="/2016/07/19/ztree实现拖拽功能/#comments" class="comment-count"><i id="changyan_count_unit" data-xid="2016/07/19/ztree实现拖拽功能/"></i>留言,<i id="changyan_parti_unit" data-xid="2016/07/19/ztree实现拖拽功能/"></i>参与</a><p><span class="date">Jul 19, 2016</span><span><a href="/categories/ztree/" class="category">ztree</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><p>最近在做仓储的功能，需要实现对仓库树的拖拽功能，测试了很长时间才完成，后端使用了SpringMVC + Spring Data Jpa图片和代码展示如下：<br><img src="/2016/07/19/ztree实现拖拽功能/拖拽前.png" alt="拖拽前"><br><img src="/2016/07/19/ztree实现拖拽功能/拖拽中.png" alt="拖拽中"><br><img src="/2016/07/19/ztree实现拖拽功能/拖拽后.png" alt="拖拽后"></p>
+<h2 id="Jsp程序"><a href="#Jsp程序" class="headerlink" title="Jsp程序"></a>Jsp程序</h2><pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+    pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@ include file=&quot;/common/taglibs.jsp&quot;%&gt;
+&lt;html&gt;
+&lt;head lang=&quot;en&quot;&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;
+    &lt;meta name=&quot;renderer&quot; content=&quot;webkit&quot;&gt;
+    &lt;title&gt;物品分类&lt;/title&gt;
+    &lt;style&gt;
+        .ztree * {font-size:14px !important;}
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body style=&quot;background: #f1f1f1;border:1px solid #f1f1f1;&quot;&gt;
+    &lt;div class=&quot;row&quot; id=&quot;page_content&quot;&gt;
+        &lt;div class=&quot;col-sm-12&quot;&gt;
+            &lt;div class=&quot;ibox float-e-margins&quot;&gt;
+                &lt;div class=&quot;ibox-title&quot;&gt;
+                    &lt;h3&gt;物品分类&lt;/h3&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;ibox-content&quot;&gt;
+                    &lt;div class=&quot;col-sm-12 no-padding&quot; id=&quot;tree&quot;&gt;
+                        &lt;div class=&quot;zTreeDemoBackground left&quot;&gt;
+                            &lt;ul id=&quot;treeDemo&quot; class=&quot;ztree&quot; url=&quot;${ctx}/baseinfo/wpfl/renderTree&quot;&gt;&lt;/ul&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;input type=&quot;hidden&quot; id=&quot;wpflOrCkgl&quot; value=&quot;wpfl&quot;&gt;
+    &lt;script type=&quot;text/javascript&quot;&gt;
+    var wpfl = true;
+    var ckgl = false;
+    var modal = {
+        saveURL : &quot;${ctx}/baseinfo/wpfl&quot;,
+        deleteURL: &quot;${ctx}/baseinfo/wpfl/delete&quot;,
+        sameLevel: &quot;${ctx}/baseinfo/wpfl/sameLevel&quot;,
+        differentLevel:&quot;${ctx}/baseinfo/wpfl/differentLevel&quot;,
+        diffLevel:&quot;${ctx}/baseinfo/wpfl/diffLevel&quot;,
+        checkURL:&quot;${ctx}/baseinfo/wpfl/check&quot;
+    }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;    
+</code></pre><h2 id="JS代码"><a href="#JS代码" class="headerlink" title="JS代码"></a>JS代码</h2><pre><code>var setting = {
+    view: {
+        addHoverDom: addHoverDom,
+        removeHoverDom: removeHoverDom,
+        selectedMulti: false,
+        showLine: false,
+        showIcon: showIconForTree
+    },
+    edit: {
+        drag: {
+            autoExpandTrigger: true,
+            prev: dropPrev,
+            inner: dropInner,
+            next: dropNext
+        },
+        enable: true,
+        editNameSelectAll: true,
+        showRemoveBtn : showRemoveBtn,
+        showRenameBtn : showRenameBtn
+    },
+    data: {
+        simpleData: {
+            enable: true
+        }
+    },
+    callback: {
+        beforeDrag: beforeDrag,
+        beforeEditName: beforeEditName,
+        beforeRemove: beforeRemove,
+        beforeRename: beforeRename,
+        onRemove: onRemove,
+        onRename: onRename,
+        beforeDrop: beforeDrop,
+        beforeDragOpen: beforeDragOpen,
+        onDrag: onDrag,
+        onDrop: onDrop,
+        onExpand: onExpand,
+        onAsyncSuccess: zTreeOnAsyncSuccess,
+    },
+    async: {
+        enable: true,
+        type: &quot;get&quot;,
+        //表示异步加载采用 post 方法请求
+        url: $(&quot;#treeDemo&quot;).attr(&quot;url&quot;),
+        autoParam: [&quot;id&quot;, &quot;type&quot;] //传递节点的id 和 type值给后台(当异步加载数据时)
+    }
+};
+
+/**数异步加载成功*/
+function zTreeOnAsyncSuccess(event, treeId, node, msg) {
+    var treeObj = $.fn.zTree.getZTreeObj(&quot;treeDemo&quot;);
+    var nodes = treeObj.getNodes();
+    // 异步展开一级子节点
+    if (nodes.length &gt; 0) {
+        treeObj.expandNode(nodes[0], true, false, false);
+    }
+}
+
+var log, className = &quot;dark&quot;;
+function beforeDrag(treeId, treeNodes) {
+    return false;
+}
+function beforeEditName(treeId, treeNode) {
+    className = (className === &quot;dark&quot; ? &quot;&quot;:&quot;dark&quot;);
+    showLog(&quot;[ &quot;+getTime()+&quot; beforeEditName ]&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &quot; + treeNode.name);
+    var zTree = $.fn.zTree.getZTreeObj(&quot;treeDemo&quot;);
+    zTree.selectNode(treeNode);
+    return;
+}
+function beforeRemove(treeId, treeNode) {
+    className = (className === &quot;dark&quot; ? &quot;&quot;:&quot;dark&quot;);
+    showLog(&quot;[ &quot;+getTime()+&quot; beforeRemove ]&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &quot; + treeNode.name);
+    var zTree = $.fn.zTree.getZTreeObj(&quot;treeDemo&quot;);
+    zTree.selectNode(treeNode);
+    var flag = false;
+    if(confirm(&quot;确认删除 节点 -- &quot; + treeNode.name + &quot; 吗？&quot;)){
+
+        // 删除节点
+        flag=delNode(modal,treeNode.id);
+    }
+    return flag;
+}
+function onRemove(e, treeId, treeNode) {
+    showLog(&quot;[ &quot;+getTime()+&quot; onRemove ]&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &quot; + treeNode.name);
+}
+function beforeRename(treeId, treeNode, newName, isCancel) {
+    className = (className === &quot;dark&quot; ? &quot;&quot;:&quot;dark&quot;);
+    showLog((isCancel ? &quot;&lt;span style=&apos;color:red&apos;&gt;&quot;:&quot;&quot;) + &quot;[ &quot;+getTime()+&quot; beforeRename ]&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &quot; + treeNode.name + (isCancel ? &quot;&lt;/span&gt;&quot;:&quot;&quot;));
+    if (newName.length == 0) {
+        alert(&quot;节点名称不能为空.&quot;);
+        var zTree = $.fn.zTree.getZTreeObj(&quot;treeDemo&quot;);
+        setTimeout(function(){zTree.editName(treeNode)}, 10);
+        return false;
+    }
+    else if(newName.length &gt; 20){
+        confirm(&quot;名称长度在20字以内&quot;);
+        return false;
+    }
+
+    // 修改的名字没变
+    if(treeNode.name == newName){
+        return true;
+    }
+
+    // 判断是否重名
+    var flag1 = check(newName);
+    if(flag1 == false){
+        alert(&quot;名称不能重复&quot;);
+        return false;
+    }
+    return true;
+}
+function onRename(e, treeId, treeNode, isCancel) {
+    showLog((isCancel ? &quot;&lt;span style=&apos;color:red&apos;&gt;&quot;:&quot;&quot;) + &quot;[ &quot;+getTime()+&quot; onRename ]&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &quot; + treeNode.name + (isCancel ? &quot;&lt;/span&gt;&quot;:&quot;&quot;));
+    if(treeNode.type == &apos;add&apos;){ // 新增节点
+        nodeAdd(treeNode); 
+        treeNode.type=&apos;edit&apos;;
+    }else{ // 编辑节点
+        nodeEdit(treeNode);
+    }
+}
+function showIconForTree(treeId, treeNode) {
+    return !treeNode.isParent;
+}
+function showLog(str) {
+    if (!log) log = $(&quot;#log&quot;);
+    log.append(&quot;&lt;li class=&apos;&quot;+className+&quot;&apos;&gt;&quot;+str+&quot;&lt;/li&gt;&quot;);
+    if(log.children(&quot;li&quot;).length &gt; 8) {
+        log.get(0).removeChild(log.children(&quot;li&quot;)[0]);
+    }
+}
+function getTime() {
+    var now= new Date(),
+        h=now.getHours(),
+        m=now.getMinutes(),
+        s=now.getSeconds(),
+        ms=now.getMilliseconds();
+    return (h+&quot;:&quot;+m+&quot;:&quot;+s+ &quot; &quot; +ms);
+}
+
+var newCount = 1;
+
+/** 是否显示编辑按钮 */
+function showRenameBtn(treeId, treeNode){
+    // 根节点不显示编辑按钮
+    if(treeNode.level == 0){
+        return false;
+    }else{
+        return true;
+    }
+}
+/** 是否显示删除按钮 */
+function showRemoveBtn(treeId, treeNode){
+    // 根节点不显示删除按钮
+    if(treeNode.level == 0){
+        return false;
+    }else{
+        return true;
+    }
+}
+
+/** 新增节点 */
+function addHoverDom(treeId, treeNode) {
+    if(wpfl == true &amp;&amp; treeNode.level == 3){ // 物品分类最多支持三级
+        return;
+    }else if(ckgl == true &amp;&amp; treeNode.level == 2){ // 仓库管理最多支持二级
+        return;
+    }
+    var sObj = $(&quot;#&quot; + treeNode.tId + &quot;_span&quot;);
+    if (treeNode.editNameFlag || $(&quot;#addBtn_&quot;+treeNode.tId).length&gt;0) return;
+    var addStr = &quot;&lt;span class=&apos;button add&apos; id=&apos;addBtn_&quot; + treeNode.tId
+        + &quot;&apos; title=&apos;新增&apos; onfocus=&apos;this.blur();&apos;&gt;&lt;/span&gt;&quot;;
+    sObj.after(addStr);
+    var btn = $(&quot;#addBtn_&quot;+treeNode.tId);
+    if (btn) btn.bind(&quot;click&quot;, function(){
+        var zTree = $.fn.zTree.getZTreeObj(&quot;treeDemo&quot;);
+        var newName = &quot;new node&quot; + (newCount++);
+        zTree.addNodes(treeNode, {id:(100 + newCount), pId:treeNode.id, name:newName,type : &apos;add&apos;});
+        var newNode=treeNode.children[treeNode.children.length-1];
+        zTree.editName(newNode);
+
+        return false;
+    });
+}
+function removeHoverDom(treeId, treeNode) {
+    $(&quot;#addBtn_&quot;+treeNode.tId).unbind().remove();
+}
+function selectAll() {
+    var zTree = $.fn.zTree.getZTreeObj(&quot;treeDemo&quot;);
+    zTree.setting.edit.editNameSelectAll =  $(&quot;#selectAll&quot;).attr(&quot;checked&quot;);
+}
+function dropPrev(treeId, nodes, targetNode) {
+    var pNode = targetNode.getParentNode();
+    if (pNode &amp;&amp; pNode.dropInner === false) {
+        return false;
+    } else {
+        for (var i=0,l=curDragNodes.length; i&lt;l; i++) {
+            var curPNode = curDragNodes[i].getParentNode();
+            if (curPNode &amp;&amp; curPNode !== targetNode.getParentNode() &amp;&amp; curPNode.childOuter === false) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+function dropInner(treeId, nodes, targetNode) {
+    if (targetNode &amp;&amp; targetNode.dropInner === false) {
+        return false;
+    } else {
+        for (var i=0,l=curDragNodes.length; i&lt;l; i++) {
+            if (!targetNode &amp;&amp; curDragNodes[i].dropRoot === false) {
+                return false;
+            } else if (curDragNodes[i].parentTId &amp;&amp; curDragNodes[i].getParentNode() !== targetNode &amp;&amp; curDragNodes[i].getParentNode().childOuter === false) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+function dropNext(treeId, nodes, targetNode) {
+    var pNode = targetNode.getParentNode();
+    if (pNode &amp;&amp; pNode.dropInner === false) {
+        return false;
+    } else {
+        for (var i=0,l=curDragNodes.length; i&lt;l; i++) {
+            var curPNode = curDragNodes[i].getParentNode();
+            if (curPNode &amp;&amp; curPNode !== targetNode.getParentNode() &amp;&amp; curPNode.childOuter === false) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+var log, className = &quot;dark&quot;, curDragNodes, autoExpandNode;
+var dragId ; //拖拽节点的父节点的id
+/** 拖拽前执行 */
+function beforeDrag(treeId, treeNodes) {
+    className = (className === &quot;dark&quot; ? &quot;&quot;:&quot;dark&quot;);
+    showLog(&quot;[ &quot;+getTime()+&quot; beforeDrag ]&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; drag: &quot; + treeNodes.length + &quot; nodes.&quot; );
+    for (var i=0,l=treeNodes.length; i&lt;l; i++) {
+        dragId = treeNodes[i].pId;
+        if (treeNodes[i].drag === false) {
+            curDragNodes = null;
+            return false;
+        } else if (treeNodes[i].parentTId &amp;&amp; treeNodes[i].getParentNode().childDrag === false) {
+            curDragNodes = null;
+            return false;
+        }
+    }
+    curDragNodes = treeNodes;
+    return true;
+}
+function beforeDragOpen(treeId, treeNode) {
+    autoExpandNode = treeNode;
+    return true;
+}
+
+/** 拖拽释放之后执行 */
+function beforeDrop(treeId, treeNodes, targetNode, moveType, isCopy) {
+    className = (className === &quot;dark&quot; ? &quot;&quot;:&quot;dark&quot;);
+    showLog(&quot;[ &quot;+getTime()+&quot; beforeDrop ]&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; moveType:&quot; + moveType);
+    showLog(&quot;target: &quot; + (targetNode ? targetNode.name : &quot;root&quot;) + &quot;  -- is &quot;+ (isCopy==null? &quot;cancel&quot; : isCopy ? &quot;copy&quot; : &quot;move&quot;));
+
+  if(dragId == targetNode.pId &amp;&amp; moveType != &apos;inner&apos;){// 同级位置调整
+      var data = &apos;pId=&apos;+dragId+&apos;&amp;currentNodeId=&apos;+treeNodes[0].id+&apos;&amp;newNodeId=&apos;+targetNode.id+&apos;&amp;moveType=&apos;+moveType;
+      nodeExchange(data,modal.sameLevel);
+  }else if(moveType == &apos;inner&apos;){ // 一个节点变成另一个节点的子节点
+      // 不能移到仓库管理第二节点,物品分类第三节点
+      if((ckgl == true &amp;&amp; targetNode.level == 2) || (wpfl == true &amp;&amp; targetNode.level == 3)){
+          return false;
+      }else{
+          var data = &apos;currentNodeId=&apos;+treeNodes[0].id+&apos;&amp;newParentNodeId=&apos;+targetNode.id;
+      }
+      nodeExchange(data,modal.differentLevel);
+  }else if(dragId != targetNode.pId &amp;&amp; moveType != &apos;inner&apos;){ // 不同级之间的调整
+      var flag1 = canMove(treeNodes[0].id);
+      if(flag1 == false){
+          alert(&quot;您选择的节点已经被引用，不能被拖动&quot;);
+          return false;
+      }
+
+    // 物品管理最高3级，仓库管理最高2级  isParent
+      if(ckgl == true &amp;&amp; treeNodes[0].pId == 0 &amp;&amp; targetNode.level == 2){
+          alert(&quot;最多支持二级分类&quot;);
+          return false;
+      }else if((wpfl == true &amp;&amp; targetNode.level == 3 &amp;&amp; treeNodes[0].isParent == true) || (wpfl == true &amp;&amp; targetNode.level == 2 &amp;&amp; treeNodes[0].pId == 0)){
+          alert(&quot;最多支持三级分类&quot;);
+          return false;
+      }
+      var data = &apos;currentNodeId=&apos;+treeNodes[0].id+&apos;&amp;newNodeId=&apos;+targetNode.id+&apos;&amp;moveType=&apos;+moveType;
+      nodeExchange(data,modal.diffLevel);
+  }
+    return true;
+}
+function onDrag(event, treeId, treeNodes) {
+    className = (className === &quot;dark&quot; ? &quot;&quot;:&quot;dark&quot;);
+    showLog(&quot;[ &quot;+getTime()+&quot; onDrag ]&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; drag: &quot; + treeNodes.length + &quot; nodes.&quot; );
+}
+function onDrop(event, treeId, treeNodes, targetNode, moveType, isCopy) {
+    className = (className === &quot;dark&quot; ? &quot;&quot;:&quot;dark&quot;);
+    showLog(&quot;[ &quot;+getTime()+&quot; onDrop ]&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; moveType:&quot; + moveType);
+    showLog(&quot;target: &quot; + (targetNode ? targetNode.name : &quot;root&quot;) + &quot;  -- is &quot;+ (isCopy==null? &quot;cancel&quot; : isCopy ? &quot;copy&quot; : &quot;move&quot;))
+}
+function onExpand(event, treeId, treeNode) {
+    if (treeNode === autoExpandNode) {
+        className = (className === &quot;dark&quot; ? &quot;&quot;:&quot;dark&quot;);
+        showLog(&quot;[ &quot;+getTime()+&quot; onExpand ]&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&quot; + treeNode.name);
+    }
+}
+
+function showLog(str) {
+    if (!log) log = $(&quot;#log&quot;);
+    log.append(&quot;&lt;li class=&apos;&quot;+className+&quot;&apos;&gt;&quot;+str+&quot;&lt;/li&gt;&quot;);
+    if(log.children(&quot;li&quot;).length &gt; 8) {
+        log.get(0).removeChild(log.children(&quot;li&quot;)[0]);
+    }
+}
+function getTime() {
+    var now= new Date(),
+        h=now.getHours(),
+        m=now.getMinutes(),
+        s=now.getSeconds(),
+        ms=now.getMilliseconds();
+    return (h+&quot;:&quot;+m+&quot;:&quot;+s+ &quot; &quot; +ms);
+}
+
+function setTrigger() {
+    var zTree = $.fn.zTree.getZTreeObj(&quot;treeDemo&quot;);
+    zTree.setting.edit.drag.autoExpandTrigger = $(&quot;#callbackTrigger&quot;).attr(&quot;checked&quot;);
+}
+
+/** 鼠标移入移出显示操作图标 */
+function over(aa){
+    $(aa).children(&quot;.hides&quot;).css(&quot;display&quot;,&quot;block&quot;);
+}
+function out(aa){
+    $(aa).children(&quot;.hides&quot;).css(&quot;display&quot;,&quot;none&quot;);
+}
+
+function change_bgcolor(aa){
+    $(aa).addClass(&quot;active&quot;)
+        .parent().siblings().children().removeClass(&quot;active&quot;);
+    $(&quot;#table-body&quot;).animate({
+        scrollTop:&apos;0px&apos;,
+        scrollLeft:&apos;0px&apos;
+    },0);
+}
+
+/** 点击物品分类 */
+function kind_click(a,b,c){
+    $(a).addClass(&quot;active&quot;).parent().siblings().children().removeClass(&quot;active&quot;);
+    var oUl = $(a).parent().parent();
+    var oDiv = oUl.parent();
+    if(oUl.index() == 0){
+        $(&quot;.show_kind&quot;).children(&quot;span&quot;).html(&apos;&apos;);
+        $(&quot;.show_kind&quot;).children(&quot;span&quot;).eq(0).html($(a).html());
+    }
+    else if(oUl.index() == 1){
+        if(oDiv.children(&quot;ul&quot;).eq(0).find(&quot;.active&quot;).length){
+            $(&quot;.show_kind&quot;).children(&quot;span&quot;).eq(oUl.index()).html(&quot;-&gt; &quot;+$(a).html());
+            $(&quot;.show_kind&quot;).children(&quot;span&quot;).eq(2).html(&apos;&apos;);
+        }
+        else{
+            confirm(&quot;请选中上一级菜单，再点击&quot;);
+        }
+    }else{
+         if(oUl.index() == 2 &amp;&amp; oDiv.children(&quot;ul&quot;).eq(0).find(&quot;.active&quot;).length &amp;&amp; oDiv.children(&quot;ul&quot;).eq(1).find(&quot;.active&quot;).length){
+             $(&quot;.show_kind&quot;).children(&quot;span&quot;).eq(oUl.index()).html(&quot;-&gt; &quot;+$(a).html());
+         }
+         else{
+             confirm(&quot;请选中上一级菜单，再点击&quot;);
+         }
+    }
+    myKindClick(a,b,c);
+}
+
+/** 删除table记录 */
+function delete_tr(p){
+    var y=p.parentNode.parentNode;
+    y.parentNode.removeChild(y);//只能上找一层parentNode
+    againPx();
+}
+
+/** 重新排序 */
+function againPx(){
+    var index = 1;
+    $(&quot;td[name=&apos;px&apos;]&quot;).each(function(){
+        $(this).find(&apos;span&apos;).html(index);
+        index++;
+    });
+}
+
+/** 新增节点 */
+function nodeAdd(treeNode){
+    $.ajax({
+        type: &apos;post&apos;,
+        url: modal.saveURL,
+        data: {
+            &apos;id&apos;:null,
+            &apos;sjfl&apos;:treeNode.pId,
+            &apos;mc&apos;:treeNode.name
+        },
+        dataType: &apos;json&apos;,
+//        async : false,
+        traditional: true,
+        success: function(result) {
+            if (result.success) {
+                var treeObj = $.fn.zTree.getZTreeObj(&quot;treeDemo&quot;);
+                var obj=result.data.obj;
+                treeNode.id = obj[&apos;id&apos;];
+                treeNode.pId = obj[&apos;sjfl&apos;];
+                treeObj.updateNode(treeNode);
+
+                showRemindMsg();
+
+                try {
+                    mySave(modal);
+                } catch(e) {}
+            } else {
+                alert(result.errorMsg);
+            }
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            btn.disabled = false;
+            alert(&quot;请求异常&quot;);
+        }
+    });
+}
+
+/** 编辑节点 */
+function nodeEdit(treeNode){
+    $.ajax({
+        type: &apos;post&apos;,
+        url: modal.saveURL,
+        data: {
+            &apos;id&apos;:treeNode.id,
+            &apos;sjfl&apos;:treeNode.pId,
+            &apos;mc&apos;:treeNode.name
+        },
+        dataType: &apos;json&apos;,
+        traditional: true,
+        success: function(result) {
+//            btn.disabled = false;
+
+            if (result.success) {
+
+                showRemindMsg();
+
+                try {
+                    mySave(modal);
+                } catch(e) {}
+            } else {
+                alert(result.errorMsg);
+            }
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            btn.disabled = false;
+            alert(&quot;请求异常&quot;);
+        }
+    });
+}
+
+/**执行删除*/
+function delNode(modal, id) {
+    var flag=true;
+    $.ajax({
+        type: &apos;post&apos;,
+        url: modal.deleteURL,
+        data: {
+            ids: id
+        },
+        async:false,
+        dataType: &apos;json&apos;,
+        traditional: true,
+        success: function(result) {
+            if (result.success) {
+                showRemindMsg();
+            } else {
+                flag = false;
+                if (result.errorMsg.indexOf(&quot;ConstraintViolationException&quot;) &gt; 0) {
+                    alert(&quot;您选择的记录已经被引用，不能被删除&quot;);
+                }
+
+            }
+        }
+    });
+    return flag;
+}
+/** 节点位置调换 */
+function nodeExchange(data,ways){
+      $.ajax({
+             type:&quot;get&quot;,
+             data:data,
+             url: ways,
+             dataType:&apos;json&apos;,
+             success: function(result) {
+                if (result.success) {
+                    showRemindMsg();
+
+                    try {
+                        mySave(modal);
+                    } catch(e) {}
+                } else {
+                    alert(result.errorMsg);
+                }
+             },
+             error: function(XMLHttpRequest, textStatus, errorThrown) {
+                 alert(&quot;请求异常&quot;);
+             }
+
+
+          });
+}
+
+/**
+ * 验证节点名字唯一性
+ * 
+ * @param name
+ * @returns {Boolean}
+ */
+function check(name){
+    var flag = true;
+    $.ajax({
+        type: &apos;post&apos;,
+        url: modal.checkURL,
+        data: {
+            name:name
+        },
+        dataType: &apos;json&apos;,
+        traditional: true,
+        async:false,
+        success: function(result) {
+            if (result.success) {
+                var check = result.data.check;
+                if(check == false){
+                    flag = false;
+                }else{
+                    flag = true;
+                }
+                try {
+                    mySave(modal);
+                } catch(e) {}
+            } else {
+                alert(result.errorMsg);
+            }
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            btn.disabled = false;
+            alert(&quot;请求异常&quot;);
+        }
+    });
+    return flag;
+}
+
+/**
+ * 仓库管理二级节点被引用的不能被拖动
+ * @param kfkwId
+ * @returns {Boolean}
+ */
+function canMove(kfkwId){
+    var flag = true;
+    $.ajax({
+        type: &apos;get&apos;,
+        url: modal.canMoveURL,
+        data: {
+            id:kfkwId
+        },
+        dataType: &apos;json&apos;,
+        traditional: true,
+        async:false,
+        success: function(result) {
+            if (result.success) {
+                var can = result.data.canMove;
+                if(can == false){
+                    flag = false;
+                }else{
+                    flag = true;
+                }
+                try {
+                    mySave(modal);
+                } catch(e) {}
+            } else {
+                alert(result.errorMsg);
+            }
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            btn.disabled = false;
+            alert(&quot;请求异常&quot;);
+        }
+    });
+    return flag;
+}
+</code></pre><h2 id="Controller代码"><a href="#Controller代码" class="headerlink" title="Controller代码"></a>Controller代码</h2><pre><code>package com.dtyun.ccgl.web.controller.baseinfo;
+
+/**
+ * 仓库管理Controller
+ * 
+ * @author WangYuanJun
+ */
+@Controller
+@RequestMapping(value = &quot;/baseinfo/ckgl&quot;)
+@FunctionModule(value = &quot;仓库管理&quot;, entry = &quot;/baseinfo/ckgl&quot;, parent = &quot;基础数据&quot;)
+public class KfkwController extends BaseController {
+
+    /** 仓库管理Service */
+    @Autowired
+    private KfkwService kfkwService;
+
+    /** 库存历史Service */
+    @Autowired
+    private KcglHisService kcglHisService;
+
+    /** 系统配置Service */
+    @Autowired
+    private CcSysConfigService sysConfigService;
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @RequestMapping(method = RequestMethod.GET)
+    public String index(Model model) {
+        CcSysConfigEntity sysConfigEntity= sysConfigService.findGjdmcBySchool(AuthUtils.getCurrentSchoolId());
+        Boolean boolean1 = false;
+
+        // 设置了仓库根节点名称
+        if(sysConfigEntity != null){
+            boolean1 = true;
+        }
+        model.addAttribute(&quot;ssxx&quot;, AuthUtils.getCurrentSchoolId());
+        model.addAttribute(&quot;booleanSetGjdmc&quot;, boolean1);
+        return &quot;/baseinfo/ckgl/ckgl&quot;;
+    }
+
+    /**
+     * 添加物品分类
+     * 
+     * @param dto
+     * @param result
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(method = RequestMethod.POST)
+    public Retval save(@Valid KfkwDto dto, BindingResult result) {
+        Retval retval = Retval.newInstance();
+
+        // 表单校验
+        if (result.hasErrors()) {
+            retval.fail(getErrorMessage(result));
+            return retval;
+        }
+
+        // 保存
+        try {
+            // 当上级分类为0时，为一级目录
+            if (dto.getSjfl() == null || dto.getSjfl() == 0) {
+                dto.setSjfl(null);
+            }
+            KfkwEntity kfkwEntity = kfkwService.save(dto);
+            retval.put(&quot;obj&quot;, kfkwEntity);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            retval.fail(e.getMessage());
+        }
+        return retval;
+    }
+
+    /**
+     * 删除物品分类
+     * 
+     * @param ids
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = &quot;/delete&quot;, method = RequestMethod.POST)
+    public Retval delete(@RequestParam Long[] ids) {
+        Retval retval = Retval.newInstance();
+        try {
+            kfkwService.deleteByIds(ids);
+        } catch (DataIntegrityViolationException e) {
+            retval.fail(e.getMessage());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            retval.fail(e.getMessage());
+        }
+        return retval;
+    }
+
+    /**
+     * 判断被引用的二级节点能否被移动
+     * 
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value=&quot;/canMove&quot;,method=RequestMethod.GET)
+    public Retval canMove(@RequestParam Long id){
+        Retval retval = Retval.newInstance();
+        Boolean boolean1 = kcglHisService.findKfkwById(id);
+        retval.put(&quot;canMove&quot;, boolean1);
+        return retval;
+    }
+
+    /**
+     *同级之间拖拽
+     *
+     * @param pId 拖拽节点父节点id
+     * @param currentNodeId 拖拽节点id
+     * @param newNodeId 目标节点id
+     * @param moveType 拖拽类型
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = &quot;/sameLevel&quot;, method = RequestMethod.GET)
+    public Retval sameLevel(@RequestParam Long pId, @RequestParam Long currentNodeId, @RequestParam Long newNodeId,
+            @RequestParam String moveType) {
+        Retval retval = Retval.newInstance();
+        try {
+
+            kfkwService.sameLevel(pId, currentNodeId, newNodeId, moveType);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            retval.fail(e.getMessage());
+        }
+        return retval;
+    }
+
+    /**
+     * 拖拽节点成为目标节点的子节点
+     * 
+     * @param currentNodeId 拖拽节点id
+     * @param newParentNodeId 目标父节点id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = &quot;/differentLevel&quot;, method = RequestMethod.GET)
+    public Retval differentLevel(@RequestParam Long currentNodeId, @RequestParam Long newParentNodeId) {
+        Retval retval = Retval.newInstance();
+        try {
+            kfkwService.differentLevel(currentNodeId, newParentNodeId);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            retval.fail(e.getMessage());
+        }
+        return retval;
+    }
+
+    /**
+     * 不同级节点为位置调换
+     * 
+     * @param currentNodeId 被拖拽节点id
+     * @param newNodeId 新的节点id
+     * @param moveType
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = &quot;/diffLevel&quot;, method = RequestMethod.GET)
+    public Retval diffLevel(@RequestParam Long currentNodeId, @RequestParam Long newNodeId,@RequestParam String moveType) {
+        Retval retval = Retval.newInstance();
+        try {
+             kfkwService.diffLevel(currentNodeId, newNodeId, moveType);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            retval.fail(e.getMessage());
+        }
+        return retval;
+    }
+
+    /**
+     * 加载树
+     * 
+     * @param id
+     * @param type
+     * @return
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping(value = &quot;/renderTree&quot;, method = RequestMethod.GET)
+    public List&lt;Map&lt;String, Object&gt;&gt; renderTree(Long id, String type) throws Exception {
+
+        List&lt;Map&lt;String, Object&gt;&gt; returnList = new ArrayList&lt;Map&lt;String, Object&gt;&gt;();
+        CcSysConfigEntity sysConfigEntity= sysConfigService.findGjdmcBySchool(AuthUtils.getCurrentSchoolId());
+        // 加载根节点
+        if (StringUtils.isEmpty(id)) {
+            Map&lt;String, Object&gt; root = new HashMap&lt;String, Object&gt;();
+
+            root.put(&quot;id&quot;, 0);
+            root.put(&quot;name&quot;, sysConfigEntity.getCckcgjdmc());
+            root.put(&quot;isParent&quot;, true);
+
+            // 加载一级节点
+            List&lt;Map&lt;String, Object&gt;&gt; returnList1 = new ArrayList&lt;Map&lt;String, Object&gt;&gt;();
+            List&lt;KfkwEntity&gt; list1 = kfkwService.findLeveL1Node();
+            for (KfkwEntity kfkw : list1) {
+                Map&lt;String, Object&gt; node = new HashMap&lt;String, Object&gt;();
+                node.put(&quot;id&quot;, kfkw.getId());
+                node.put(&quot;name&quot;, kfkw.getMc());
+                Boolean isParent = kfkwService.hasSubNodeById(kfkw.getId());
+                node.put(&quot;isParent&quot;, isParent);
+                returnList1.add(node);
+            }
+
+            root.put(&quot;children&quot;, returnList1);
+            returnList.add(root);
+
+            return returnList;
+        }
+
+        // 加载子节点
+        List&lt;KfkwEntity&gt; list = null;
+        if (id != null &amp;&amp; id &gt; 0L) {
+            list = kfkwService.findSubNodeById(id);
+            for (KfkwEntity kfkw : list) {
+                Map&lt;String, Object&gt; node = new HashMap&lt;String, Object&gt;();
+                node.put(&quot;id&quot;, kfkw.getId());
+                node.put(&quot;name&quot;, kfkw.getMc());
+                Boolean isParent = kfkwService.hasSubNodeById(kfkw.getId());
+                node.put(&quot;isParent&quot;, isParent);
+                returnList.add(node);
+            }
+        }
+
+        return returnList;
+    }
+
+    /**
+     * 查重
+     * 
+     * @param name
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = &quot;/check&quot;, method = RequestMethod.POST)
+    public Retval check(@RequestParam String name) {
+        Retval retval = Retval.newInstance();
+        Boolean boolean1 = kfkwService.check(name);
+        retval.put(&quot;check&quot;, boolean1);
+        return retval;
+    }
+
+}
+</code></pre><h2 id="service代码"><a href="#service代码" class="headerlink" title="service代码"></a>service代码</h2><pre><code>/**
+ * 仓库管理Service
+ * 
+ * @author WangYuanJun
+ */
+@Service
+public class KfkwService extends BaseService{
+
+    /** 物品分类Dao */
+    @Autowired
+    private KfkwDao kfkwDao;
+
+
+    /**
+     * 找该级的子目录
+     * 
+     * @param sjfl
+     * @return
+     */
+    public List&lt;KfkwEntity&gt; findByMaxPx(Long sjfl) {
+        Sort sort = new Sort(Direction.DESC,&quot;px&quot;);
+        return kfkwDao.findAll(spc3(sjfl),sort);
+    }
+
+    public Specification&lt;KfkwEntity&gt; spc3(Long sjfl) {
+        Specification&lt;KfkwEntity&gt; sp = new Specification&lt;KfkwEntity&gt;() {
+            @Override
+            public Predicate toPredicate(Root&lt;KfkwEntity&gt; root, CriteriaQuery&lt;?&gt; query, CriteriaBuilder cb) {
+                List&lt;Predicate&gt; predicates = Lists.newArrayList();
+                if(sjfl == null){
+                    Predicate pSjfl = cb.isNull(root.get(&quot;sjfl&quot;).as(Long.class));
+                    predicates.add(pSjfl);
+                }else{
+                    Predicate pSjfl = cb.equal(root.get(&quot;sjfl&quot;).as(Long.class), sjfl);
+                    predicates.add(pSjfl);
+                }
+                Predicate pXx = cb.equal(root.get(&quot;ssxx&quot;).as(Long.class), getSchoolId());// 所属学校
+                predicates.add(pXx);
+                query.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
+                return query.getRestriction();
+            }
+        };
+        return sp;
+    }
+
+    /**
+     * 同级之间拖拽
+     * 
+     * @param pId 父节点
+     * @param currentNodeId 拖拽的id
+     * @param newNodeId 拖拽新的id
+     */
+    @Transactional
+    public void sameLevel(Long pId, Long currentNodeId, Long newNodeId, String moveType) {
+        // 将他们中间的影响的记录跟新
+
+        if (&quot;next&quot;.equals(moveType)) {
+            KfkwEntity currentKfkw = kfkwDao.findOne(currentNodeId);
+            KfkwEntity newKfkw = kfkwDao.findOne(newNodeId);
+            // 向下拖拽
+            if(currentKfkw.getPx()&lt;newKfkw.getPx()){
+                // 跟新受影响的记录
+                List&lt;KfkwEntity&gt; kfkwList = findInfluenceData(pId, currentKfkw.getPx(), newKfkw.getPx());
+                for (int i = 0; i &lt; kfkwList.size(); i++) {
+                    KfkwEntity kfkw = kfkwList.get(i);
+                    if (!(kfkw.getId().equals(currentKfkw.getId())) &amp;&amp; !(kfkw.getId().equals(newKfkw.getId()))) {
+                        KfkwEntity kfkwEntity2 = kfkwDao.findOne(kfkw.getId());
+                        kfkwEntity2.setPx(kfkwEntity2.getPx() - 1);
+                        kfkwDao.save(kfkwEntity2);
+                    }
+
+                }
+                // 拖拽节点排序变为目标节点的排序
+                currentKfkw.setPx(newKfkw.getPx());
+                kfkwDao.save(currentKfkw);
+                // 目标排序节点排序为其排序-1
+                newKfkw.setPx(newKfkw.getPx() - 1);
+                kfkwDao.save(newKfkw);
+            }else{
+
+                // 向上拖拽,movetpe=next
+                // 目标节点wpflList.get(0),去除目标节点,将目标节点的下一个节点变为目标节点
+                List&lt;KfkwEntity&gt; kfkwList = findInfluenceData(pId, currentKfkw.getPx(), newKfkw.getPx());
+                kfkwList.remove(0);
+                KfkwEntity kfkwNew=kfkwDao.findOne(kfkwList.get(0).getId());
+                int kfkwNewPx = kfkwNew.getPx();
+                for (int i = 0; i &lt; kfkwList.size(); i++) {
+                    KfkwEntity kfkw = kfkwList.get(i);
+                    if (!(kfkw.getId().equals(currentKfkw.getId())) ) {
+                        KfkwEntity kfkwEntity2 = kfkwDao.findOne(kfkw.getId());
+                        kfkwEntity2.setPx(kfkwEntity2.getPx() + 1);
+                        kfkwDao.save(kfkwEntity2);
+                    }
+                }
+                // 拖拽的排序变为目标节点排序
+                currentKfkw.setPx(kfkwNewPx);
+                kfkwDao.save(currentKfkw);
+            }
+
+        } else if (&quot;prev&quot;.equals(moveType)) {
+            KfkwEntity currentKfkw = kfkwDao.findOne(currentNodeId);
+            KfkwEntity newKfkw = kfkwDao.findOne(newNodeId);
+            // 向上拖拽
+            if(currentKfkw.getPx()&gt;newKfkw.getPx()){
+                // 跟新受影响的记录
+                List&lt;KfkwEntity&gt; kfkwList = findInfluenceData(pId, currentKfkw.getPx(), newKfkw.getPx());
+                for (int i = 0; i &lt; kfkwList.size(); i++) {
+                    KfkwEntity kfkw = kfkwList.get(i);
+                    if (!(kfkw.getId().equals(currentKfkw.getId())) &amp;&amp; !(kfkw.getId().equals(newKfkw.getId()))) {
+                        KfkwEntity kfkwEntity2 = kfkwDao.findOne(kfkw.getId());
+                        kfkwEntity2.setPx(kfkwEntity2.getPx() + 1);
+                        kfkwDao.save(kfkwEntity2);
+                    }
+
+                }
+                // 拖拽的排序变为目标节点排序
+                currentKfkw.setPx(newKfkw.getPx());
+                kfkwDao.save(currentKfkw);
+                // 目标排序的排序为其排序至+1
+                newKfkw.setPx(newKfkw.getPx() + 1);
+                kfkwDao.save(newKfkw);
+            }else{
+                    // 向下拖拽,movetype=prev
+                    // 跟新受影响的记录
+                     // 目标节点wpflList.get(最大值),去除目标节点,将目标节点的上一个节点变为目标节点
+                    List&lt;KfkwEntity&gt; kfkwList = findInfluenceData(pId, currentKfkw.getPx(), newKfkw.getPx());
+                    kfkwList.remove(kfkwList.size()-1);
+                    KfkwEntity kfkwNew=kfkwDao.findOne(kfkwList.get(kfkwList.size()-1).getId()); //新的目标节点
+                    int kfkwNewPx = kfkwNew.getPx();
+                    for (int i = 0; i &lt; kfkwList.size(); i++) {
+                        KfkwEntity kfkw = kfkwList.get(i);
+                        if (!(kfkw.getId().equals(currentKfkw.getId())) ) {
+                            KfkwEntity kfkwEntity2 = kfkwDao.findOne(kfkw.getId());
+                            kfkwEntity2.setPx(kfkwEntity2.getPx() - 1);
+                            kfkwDao.save(kfkwEntity2);
+                        }
+
+                    }
+                    // 拖拽节点排序变为目标节点的排序
+                    currentKfkw.setPx(kfkwNewPx);
+                    kfkwDao.save(currentKfkw);
+            }
+
+        }
+
+    }
+
+    public List&lt;KfkwEntity&gt; findInfluenceData(Long sjfl, Integer currentNodePx, Integer newNodePx) {
+        Specification&lt;KfkwEntity&gt; spec = new Specification&lt;KfkwEntity&gt;() {
+
+            @Override
+            public Predicate toPredicate(Root&lt;KfkwEntity&gt; root, CriteriaQuery&lt;?&gt; query, CriteriaBuilder cb) {
+                List&lt;Predicate&gt; predicates = Lists.newArrayList();
+
+                if(sjfl != 0){
+                    Predicate p1 = cb.equal(root.get(&quot;sjfl&quot;).as(Long.class), sjfl);
+                    predicates.add(p1);
+                }else{
+                    Predicate p1 = cb.isNull(root.get(&quot;sjfl&quot;).as(Long.class));
+                    predicates.add(p1);
+                }
+                Predicate p2 = cb.equal(root.get(&quot;ssxx&quot;).as(Long.class), getSchoolId());
+                predicates.add(p2);
+                if(currentNodePx&lt;newNodePx){
+                    Predicate p3 = cb.between(root.get(&quot;px&quot;), currentNodePx, newNodePx);
+                    predicates.add(p3);
+                }else if(currentNodePx&gt;newNodePx){
+                    Predicate p3 = cb.between(root.get(&quot;px&quot;), newNodePx, currentNodePx);
+                    predicates.add(p3);;
+                }
+                query.orderBy(cb.asc(root.get(&quot;px&quot;).as(Long.class)));
+                query.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
+                return query.getRestriction();
+            }
+        };
+
+        List&lt;KfkwEntity&gt; wpflList = kfkwDao.findAll(spec);
+
+        return wpflList;
+    }
+
+    //成为目标节点的子节点
+    /**
+     * 
+     * @param currentNodeId 拖拽节点id
+     * @param newParentNodeId 目标父节点id
+     * @throws Exception 
+     */
+    @Transactional
+    public void differentLevel(Long currentNodeId,Long newParentNodeId) throws Exception{
+
+        KfkwEntity kfkwEntity=kfkwDao.findOne(currentNodeId);  // 拖拽节点
+        List&lt;KfkwEntity&gt; kfkwEntities = null;
+        if(kfkwEntity.getSjfl() != null){
+            kfkwEntities= findInfluenceData1(kfkwEntity.getSjfl().getId(), kfkwEntity.getPx());
+        }else{
+            kfkwEntities= findInfluenceData1(null, kfkwEntity.getPx());
+        }
+        if(CollectionUtils.isNotEmpty(kfkwEntities)){ // 当前节点为同级最后节点时wpflEntities=[]
+            for (int i = 0; i &lt; kfkwEntities.size(); i++) {
+                KfkwEntity kfkwEntity2= kfkwEntities.get(i);
+                kfkwEntity2.setPx(kfkwEntity2.getPx()-1);
+                kfkwDao.save(kfkwEntity2);
+            }
+        }
+        //当前节点成为目标节点(父节点)的最后一个节点
+        KfkwDto kfkwDto = new KfkwDto();
+        List&lt;KfkwEntity&gt; kfkwEntities2= kfkwDao.findByMaxPx(newParentNodeId, getSchoolId()); //  得到目标节点子节点的集合
+        if(CollectionUtils.isEmpty(kfkwEntities2)){
+            kfkwDto.setPx(1);
+        }else{
+            kfkwDto.setPx(kfkwEntities2.get(0).getPx()+1);
+        }
+        kfkwEntity.setSjfl(kfkwDao.findOne(newParentNodeId));
+        super.save(kfkwEntity, kfkwDto);
+    }
+
+
+    public List&lt;KfkwEntity&gt; findInfluenceData1(Long sjfl, Integer currentNodePx) {
+        Specification&lt;KfkwEntity&gt; spec = new Specification&lt;KfkwEntity&gt;() {
+
+            @Override
+            public Predicate toPredicate(Root&lt;KfkwEntity&gt; root, CriteriaQuery&lt;?&gt; query, CriteriaBuilder cb) {
+                List&lt;Predicate&gt; predicates = Lists.newArrayList();
+
+                if(sjfl != null){
+                    Predicate p1 = cb.equal(root.get(&quot;sjfl&quot;).as(Long.class), sjfl);
+                    predicates.add(p1);
+                }else{
+                    Predicate p1 = cb.isNull(root.get(&quot;sjfl&quot;).as(Long.class));
+                    predicates.add(p1);
+                }
+                Predicate p2 = cb.equal(root.get(&quot;ssxx&quot;).as(Long.class), getSchoolId());
+                predicates.add(p2);
+                Predicate p3 = cb.greaterThan(root.get(&quot;px&quot;), currentNodePx);
+                predicates.add(p3);
+                query.orderBy(cb.asc(root.get(&quot;px&quot;).as(Long.class)));
+                query.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
+                return query.getRestriction();
+            }
+        };
+
+        List&lt;KfkwEntity&gt; wpflList = kfkwDao.findAll(spec);
+
+        return wpflList;
+    }
+
+
+    /**
+     * 不同级节点为位置调换,movetype != inner
+     * 
+     * @param currentNodeId
+     * @param newNodeId
+     * @param moveType
+     * @throws Exception
+     */
+    @Transactional
+    public void diffLevel(Long currentNodeId, Long newNodeId, String moveType) throws Exception {
+        if(&quot;next&quot;.equals(moveType)){
+            KfkwEntity currentKfkw = kfkwDao.findOne(currentNodeId);// 拖拽节点
+            KfkwEntity newKfkw = kfkwDao.findOne(newNodeId);//目标节点 
+            KfkwEntity newKfkwSjfl =null;
+            // 移到第一节点
+            if(newKfkw.getSjfl() != null){
+                newKfkwSjfl = kfkwDao.findOne(newKfkw.getSjfl().getId()); //目标节点的父类
+            }
+
+            List&lt;KfkwEntity&gt; ccKfkwEntities = null;
+            if(newKfkw.getSjfl() != null){
+                // 目标节点后面的数据排序+1，如果是最后一位不要+1
+                ccKfkwEntities = this.findInfluenceData2(newKfkw.getSjfl().getId(), newKfkw.getPx());
+            }else{
+                ccKfkwEntities = this.findInfluenceData2(null, newKfkw.getPx());
+            }
+
+            if(CollectionUtils.isNotEmpty(ccKfkwEntities)){
+                for (int i = 0; i &lt; ccKfkwEntities.size(); i++) {
+                    KfkwEntity ccKfkwEntity=ccKfkwEntities.get(i);
+                    ccKfkwEntity.setPx(ccKfkwEntity.getPx()+1);
+                    kfkwDao.save(ccKfkwEntity);
+                }
+            }
+
+            List&lt;KfkwEntity&gt; cckfkwEntities2 = null;
+            if(currentKfkw.getSjfl() != null){
+                // 当前节点之后的排序值减一，判断是不是最后一个节点，如果是最后一个节点，就不需要-1了
+                cckfkwEntities2 = this.findInfluenceData2(currentKfkw.getSjfl().getId(), currentKfkw.getPx());
+            }else{
+                cckfkwEntities2 = this.findInfluenceData2(null, currentKfkw.getPx());
+            }
+            if(CollectionUtils.isNotEmpty(cckfkwEntities2)){
+                for (int i = 0; i &lt; cckfkwEntities2.size(); i++) {
+                    KfkwEntity ccKfkwEntity=cckfkwEntities2.get(i);
+                    ccKfkwEntity.setPx(ccKfkwEntity.getPx()-1);
+                    kfkwDao.save(ccKfkwEntity);
+                }
+            }
+
+            currentKfkw.setPx(newKfkw.getPx()+1); 
+            currentKfkw.setSjfl(newKfkwSjfl);
+            kfkwDao.save(currentKfkw);
+        }else{
+            KfkwEntity currentKfkw = kfkwDao.findOne(currentNodeId);// 拖拽节点
+            KfkwEntity newKfkw = kfkwDao.findOne(newNodeId);//目标节点 
+            KfkwEntity newKfkwSjfl =null;
+            // 移到第一节点
+            if(newKfkw.getSjfl() != null){
+                newKfkwSjfl = kfkwDao.findOne(newKfkw.getSjfl().getId()); //目标节点的父类
+            }
+
+            List&lt;KfkwEntity&gt; ccKfkwEntities2 = null;
+            if(currentKfkw.getSjfl() !=null){
+                // 当前节点之后的排序值减一，判断是不是最后一个节点，如果是最后一个节点，就不需要-1了
+                ccKfkwEntities2 = this.findInfluenceData2(currentKfkw.getSjfl().getId(), currentKfkw.getPx());
+            }else{
+                ccKfkwEntities2 = this.findInfluenceData2(null, currentKfkw.getPx());
+            }
+
+            if(CollectionUtils.isNotEmpty(ccKfkwEntities2)){
+                for (int i = 0; i &lt; ccKfkwEntities2.size(); i++) {
+                    KfkwEntity ccKfkwEntity=ccKfkwEntities2.get(i);
+                    ccKfkwEntity.setPx(ccKfkwEntity.getPx()-1);
+                    kfkwDao.save(ccKfkwEntity);
+                }
+            }
+
+            List&lt;KfkwEntity&gt; ccKfkwEntities = null;
+            if(newKfkw.getSjfl() !=null){
+                // 目标节点之后的排序值加一
+                ccKfkwEntities = this.findInfluenceData2(newKfkw.getSjfl().getId(), newKfkw.getPx());
+            }else{
+                ccKfkwEntities = this.findInfluenceData2(null, newKfkw.getPx());
+            }
+
+            if(CollectionUtils.isNotEmpty(ccKfkwEntities)){
+                for (int i = 0; i &lt; ccKfkwEntities.size(); i++) {
+                    KfkwEntity ccKfkwEntity=ccKfkwEntities.get(i);
+                    ccKfkwEntity.setPx(ccKfkwEntity.getPx()+1);
+                    kfkwDao.save(ccKfkwEntity);
+                }
+            }
+
+            currentKfkw.setPx(newKfkw.getPx()); 
+            currentKfkw.setSjfl(newKfkwSjfl);
+            kfkwDao.save(currentKfkw);
+
+//            目标节点的排序值加一
+            newKfkw.setPx(newKfkw.getPx()+1);
+            kfkwDao.save(newKfkw);
+
+        }
+    }
+
+    public List&lt;KfkwEntity&gt; findInfluenceData2(Long sjfl, Integer currentNodePx) {
+        Specification&lt;KfkwEntity&gt; spec = new Specification&lt;KfkwEntity&gt;() {
+
+            @Override
+            public Predicate toPredicate(Root&lt;KfkwEntity&gt; root, CriteriaQuery&lt;?&gt; query, CriteriaBuilder cb) {
+                List&lt;Predicate&gt; predicates = Lists.newArrayList();
+
+                if(sjfl != null){
+                    Predicate p1 = cb.equal(root.get(&quot;sjfl&quot;).as(Long.class), sjfl);
+                    predicates.add(p1);
+                }else{
+                    Predicate p1 = cb.isNull(root.get(&quot;sjfl&quot;).as(Long.class));
+                    predicates.add(p1);
+                }
+                Predicate p2 = cb.equal(root.get(&quot;ssxx&quot;).as(Long.class), getSchoolId());
+                predicates.add(p2);
+                Predicate p3 = cb.greaterThan(root.get(&quot;px&quot;), currentNodePx);
+                predicates.add(p3);
+                query.orderBy(cb.asc(root.get(&quot;px&quot;).as(Long.class)));
+                query.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
+                return query.getRestriction();
+            }
+        };
+
+        List&lt;KfkwEntity&gt; wpflList = kfkwDao.findAll(spec);
+
+        return wpflList;
+    }
+
+}
+</code></pre><h2 id="dao代码"><a href="#dao代码" class="headerlink" title="dao代码"></a>dao代码</h2><pre><code>/**
+ * 仓库管理Dao
+ * 
+ * @author WangYuanJun
+ */
+public interface KfkwDao extends JpaRepository&lt;KfkwEntity, Long&gt;, JpaSpecificationExecutor&lt;KfkwEntity&gt; {
+
+    @Query(&quot;select o from KfkwEntity o where o.sjfl.id=?1 and o.ssxx.id=?2 order by o.px desc&quot;)
+    public List&lt;KfkwEntity&gt; findByMaxPx(Long sjfl,Long ssxx);
+
+}
+</code></pre></div><div class="tags"><a href="/tags/jquery/">jquery</a><a href="/tags/ztree/">ztree</a></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2016/08/26/Spring-Aop之AspectJ注解配置实现日志管理/" class="pre">Spring Aop之AspectJ注解配置实现日志管理</a><a href="/2016/05/10/Maven镜像更换为阿里云镜像/" class="next">Maven镜像更换为阿里云镜像</a></div><div id="comments"><div id="SOHUCS" sid="2016/07/19/ztree实现拖拽功能/"></div></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Jsp程序"><span class="toc-text">Jsp程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JS代码"><span class="toc-text">JS代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Controller代码"><span class="toc-text">Controller代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#service代码"><span class="toc-text">service代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dao代码"><span class="toc-text">dao代码</span></a></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/12/25/Oracle-VM-VirtualBox配置虚拟网卡-桥接-实现主机-虚拟机网络互通/">Oracle VM VirtualBox配置虚拟网卡(桥接),实现主机-虚拟机网络互通</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/25/Oracle-VM-VirtualBox-l配置虚拟网卡-桥接-实现主机-虚拟机网络互通/">Oracle VM VirtualBox配置虚拟网卡(桥接),实现主机-虚拟机网络互通</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/25/解决虚拟机安装linux后首次输入ifconfig-IP地址显示为127-0-0-1/">解决虚拟机安装linux后首次输入ifconfig IP地址显示为127.0.0.1</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/25/解决项目war包部署到linux系统的tomcat中访问页面报404错误/">解决项目war包部署到linux系统的tomcat中访问页面报404错误</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/25/Java-Web项目导出war包并部署到linux系统的tomcat中/">Java Web项目导出war包并部署到linux系统的tomcat中</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/SpringBoot发布HttpClient服务和客户端调用HttpClient服务/">SpringBoot发布HttpClient服务和客户端调用HttpClient服务</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/21/SpringBoot整合cxf发布WebService服务和客户端调用WebService服务/">SpringBoot整合cxf发布WebService服务和客户端调用WebService服务</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/18/github-hexo搭建博客之hexo提交百度搜索引擎/">github-hexo搭建博客之hexo提交百度搜索引擎</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/18/github-hexo搭建博客之畅言实现博客的评论/">github-hexo搭建博客之畅言实现博客的评论</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/07/使用element-ui-select下拉框多选，编辑状态下回显数据/">使用element ui select下拉框多选，编辑状态下回显数据</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HttpClient/">HttpClient</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/WebService/">WebService</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/axios/">axios</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/element-ui/">element ui</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/extjs/">extjs</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery插件/">jquery插件</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/maven/">maven</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mybatis/">mybatis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/oracle/">oracle</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/shiro/">shiro</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/spring/">spring</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/tomcate/">tomcate</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/weblogic/">weblogic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/webpack/">webpack</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ztree/">ztree</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编码规范/">编码规范</a><span class="category-list-count">1</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/jquery/" style="font-size: 15px;">jquery</a> <a href="/tags/docker/" style="font-size: 15px;">docker</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/maven/" style="font-size: 15px;">maven</a> <a href="/tags/redis/" style="font-size: 15px;">redis</a> <a href="/tags/spring-aop/" style="font-size: 15px;">spring aop</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/HttpClient/" style="font-size: 15px;">HttpClient</a> <a href="/tags/SpringBoot/" style="font-size: 15px;">SpringBoot</a> <a href="/tags/WebService/" style="font-size: 15px;">WebService</a> <a href="/tags/SpringMVC/" style="font-size: 15px;">SpringMVC</a> <a href="/tags/tomcate/" style="font-size: 15px;">tomcate</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/mybatis/" style="font-size: 15px;">mybatis</a> <a href="/tags/webpack/" style="font-size: 15px;">webpack</a> <a href="/tags/extjs/" style="font-size: 15px;">extjs</a> <a href="/tags/ztree/" style="font-size: 15px;">ztree</a> <a href="/tags/shiro/" style="font-size: 15px;">shiro</a> <a href="/tags/element-ui/" style="font-size: 15px;">element ui</a> <a href="/tags/select2/" style="font-size: 15px;">select2</a> <a href="/tags/weblogic/" style="font-size: 15px;">weblogic</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/java基础/" style="font-size: 15px;">java基础</a> <a href="/tags/git/" style="font-size: 15px;">git</a> <a href="/tags/axios/" style="font-size: 15px;">axios</a> <a href="/tags/oracle/" style="font-size: 15px;">oracle</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/Oracle-VM-VirtualBox/" style="font-size: 15px;">Oracle VM VirtualBox</a> <a href="/tags/linux/" style="font-size: 15px;">linux</a> <a href="/tags/编码规范/" style="font-size: 15px;">编码规范</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-you"> 友情链接</i></div><ul></ul><a href="https://github.com/wangyuanjun008" title="GitHub" target="_blank">GitHub</a></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">WangYuanJun.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script><script>window._config = { showScore: true };
+(function(){ 
+  var appid = 'cytn089Dg'; 
+  var conf = '4501ebcf59ba2646236d1827a7751555'; 
+  var width = window.innerWidth || document.documentElement.clientWidth; 
+  var nodes =document.getElementsByTagName("head")[0]||document.head||document.documentElement;
+  if (/(Android|iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent) && width < 750) {  
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+  }
+  else { 
+    var loadJs=function(d,a){
+      var b=document.createElement("script");b.setAttribute("type","text/javascript");
+      b.setAttribute("charset","UTF-8");
+      b.setAttribute("src",d);
+      if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}
+      nodes.appendChild(b)
+    };
+    loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); 
+  } 
+  var loadCss = function(cssString){  
+    var style=document.createElement("style");  
+    style.setAttribute("type", "text/css");  
+    if(style.styleSheet){// IE  
+        style.styleSheet.cssText = cssString;  
+    } else {// w3c  
+        var cssText = document.createTextNode(cssString);  
+        style.appendChild(cssText);  
+    }
+    nodes.appendChild(style);
+  }
+  window.onload=function(){loadCss('.module-hot-topic,.module-cmt-float-bar{display:none!important}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .wrap-action-w .cbox-prompt-w span.prompt-empty-w,#SOHUCS #SOHU_MAIN .module-cmt-float-bar .wrap-cont-w .cont-form-w .form-text-w span.text-null,#SOHUCS #SOHU_MAIN .module-cmt-float-bar .wrap-cont-w .cont-minwidth-w div.cont-comment-w a.comment-link-w,#SOHUCS #SOHU_MAIN .module-cmt-float-bar .wrap-cont-w .cont-minwidth-w div.cont-comment-w span.comment-text-w,#SOHUCS #SOHU_MAIN .module-cmt-footer .section-service-w div.service-wrap-w a:hover,#SOHUCS #SOHU_MAIN .module-cmt-header .section-cbox-w .block-head-w div.header-login,#SOHUCS #SOHU_MAIN .module-cmt-header .section-title-w .title-user-w .user-wrap-w span.wrap-name-w,#SOHUCS #SOHU_MAIN .module-cmt-list .action-click-gw span.click-disable-eg a em.icon-name-bg,#SOHUCS #SOHU_MAIN .module-cmt-list .block-title-gw ul li div.title-name-gw,#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type .cmt-list-number .comment-number span.cy-number,#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type .cmt-list-number span.comment-number,#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type .type-lists li.active,#SOHUCS #SOHU_MAIN .module-cmt-list .msg-wrap-gw .wrap-action-gw .action-click-gw span a:hover,#SOHUCS #SOHU_MAIN .module-cmt-list .picture-box-gw div.box-action-gw a:hover,#SOHUCS #SOHU_MAIN .module-cmt-list .wrap-action-gw .action-click-gw span a:hover em.icon-name-bg,#SOHUCS #SOHU_MAIN .module-cmt-list .wrap-user-gw span.user-name-gw a{color:#40759b!important}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .post-wrap-border-t div.post-wrap-border-t-r,#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w div.post-wrap-border-l,#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w div.post-wrap-border-r{display:none!important}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .post-wrap-border-t div.post-wrap-border-t-l{background:#FFF!important;top:-2px!important}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .wrap-action-w .action-function-w .uploading-wrapper-dw div.wrapper-image-dw,#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w div.post-wrap-main,#SOHUCS #SOHU_MAIN .module-cmt-float-bar .wrap-cont-w .cont-form-w div.form-text-w,#SOHUCS #SOHU_MAIN .module-cmt-header .section-cbox-w .block-head-w div.header-login,#SOHUCS #SOHU_MAIN .module-cmt-list .module-cmt-box .post-wrap-w div.post-wrap-main{border:1px solid #e6e6e6!important;border-radius:20px 20px 20px 20px;margin:0!important}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .wrap-action-w .action-issue-w .issue-btn-w a .btn-fw{width:130px!important;height:34px!important;line-height:33px!important;font-size:17px!important;background:#5483b1!important;border-radius:20px!important;color:#FFF!important;-webkit-box-shadow:0 -1px 4px #5483b1 inset;box-shadow:0 -1px 10px #5483b1 inset}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .wrap-action-w .action-issue-w .issue-btn-w a .btn-fw:before{content:"发表评论"}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .wrap-action-w .action-issue-w .issue-btn-w a:hover .btn-fw{color:#40759b!important;background:#FFF!important}#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type .type-lists li{background:none!important;border-bottom:1px solid #e6e6e6}#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type .type-lists li.active{border:1px solid #e6e6e6;border-radius:10px 10px 0 0;border-bottom:none}#SOHUCS #SOHU_MAIN .module-cmt-list .block-title-gw ul li .title-name-gw div.title-name-gw-tag{background:#5483b1!important;border-radius:3px}#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type div.cmt-list-border{background-color:#e6e6e6!important}#SOHUCS #SOHU_MAIN .module-cmt-notice ul.nt-list li.nt-item{border:1px solid #e6e6e6!important}#SOHUCS #SOHU_MAIN .module-cmt-notice ul.nt-list li.nt-item .nt-logo{text-align:center;line-height:40px;border-radius:50%!important;background:#e6e6e6!important}#SOHUCS #SOHU_MAIN .module-cmt-notice ul.nt-list li.nt-item .nt-logo:before{content:"畅";font-size:22px;color:#FFF}#SOHUCS #SOHU_MAIN .module-cmt-notice ul.nt-list li.nt-item a.nt-text,#SOHUCS #SOHU_MAIN .module-cmt-notice ul.nt-list li.nt-item a.nt-text i{color:#5483b1!important}#SOHUCS #SOHU_MAIN .module-cmt-header .section-title-w .title-user-w .user-wrap-w{background:#FFF!important}');};
+})();</script><script src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script></body></html>
