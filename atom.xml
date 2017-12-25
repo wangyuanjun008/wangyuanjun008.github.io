@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wangyuanjun.cn/"/>
-  <updated>2017-12-25T09:41:38.098Z</updated>
+  <updated>2017-12-25T09:54:02.995Z</updated>
   <id>http://wangyuanjun.cn/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://wangyuanjun.cn/2017/12/25/Oracle-VM-VirtualBox%E9%85%8D%E7%BD%AE%E8%99%9A%E6%8B%9F%E7%BD%91%E5%8D%A1-%E6%A1%A5%E6%8E%A5-%E5%AE%9E%E7%8E%B0%E4%B8%BB%E6%9C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BA%92%E9%80%9A/"/>
     <id>http://wangyuanjun.cn/2017/12/25/Oracle-VM-VirtualBox配置虚拟网卡-桥接-实现主机-虚拟机网络互通/</id>
     <published>2017-12-25T09:01:52.000Z</published>
-    <updated>2017-12-25T09:41:38.098Z</updated>
+    <updated>2017-12-25T09:54:02.995Z</updated>
     
     <content type="html"><![CDATA[<h2 id="桥接网卡"><a href="#桥接网卡" class="headerlink" title="桥接网卡"></a>桥接网卡</h2><ol>
 <li>首先打开虚拟机</li>
@@ -36,47 +36,6 @@
 <li>shell# vim ifcfg-enp0s3</li>
 <li>BOOTPROTO=dhcp,ONBOOT=yes(dhcp为动态获取ip，ONBOOT=yes为开机启动)</li>
 <li>保存退出！<br><img src="/2017/12/25/Oracle-VM-VirtualBox配置虚拟网卡-桥接-实现主机-虚拟机网络互通/修改网卡.png" alt="修改网卡"></li>
-</ol>
-<h2 id="重启服务器"><a href="#重启服务器" class="headerlink" title="重启服务器"></a>重启服务器</h2><pre><code>shell#service network restart
-</code></pre><p>或者</p>
-<pre><code>shell#systemctl restart network (centos7版本命令)
-</code></pre><p>参考:<a href="https://jingyan.baidu.com/article/c843ea0ba8b70677931e4adc.html" target="_blank" rel="external">VirtualBox linux虚拟机如何实现“桥接”上网</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;桥接网卡&quot;&gt;&lt;a href=&quot;#桥接网卡&quot; class=&quot;headerlink&quot; title=&quot;桥接网卡&quot;&gt;&lt;/a&gt;桥接网卡&lt;/h2&gt;&lt;ol&gt;
-&lt;li&gt;首先打开虚拟机&lt;/li&gt;
-&lt;li&gt;右键点击右下角 网络连接&lt;/li&gt;
-&lt;li&gt;在弹出框内点击 网络&lt;/li&gt;
-&lt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Oracle VM VirtualBox配置虚拟网卡(桥接),实现主机-虚拟机网络互通</title>
-    <link href="http://wangyuanjun.cn/2017/12/25/Oracle-VM-VirtualBox-l%E9%85%8D%E7%BD%AE%E8%99%9A%E6%8B%9F%E7%BD%91%E5%8D%A1-%E6%A1%A5%E6%8E%A5-%E5%AE%9E%E7%8E%B0%E4%B8%BB%E6%9C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BA%92%E9%80%9A/"/>
-    <id>http://wangyuanjun.cn/2017/12/25/Oracle-VM-VirtualBox-l配置虚拟网卡-桥接-实现主机-虚拟机网络互通/</id>
-    <published>2017-12-25T09:01:52.000Z</published>
-    <updated>2017-12-25T09:42:22.829Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="桥接网卡"><a href="#桥接网卡" class="headerlink" title="桥接网卡"></a>桥接网卡</h2><ol>
-<li>首先打开虚拟机</li>
-<li>右键点击右下角 网络连接</li>
-<li>在弹出框内点击 网络</li>
-<li>在设置界面依次点击-网络-连接方式选择 -桥接网卡-确定</li>
-</ol>
-<p><img src="/2017/12/25/Oracle-VM-VirtualBox-l配置虚拟网卡-桥接-实现主机-虚拟机网络互通/桥接.png" alt="桥接"></p>
-<h2 id="编辑网卡"><a href="#编辑网卡" class="headerlink" title="编辑网卡"></a>编辑网卡</h2><ol>
-<li>打开centos虚拟机终端，就是命令行</li>
-<li>切换到root用户，对网卡文件进行编辑</li>
-<li>shell#cd /etc/sysconfig/network-scripts/</li>
-<li>shell# vim ifcfg-enp0s3</li>
-<li>BOOTPROTO=dhcp,ONBOOT=yes(dhcp为动态获取ip，ONBOOT=yes为开机启动)</li>
-<li>保存退出！<br><img src="/2017/12/25/Oracle-VM-VirtualBox-l配置虚拟网卡-桥接-实现主机-虚拟机网络互通/修改网卡.png" alt="修改网卡"></li>
 </ol>
 <h2 id="重启服务器"><a href="#重启服务器" class="headerlink" title="重启服务器"></a>重启服务器</h2><pre><code>shell#service network restart
 </code></pre><p>或者</p>
@@ -1659,6 +1618,85 @@ end;
     
     
       <category term="java" scheme="http://wangyuanjun.cn/tags/java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用select2下拉框ajax加载数据时,编辑赋值的方法</title>
+    <link href="http://wangyuanjun.cn/2017/09/14/%E4%BD%BF%E7%94%A8select2%E4%B8%8B%E6%8B%89%E6%A1%86ajax%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE%E6%97%B6-%E7%BC%96%E8%BE%91%E8%B5%8B%E5%80%BC%E7%9A%84%E6%96%B9%E6%B3%95/"/>
+    <id>http://wangyuanjun.cn/2017/09/14/使用select2下拉框ajax加载数据时-编辑赋值的方法/</id>
+    <published>2017-09-13T16:19:44.000Z</published>
+    <updated>2017-12-18T01:51:14.168Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近在做一个项目,项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.github.com</a><br>使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:</p>
+<pre><code>&lt;label class=&quot;col-sm-1 control-label&quot;&gt;使用状态:&lt;/label&gt;
+&lt;select id=&quot;sel_status&quot; name=&quot;status&quot; class=&quot;col-sm-3 form-control select2&quot;&gt;&lt;/select&gt;
+
+$(&quot;#sel_status&quot;).select2({
+    placeholder : &quot;--请选择--&quot;,
+    dropdownParent : $(&quot;#myModal&quot;),
+    allowClear : true,
+    width : 150,
+    ajax : {
+        url : &apos;${ctx}/dataDict/getData?groupCode=&apos;+&apos;yesOrNo&apos;,
+        dataType : &apos;json&apos;,
+        type : &apos;get&apos;,
+        data: function (params) {
+            return {
+                q: params.term, // search term 请求参数
+                page: params.page
+            };
+        },
+        processResults: function (data, params) {
+            params.page = params.page || 1;
+            return {
+                results: data,//itemList
+                pagination: {
+                    more: (params.page * 30) &lt; data.total_count
+                }
+            };
+        },
+        cache: true
+    }
+ });
+</code></pre><p>通过查询api知道，在select4.0之后可以使用 $(“select”).val(“id”).trigger(“change”);为下拉框赋值<br>你会发现下拉框中的数据是点击之后才会加载数据的，使用如上方法 ‘id’是未知的，原因是在编辑的时候下拉框的数据还没有加载出来</p>
+<p>解决方法如下:</p>
+<pre><code>function getDataByGroupCode(groupCode){
+    var dataStore;
+    $.ajax({
+        dataType : &apos;json&apos;,
+        type : &apos;get&apos;,
+        url : model.dataURL+groupCode,
+        async : false,
+        success: function(data){
+            dataStore=data;
+        }
+     });
+    return dataStore;
+}    
+var dataStore = getDataByGroupCode(&apos;yesOrNo&apos;);
+
+$(&quot;#sel_status&quot;).select2({
+    placeholder : &quot;--请选择--&quot;,
+    dropdownParent : $(&quot;#myModal&quot;),
+    allowClear : true,
+    width : 150,
+    minimumResultsForSearch: -1,
+    data : dataStore
+});
+</code></pre><p>在页面加载的时候就加载下拉框数据，在编辑时就能为其赋值，问题解决!</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近在做一个项目,项目地址: &lt;a href=&quot;https://github.com/wangyuanjun008/wyj-parent.github.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/wangyu
+    
+    </summary>
+    
+      <category term="jquery插件" scheme="http://wangyuanjun.cn/categories/jquery%E6%8F%92%E4%BB%B6/"/>
+    
+    
+      <category term="select2" scheme="http://wangyuanjun.cn/tags/select2/"/>
     
   </entry>
   
