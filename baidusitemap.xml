@@ -4,6 +4,70 @@
 
     
   <url>
+    <loc>http://wangyuanjun.cn/2016/12/09/Maven%E9%9B%86%E6%88%90-tomcat7-maven-plugin-%E9%83%A8%E7%BD%B2Maven-Web%E9%A1%B9%E7%9B%AE/</loc>
+    <lastmod>2017-12-26T08:30:29.103Z</lastmod>
+    <data>
+        <display>
+        <title>Maven集成 tomcat7-maven-plugin 部署Maven Web项目</title>
+        <pubTime>2016-12-09T07:54:44.000Z</pubTime>
+        
+        <tag>tomcat</tag>
+         
+        <tag>maven</tag>
+         
+         
+           
+             
+              <breadCrumb title="tomcat" url="http://wangyuanjun.cn/categories/tomcat/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wangyuanjun.cn/2016/10/26/Tomcat%E6%8A%A5%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA/</loc>
+    <lastmod>2017-12-26T08:29:36.047Z</lastmod>
+    <data>
+        <display>
+        <title>Tomcat报内存溢出</title>
+        <pubTime>2016-10-26T13:45:17.000Z</pubTime>
+        
+        <tag>tomcat</tag>
+         
+         
+           
+             
+              <breadCrumb title="tomcat" url="http://wangyuanjun.cn/categories/tomcat/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://wangyuanjun.cn/2016/12/01/%E8%A7%A3%E5%86%B3java-lang-ClassNotFoundException-ch-qos-logback-ext-spring-web-LogbackConfigListener-%E9%A1%B9%E7%9B%AE%E5%90%AF%E5%8A%A8%E6%8A%A5%E9%94%99/</loc>
+    <lastmod>2017-12-26T07:25:57.821Z</lastmod>
+    <data>
+        <display>
+        <title>解决java.lang.ClassNotFoundException: ch.qos.logback.ext.spring.web.LogbackConfigListener 项目启动报错</title>
+        <pubTime>2016-12-01T07:08:40.000Z</pubTime>
+        
+        <tag>tomcat</tag>
+         
+        <tag>maven</tag>
+         
+         
+           
+             
+              <breadCrumb title="tomcat" url="http://wangyuanjun.cn/categories/tomcat/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://wangyuanjun.cn/2017/12/25/Oracle-VM-VirtualBox%E9%85%8D%E7%BD%AE%E8%99%9A%E6%8B%9F%E7%BD%91%E5%8D%A1-%E6%A1%A5%E6%8E%A5-%E5%AE%9E%E7%8E%B0%E4%B8%BB%E6%9C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BA%92%E9%80%9A/</loc>
     <lastmod>2017-12-25T09:54:02.995Z</lastmod>
     <data>
@@ -848,26 +912,6 @@
            
              
               <breadCrumb title="maven" url="http://wangyuanjun.cn/categories/maven/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://wangyuanjun.cn/2016/10/26/Tomcat%E6%8A%A5%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA/</loc>
-    <lastmod>2017-12-18T01:45:43.815Z</lastmod>
-    <data>
-        <display>
-        <title>Tomcat报内存溢出</title>
-        <pubTime>2016-10-26T13:45:17.000Z</pubTime>
-        
-        <tag>tomcate</tag>
-         
-         
-           
-             
-              <breadCrumb title="tomcate" url="http://wangyuanjun.cn/categories/tomcate/"/>
           
         </display>
     </data>
