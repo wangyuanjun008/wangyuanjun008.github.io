@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wangyuanjun.cn/"/>
-  <updated>2018-01-08T08:49:43.442Z</updated>
+  <updated>2018-01-08T09:09:28.738Z</updated>
   <id>http://wangyuanjun.cn/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://wangyuanjun.cn/2018/01/08/Quartz%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94SSM%E5%92%8CQuartz%E9%9B%86%E6%88%90%E8%AF%A6%E8%A7%A3-%E5%9B%9B/"/>
     <id>http://wangyuanjun.cn/2018/01/08/Quartz学习——SSM和Quartz集成详解-四/</id>
     <published>2018-01-08T07:31:45.000Z</published>
-    <updated>2018-01-08T08:49:43.442Z</updated>
+    <updated>2018-01-08T09:09:28.738Z</updated>
     
     <content type="html"><![CDATA[<p>下面介绍SSM+Quartz的示例，项目地址: <font color="red" size="5" face="微软雅黑"><a href="https://github.com/wangyuanjun008/wyj-quartz-ssm.git" target="_blank" rel="external">quartz-spring</a></font></p>
 <h2 id="一：环境介绍"><a href="#一：环境介绍" class="headerlink" title="一：环境介绍"></a>一：环境介绍</h2> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">工具：Spring Tool Suite + Mysql </div><div class="line">框架：Spring+SpringMVC+Mybatis</div><div class="line">前端: easy ui </div><div class="line">日志：logback </div><div class="line">构建工具：Maven </div><div class="line">Quartz版本：2.2.3</div></pre></td></tr></table></figure>
@@ -38,6 +38,10 @@
     
     </summary>
     
+      <category term="quartz" scheme="http://wangyuanjun.cn/categories/quartz/"/>
+    
+    
+      <category term="quartz" scheme="http://wangyuanjun.cn/tags/quartz/"/>
     
   </entry>
   
@@ -46,7 +50,7 @@
     <link href="http://wangyuanjun.cn/2018/01/08/Quartz%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Spring%E5%92%8CQuartz%E9%9B%86%E6%88%90%E8%AF%A6%E8%A7%A3-%E4%B8%89/"/>
     <id>http://wangyuanjun.cn/2018/01/08/Quartz学习——Spring和Quartz集成详解-三/</id>
     <published>2018-01-08T06:46:30.000Z</published>
-    <updated>2018-01-08T07:29:13.306Z</updated>
+    <updated>2018-01-08T09:09:22.610Z</updated>
     
     <content type="html"><![CDATA[<p>下面介绍Spring集成Quartz的示例，项目地址: <font color="red" size="5" face="微软雅黑"><a href="https://github.com/wangyuanjun008/wyj-quartz-spring.git" target="_blank" rel="external">quartz-spring</a></font><br>介绍Spring和Quartz集成存储方式使用的是RAM方式和JDBC方式！ </p>
 <h2 id="jar包依赖"><a href="#jar包依赖" class="headerlink" title="jar包依赖"></a>jar包依赖</h2><pre><code>&lt;properties&gt;
@@ -244,6 +248,10 @@
     
     </summary>
     
+      <category term="quartz" scheme="http://wangyuanjun.cn/categories/quartz/"/>
+    
+    
+      <category term="quartz" scheme="http://wangyuanjun.cn/tags/quartz/"/>
     
   </entry>
   
@@ -252,7 +260,7 @@
     <link href="http://wangyuanjun.cn/2018/01/03/Quartz%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Quartz%E7%AE%80%E5%8D%95%E5%85%A5%E9%97%A8Demo-%E4%BA%8C/"/>
     <id>http://wangyuanjun.cn/2018/01/03/Quartz学习——Quartz简单入门Demo-二/</id>
     <published>2018-01-03T07:50:18.000Z</published>
-    <updated>2018-01-08T06:34:41.225Z</updated>
+    <updated>2018-01-08T09:09:39.895Z</updated>
     
     <content type="html"><![CDATA[<p>下面介绍Quartz入门的示例，项目地址: <font color="red" size="5" face="微软雅黑"><a href="https://github.com/wangyuanjun008/wyj-quartz-demo" target="_blank" rel="external">quartz-demo</a></font><br>由于Quartz的存储方式分为RAM和JDBC，分别对这两种进行简单的说明。并附上代码！<br>首先需要添加Quartz的依赖 ，我使用的是quartz.2.2.3版本！ </p>
 <pre><code>&lt;dependency&gt;
@@ -504,6 +512,10 @@ public class QuartzJdbcTest {
     
     </summary>
     
+      <category term="quartz" scheme="http://wangyuanjun.cn/categories/quartz/"/>
+    
+    
+      <category term="quartz" scheme="http://wangyuanjun.cn/tags/quartz/"/>
     
   </entry>
   
@@ -863,7 +875,7 @@ insert into teacher values(&apos;&apos;&apos;&apos;,&apos;&apos;jack&apos;&apos;
     <link href="http://wangyuanjun.cn/2017/12/27/Quartz%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Quartz%E4%BB%8B%E7%BB%8D-%E4%B8%80/"/>
     <id>http://wangyuanjun.cn/2017/12/27/Quartz学习——Quartz介绍-一/</id>
     <published>2017-12-27T15:02:10.000Z</published>
-    <updated>2018-01-08T06:34:38.709Z</updated>
+    <updated>2018-01-08T09:09:26.129Z</updated>
     
     <content type="html"><![CDATA[<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>Quartz是OpenSymphony开源组织在Job scheduling领域又一个开源项目，是完全由java开发的一个开源的任务日程管理系统，“任务进度管理器”就是一个在预先确定（被纳入日程）的时间到达时，负责执行（或者通知）其他软件组件的系统。<br>Quartz用一个小Java库发布文件（.jar文件），这个库文件包含了所有Quartz核心功能。这些功能的主要接口(API)是Scheduler接口。它提供了简单的操作，例如：将任务纳入日程或者从日程中取消，开始/停止/暂停日程进度。</p>
 <h2 id="quartz核心概念"><a href="#quartz核心概念" class="headerlink" title="quartz核心概念"></a>quartz核心概念</h2><p>先来看一张图：<br><img src="/2017/12/27/Quartz学习——Quartz介绍-一/quartz.png" alt="quartz"></p>
@@ -1035,6 +1047,10 @@ sched.shutdown(true);
     
     </summary>
     
+      <category term="quartz" scheme="http://wangyuanjun.cn/categories/quartz/"/>
+    
+    
+      <category term="quartz" scheme="http://wangyuanjun.cn/tags/quartz/"/>
     
   </entry>
   
