@@ -4,6 +4,21 @@
 
     
   <url>
+    <loc>http://wangyuanjun.cn/2018/01/08/Quartz%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Spring%E5%92%8CQuartz%E9%9B%86%E6%88%90%E8%AF%A6%E8%A7%A3-%E4%B8%89/</loc>
+    <lastmod>2018-01-08T07:26:29.769Z</lastmod>
+    <data>
+        <display>
+        <title>Quartz学习——Spring和Quartz集成详解(三)</title>
+        <pubTime>2018-01-08T06:46:30.000Z</pubTime>
+        
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://wangyuanjun.cn/2018/01/03/Quartz%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Quartz%E7%AE%80%E5%8D%95%E5%85%A5%E9%97%A8Demo-%E4%BA%8C/</loc>
     <lastmod>2018-01-08T06:34:41.225Z</lastmod>
     <data>
@@ -425,9 +440,9 @@
         <title>SpringBoot发布HttpClient服务和客户端调用HttpClient服务</title>
         <pubTime>2017-12-23T06:28:27.000Z</pubTime>
         
-        <tag>SpringBoot</tag>
-         
         <tag>HttpClient</tag>
+         
+        <tag>SpringBoot</tag>
          
          
            
@@ -447,9 +462,9 @@
         <title>SpringBoot整合cxf发布WebService服务和客户端调用WebService服务</title>
         <pubTime>2017-12-21T05:19:10.000Z</pubTime>
         
-        <tag>WebService</tag>
-         
         <tag>SpringBoot</tag>
+         
+        <tag>WebService</tag>
          
          
            

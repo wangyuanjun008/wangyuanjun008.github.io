@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wangyuanjun.cn/"/>
-  <updated>2018-01-08T06:34:41.225Z</updated>
+  <updated>2018-01-08T07:26:29.769Z</updated>
   <id>http://wangyuanjun.cn/</id>
   
   <author>
@@ -14,6 +14,212 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Quartz学习——Spring和Quartz集成详解(三)</title>
+    <link href="http://wangyuanjun.cn/2018/01/08/Quartz%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Spring%E5%92%8CQuartz%E9%9B%86%E6%88%90%E8%AF%A6%E8%A7%A3-%E4%B8%89/"/>
+    <id>http://wangyuanjun.cn/2018/01/08/Quartz学习——Spring和Quartz集成详解-三/</id>
+    <published>2018-01-08T06:46:30.000Z</published>
+    <updated>2018-01-08T07:26:29.769Z</updated>
+    
+    <content type="html"><![CDATA[<p>下面介绍Spring集成Quartz的示例，项目地址: <font color="red" size="5" face="微软雅黑"><a href="https://github.com/wangyuanjun008/wyj-quartz-spring.git" target="_blank" rel="external">quartz-spring</a></font><br>介绍Spring和Quartz集成存储方式使用的是RAM方式和JDBC方式！ </p>
+<h2 id="jar包依赖"><a href="#jar包依赖" class="headerlink" title="jar包依赖"></a>jar包依赖</h2><pre><code>&lt;properties&gt;
+    &lt;!-- 项目构建源码编码方式 --&gt;
+    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+    &lt;!-- 主要依赖库的版本定义 --&gt;
+    &lt;!-- spring版本号 --&gt;
+    &lt;spring.version&gt;4.0.2.RELEASE&lt;/spring.version&gt;
+    &lt;!-- 日志文件管理包版本 --&gt;
+    &lt;slf4j.version&gt;1.7.7&lt;/slf4j.version&gt;
+    &lt;junit.version&gt;4.11&lt;/junit.version&gt;
+    &lt;jackson.version&gt;2.4.0&lt;/jackson.version&gt;
+    &lt;mysql.version&gt;5.1.30&lt;/mysql.version&gt;
+    &lt;quartz.version&gt;2.2.3&lt;/quartz.version&gt;
+    &lt;fastjson.version&gt;1.1.41&lt;/fastjson.version&gt;
+
+&lt;/properties&gt;
+
+
+&lt;dependencies&gt;
+
+    &lt;!-- spring核心包 --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-core&lt;/artifactId&gt;
+        &lt;version&gt;${spring.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-web&lt;/artifactId&gt;
+        &lt;version&gt;${spring.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-oxm&lt;/artifactId&gt;
+        &lt;version&gt;${spring.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-tx&lt;/artifactId&gt;
+        &lt;version&gt;${spring.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-jdbc&lt;/artifactId&gt;
+        &lt;version&gt;${spring.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-webmvc&lt;/artifactId&gt;
+        &lt;version&gt;${spring.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-aop&lt;/artifactId&gt;
+        &lt;version&gt;${spring.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-aspects&lt;/artifactId&gt;
+        &lt;version&gt;${spring.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-context-support&lt;/artifactId&gt;
+        &lt;version&gt;${spring.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-test&lt;/artifactId&gt;
+        &lt;version&gt;${spring.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    &lt;!-- 导入java ee jar 包 --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;javax&lt;/groupId&gt;
+        &lt;artifactId&gt;javaee-api&lt;/artifactId&gt;
+        &lt;version&gt;7.0&lt;/version&gt;
+        &lt;scope&gt;provided&lt;/scope&gt;
+    &lt;/dependency&gt;
+    &lt;!-- JSTL标签类 --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
+        &lt;artifactId&gt;jstl&lt;/artifactId&gt;
+        &lt;version&gt;1.2&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;!-- 日志文件管理包 --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
+        &lt;artifactId&gt;logback-classic&lt;/artifactId&gt;
+        &lt;version&gt;1.1.3&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.logback-extensions&lt;/groupId&gt;
+        &lt;artifactId&gt;logback-ext-spring&lt;/artifactId&gt;
+        &lt;version&gt;0.1.2&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;!-- 代码直接调用commons-logging会被桥接到slf4j --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+        &lt;artifactId&gt;jcl-over-slf4j&lt;/artifactId&gt;
+        &lt;version&gt;1.7.12&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;!-- 代码直接调用java.util.logging会被桥接到slf4j --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+        &lt;artifactId&gt;jul-to-slf4j&lt;/artifactId&gt;
+        &lt;version&gt;1.7.12&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;!-- 格式化对象，方便输出日志 --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+        &lt;artifactId&gt;fastjson&lt;/artifactId&gt;
+        &lt;version&gt;${fastjson.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+        &lt;groupId&gt;junit&lt;/groupId&gt;
+        &lt;artifactId&gt;junit&lt;/artifactId&gt;
+        &lt;version&gt;${junit.version}&lt;/version&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+    &lt;!-- 导入Mysql数据库链接jar包 --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;mysql&lt;/groupId&gt;
+        &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+        &lt;version&gt;${mysql.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;!-- velocity --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.apache.velocity&lt;/groupId&gt;
+        &lt;artifactId&gt;velocity&lt;/artifactId&gt;
+        &lt;version&gt;1.7&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.apache.velocity&lt;/groupId&gt;
+        &lt;artifactId&gt;velocity-tools&lt;/artifactId&gt;
+        &lt;version&gt;2.0&lt;/version&gt;
+    &lt;/dependency&gt;
+
+
+    &lt;!-- JSON begin --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
+        &lt;artifactId&gt;jackson-core&lt;/artifactId&gt;
+        &lt;version&gt;${jackson.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
+        &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;
+        &lt;version&gt;${jackson.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.fasterxml.jackson.module&lt;/groupId&gt;
+        &lt;artifactId&gt;jackson-module-jaxb-annotations&lt;/artifactId&gt;
+        &lt;version&gt;${jackson.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;!-- freemarker --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.freemarker&lt;/groupId&gt;
+        &lt;artifactId&gt;freemarker&lt;/artifactId&gt;
+        &lt;version&gt;2.3.27-incubating&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.quartz-scheduler&lt;/groupId&gt;
+        &lt;artifactId&gt;quartz&lt;/artifactId&gt;
+        &lt;version&gt;${quartz.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.quartz-scheduler&lt;/groupId&gt;
+        &lt;artifactId&gt;quartz-jobs&lt;/artifactId&gt;
+        &lt;version&gt;${quartz.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre><h2 id="配置文件spring-quartz-xml"><a href="#配置文件spring-quartz-xml" class="headerlink" title="配置文件spring-quartz.xml"></a>配置文件spring-quartz.xml</h2><p>1：RAM存储方式的xml配置文件<br>（1）：配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</div><div class="line">&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;</div><div class="line">	xmlns:context=&quot;http://www.springframework.org/schema/context&quot; xmlns:p=&quot;http://www.springframework.org/schema/p&quot;</div><div class="line">	xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot; xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot;</div><div class="line">	xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</div><div class="line">	xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd</div><div class="line">	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd</div><div class="line">	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd</div><div class="line">	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd&quot;&gt;</div><div class="line"></div><div class="line">	&lt;!-- ====================================RAM版============================================== --&gt;</div><div class="line">	&lt;!-- </div><div class="line">		Spring整合Quartz进行配置遵循下面的步骤：</div><div class="line">		1：定义工作任务的Job</div><div class="line">		2：定义触发器Trigger，并将触发器与工作任务绑定</div><div class="line">		3：定义调度器，并将Trigger注册到Scheduler</div><div class="line">	 --&gt;</div><div class="line">	&lt;!-- 1：定义任务的bean ，这里使用JobDetailFactoryBean,也可以使用MethodInvokingJobDetailFactoryBean ，配置类似--&gt;</div><div class="line">	&lt;bean name=&quot;hwJob&quot; class=&quot;org.springframework.scheduling.quartz.JobDetailFactoryBean&quot;&gt;</div><div class="line">		&lt;!-- 指定job的名称 --&gt;</div><div class="line">		&lt;property name=&quot;name&quot; value=&quot;hw_job&quot;/&gt;</div><div class="line">		&lt;!-- 指定job的分组 --&gt;</div><div class="line">		&lt;property name=&quot;group&quot; value=&quot;hw_group&quot;/&gt;</div><div class="line">		&lt;!-- 指定具体的job类 --&gt;</div><div class="line">		&lt;property name=&quot;jobClass&quot; value=&quot;com.wyj.exampleRAM.RAMJob&quot;/&gt;</div><div class="line">		&lt;!-- 必须设置为true，如果为false，当没有活动的触发器与之关联时会在调度器中会删除该任务  --&gt;</div><div class="line">		&lt;property name=&quot;durability&quot; value=&quot;true&quot;/&gt;</div><div class="line">		&lt;!-- 指定spring容器的key，如果不设定在job中的jobmap中是获取不到spring容器的 --&gt;</div><div class="line">		&lt;property name=&quot;applicationContextJobDataKey&quot; value=&quot;applicationContext&quot;/&gt;</div><div class="line">	&lt;/bean&gt;</div><div class="line">	&lt;!-- 2.1：定义触发器的bean，定义一个Simple的Trigger，一个触发器只能和一个任务进行绑定 --&gt;</div><div class="line">	&lt;!-- &lt;bean name=&quot;simpleTrigger&quot; class=&quot;org.springframework.scheduling.quartz.SimpleTriggerFactoryBean&quot;&gt;</div><div class="line">		指定Trigger的名称</div><div class="line">		&lt;property name=&quot;name&quot; value=&quot;hw_trigger&quot;/&gt;</div><div class="line">		指定Trigger的名称</div><div class="line">		&lt;property name=&quot;group&quot; value=&quot;hw_trigger_group&quot;/&gt;</div><div class="line">		指定Tirgger绑定的Job</div><div class="line">		&lt;property name=&quot;jobDetail&quot; ref=&quot;hwJob&quot;/&gt;</div><div class="line">		指定Trigger的延迟时间 1s后运行</div><div class="line">		&lt;property name=&quot;startDelay&quot; value=&quot;1000&quot;/&gt;</div><div class="line">		指定Trigger的重复间隔  5s</div><div class="line">		&lt;property name=&quot;repeatInterval&quot; value=&quot;5000&quot;/&gt;</div><div class="line">		指定Trigger的重复次数</div><div class="line">		&lt;property name=&quot;repeatCount&quot; value=&quot;5&quot;/&gt;</div><div class="line">	&lt;/bean&gt; --&gt;</div><div class="line">	</div><div class="line">	&lt;!-- 2.2：定义触发器的bean，定义一个Cron的Trigger，一个触发器只能和一个任务进行绑定 --&gt;</div><div class="line">	&lt;bean id=&quot;cronTrigger&quot; class=&quot;org.springframework.scheduling.quartz.CronTriggerFactoryBean&quot;&gt;</div><div class="line">		&lt;!-- 指定Trigger的名称 --&gt;</div><div class="line">		&lt;property name=&quot;name&quot; value=&quot;hw_trigger&quot;/&gt;</div><div class="line">		&lt;!-- 指定Trigger的名称 --&gt;</div><div class="line">		&lt;property name=&quot;group&quot; value=&quot;hw_trigger_group&quot;/&gt;</div><div class="line">		&lt;!-- 指定Tirgger绑定的Job --&gt;</div><div class="line">		&lt;property name=&quot;jobDetail&quot; ref=&quot;hwJob&quot;/&gt;</div><div class="line">		&lt;!-- 指定Cron 的表达式 ，当前是每隔1s运行一次 --&gt;</div><div class="line">		&lt;property name=&quot;cronExpression&quot; value=&quot;0/1 * * * * ?&quot; /&gt;</div><div class="line">	&lt;/bean&gt;</div><div class="line">	</div><div class="line">	</div><div class="line">	&lt;!-- 3.定义调度器，并将Trigger注册到调度器中--&gt;</div><div class="line">	&lt;bean name=&quot;scheduler&quot; class=&quot;org.springframework.scheduling.quartz.SchedulerFactoryBean&quot;&gt;</div><div class="line">		&lt;property name=&quot;triggers&quot;&gt;</div><div class="line">			&lt;list&gt;</div><div class="line">&lt;!--  				&lt;ref bean=&quot;simpleTrigger&quot;/&gt;   --&gt;</div><div class="line">				&lt;ref bean=&quot;cronTrigger&quot;/&gt; </div><div class="line">			&lt;/list&gt;</div><div class="line">		&lt;/property&gt;</div><div class="line">	&lt;/bean&gt;</div><div class="line">&lt;/beans&gt;</div></pre></td></tr></table></figure>
+<p>（2）：运行结果<br>CronScheduleBuilder：<br><img src="/2018/01/08/Quartz学习——Spring和Quartz集成详解-三/RAMTest.png" alt="RAMTest"></p>
+<p>2：JDBC存储方式的xml配置文件<br>（1）：配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</div><div class="line">&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;</div><div class="line">	xmlns:context=&quot;http://www.springframework.org/schema/context&quot; xmlns:p=&quot;http://www.springframework.org/schema/p&quot;</div><div class="line">	xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot; xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot;</div><div class="line">	xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</div><div class="line">	xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd</div><div class="line">	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd</div><div class="line">	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd</div><div class="line">	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd&quot;&gt;</div><div class="line">	</div><div class="line">	&lt;!-- ====================================JDBC版============================================== --&gt;</div><div class="line">	&lt;!-- </div><div class="line">		持久化数据配置，需要添加quartz.properties</div><div class="line">	 --&gt;</div><div class="line"> 	&lt;bean name=&quot;scheduler&quot; class=&quot;org.springframework.scheduling.quartz.SchedulerFactoryBean&quot;&gt; </div><div class="line">        &lt;property name=&quot;applicationContextSchedulerContextKey&quot; value=&quot;applicationContextKey&quot;/&gt; </div><div class="line">        &lt;property name=&quot;configLocation&quot; value=&quot;classpath:quartz.properties&quot;/&gt;	</div><div class="line">	&lt;/bean&gt; </div><div class="line">	</div><div class="line">&lt;/beans&gt;</div></pre></td></tr></table></figure>
+<p>（2）：quartz.properties<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"># Default Properties file for use by StdSchedulerFactory  </div><div class="line"># to create a Quartz Scheduler Instance, if a different  </div><div class="line"># properties file is not explicitly specified.  </div><div class="line">#  </div><div class="line">  </div><div class="line">#org.quartz.scheduler.instanceName: DefaultQuartzScheduler </div><div class="line"></div><div class="line">org.quartz.scheduler.instanceName: DefaultQuartzScheduler</div><div class="line">#org.quartz.scheduler.instanceId = AUTO</div><div class="line"> </div><div class="line">org.quartz.scheduler.rmi.export: false  </div><div class="line">org.quartz.scheduler.rmi.proxy: false  </div><div class="line">org.quartz.scheduler.wrapJobExecutionInUserTransaction: false  </div><div class="line">  </div><div class="line">org.quartz.threadPool.class: org.quartz.simpl.SimpleThreadPool  </div><div class="line">org.quartz.threadPool.threadCount: 10  </div><div class="line">org.quartz.threadPool.threadPriority: 5  </div><div class="line">org.quartz.threadPool.threadsInheritContextClassLoaderOfInitializingThread: true  </div><div class="line">  </div><div class="line">#创建数据源</div><div class="line">org.quartz.jobStore.misfireThreshold: 60000  </div><div class="line">#JDBC连接方式</div><div class="line">org.quartz.jobStore.class: org.quartz.impl.jdbcjobstore.JobStoreTX </div><div class="line">#JDBC代理类 </div><div class="line">org.quartz.jobStore.driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate  </div><div class="line">org.quartz.jobStore.useProperties:true  </div><div class="line">#指定前缀</div><div class="line">org.quartz.jobStore.tablePrefix: QRTZ_</div><div class="line">#数据源名称</div><div class="line">org.quartz.jobStore.dataSource: qzDS  </div><div class="line">#配置数据源属性  </div><div class="line">org.quartz.dataSource.qzDS.driver:com.mysql.jdbc.Driver</div><div class="line">org.quartz.dataSource.qzDS.URL:jdbc:mysql://192.168.99.100:3306/quartz_test?useUnicode=true&amp;characterEncoding=utf-8</div><div class="line">org.quartz.dataSource.qzDS.user:root</div><div class="line">org.quartz.dataSource.qzDS.password:admin</div><div class="line">org.quartz.dataSource.qzDS.maxConnections:10</div></pre></td></tr></table></figure></p>
+<p>（3）：job<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">package com.wyj.exampleJDBC;</div><div class="line"></div><div class="line">import java.text.SimpleDateFormat;</div><div class="line">import java.util.Date;</div><div class="line"></div><div class="line">import org.quartz.Job;</div><div class="line">import org.quartz.JobExecutionContext;</div><div class="line">import org.quartz.JobExecutionException;</div><div class="line">import org.slf4j.Logger;</div><div class="line">import org.slf4j.LoggerFactory;</div><div class="line">/**</div><div class="line"> * JdbcJob</div><div class="line"> * </div><div class="line"> * </div><div class="line"> * @author：WangYuanJun</div><div class="line"> * @date：2017年12月29日 下午10:05:18</div><div class="line"> */</div><div class="line">public class JdbcJob implements Job&#123;</div><div class="line"></div><div class="line">	private Logger logger = LoggerFactory.getLogger(JdbcJob.class);</div><div class="line"></div><div class="line">	public void execute(JobExecutionContext arg0) throws JobExecutionException &#123;</div><div class="line"></div><div class="line">		logger.debug(&quot;MyJDBCJob is start ...&quot;);</div><div class="line">		</div><div class="line">		logger.debug(&quot;MyJDBCJob quzrtz &quot;+new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss &quot;).format(new Date()));</div><div class="line">		</div><div class="line">		logger.debug(&quot;MyJDBCJob is end ...&quot;);</div><div class="line">		</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>（4）：jobTest<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div></pre></td><td class="code"><pre><div class="line">package com.wyj.exampleJDBC;</div><div class="line"></div><div class="line">import java.util.List;</div><div class="line"></div><div class="line">import org.quartz.CronScheduleBuilder;</div><div class="line">import org.quartz.CronTrigger;</div><div class="line">import org.quartz.JobBuilder;</div><div class="line">import org.quartz.JobDetail;</div><div class="line">import org.quartz.JobKey;</div><div class="line">import org.quartz.Scheduler;</div><div class="line">import org.quartz.SchedulerException;</div><div class="line">import org.quartz.SchedulerFactory;</div><div class="line">import org.quartz.SimpleScheduleBuilder;</div><div class="line">import org.quartz.SimpleTrigger;</div><div class="line">import org.quartz.Trigger;</div><div class="line">import org.quartz.TriggerBuilder;</div><div class="line">import org.quartz.impl.StdScheduler;</div><div class="line">import org.quartz.impl.StdSchedulerFactory;</div><div class="line">import org.springframework.context.ApplicationContext;</div><div class="line">import org.springframework.context.support.ClassPathXmlApplicationContext;</div><div class="line">/**</div><div class="line"> * JdbcJobtest</div><div class="line"> * </div><div class="line"> * </div><div class="line"> * @author：WangYuanJun</div><div class="line"> * @date：2017年12月29日 下午10:05:26</div><div class="line"> */</div><div class="line">public class QuartzJdbcTest &#123;</div><div class="line">    private static Scheduler scheduler;</div><div class="line">    </div><div class="line">    </div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;spring-quartz.xml&quot;);</div><div class="line">        scheduler = (StdScheduler)ac.getBean(&quot;scheduler&quot;);</div><div class="line"></div><div class="line">        testStartSchedule();</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    /**</div><div class="line">     *  开始一个simpleSchedule()调度</div><div class="line">     */</div><div class="line">	public static void testStartSchedule()&#123;</div><div class="line">		</div><div class="line">		try &#123;</div><div class="line">			// 1、创建一个JobDetail实例，指定Quartz</div><div class="line">			JobDetail jobDetail = JobBuilder.newJob(JdbcJob.class)</div><div class="line">					// 任务执行类</div><div class="line">					.withIdentity(&quot;job_1&quot;, &quot;jGroup1&quot;)// 任务名，任务组</div><div class="line">					.build();</div><div class="line">			//触发器类型</div><div class="line">			//SimpleScheduleBuilder builder = SimpleScheduleBuilder.simpleSchedule().repeatSecondlyForTotalCount(5); // 设置执行次数</div><div class="line">					</div><div class="line">		    CronScheduleBuilder builder = CronScheduleBuilder.cronSchedule(&quot;0/2 * * * * ?&quot;);</div><div class="line">		    //  2、创建Trigger</div><div class="line">			</div><div class="line">			Trigger trigger = TriggerBuilder.newTrigger()</div><div class="line">					.withIdentity(&quot;trigger_1&quot;,&quot;triggerGroup1&quot;)</div><div class="line">					.withSchedule(builder)</div><div class="line">					.build();</div><div class="line">			</div><div class="line">			// 3、创建Scheduler</div><div class="line">			Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();</div><div class="line">			scheduler.start();</div><div class="line">			</div><div class="line">			// 4、调度执行</div><div class="line">			scheduler.scheduleJob(jobDetail,trigger);</div><div class="line">			</div><div class="line">			try &#123;</div><div class="line">				Thread.sleep(60000);</div><div class="line">			&#125; catch (Exception e) &#123;</div><div class="line">			    e.printStackTrace();</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">			//关闭调度器</div><div class="line">			scheduler.shutdown();</div><div class="line">			</div><div class="line">			</div><div class="line">		&#125; catch (Exception e) &#123;</div><div class="line">		    e.printStackTrace();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 从数据库中找到已经存在的job，并重新开户调度</div><div class="line">	 */</div><div class="line">	public static void resumeJob()&#123;</div><div class="line">		try &#123;</div><div class="line">			SchedulerFactory schedulerFactory = new StdSchedulerFactory();</div><div class="line">			Scheduler scheduler = schedulerFactory.getScheduler();</div><div class="line">			JobKey jobKey = new JobKey(&quot;job1_1&quot;, &quot;jGroup1&quot;);</div><div class="line">			List&lt;? extends Trigger&gt; triggers = scheduler.getTriggersOfJob(jobKey);</div><div class="line">            //SELECT TRIGGER_NAME, TRIGGER_GROUP FROM &#123;0&#125;TRIGGERS WHERE SCHED_NAME = &#123;1&#125; AND JOB_NAME = ? AND JOB_GROUP = ?</div><div class="line">            // 重新恢复在jGroup1组中，名为job1_1的 job的触发器运行</div><div class="line">            if(triggers.size() &gt; 0)&#123;</div><div class="line">                for (Trigger tg : triggers) &#123;</div><div class="line">                    // 根据类型判断</div><div class="line">                    if ((tg instanceof CronTrigger) || (tg instanceof SimpleTrigger)) &#123;</div><div class="line">                        // 恢复job运行</div><div class="line">                        scheduler.resumeJob(jobKey);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">                scheduler.start();</div><div class="line">            &#125;</div><div class="line">			</div><div class="line">		&#125; catch (Exception e) &#123;</div><div class="line">		    e.printStackTrace();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>运行结果：<br>CronScheduleBuilder：<br><img src="/2018/01/08/Quartz学习——Spring和Quartz集成详解-三/jdbcTest.png" alt="jdbcTest"></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;下面介绍Spring集成Quartz的示例，项目地址: &lt;font color=&quot;red&quot; size=&quot;5&quot; face=&quot;微软雅黑&quot;&gt;&lt;a href=&quot;https://github.com/wangyuanjun008/wyj-quartz-spring.git&quot; targ
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>Quartz学习——Quartz简单入门Demo(二)</title>
@@ -1216,9 +1422,9 @@ public class HttpServiceTest {
       <category term="HttpClient" scheme="http://wangyuanjun.cn/categories/HttpClient/"/>
     
     
-      <category term="SpringBoot" scheme="http://wangyuanjun.cn/tags/SpringBoot/"/>
-    
       <category term="HttpClient" scheme="http://wangyuanjun.cn/tags/HttpClient/"/>
+    
+      <category term="SpringBoot" scheme="http://wangyuanjun.cn/tags/SpringBoot/"/>
     
   </entry>
   
@@ -1497,9 +1703,9 @@ public class WebServiceTest {
       <category term="WebService" scheme="http://wangyuanjun.cn/categories/WebService/"/>
     
     
-      <category term="WebService" scheme="http://wangyuanjun.cn/tags/WebService/"/>
-    
       <category term="SpringBoot" scheme="http://wangyuanjun.cn/tags/SpringBoot/"/>
+    
+      <category term="WebService" scheme="http://wangyuanjun.cn/tags/WebService/"/>
     
   </entry>
   
@@ -1797,110 +2003,6 @@ npm install --save-dev sass-loader
     
     
       <category term="webpack" scheme="http://wangyuanjun.cn/tags/webpack/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Springboot RedisTemplate 报No qualifying bean of type... 不能按类型装配注入</title>
-    <link href="http://wangyuanjun.cn/2017/11/23/Springboot-RedisTemplate-%E6%8A%A5No-qualifying-bean-of-type-%E4%B8%8D%E8%83%BD%E6%8C%89%E7%B1%BB%E5%9E%8B%E8%A3%85%E9%85%8D%E6%B3%A8%E5%85%A5/"/>
-    <id>http://wangyuanjun.cn/2017/11/23/Springboot-RedisTemplate-报No-qualifying-bean-of-type-不能按类型装配注入/</id>
-    <published>2017-11-23T09:40:09.000Z</published>
-    <updated>2017-12-18T01:52:00.255Z</updated>
-    
-    <content type="html"><![CDATA[<p>最近在做一个项目,项目地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>在项目中与redis集成，使用的依赖是:</p>
-<pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-    &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
-&lt;/dependency&gt;    
-</code></pre><p>在Controller中使用如下:</p>
-<pre><code>@Autowired
-private RedisTemplate&lt;String, DataGroup&gt; redisTemplate;
-</code></pre><p>项目启动报错如下:</p>
-<pre><code>Description:
-
-Field redisTemplate in com.wyj.controller.data.DataGroupController required a bean of type &apos;org.springframework.data.redis.core.RedisTemplate&apos; that could not be found.
-    - Bean method &apos;redisTemplate&apos; in &apos;RedisAutoConfiguration.RedisConfiguration&apos; not loaded because @ConditionalOnMissingBean (names: redisTemplate; SearchStrategy: all) found bean &apos;redisTemplate&apos;
-
-
-Action:
-
-Consider revisiting the conditions above or defining a bean of type &apos;org.springframework.data.redis.core.RedisTemplate&apos; in your configuration.
-
-2017-11-23 17:36:38.299 ERROR 5784 --- [           main] o.s.test.context.TestContextManager      : Caught exception while allowing TestExecutionListener [org.springframework.test.context.web.ServletTestExecutionListener@3b2cf7ab] to prepare test instance [com.wyj.WyjSpringbootApplicationTests@6cc8adff]
-
-java.lang.IllegalStateException: Failed to load ApplicationContext
-    at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:124) ~[spring-test-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:83) ~[spring-test-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.test.context.web.ServletTestExecutionListener.setUpRequestContextIfNecessary(ServletTestExecutionListener.java:189) ~[spring-test-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.test.context.web.ServletTestExecutionListener.prepareTestInstance(ServletTestExecutionListener.java:131) ~[spring-test-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.test.context.TestContextManager.prepareTestInstance(TestContextManager.java:230) ~[spring-test-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.createTest(SpringJUnit4ClassRunner.java:228) [spring-test-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.test.context.junit4.SpringJUnit4ClassRunner$1.runReflectiveCall(SpringJUnit4ClassRunner.java:287) [spring-test-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12) [junit-4.12.jar:4.12]
-    at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.methodBlock(SpringJUnit4ClassRunner.java:289) [spring-test-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:247) [spring-test-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:94) [spring-test-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290) [junit-4.12.jar:4.12]
-    at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71) [junit-4.12.jar:4.12]
-    at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288) [junit-4.12.jar:4.12]
-    at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58) [junit-4.12.jar:4.12]
-    at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268) [junit-4.12.jar:4.12]
-    at org.springframework.test.context.junit4.statements.RunBeforeTestClassCallbacks.evaluate(RunBeforeTestClassCallbacks.java:61) [spring-test-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.test.context.junit4.statements.RunAfterTestClassCallbacks.evaluate(RunAfterTestClassCallbacks.java:70) [spring-test-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.junit.runners.ParentRunner.run(ParentRunner.java:363) [junit-4.12.jar:4.12]
-    at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.run(SpringJUnit4ClassRunner.java:191) [spring-test-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:283) [surefire-junit4-2.18.1.jar:2.18.1]
-    at org.apache.maven.surefire.junit4.JUnit4Provider.executeWithRerun(JUnit4Provider.java:173) [surefire-junit4-2.18.1.jar:2.18.1]
-    at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:153) [surefire-junit4-2.18.1.jar:2.18.1]
-    at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:128) [surefire-junit4-2.18.1.jar:2.18.1]
-    at org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:203) [surefire-booter-2.18.1.jar:2.18.1]
-    at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:155) [surefire-booter-2.18.1.jar:2.18.1]
-    at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:103) [surefire-booter-2.18.1.jar:2.18.1]
-Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name &apos;dataGroupController&apos;: Unsatisfied dependency expressed through field &apos;redisTemplate&apos;; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type &apos;org.springframework.data.redis.core.RedisTemplate&lt;java.lang.String, com.wyj.entity.data.DataGroup&gt;&apos; available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
-    at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:588) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:88) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:366) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1264) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:553) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:761) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:867) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:543) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:693) ~[spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
-    at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:360) ~[spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
-    at org.springframework.boot.SpringApplication.run(SpringApplication.java:303) ~[spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
-    at org.springframework.boot.test.context.SpringBootContextLoader.loadContext(SpringBootContextLoader.java:120) ~[spring-boot-test-1.5.8.RELEASE.jar:1.5.8.RELEASE]
-    at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContextInternal(DefaultCacheAwareContextLoaderDelegate.java:98) ~[spring-test-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:116) ~[spring-test-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    ... 26 common frames omitted
-Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type &apos;org.springframework.data.redis.core.RedisTemplate&lt;java.lang.String, com.wyj.entity.data.DataGroup&gt;&apos; available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
-    at org.springframework.beans.factory.support.DefaultListableBeanFactory.raiseNoMatchingBeanFound(DefaultListableBeanFactory.java:1493) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1104) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1066) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:585) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
-    ... 44 common frames omitted    
-</code></pre><p>苦思冥想多时，上网查阅资料，看springboot文档，结果如下</p>
-<pre><code>If you add a @Bean of your own of any of the auto-configured types it will replace the default (except in the case of RedisTemplate the exclusion is based on the bean name ‘redisTemplate’ not its type). 
-</code></pre><p>将代码改成:</p>
-<pre><code>@Resource 
-private RedisTemplate&lt;String, DataGroup&gt; redisTemplate;        
-</code></pre><p>项目启动不报错，完美解决!</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;最近在做一个项目,项目地址: &lt;a href=&quot;https://github.com/wangyuanjun008/wyj-springboot.github.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/wa
-    
-    </summary>
-    
-      <category term="SpringBoot" scheme="http://wangyuanjun.cn/categories/SpringBoot/"/>
-    
-    
-      <category term="SpringBoot" scheme="http://wangyuanjun.cn/tags/SpringBoot/"/>
     
   </entry>
   
