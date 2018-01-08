@@ -1,0 +1,275 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>常用mysql命令大全 | 守望的稻草人</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">常用mysql命令大全</h1><a id="logo" href="/.">守望的稻草人</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">常用mysql命令大全</h1><div class="post-meta"><a href="/2018/01/03/常用mysql命令大全/#comments" class="comment-count"><i id="changyan_count_unit" data-xid="2018/01/03/常用mysql命令大全/"></i>留言,<i id="changyan_parti_unit" data-xid="2018/01/03/常用mysql命令大全/"></i>参与</a><p><span class="date">Jan 03, 2018</span><span><a href="/categories/mysql/" class="category">mysql</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><h1 id="1、连接Mysql"><a href="#1、连接Mysql" class="headerlink" title="1、连接Mysql"></a>1、连接Mysql</h1><p>格式： mysql -h主机地址 -u用户名 －p用户密码</p>
+<h2 id="1、连接到本机上的MYSQL。"><a href="#1、连接到本机上的MYSQL。" class="headerlink" title="1、连接到本机上的MYSQL。"></a>1、连接到本机上的MYSQL。</h2><p>首先打开DOS窗口，然后进入目录mysql\bin，再键入命令mysql -u root -p，回车后提示你输密码.注意用户名前可以有空格也可以没有空格，但是密码前必须没有空格，否则让你重新输入密码。</p>
+<p>如果刚安装好MYSQL，超级用户root是没有密码的，故直接回车即可进入到MYSQL中了，MYSQL的提示符是： mysql&gt;</p>
+<h2 id="2、连接到远程主机上的MYSQL。"><a href="#2、连接到远程主机上的MYSQL。" class="headerlink" title="2、连接到远程主机上的MYSQL。"></a>2、连接到远程主机上的MYSQL。</h2><p>假设远程主机的IP为：110.110.110.110，用户名为root,密码为abcd123。则键入以下命令：<br>    mysql -h110.110.110.110 -u root -p 123;（注:u与root之间可以不用加空格，其它也一样）</p>
+<h2 id="3、退出MYSQL命令"><a href="#3、退出MYSQL命令" class="headerlink" title="3、退出MYSQL命令"></a>3、退出MYSQL命令</h2><pre><code>exit （回车）
+</code></pre><h1 id="2、修改密码"><a href="#2、修改密码" class="headerlink" title="2、修改密码"></a>2、修改密码</h1><p>格式：mysqladmin -u用户名 -p旧密码 password 新密码</p>
+<h2 id="1、给root加个密码ab12。"><a href="#1、给root加个密码ab12。" class="headerlink" title="1、给root加个密码ab12。"></a>1、给root加个密码ab12。</h2><p>首先在DOS下进入目录mysql\bin，然后键入以下命令</p>
+<pre><code>mysqladmin -u root -password ab12
+</code></pre><p>注：因为开始时root没有密码，所以-p旧密码一项就可以省略了。</p>
+<h2 id="2、再将root的密码改为djg345。"><a href="#2、再将root的密码改为djg345。" class="headerlink" title="2、再将root的密码改为djg345。"></a>2、再将root的密码改为djg345。</h2><pre><code>mysqladmin -u root -p ab12 password djg345
+</code></pre><h1 id="3、增加新用户"><a href="#3、增加新用户" class="headerlink" title="3、增加新用户"></a>3、增加新用户</h1><p>注意：和上面不同，下面的因为是MYSQL环境中的命令，所以后面都带一个分号作为命令结束符</p>
+<p>格式：grant select on 数据库.* to 用户名@登录主机 identified by “密码”</p>
+<h2 id="1、增加一个用户test1密码为abc，让他可以在任何主机上登录，并对所有数据库有查询、插入、修改、删除的权限。首先用root用户连入MYSQL，然后键入以下命令："><a href="#1、增加一个用户test1密码为abc，让他可以在任何主机上登录，并对所有数据库有查询、插入、修改、删除的权限。首先用root用户连入MYSQL，然后键入以下命令：" class="headerlink" title="1、增加一个用户test1密码为abc，让他可以在任何主机上登录，并对所有数据库有查询、插入、修改、删除的权限。首先用root用户连入MYSQL，然后键入以下命令："></a>1、增加一个用户test1密码为abc，让他可以在任何主机上登录，并对所有数据库有查询、插入、修改、删除的权限。首先用root用户连入MYSQL，然后键入以下命令：</h2><pre><code>grant select,insert,update,delete on *.* to [email=test1@”%]test1@”%[/email]” Identified by “abc”;
+</code></pre><p>但增加的用户是十分危险的，你想如某个人知道test1的密码，那么他就可以在internet上的任何一台电脑上登录你的mysql数据库并对你的数据可以为所欲为了，解决办法见2。</p>
+<h2 id="2、增加一个用户test2密码为abc-让他只可以在localhost上登录，并可以对数据库mydb进行查询、插入、修改、删除的操作（localhost指本地主机，即MYSQL数据库所在的那台主机），这样用户即使用知道test2的密码，他也无法从internet上直接访问数据库，只能通过MYSQL主机上的web页来访问了。"><a href="#2、增加一个用户test2密码为abc-让他只可以在localhost上登录，并可以对数据库mydb进行查询、插入、修改、删除的操作（localhost指本地主机，即MYSQL数据库所在的那台主机），这样用户即使用知道test2的密码，他也无法从internet上直接访问数据库，只能通过MYSQL主机上的web页来访问了。" class="headerlink" title="2、增加一个用户test2密码为abc,让他只可以在localhost上登录，并可以对数据库mydb进行查询、插入、修改、删除的操作（localhost指本地主机，即MYSQL数据库所在的那台主机），这样用户即使用知道test2的密码，他也无法从internet上直接访问数据库，只能通过MYSQL主机上的web页来访问了。"></a>2、增加一个用户test2密码为abc,让他只可以在localhost上登录，并可以对数据库mydb进行查询、插入、修改、删除的操作（localhost指本地主机，即MYSQL数据库所在的那台主机），这样用户即使用知道test2的密码，他也无法从internet上直接访问数据库，只能通过MYSQL主机上的web页来访问了。</h2><pre><code>grant select,insert,update,delete on mydb.* to [email=test2@localhost]test2@localhost[/email] identified by “abc”;
+</code></pre><p>如果你不想test2有密码，可以再打一个命令将密码消掉。</p>
+<pre><code>grant select,insert,update,delete on mydb.* to [email=test2@localhost]test2@localhost[/email] identified by “”;
+</code></pre><h1 id="4-数据库"><a href="#4-数据库" class="headerlink" title="4 数据库"></a>4 数据库</h1><h2 id="4-1-创建数据库"><a href="#4-1-创建数据库" class="headerlink" title="4.1 创建数据库"></a>4.1 创建数据库</h2><p>注意：创建数据库之前要先连接Mysql服务器</p>
+<p>命令：create database &lt;数据库名&gt;</p>
+<p>例1：建立一个名为xhkdb的数据库</p>
+<p>   mysql&gt; create database xhkdb;</p>
+<p>例2：创建数据库并分配用户</p>
+<p>①CREATE DATABASE 数据库名;</p>
+<p>②GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER ON 数据库名.* TO 数据库名@localhost IDENTIFIED BY ‘密码’;</p>
+<p>③SET PASSWORD FOR ‘数据库名’@’localhost’ = OLD_PASSWORD(‘密码’);</p>
+<p>依次执行3个命令完成数据库创建。注意：中文 “密码”和“数据库”是户自己需要设置的。</p>
+<h2 id="4-2-显示数据库"><a href="#4-2-显示数据库" class="headerlink" title="4.2 显示数据库"></a>4.2 显示数据库</h2><p>命令：show databases （注意：最后有个s）</p>
+<pre><code>mysql&gt; show databases;
+</code></pre><p>注意：为了不再显示的时候乱码，要修改数据库默认编码。以下以GBK编码页面为例进行说明：</p>
+<p>1、修改MYSQL的配置文件：my.ini里面修改default-character-set=gbk<br>2、代码运行时修改：<br>   ①Java代码：jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=gbk<br>   ②PHP代码：header(“Content-Type:text/html;charset=gb2312”);<br>   ③C语言代码：int mysql_set_character_set( MYSQL <em> mysql, char </em> csname)；<br>该函数用于为当前连接设置默认的字符集。字符串csname指定了1个有效的字符集名称。连接校对成为字符集的默认校对。该函数的工作方式与SET NAMES语句类似，但它还能设置mysql- &gt; charset的值，从而影响了由mysql_real_escape_string() 设置的字符集。</p>
+<h2 id="4-3-删除数据库"><a href="#4-3-删除数据库" class="headerlink" title="4.3 删除数据库"></a>4.3 删除数据库</h2><p>命令：drop database &lt;数据库名&gt;<br>例如：删除名为 xhkdb的数据库</p>
+<pre><code>mysql&gt; drop database xhkdb;
+</code></pre><p>例子1：删除一个已经确定存在的数据库</p>
+<p>   mysql&gt; drop database drop_database;<br>   Query OK, 0 rows affected (0.00 sec)</p>
+<p>例子2：删除一个不确定存在的数据库</p>
+<p>   mysql&gt; drop database drop_database;<br>   ERROR 1008 (HY000): Can’t drop database ‘drop_database’; database doesn’t exist<br>      //发生错误，不能删除’drop_database’数据库，该数据库不存在。<br>   mysql&gt; drop database if exists drop_database;<br>   Query OK, 0 rows affected, 1 warning (0.00 sec)//产生一个警告说明此数据库不存在<br>   mysql&gt; create database drop_database;<br>   Query OK, 1 row affected (0.00 sec)<br>   mysql&gt; drop database if exists drop_database;//if exists 判断数据库是否存在，不存在也不产生错误<br>   Query OK, 0 rows affected (0.00 sec)</p>
+<h2 id="4-4-连接数据库"><a href="#4-4-连接数据库" class="headerlink" title="4.4 连接数据库"></a>4.4 连接数据库</h2><p>命令： use &lt;数据库名&gt;</p>
+<p>例如：如果xhkdb数据库存在，尝试存取它：</p>
+<p>   mysql&gt; use xhkdb;</p>
+<p>屏幕提示：Database changed</p>
+<p>use 语句可以通告MySQL把db_name数据库作为默认（当前）数据库使用，用于后续语句。该数据库保持为默认数据库，直到语段的结尾，或者直到发布一个不同的USE语句：</p>
+<p>   mysql&gt; USE db1;<br>   mysql&gt; SELECT COUNT(<em>) FROM mytable;   # selects from db1.mytable<br>   mysql&gt; USE db2;<br>   mysql&gt; SELECT COUNT(</em>) FROM mytable;   # selects from db2.mytable</p>
+<p>使用USE语句为一个特定的当前的数据库做标记，不会阻碍您访问其它数据库中的表。下面的例子可以从db1数据库访问作者表，并从db2数据库访问编辑表：</p>
+<p>   mysql&gt; USE db1;<br>   mysql&gt; SELECT author_name,editor_name FROM author,db2.editor<br>       -&gt;        WHERE author.editor_id = db2.editor.editor_id;</p>
+<p>USE语句被设立出来，用于与Sybase相兼容。</p>
+<p>有些网友问到，连接以后怎么退出。其实，不用退出来，use 数据库后，使用show databases就能查询所有数据库，如果想跳到其他数据库，用<br>   use 其他数据库名字<br>就可以了。</p>
+<h2 id="4-5-当前选择的数据库"><a href="#4-5-当前选择的数据库" class="headerlink" title="4.5 当前选择的数据库"></a>4.5 当前选择的数据库</h2><p>命令：mysql&gt; select database();</p>
+<p>MySQL中SELECT命令类似于其他编程语言里的print或者write，你可以用它来显示一个字符串、数字、数学表达式的结果等等。如何使用MySQL中SELECT命令的特殊功能？</p>
+<p>1.显示MYSQL的版本</p>
+<pre><code>mysql&gt; select version(); 
++-----------------------+ 
+| version()             | 
++-----------------------+ 
+| 6.0.4-alpha-community | 
++-----------------------+ 
+1 row in set (0.02 sec) 
+</code></pre><p>2.显示当前时间</p>
+<pre><code>mysql&gt; select now(); 
++---------------------+ 
+| now()               | 
++---------------------+ 
+| 2009-09-15 22:35:32 | 
++---------------------+ 
+1 row in set (0.04 sec) 
+</code></pre><p>3.显示年月日</p>
+<pre><code>SELECT DAYOFMONTH(CURRENT_DATE); 
++--------------------------+ 
+| DAYOFMONTH(CURRENT_DATE) | 
++--------------------------+ 
+|                       15 | 
++--------------------------+ 
+1 row in set (0.01 sec) 
+
+SELECT MONTH(CURRENT_DATE); 
++---------------------+ 
+| MONTH(CURRENT_DATE) | 
++---------------------+ 
+|                   9 | 
++---------------------+ 
+1 row in set (0.00 sec) 
+
+SELECT YEAR(CURRENT_DATE); 
++--------------------+ 
+| YEAR(CURRENT_DATE) | 
++--------------------+ 
+|               2009 | 
++--------------------+ 
+1 row in set (0.00 sec) 
+</code></pre><p>4.显示字符串</p>
+<pre><code>mysql&gt; SELECT &quot;welecome to my blog!&quot;; 
++----------------------+ 
+| welecome to my blog! | 
++----------------------+ 
+| welecome to my blog! | 
++----------------------+ 
+1 row in set (0.00 sec) 
+</code></pre><p>5.当计算器用</p>
+<pre><code>select ((4 * 4) / 10 ) + 25; 
++----------------------+ 
+| ((4 * 4) / 10 ) + 25 | 
++----------------------+ 
+|                26.60 | 
++----------------------+ 
+1 row in set (0.00 sec) 
+</code></pre><p>6.串接字符串</p>
+<pre><code>select CONCAT(f_name, &quot; &quot;, l_name) 
+AS Name 
+from employee_data 
+where title = &apos;Marketing Executive&apos;; 
++---------------+ 
+| Name          | 
++---------------+ 
+| Monica Sehgal | 
+| Hal Simlai    | 
+| Joseph Irvine | 
++---------------+ 
+3 rows in set (0.00 sec) 
+</code></pre><p>注意：这里用到CONCAT()函数，用来把字符串串接起来。另外，我们还用到以前学到的AS给结果列’CONCAT(f_name, “ “, l_name)’起了个假名。</p>
+<h1 id="5-数据库表"><a href="#5-数据库表" class="headerlink" title="5 数据库表"></a>5 数据库表</h1><h2 id="5-1-创建数据表"><a href="#5-1-创建数据表" class="headerlink" title="5.1 创建数据表"></a>5.1 创建数据表</h2><p>命令：create table &lt;表名&gt; ( &lt;字段名1&gt; &lt;类型1&gt; [,..&lt;字段名n&gt; &lt;类型n&gt;]);</p>
+<p>例如，建立一个名为MyClass的表，<br>字段名    数字类型    数据宽度    是否为空    是否主键    自动增加    默认值<br>id    int    4    否    primary key    auto_increment<br>name    char    20    否<br>sex    int    4    否              0<br>degree    double    16    是    </p>
+<pre><code>mysql&gt; create table MyClass(
+&gt; id int(4) not null primary key auto_increment,
+&gt; name char(20) not null,
+&gt; sex int(4) not null default &apos;0&apos;,
+&gt; degree double(16,2));
+</code></pre><h2 id="5-2-删除数据表"><a href="#5-2-删除数据表" class="headerlink" title="5.2 删除数据表"></a>5.2 删除数据表</h2><p>命令：drop table &lt;表名&gt;</p>
+<p>例如：删除表名为 MyClass 的表</p>
+<pre><code>mysql&gt; drop table MyClass;
+</code></pre><p>DROP TABLE用于取消一个或多个表。您必须有每个表的DROP权限。所有的表数据和表定义会被取消，所以使用本语句要小心！</p>
+<p>注意：对于一个带分区的表，DROP TABLE会永久性地取消表定义，取消各分区，并取消储存在这些分区中的所有数据。DROP TABLE还会取消与被取消的表有关联的分区定义（.par）文件。</p>
+<p>对与不存在的表，使用IF EXISTS用于防止错误发生。当使用IF EXISTS时，对于每个不存在的表，会生成一个NOTE。</p>
+<p>RESTRICT和CASCADE可以使分区更容易。目前，RESTRICT和CASCADE不起作用。</p>
+<h2 id="5-3-表插入数据"><a href="#5-3-表插入数据" class="headerlink" title="5.3 表插入数据"></a>5.3 表插入数据</h2><p>命令：insert into &lt;表名&gt; [( &lt;字段名1&gt;[,..&lt;字段名n &gt; ])] values ( 值1 )[, ( 值n )]</p>
+<p>例如：往表 MyClass中插入二条记录, 这二条记录表示：编号为1的名为Tom的成绩为96.45, 编号为2 的名为Joan 的成绩为82.99， 编号为3 的名为Wang 的成绩为96.5。<br>   mysql&gt; insert into MyClass values(1,’Tom’,96.45),(2,’Joan’,82.99), (2,’Wang’, 96.59);</p>
+<p>注意：insert into每次只能向表中插入一条记录。</p>
+<h2 id="5-4-查询表中的数据"><a href="#5-4-查询表中的数据" class="headerlink" title="5.4 查询表中的数据"></a>5.4 查询表中的数据</h2><p>1)、查询所有行<br>命令： select &lt;字段1，字段2，…&gt; from &lt; 表名 &gt; where &lt; 表达式 &gt;<br>例如：查看表 MyClass 中所有数据</p>
+<pre><code>mysql&gt; select * from MyClass;
+</code></pre><p>2）、查询前几行数据<br>例如：查看表 MyClass 中前2行数据</p>
+<pre><code>mysql&gt; select * from MyClass order by id limit 0,2;
+</code></pre><p>select一般配合where使用，以查询更精确更复杂的数据。</p>
+<h2 id="5-5-删除表中数据"><a href="#5-5-删除表中数据" class="headerlink" title="5.5 删除表中数据"></a>5.5 删除表中数据</h2><p>命令：delete from 表名 where 表达式</p>
+<p>例如：删除表 MyClass中编号为1 的记录<br>mysql&gt; delete from MyClass where id=1;</p>
+<p>下面是一个删除数据前后表的对比。<br>FirstName    LastName    Age<br>Peter    Griffin    35<br>Glenn    Quagmire    33<br>下面以PHP代码为例删除 “Persons” 表中所有 LastName=’Griffin’ 的记录：</p>
+<pre><code>&lt;?php 
+   $con = mysql_connect(&quot;localhost&quot;,&quot;peter&quot;,&quot;abc123&quot;); 
+   if (!$con) 
+   {
+      die(&apos;Could not connect: &apos; . mysql_error()); 
+   } 
+   mysql_select_db(&quot;my_db&quot;, $con); 
+   mysql_query(&quot;DELETE FROM Persons WHERE LastName=&apos;Griffin&apos;&quot;); mysql_close($con); 
+?&gt;
+</code></pre><p>在这次删除之后，表是这样的：</p>
+<pre><code>FirstName    LastName    Age
+Glenn    Quagmire    33
+</code></pre><h2 id="5-6-修改表中数据"><a href="#5-6-修改表中数据" class="headerlink" title="5.6 修改表中数据"></a>5.6 修改表中数据</h2><p>语法：update 表名 set 字段=新值,… where 条件</p>
+<pre><code>mysql&gt; update MyClass set name=&apos;Mary&apos; where id=1;
+</code></pre><p>例子1：单表的MySQL UPDATE语句：</p>
+<pre><code>UPDATE [LOW_PRIORITY] [IGNORE] tbl_name SET col_name1=expr1 [, col_name2=expr2 ...] [WHERE where_definition] [ORDER BY ...] [LIMIT row_count]
+</code></pre><p>例子2：多表的UPDATE语句：</p>
+<pre><code>UPDATE [LOW_PRIORITY] [IGNORE] table_references SET col_name1=expr1 [, col_name2=expr2 ...] [WHERE where_definition]
+</code></pre><p>UPDATE语法可以用新值更新原有表行中的各列。SET子句指示要修改哪些列和要给予哪些值。WHERE子句指定应更新哪些行。如果没有WHERE子句，则更新所有的行。如果指定了ORDER BY子句，则按照被指定的顺序对行进行更新。LIMIT子句用于给定一个限值，限制可以被更新的行的数目。</p>
+<h2 id="5-7-增加字段"><a href="#5-7-增加字段" class="headerlink" title="5.7 增加字段"></a>5.7 增加字段</h2><p>命令：alter table 表名 add字段 类型 其他;<br>例如：在表MyClass中添加了一个字段passtest，类型为int(4)，默认值为0</p>
+<pre><code>mysql&gt; alter table MyClass add passtest int(4) default &apos;0&apos;
+</code></pre><p>加索引</p>
+<pre><code>  mysql&gt; alter table 表名 add index 索引名 (字段名1[，字段名2 …]);
+
+例子： mysql&gt; alter table employee add index emp_name (name);
+</code></pre><p>加主关键字的索引</p>
+<pre><code> mysql&gt; alter table 表名 add primary key (字段名);
+
+例子： mysql&gt; alter table employee add primary key(id);
+</code></pre><p>加唯一限制条件的索引</p>
+<pre><code>   mysql&gt; alter table 表名 add unique 索引名 (字段名);
+
+例子： mysql&gt; alter table employee add unique emp_name2(cardnumber);
+</code></pre><p>删除某个索引</p>
+<pre><code>   mysql&gt; alter table 表名 drop index 索引名;
+
+例子： mysql&gt;alter table employee drop index emp_name;
+</code></pre><p>增加字段：</p>
+<pre><code>mysql&gt; ALTER TABLE table_name ADD field_name field_type;
+</code></pre><p>修改原字段名称及类型：</p>
+<pre><code>mysql&gt; ALTER TABLE table_name CHANGE old_field_name new_field_name field_type;
+</code></pre><p>删除字段：</p>
+<pre><code>MySQL ALTER TABLE table_name DROP field_name;
+</code></pre><h2 id="5-8-修改表名"><a href="#5-8-修改表名" class="headerlink" title="5.8 修改表名"></a>5.8 修改表名</h2><p>命令：rename table 原表名 to 新表名;</p>
+<p>例如：在表MyClass名字更改为YouClass</p>
+<pre><code>mysql&gt; rename table MyClass to YouClass;
+</code></pre><p>当你执行 RENAME 时，你不能有任何锁定的表或活动的事务。你同样也必须有对原初表的 ALTER 和 DROP 权限，以及对新表的 CREATE 和 INSERT 权限。</p>
+<p>如果在多表更名中，MySQL 遭遇到任何错误，它将对所有被更名的表进行倒退更名，将每件事物退回到最初状态。</p>
+<p>RENAME TABLE 在 MySQL 3.23.23 中被加入。</p>
+<h1 id="6、备份数据库"><a href="#6、备份数据库" class="headerlink" title="6、备份数据库"></a>6、备份数据库</h1><p>命令在DOS的[url=file://\mysql\bin]\mysql\bin[/url]目录下执行</p>
+<p>1.导出整个数据库<br>导出文件默认是存在mysql\bin目录下</p>
+<pre><code>mysqldump -u 用户名 -p 数据库名 &gt; 导出的文件名
+mysqldump -u user_name -p123456 database_name &gt; outfile_name.sql
+</code></pre><p>2.导出一个表</p>
+<pre><code>mysqldump -u 用户名 -p 数据库名 表名&gt; 导出的文件名
+mysqldump -u user_name -p database_name table_name &gt; outfile_name.sql
+</code></pre><p>3.导出一个数据库结构</p>
+<pre><code>mysqldump -u user_name -p -d –add-drop-table database_name &gt; outfile_name.sql
+-d 没有数据 –add-drop-table 在每个create语句之前增加一个drop table
+</code></pre><p>4.带语言参数导出</p>
+<pre><code>mysqldump -uroot -p –default-character-set=latin1 –set-charset=gbk –skip-opt database_name &gt; outfile_name.sql
+</code></pre><p>例如，将aaa库备份到文件back_aaa中：<br>　　[root@test1 root]# cd　/home/data/mysql<br>　　[root@test1 mysql]# mysqldump -u root -p –opt aaa &gt; back_aaa</p>
+<h1 id="7-1-一个建库和建表的实例1"><a href="#7-1-一个建库和建表的实例1" class="headerlink" title="7.1 一个建库和建表的实例1"></a>7.1 一个建库和建表的实例1</h1><pre><code>drop database if exists school; //如果存在SCHOOL则删除
+create database school; //建立库SCHOOL
+use school; //打开库SCHOOL
+create table teacher //建立表TEACHER
+(
+    id int(3) auto_increment not null primary key,
+    name char(10) not null,
+    address varchar(50) default ‘深圳’,
+    year date
+); //建表结束
+
+//以下为插入字段
+insert into teacher values(”,’allen’,&apos;大连一中’,&apos;1976-10-10′);
+insert into teacher values(”,’jack’,&apos;大连二中’,&apos;1975-12-23′);
+</code></pre><p>如果你在mysql提示符键入上面的命令也可以，但不方便调试。<br>1、你可以将以上命令原样写入一个文本文件中，假设为school.sql，然后复制到c:\下，并在DOS状态进入目录[url=file://\mysql\bin]\mysql\bin[/url]，然后键入以下命令：</p>
+<pre><code>mysql -uroot -p密码 &lt; c:\\school.sql
+</code></pre><p>如果成功，空出一行无任何显示；如有错误，会有提示。（以上命令已经调试，你只要将//的注释去掉即可使用）。</p>
+<p>2、或者进入命令行后使用 mysql&gt; source c:\school.sql; 也可以将school.sql文件导入数据库中。</p>
+<h1 id="7-2-一个建库和建表的实例2"><a href="#7-2-一个建库和建表的实例2" class="headerlink" title="7.2 一个建库和建表的实例2"></a>7.2 一个建库和建表的实例2</h1><pre><code>drop database if exists school; //如果存在SCHOOL则删除
+create database school; //建立库SCHOOL
+use school; //打开库SCHOOL
+create table teacher //建立表TEACHER
+(
+    id int(3) auto_increment not null primary key,
+    name char(10) not null,
+    address varchar(50) default &apos;&apos;深圳&apos;&apos;,
+    year date
+); //建表结束
+
+//以下为插入字段
+insert into teacher values(&apos;&apos;&apos;&apos;,&apos;&apos;glchengang&apos;&apos;,&apos;&apos;深圳一中&apos;&apos;,&apos;&apos;1976-10-10&apos;&apos;);
+insert into teacher values(&apos;&apos;&apos;&apos;,&apos;&apos;jack&apos;&apos;,&apos;&apos;深圳一中&apos;&apos;,&apos;&apos;1975-12-23&apos;&apos;);
+</code></pre><p>注：在建表中<br>1、将ID设为长度为3的数字字段:int(3)；并让它每个记录自动加一:auto_increment；并不能为空:not null；而且让他成为主字段primary key。</p>
+<p>2、将NAME设为长度为10的字符字段</p>
+<p>3、将ADDRESS设为长度50的字符字段，而且缺省值为深圳。</p>
+<p>4、将YEAR设为日期字段。</p>
+<p>转载:<a href="https://www.cnblogs.com/zhangzhu/archive/2013/07/04/3172486.html" target="_blank" rel="external">Mysql命令大全</a></p>
+</div><div class="tags"><a href="/tags/mysql/">mysql</a></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2018/01/03/Docker之创建并进入mysql容器/" class="pre">Docker之创建并进入mysql容器</a><a href="/2017/12/28/Dubbo学习——Dubbo介绍-一/" class="next">Dubbo学习——Dubbo介绍(一)</a></div><div id="comments"><div id="SOHUCS" sid="2018/01/03/常用mysql命令大全/"></div></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1、连接Mysql"><span class="toc-text">1、连接Mysql</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、连接到本机上的MYSQL。"><span class="toc-text">1、连接到本机上的MYSQL。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、连接到远程主机上的MYSQL。"><span class="toc-text">2、连接到远程主机上的MYSQL。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、退出MYSQL命令"><span class="toc-text">3、退出MYSQL命令</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2、修改密码"><span class="toc-text">2、修改密码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、给root加个密码ab12。"><span class="toc-text">1、给root加个密码ab12。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、再将root的密码改为djg345。"><span class="toc-text">2、再将root的密码改为djg345。</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3、增加新用户"><span class="toc-text">3、增加新用户</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、增加一个用户test1密码为abc，让他可以在任何主机上登录，并对所有数据库有查询、插入、修改、删除的权限。首先用root用户连入MYSQL，然后键入以下命令："><span class="toc-text">1、增加一个用户test1密码为abc，让他可以在任何主机上登录，并对所有数据库有查询、插入、修改、删除的权限。首先用root用户连入MYSQL，然后键入以下命令：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、增加一个用户test2密码为abc-让他只可以在localhost上登录，并可以对数据库mydb进行查询、插入、修改、删除的操作（localhost指本地主机，即MYSQL数据库所在的那台主机），这样用户即使用知道test2的密码，他也无法从internet上直接访问数据库，只能通过MYSQL主机上的web页来访问了。"><span class="toc-text">2、增加一个用户test2密码为abc,让他只可以在localhost上登录，并可以对数据库mydb进行查询、插入、修改、删除的操作（localhost指本地主机，即MYSQL数据库所在的那台主机），这样用户即使用知道test2的密码，他也无法从internet上直接访问数据库，只能通过MYSQL主机上的web页来访问了。</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-数据库"><span class="toc-text">4 数据库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-创建数据库"><span class="toc-text">4.1 创建数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-显示数据库"><span class="toc-text">4.2 显示数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-删除数据库"><span class="toc-text">4.3 删除数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-连接数据库"><span class="toc-text">4.4 连接数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-5-当前选择的数据库"><span class="toc-text">4.5 当前选择的数据库</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-数据库表"><span class="toc-text">5 数据库表</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-创建数据表"><span class="toc-text">5.1 创建数据表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-删除数据表"><span class="toc-text">5.2 删除数据表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-表插入数据"><span class="toc-text">5.3 表插入数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-查询表中的数据"><span class="toc-text">5.4 查询表中的数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-5-删除表中数据"><span class="toc-text">5.5 删除表中数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-6-修改表中数据"><span class="toc-text">5.6 修改表中数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-7-增加字段"><span class="toc-text">5.7 增加字段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-8-修改表名"><span class="toc-text">5.8 修改表名</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6、备份数据库"><span class="toc-text">6、备份数据库</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-1-一个建库和建表的实例1"><span class="toc-text">7.1 一个建库和建表的实例1</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-2-一个建库和建表的实例2"><span class="toc-text">7.2 一个建库和建表的实例2</span></a></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/01/03/Quartz学习——Quartz简单入门De-二/">Quartz学习——Quartz简单入门Demo(二)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/03/Docker之创建并进入mysql容器/">Docker之创建并进入mysql容器</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/03/常用mysql命令大全/">常用mysql命令大全</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/28/Dubbo学习——Dubbo介绍-一/">Dubbo学习——Dubbo介绍(一)</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/27/Quartz学习——————Quartz介绍-一/">Quartz学习———Quartz介绍(一)</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/25/Oracle-VM-VirtualBox配置虚拟网卡-桥接-实现主机-虚拟机网络互通/">Oracle VM VirtualBox配置虚拟网卡(桥接),实现主机-虚拟机网络互通</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/25/解决虚拟机安装linux后首次输入ifconfig-IP地址显示为127-0-0-1/">解决虚拟机安装linux后首次输入ifconfig IP地址显示为127.0.0.1</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/25/解决项目war包部署到linux系统的tomcat中访问页面报404错误/">解决项目war包部署到linux系统的tomcat中访问页面报404错误</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/25/Java-Web项目导出war包并部署到linux系统的tomcat中/">Java Web项目导出war包并部署到linux系统的tomcat中</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/SpringBoot发布HttpClient服务和客户端调用HttpClient服务/">SpringBoot发布HttpClient服务和客户端调用HttpClient服务</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HttpClient/">HttpClient</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/WebService/">WebService</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/axios/">axios</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/element-ui/">element ui</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/extjs/">extjs</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/maven/">maven</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mybatis/">mybatis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/oracle/">oracle</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/select2/">select2</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/shiro/">shiro</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/spring/">spring</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/tomcat/">tomcat</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/weblogic/">weblogic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/webpack/">webpack</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ztree/">ztree</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编码规范/">编码规范</a><span class="category-list-count">1</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/webpack/" style="font-size: 15px;">webpack</a> <a href="/tags/docker/" style="font-size: 15px;">docker</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/maven/" style="font-size: 15px;">maven</a> <a href="/tags/tomcat/" style="font-size: 15px;">tomcat</a> <a href="/tags/redis/" style="font-size: 15px;">redis</a> <a href="/tags/Oracle-VM-VirtualBox/" style="font-size: 15px;">Oracle VM VirtualBox</a> <a href="/tags/linux/" style="font-size: 15px;">linux</a> <a href="/tags/spring-aop/" style="font-size: 15px;">spring aop</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/SpringMVC/" style="font-size: 15px;">SpringMVC</a> <a href="/tags/WebService/" style="font-size: 15px;">WebService</a> <a href="/tags/SpringBoot/" style="font-size: 15px;">SpringBoot</a> <a href="/tags/HttpClient/" style="font-size: 15px;">HttpClient</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/extjs/" style="font-size: 15px;">extjs</a> <a href="/tags/mybatis/" style="font-size: 15px;">mybatis</a> <a href="/tags/jquery/" style="font-size: 15px;">jquery</a> <a href="/tags/ztree/" style="font-size: 15px;">ztree</a> <a href="/tags/shiro/" style="font-size: 15px;">shiro</a> <a href="/tags/weblogic/" style="font-size: 15px;">weblogic</a> <a href="/tags/element-ui/" style="font-size: 15px;">element ui</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/java基础/" style="font-size: 15px;">java基础</a> <a href="/tags/axios/" style="font-size: 15px;">axios</a> <a href="/tags/git/" style="font-size: 15px;">git</a> <a href="/tags/select2/" style="font-size: 15px;">select2</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/oracle/" style="font-size: 15px;">oracle</a> <a href="/tags/编码规范/" style="font-size: 15px;">编码规范</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-you"> 友情链接</i></div><ul></ul><a href="https://github.com/wangyuanjun008" title="GitHub" target="_blank">GitHub</a></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">WangYuanJun.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script><script>window._config = { showScore: true };
+(function(){ 
+  var appid = 'cytn089Dg'; 
+  var conf = '4501ebcf59ba2646236d1827a7751555'; 
+  var width = window.innerWidth || document.documentElement.clientWidth; 
+  var nodes =document.getElementsByTagName("head")[0]||document.head||document.documentElement;
+  if (/(Android|iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent) && width < 750) {  
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+  }
+  else { 
+    var loadJs=function(d,a){
+      var b=document.createElement("script");b.setAttribute("type","text/javascript");
+      b.setAttribute("charset","UTF-8");
+      b.setAttribute("src",d);
+      if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}
+      nodes.appendChild(b)
+    };
+    loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); 
+  } 
+  var loadCss = function(cssString){  
+    var style=document.createElement("style");  
+    style.setAttribute("type", "text/css");  
+    if(style.styleSheet){// IE  
+        style.styleSheet.cssText = cssString;  
+    } else {// w3c  
+        var cssText = document.createTextNode(cssString);  
+        style.appendChild(cssText);  
+    }
+    nodes.appendChild(style);
+  }
+  window.onload=function(){loadCss('.module-hot-topic,.module-cmt-float-bar{display:none!important}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .wrap-action-w .cbox-prompt-w span.prompt-empty-w,#SOHUCS #SOHU_MAIN .module-cmt-float-bar .wrap-cont-w .cont-form-w .form-text-w span.text-null,#SOHUCS #SOHU_MAIN .module-cmt-float-bar .wrap-cont-w .cont-minwidth-w div.cont-comment-w a.comment-link-w,#SOHUCS #SOHU_MAIN .module-cmt-float-bar .wrap-cont-w .cont-minwidth-w div.cont-comment-w span.comment-text-w,#SOHUCS #SOHU_MAIN .module-cmt-footer .section-service-w div.service-wrap-w a:hover,#SOHUCS #SOHU_MAIN .module-cmt-header .section-cbox-w .block-head-w div.header-login,#SOHUCS #SOHU_MAIN .module-cmt-header .section-title-w .title-user-w .user-wrap-w span.wrap-name-w,#SOHUCS #SOHU_MAIN .module-cmt-list .action-click-gw span.click-disable-eg a em.icon-name-bg,#SOHUCS #SOHU_MAIN .module-cmt-list .block-title-gw ul li div.title-name-gw,#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type .cmt-list-number .comment-number span.cy-number,#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type .cmt-list-number span.comment-number,#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type .type-lists li.active,#SOHUCS #SOHU_MAIN .module-cmt-list .msg-wrap-gw .wrap-action-gw .action-click-gw span a:hover,#SOHUCS #SOHU_MAIN .module-cmt-list .picture-box-gw div.box-action-gw a:hover,#SOHUCS #SOHU_MAIN .module-cmt-list .wrap-action-gw .action-click-gw span a:hover em.icon-name-bg,#SOHUCS #SOHU_MAIN .module-cmt-list .wrap-user-gw span.user-name-gw a{color:#40759b!important}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .post-wrap-border-t div.post-wrap-border-t-r,#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w div.post-wrap-border-l,#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w div.post-wrap-border-r{display:none!important}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .post-wrap-border-t div.post-wrap-border-t-l{background:#FFF!important;top:-2px!important}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .wrap-action-w .action-function-w .uploading-wrapper-dw div.wrapper-image-dw,#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w div.post-wrap-main,#SOHUCS #SOHU_MAIN .module-cmt-float-bar .wrap-cont-w .cont-form-w div.form-text-w,#SOHUCS #SOHU_MAIN .module-cmt-header .section-cbox-w .block-head-w div.header-login,#SOHUCS #SOHU_MAIN .module-cmt-list .module-cmt-box .post-wrap-w div.post-wrap-main{border:1px solid #e6e6e6!important;border-radius:20px 20px 20px 20px;margin:0!important}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .wrap-action-w .action-issue-w .issue-btn-w a .btn-fw{width:130px!important;height:34px!important;line-height:33px!important;font-size:17px!important;background:#5483b1!important;border-radius:20px!important;color:#FFF!important;-webkit-box-shadow:0 -1px 4px #5483b1 inset;box-shadow:0 -1px 10px #5483b1 inset}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .wrap-action-w .action-issue-w .issue-btn-w a .btn-fw:before{content:"发表评论"}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .wrap-action-w .action-issue-w .issue-btn-w a:hover .btn-fw{color:#40759b!important;background:#FFF!important}#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type .type-lists li{background:none!important;border-bottom:1px solid #e6e6e6}#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type .type-lists li.active{border:1px solid #e6e6e6;border-radius:10px 10px 0 0;border-bottom:none}#SOHUCS #SOHU_MAIN .module-cmt-list .block-title-gw ul li .title-name-gw div.title-name-gw-tag{background:#5483b1!important;border-radius:3px}#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type div.cmt-list-border{background-color:#e6e6e6!important}#SOHUCS #SOHU_MAIN .module-cmt-notice ul.nt-list li.nt-item{border:1px solid #e6e6e6!important}#SOHUCS #SOHU_MAIN .module-cmt-notice ul.nt-list li.nt-item .nt-logo{text-align:center;line-height:40px;border-radius:50%!important;background:#e6e6e6!important}#SOHUCS #SOHU_MAIN .module-cmt-notice ul.nt-list li.nt-item .nt-logo:before{content:"畅";font-size:22px;color:#FFF}#SOHUCS #SOHU_MAIN .module-cmt-notice ul.nt-list li.nt-item a.nt-text,#SOHUCS #SOHU_MAIN .module-cmt-notice ul.nt-list li.nt-item a.nt-text i{color:#5483b1!important}#SOHUCS #SOHU_MAIN .module-cmt-header .section-title-w .title-user-w .user-wrap-w{background:#FFF!important}');};
+})();</script><script src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script></body></html>

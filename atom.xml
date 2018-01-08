@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wangyuanjun.cn/"/>
-  <updated>2017-12-25T09:54:02.995Z</updated>
+  <updated>2018-01-08T06:34:41.225Z</updated>
   <id>http://wangyuanjun.cn/</id>
   
   <author>
@@ -14,6 +14,797 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Quartz学习——Quartz简单入门Demo(二)</title>
+    <link href="http://wangyuanjun.cn/2018/01/03/Quartz%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Quartz%E7%AE%80%E5%8D%95%E5%85%A5%E9%97%A8De-%E4%BA%8C/"/>
+    <id>http://wangyuanjun.cn/2018/01/03/Quartz学习——Quartz简单入门De-二/</id>
+    <published>2018-01-03T07:50:18.000Z</published>
+    <updated>2018-01-08T06:34:41.225Z</updated>
+    
+    <content type="html"><![CDATA[<p>下面介绍Quartz入门的示例，项目地址: <font color="red" size="5" face="微软雅黑"><a href="https://github.com/wangyuanjun008/wyj-quartz-demo" target="_blank" rel="external">quartz-demo</a></font><br>由于Quartz的存储方式分为RAM和JDBC，分别对这两种进行简单的说明。并附上代码！<br>首先需要添加Quartz的依赖 ，我使用的是quartz.2.2.3版本！ </p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.quartz-scheduler&lt;/groupId&gt;
+    &lt;artifactId&gt;quartz&lt;/artifactId&gt;
+    &lt;version&gt;2.2.3&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.quartz-scheduler&lt;/groupId&gt;
+    &lt;artifactId&gt;quartz-jobs&lt;/artifactId&gt;
+    &lt;version&gt;2.2.3&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre><h2 id="RAM方式"><a href="#RAM方式" class="headerlink" title="RAM方式"></a>RAM方式</h2><p>要测试RAMdemo的代码，请先删除demo中这个quartz.properties文件，或者重命名！否则会测试不成功！<br>（1）：Job</p>
+<pre><code>package com.wyj.exampleRAM;
+
+import java.util.Date;
+
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+/**
+ * RAMjob
+ * 
+ * 
+ * @author：WangYuanJun
+ * @date：2017年12月28日 下午10:03:31
+ */
+public class RAMJob implements Job{
+
+    private Logger logger = LoggerFactory.getLogger(RAMJob.class);
+
+    public void execute(JobExecutionContext arg0) throws JobExecutionException {
+        logger.debug(&quot;hello world ! hello Quartz - &quot;+new Date());
+    }
+
+}
+</code></pre><p>（2）：JobTest</p>
+<pre><code>package com.wyj.exampleRAM;
+
+import java.util.Date;
+
+import org.quartz.CronScheduleBuilder;
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.SchedulerFactory;
+import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
+import org.quartz.impl.StdSchedulerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+/**
+ * RAMtest
+ * 
+ * 
+ * @author：WangYuanJun
+ * @date：2017年12月28日 下午10:03:50
+ */
+public class RAMQuartzTest {
+
+    private static Logger logger = LoggerFactory.getLogger(RAMJob.class);
+
+    public static void main(String[] args) throws SchedulerException {
+        //1.创建Scheduler的工厂
+        SchedulerFactory sf = new StdSchedulerFactory();
+
+        //2.从工厂中获取调度器实例
+        Scheduler scheduler = sf.getScheduler();
+
+        //3.创建JobDetail
+        JobDetail jb = JobBuilder.newJob(RAMJob.class)
+                .withDescription(&quot;this is hello job&quot;)//job的描述
+                .withIdentity(&quot;helloJob&quot;, &quot;helloGroup&quot;)//job 的name和group
+                .build();
+
+         //任务运行的时间，SimpleSchedle类型触发器有效
+        long time=  System.currentTimeMillis() + 3*1000L; //3秒后启动任务
+        Date statTime = new Date(time);
+        //4.创建Trigger
+        //使用SimpleScheduleBuilder或者CronScheduleBuilder
+        Trigger trigger = TriggerBuilder.newTrigger()
+                            .withDescription(&quot;&quot;)
+                            .withIdentity(&quot;helloTrigger&quot;, &quot;helloTriggerGroup&quot;)
+                            .startAt(statTime)//默认当前时间启动
+                            .withSchedule(CronScheduleBuilder.cronSchedule(&quot;0/2 * * * * ?&quot;))//两秒执行一次
+                            .build();
+
+        //5.注册任务和定时器
+        scheduler.scheduleJob(jb, trigger);
+
+        //6.启动 调度器
+        scheduler.start();
+        logger.debug(&quot;启动时间 ：&quot;+new Date());
+    }
+}
+</code></pre><p>运行结果：<br>SimpleScheduleBuilder：<br><img src="/2018/01/03/Quartz学习——Quartz简单入门De-二/SimpleRAMTest.png" alt="SimpleRAMTest"></p>
+<p>CronScheduleBuilder：<br><img src="/2018/01/03/Quartz学习——Quartz简单入门De-二/CronRAMTest.png" alt="CronRAMTest"></p>
+<h2 id="JDBC方式"><a href="#JDBC方式" class="headerlink" title="JDBC方式"></a>JDBC方式</h2><p>使用jdbc方式，就要配置quartz.properties文件，并且在开始的时候在数据库中新增表！<br>我使用的数据库是mysql，数据库中表在wyj-quartz-demo项目里面有，需要的请在里面下载！<br>运行 tables_mysql.sql 这个文件。</p>
+<pre><code>#配置数据源属性  
+org.quartz.dataSource.qzDS.driver:com.mysql.jdbc.Driver
+org.quartz.dataSource.qzDS.URL:jdbc:mysql://192.168.99.100:3306/quartz_test?useUnicode=true&amp;characterEncoding=utf-8
+org.quartz.dataSource.qzDS.user:root
+org.quartz.dataSource.qzDS.password:admin
+org.quartz.dataSource.qzDS.maxConnections:10
+</code></pre><p>（1）job</p>
+<pre><code>package com.wyj.exampleJDBC;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+/**
+ * JdbcJob
+ * 
+ * 
+ * @author：WangYuanJun
+ * @date：2017年12月28日 下午10:04:03
+ */
+public class JdbcJob implements Job{
+
+    private Logger logger = LoggerFactory.getLogger(JdbcJob.class);
+
+    public void execute(JobExecutionContext arg0) throws JobExecutionException {
+
+        logger.debug(&quot;MyJDBCJob is start ...&quot;);
+
+        logger.debug(&quot;MyJDBCJob quzrtz &quot;+new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss &quot;).format(new Date()));
+
+        logger.debug(&quot;MyJDBCJob is end ...&quot;);
+    }
+}
+</code></pre><p>（2）jobTest</p>
+<pre><code>package com.wyj.exampleJDBC;
+
+import java.util.List;
+
+import org.quartz.CronScheduleBuilder;
+import org.quartz.CronTrigger;
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
+import org.quartz.JobKey;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerFactory;
+import org.quartz.SimpleTrigger;
+import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
+import org.quartz.impl.StdSchedulerFactory;
+/**
+ * JdbcJobtest
+ * 
+ * 
+ * @author：WangYuanJun
+ * @date：2017年12月28日 下午10:04:14
+ */
+public class QuartzJdbcTest {
+
+    public static void main(String[] args) {
+        testStartSchedule();
+//        resumeJob();
+    }
+
+
+    /**
+     *  开始一个simpleSchedule()调度
+     */
+    public static void testStartSchedule(){
+
+        try {
+            // 1、创建一个JobDetail实例，指定Quartz
+            JobDetail jobDetail = JobBuilder.newJob(JdbcJob.class)
+                    // 任务执行类
+                    .withIdentity(&quot;job_1&quot;, &quot;jGroup1&quot;)// 任务名，任务组
+                    .build();
+            //触发器类型
+//            SimpleScheduleBuilder builder = SimpleScheduleBuilder.simpleSchedule().repeatSecondlyForTotalCount(5); // 设置执行次数
+
+            CronScheduleBuilder builder = CronScheduleBuilder.cronSchedule(&quot;0/2 * * * * ?&quot;);
+            //  2、创建Trigger
+
+            Trigger trigger = TriggerBuilder.newTrigger()
+                    .withIdentity(&quot;trigger_1&quot;,&quot;triggerGroup1&quot;)
+                    .withSchedule(builder)
+                    .build();
+
+            // 3、创建Scheduler
+            Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+            scheduler.start();
+
+            // 4、调度执行
+            scheduler.scheduleJob(jobDetail,trigger);
+
+            try {
+                Thread.sleep(60000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            //关闭调度器
+            scheduler.shutdown();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 从数据库中找到已经存在的job，并重新开户调度
+     */
+    public static void resumeJob(){
+        try {
+            SchedulerFactory schedulerFactory = new StdSchedulerFactory();
+            Scheduler scheduler = schedulerFactory.getScheduler();
+            JobKey jobKey = new JobKey(&quot;job1_1&quot;, &quot;jGroup1&quot;);
+            List&lt;? extends Trigger&gt; triggers = scheduler.getTriggersOfJob(jobKey);
+            //SELECT TRIGGER_NAME, TRIGGER_GROUP FROM {0}TRIGGERS WHERE SCHED_NAME = {1} AND JOB_NAME = ? AND JOB_GROUP = ?
+            // 重新恢复在jGroup1组中，名为job1_1的 job的触发器运行
+            if(triggers.size() &gt; 0){
+                for (Trigger tg : triggers) {
+                    // 根据类型判断
+                    if ((tg instanceof CronTrigger) || (tg instanceof SimpleTrigger)) {
+                        // 恢复job运行
+                        scheduler.resumeJob(jobKey);
+                    }
+                }
+                scheduler.start();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre><p>运行结果：<br>数据库信息：<br><img src="/2018/01/03/Quartz学习——Quartz简单入门De-二/jdbcTest1.png" alt="jdbcTest1"></p>
+<p>控制台信息：<br><img src="/2018/01/03/Quartz学习——Quartz简单入门De-二/jdbcTest2.png" alt="jdbcTest2"></p>
+<p><strong>注意</strong>:<font color="red">Cron和Simple类型，Simple类型的如果JobDetail没有设置.storeDurably(true)，则job在运行完成之后会在数据库中删除！</font></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;下面介绍Quartz入门的示例，项目地址: &lt;font color=&quot;red&quot; size=&quot;5&quot; face=&quot;微软雅黑&quot;&gt;&lt;a href=&quot;https://github.com/wangyuanjun008/wyj-quartz-demo&quot; target=&quot;_blank&quot; 
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Docker之创建并进入mysql容器</title>
+    <link href="http://wangyuanjun.cn/2018/01/03/Docker%E4%B9%8B%E5%88%9B%E5%BB%BA%E5%B9%B6%E8%BF%9B%E5%85%A5mysql%E5%AE%B9%E5%99%A8/"/>
+    <id>http://wangyuanjun.cn/2018/01/03/Docker之创建并进入mysql容器/</id>
+    <published>2018-01-03T02:11:52.000Z</published>
+    <updated>2018-01-03T02:39:59.678Z</updated>
+    
+    <content type="html"><![CDATA[<p>本文介绍docker如何创建并进入MYSQL容器。</p>
+<h2 id="运行”docker-pull-mysql”获取mysql镜像"><a href="#运行”docker-pull-mysql”获取mysql镜像" class="headerlink" title="运行”docker pull mysql”获取mysql镜像"></a>运行”docker pull mysql”获取mysql镜像</h2><pre><code>[root@localhost ~]# docker pull mysql  
+Using default tag: latest  
+latest: Pulling from library/mysql  
+85b1f47fba49: Pull complete   
+5671503d4f93: Pull complete   
+3b43b3b913cb: Pull complete   
+4fbb803665d0: Pull complete   
+05808866e6f9: Pull complete   
+1d8c65d48cfa: Pull complete   
+e189e187b2b5: Pull complete   
+02d3e6011ee8: Pull complete   
+d43b32d5ce04: Pull complete   
+2a809168ab45: Pull complete   
+Digest: sha256:1a2f9361228e9b10b4c77a651b460828514845dc7ac51735b919c2c4aec864b7  
+Status: Downloaded newer image for mysql:latest  
+</code></pre><h2 id="在后台启动mysql容器-–name指定了容器的名称，方便之后进入容器的命令行，MYSQL-ROOT-PASSWORD-admin指定了mysql的root密码，-d表示在后台运行"><a href="#在后台启动mysql容器-–name指定了容器的名称，方便之后进入容器的命令行，MYSQL-ROOT-PASSWORD-admin指定了mysql的root密码，-d表示在后台运行" class="headerlink" title="在后台启动mysql容器(–name指定了容器的名称，方便之后进入容器的命令行，MYSQL_ROOT_PASSWORD=admin指定了mysql的root密码，-d表示在后台运行)"></a>在后台启动mysql容器(–name指定了容器的名称，方便之后进入容器的命令行，MYSQL_ROOT_PASSWORD=admin指定了mysql的root密码，-d表示在后台运行)</h2><pre><code>Administrator@SKY-20170607FIJ MINGW64 ~
+$ docker run --name mysql -p 3306:3306  -e MYSQL_ROOT_PASSWORD=admin -d mysql
+c6215e8c1fd73bc395a0c92e93f7e7145baedbe99c7ff639ccc9f5641bddf583
+</code></pre><h2 id="进入容器bash并进入mysql命令行："><a href="#进入容器bash并进入mysql命令行：" class="headerlink" title="进入容器bash并进入mysql命令行："></a>进入容器bash并进入mysql命令行：</h2><pre><code>Administrator@SKY-20170607FIJ MINGW64 ~
+$ docker exec -it mysql bash
+root@c6215e8c1fd7:/# mysql -uroot -padmin
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 5
+Server version: 5.7.20 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2017, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type &apos;help;&apos; or &apos;\h&apos; for help. Type &apos;\c&apos; to clear the current input statement.
+
+mysql&gt; show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.00 sec)
+
+mysql&gt;
+</code></pre><h2 id="退出mysql镜像"><a href="#退出mysql镜像" class="headerlink" title="退出mysql镜像"></a>退出mysql镜像</h2><p>输入</p>
+<pre><code>exit
+</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;本文介绍docker如何创建并进入MYSQL容器。&lt;/p&gt;
+&lt;h2 id=&quot;运行”docker-pull-mysql”获取mysql镜像&quot;&gt;&lt;a href=&quot;#运行”docker-pull-mysql”获取mysql镜像&quot; class=&quot;headerlink&quot; title=
+    
+    </summary>
+    
+      <category term="docker" scheme="http://wangyuanjun.cn/categories/docker/"/>
+    
+    
+      <category term="docker" scheme="http://wangyuanjun.cn/tags/docker/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>常用mysql命令大全</title>
+    <link href="http://wangyuanjun.cn/2018/01/03/%E5%B8%B8%E7%94%A8mysql%E5%91%BD%E4%BB%A4%E5%A4%A7%E5%85%A8/"/>
+    <id>http://wangyuanjun.cn/2018/01/03/常用mysql命令大全/</id>
+    <published>2018-01-03T01:40:56.000Z</published>
+    <updated>2018-01-03T02:40:13.667Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="1、连接Mysql"><a href="#1、连接Mysql" class="headerlink" title="1、连接Mysql"></a>1、连接Mysql</h1><p>格式： mysql -h主机地址 -u用户名 －p用户密码</p>
+<h2 id="1、连接到本机上的MYSQL。"><a href="#1、连接到本机上的MYSQL。" class="headerlink" title="1、连接到本机上的MYSQL。"></a>1、连接到本机上的MYSQL。</h2><p>首先打开DOS窗口，然后进入目录mysql\bin，再键入命令mysql -u root -p，回车后提示你输密码.注意用户名前可以有空格也可以没有空格，但是密码前必须没有空格，否则让你重新输入密码。</p>
+<p>如果刚安装好MYSQL，超级用户root是没有密码的，故直接回车即可进入到MYSQL中了，MYSQL的提示符是： mysql&gt;</p>
+<h2 id="2、连接到远程主机上的MYSQL。"><a href="#2、连接到远程主机上的MYSQL。" class="headerlink" title="2、连接到远程主机上的MYSQL。"></a>2、连接到远程主机上的MYSQL。</h2><p>假设远程主机的IP为：110.110.110.110，用户名为root,密码为abcd123。则键入以下命令：<br>    mysql -h110.110.110.110 -u root -p 123;（注:u与root之间可以不用加空格，其它也一样）</p>
+<h2 id="3、退出MYSQL命令"><a href="#3、退出MYSQL命令" class="headerlink" title="3、退出MYSQL命令"></a>3、退出MYSQL命令</h2><pre><code>exit （回车）
+</code></pre><h1 id="2、修改密码"><a href="#2、修改密码" class="headerlink" title="2、修改密码"></a>2、修改密码</h1><p>格式：mysqladmin -u用户名 -p旧密码 password 新密码</p>
+<h2 id="1、给root加个密码ab12。"><a href="#1、给root加个密码ab12。" class="headerlink" title="1、给root加个密码ab12。"></a>1、给root加个密码ab12。</h2><p>首先在DOS下进入目录mysql\bin，然后键入以下命令</p>
+<pre><code>mysqladmin -u root -password ab12
+</code></pre><p>注：因为开始时root没有密码，所以-p旧密码一项就可以省略了。</p>
+<h2 id="2、再将root的密码改为djg345。"><a href="#2、再将root的密码改为djg345。" class="headerlink" title="2、再将root的密码改为djg345。"></a>2、再将root的密码改为djg345。</h2><pre><code>mysqladmin -u root -p ab12 password djg345
+</code></pre><h1 id="3、增加新用户"><a href="#3、增加新用户" class="headerlink" title="3、增加新用户"></a>3、增加新用户</h1><p>注意：和上面不同，下面的因为是MYSQL环境中的命令，所以后面都带一个分号作为命令结束符</p>
+<p>格式：grant select on 数据库.* to 用户名@登录主机 identified by “密码”</p>
+<h2 id="1、增加一个用户test1密码为abc，让他可以在任何主机上登录，并对所有数据库有查询、插入、修改、删除的权限。首先用root用户连入MYSQL，然后键入以下命令："><a href="#1、增加一个用户test1密码为abc，让他可以在任何主机上登录，并对所有数据库有查询、插入、修改、删除的权限。首先用root用户连入MYSQL，然后键入以下命令：" class="headerlink" title="1、增加一个用户test1密码为abc，让他可以在任何主机上登录，并对所有数据库有查询、插入、修改、删除的权限。首先用root用户连入MYSQL，然后键入以下命令："></a>1、增加一个用户test1密码为abc，让他可以在任何主机上登录，并对所有数据库有查询、插入、修改、删除的权限。首先用root用户连入MYSQL，然后键入以下命令：</h2><pre><code>grant select,insert,update,delete on *.* to [email=test1@”%]test1@”%[/email]” Identified by “abc”;
+</code></pre><p>但增加的用户是十分危险的，你想如某个人知道test1的密码，那么他就可以在internet上的任何一台电脑上登录你的mysql数据库并对你的数据可以为所欲为了，解决办法见2。</p>
+<h2 id="2、增加一个用户test2密码为abc-让他只可以在localhost上登录，并可以对数据库mydb进行查询、插入、修改、删除的操作（localhost指本地主机，即MYSQL数据库所在的那台主机），这样用户即使用知道test2的密码，他也无法从internet上直接访问数据库，只能通过MYSQL主机上的web页来访问了。"><a href="#2、增加一个用户test2密码为abc-让他只可以在localhost上登录，并可以对数据库mydb进行查询、插入、修改、删除的操作（localhost指本地主机，即MYSQL数据库所在的那台主机），这样用户即使用知道test2的密码，他也无法从internet上直接访问数据库，只能通过MYSQL主机上的web页来访问了。" class="headerlink" title="2、增加一个用户test2密码为abc,让他只可以在localhost上登录，并可以对数据库mydb进行查询、插入、修改、删除的操作（localhost指本地主机，即MYSQL数据库所在的那台主机），这样用户即使用知道test2的密码，他也无法从internet上直接访问数据库，只能通过MYSQL主机上的web页来访问了。"></a>2、增加一个用户test2密码为abc,让他只可以在localhost上登录，并可以对数据库mydb进行查询、插入、修改、删除的操作（localhost指本地主机，即MYSQL数据库所在的那台主机），这样用户即使用知道test2的密码，他也无法从internet上直接访问数据库，只能通过MYSQL主机上的web页来访问了。</h2><pre><code>grant select,insert,update,delete on mydb.* to [email=test2@localhost]test2@localhost[/email] identified by “abc”;
+</code></pre><p>如果你不想test2有密码，可以再打一个命令将密码消掉。</p>
+<pre><code>grant select,insert,update,delete on mydb.* to [email=test2@localhost]test2@localhost[/email] identified by “”;
+</code></pre><h1 id="4-数据库"><a href="#4-数据库" class="headerlink" title="4 数据库"></a>4 数据库</h1><h2 id="4-1-创建数据库"><a href="#4-1-创建数据库" class="headerlink" title="4.1 创建数据库"></a>4.1 创建数据库</h2><p>注意：创建数据库之前要先连接Mysql服务器</p>
+<p>命令：create database &lt;数据库名&gt;</p>
+<p>例1：建立一个名为xhkdb的数据库</p>
+<p>   mysql&gt; create database xhkdb;</p>
+<p>例2：创建数据库并分配用户</p>
+<p>①CREATE DATABASE 数据库名;</p>
+<p>②GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER ON 数据库名.* TO 数据库名@localhost IDENTIFIED BY ‘密码’;</p>
+<p>③SET PASSWORD FOR ‘数据库名’@’localhost’ = OLD_PASSWORD(‘密码’);</p>
+<p>依次执行3个命令完成数据库创建。注意：中文 “密码”和“数据库”是户自己需要设置的。</p>
+<h2 id="4-2-显示数据库"><a href="#4-2-显示数据库" class="headerlink" title="4.2 显示数据库"></a>4.2 显示数据库</h2><p>命令：show databases （注意：最后有个s）</p>
+<pre><code>mysql&gt; show databases;
+</code></pre><p>注意：为了不再显示的时候乱码，要修改数据库默认编码。以下以GBK编码页面为例进行说明：</p>
+<p>1、修改MYSQL的配置文件：my.ini里面修改default-character-set=gbk<br>2、代码运行时修改：<br>   ①Java代码：jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=gbk<br>   ②PHP代码：header(“Content-Type:text/html;charset=gb2312”);<br>   ③C语言代码：int mysql_set_character_set( MYSQL <em> mysql, char </em> csname)；<br>该函数用于为当前连接设置默认的字符集。字符串csname指定了1个有效的字符集名称。连接校对成为字符集的默认校对。该函数的工作方式与SET NAMES语句类似，但它还能设置mysql- &gt; charset的值，从而影响了由mysql_real_escape_string() 设置的字符集。</p>
+<h2 id="4-3-删除数据库"><a href="#4-3-删除数据库" class="headerlink" title="4.3 删除数据库"></a>4.3 删除数据库</h2><p>命令：drop database &lt;数据库名&gt;<br>例如：删除名为 xhkdb的数据库</p>
+<pre><code>mysql&gt; drop database xhkdb;
+</code></pre><p>例子1：删除一个已经确定存在的数据库</p>
+<p>   mysql&gt; drop database drop_database;<br>   Query OK, 0 rows affected (0.00 sec)</p>
+<p>例子2：删除一个不确定存在的数据库</p>
+<p>   mysql&gt; drop database drop_database;<br>   ERROR 1008 (HY000): Can’t drop database ‘drop_database’; database doesn’t exist<br>      //发生错误，不能删除’drop_database’数据库，该数据库不存在。<br>   mysql&gt; drop database if exists drop_database;<br>   Query OK, 0 rows affected, 1 warning (0.00 sec)//产生一个警告说明此数据库不存在<br>   mysql&gt; create database drop_database;<br>   Query OK, 1 row affected (0.00 sec)<br>   mysql&gt; drop database if exists drop_database;//if exists 判断数据库是否存在，不存在也不产生错误<br>   Query OK, 0 rows affected (0.00 sec)</p>
+<h2 id="4-4-连接数据库"><a href="#4-4-连接数据库" class="headerlink" title="4.4 连接数据库"></a>4.4 连接数据库</h2><p>命令： use &lt;数据库名&gt;</p>
+<p>例如：如果xhkdb数据库存在，尝试存取它：</p>
+<p>   mysql&gt; use xhkdb;</p>
+<p>屏幕提示：Database changed</p>
+<p>use 语句可以通告MySQL把db_name数据库作为默认（当前）数据库使用，用于后续语句。该数据库保持为默认数据库，直到语段的结尾，或者直到发布一个不同的USE语句：</p>
+<p>   mysql&gt; USE db1;<br>   mysql&gt; SELECT COUNT(<em>) FROM mytable;   # selects from db1.mytable<br>   mysql&gt; USE db2;<br>   mysql&gt; SELECT COUNT(</em>) FROM mytable;   # selects from db2.mytable</p>
+<p>使用USE语句为一个特定的当前的数据库做标记，不会阻碍您访问其它数据库中的表。下面的例子可以从db1数据库访问作者表，并从db2数据库访问编辑表：</p>
+<p>   mysql&gt; USE db1;<br>   mysql&gt; SELECT author_name,editor_name FROM author,db2.editor<br>       -&gt;        WHERE author.editor_id = db2.editor.editor_id;</p>
+<p>USE语句被设立出来，用于与Sybase相兼容。</p>
+<p>有些网友问到，连接以后怎么退出。其实，不用退出来，use 数据库后，使用show databases就能查询所有数据库，如果想跳到其他数据库，用<br>   use 其他数据库名字<br>就可以了。</p>
+<h2 id="4-5-当前选择的数据库"><a href="#4-5-当前选择的数据库" class="headerlink" title="4.5 当前选择的数据库"></a>4.5 当前选择的数据库</h2><p>命令：mysql&gt; select database();</p>
+<p>MySQL中SELECT命令类似于其他编程语言里的print或者write，你可以用它来显示一个字符串、数字、数学表达式的结果等等。如何使用MySQL中SELECT命令的特殊功能？</p>
+<p>1.显示MYSQL的版本</p>
+<pre><code>mysql&gt; select version(); 
++-----------------------+ 
+| version()             | 
++-----------------------+ 
+| 6.0.4-alpha-community | 
++-----------------------+ 
+1 row in set (0.02 sec) 
+</code></pre><p>2.显示当前时间</p>
+<pre><code>mysql&gt; select now(); 
++---------------------+ 
+| now()               | 
++---------------------+ 
+| 2009-09-15 22:35:32 | 
++---------------------+ 
+1 row in set (0.04 sec) 
+</code></pre><p>3.显示年月日</p>
+<pre><code>SELECT DAYOFMONTH(CURRENT_DATE); 
++--------------------------+ 
+| DAYOFMONTH(CURRENT_DATE) | 
++--------------------------+ 
+|                       15 | 
++--------------------------+ 
+1 row in set (0.01 sec) 
+
+SELECT MONTH(CURRENT_DATE); 
++---------------------+ 
+| MONTH(CURRENT_DATE) | 
++---------------------+ 
+|                   9 | 
++---------------------+ 
+1 row in set (0.00 sec) 
+
+SELECT YEAR(CURRENT_DATE); 
++--------------------+ 
+| YEAR(CURRENT_DATE) | 
++--------------------+ 
+|               2009 | 
++--------------------+ 
+1 row in set (0.00 sec) 
+</code></pre><p>4.显示字符串</p>
+<pre><code>mysql&gt; SELECT &quot;welecome to my blog!&quot;; 
++----------------------+ 
+| welecome to my blog! | 
++----------------------+ 
+| welecome to my blog! | 
++----------------------+ 
+1 row in set (0.00 sec) 
+</code></pre><p>5.当计算器用</p>
+<pre><code>select ((4 * 4) / 10 ) + 25; 
++----------------------+ 
+| ((4 * 4) / 10 ) + 25 | 
++----------------------+ 
+|                26.60 | 
++----------------------+ 
+1 row in set (0.00 sec) 
+</code></pre><p>6.串接字符串</p>
+<pre><code>select CONCAT(f_name, &quot; &quot;, l_name) 
+AS Name 
+from employee_data 
+where title = &apos;Marketing Executive&apos;; 
++---------------+ 
+| Name          | 
++---------------+ 
+| Monica Sehgal | 
+| Hal Simlai    | 
+| Joseph Irvine | 
++---------------+ 
+3 rows in set (0.00 sec) 
+</code></pre><p>注意：这里用到CONCAT()函数，用来把字符串串接起来。另外，我们还用到以前学到的AS给结果列’CONCAT(f_name, “ “, l_name)’起了个假名。</p>
+<h1 id="5-数据库表"><a href="#5-数据库表" class="headerlink" title="5 数据库表"></a>5 数据库表</h1><h2 id="5-1-创建数据表"><a href="#5-1-创建数据表" class="headerlink" title="5.1 创建数据表"></a>5.1 创建数据表</h2><p>命令：create table &lt;表名&gt; ( &lt;字段名1&gt; &lt;类型1&gt; [,..&lt;字段名n&gt; &lt;类型n&gt;]);</p>
+<p>例如，建立一个名为MyClass的表，<br>字段名    数字类型    数据宽度    是否为空    是否主键    自动增加    默认值<br>id    int    4    否    primary key    auto_increment<br>name    char    20    否<br>sex    int    4    否              0<br>degree    double    16    是    </p>
+<pre><code>mysql&gt; create table MyClass(
+&gt; id int(4) not null primary key auto_increment,
+&gt; name char(20) not null,
+&gt; sex int(4) not null default &apos;0&apos;,
+&gt; degree double(16,2));
+</code></pre><h2 id="5-2-删除数据表"><a href="#5-2-删除数据表" class="headerlink" title="5.2 删除数据表"></a>5.2 删除数据表</h2><p>命令：drop table &lt;表名&gt;</p>
+<p>例如：删除表名为 MyClass 的表</p>
+<pre><code>mysql&gt; drop table MyClass;
+</code></pre><p>DROP TABLE用于取消一个或多个表。您必须有每个表的DROP权限。所有的表数据和表定义会被取消，所以使用本语句要小心！</p>
+<p>注意：对于一个带分区的表，DROP TABLE会永久性地取消表定义，取消各分区，并取消储存在这些分区中的所有数据。DROP TABLE还会取消与被取消的表有关联的分区定义（.par）文件。</p>
+<p>对与不存在的表，使用IF EXISTS用于防止错误发生。当使用IF EXISTS时，对于每个不存在的表，会生成一个NOTE。</p>
+<p>RESTRICT和CASCADE可以使分区更容易。目前，RESTRICT和CASCADE不起作用。</p>
+<h2 id="5-3-表插入数据"><a href="#5-3-表插入数据" class="headerlink" title="5.3 表插入数据"></a>5.3 表插入数据</h2><p>命令：insert into &lt;表名&gt; [( &lt;字段名1&gt;[,..&lt;字段名n &gt; ])] values ( 值1 )[, ( 值n )]</p>
+<p>例如：往表 MyClass中插入二条记录, 这二条记录表示：编号为1的名为Tom的成绩为96.45, 编号为2 的名为Joan 的成绩为82.99， 编号为3 的名为Wang 的成绩为96.5。<br>   mysql&gt; insert into MyClass values(1,’Tom’,96.45),(2,’Joan’,82.99), (2,’Wang’, 96.59);</p>
+<p>注意：insert into每次只能向表中插入一条记录。</p>
+<h2 id="5-4-查询表中的数据"><a href="#5-4-查询表中的数据" class="headerlink" title="5.4 查询表中的数据"></a>5.4 查询表中的数据</h2><p>1)、查询所有行<br>命令： select &lt;字段1，字段2，…&gt; from &lt; 表名 &gt; where &lt; 表达式 &gt;<br>例如：查看表 MyClass 中所有数据</p>
+<pre><code>mysql&gt; select * from MyClass;
+</code></pre><p>2）、查询前几行数据<br>例如：查看表 MyClass 中前2行数据</p>
+<pre><code>mysql&gt; select * from MyClass order by id limit 0,2;
+</code></pre><p>select一般配合where使用，以查询更精确更复杂的数据。</p>
+<h2 id="5-5-删除表中数据"><a href="#5-5-删除表中数据" class="headerlink" title="5.5 删除表中数据"></a>5.5 删除表中数据</h2><p>命令：delete from 表名 where 表达式</p>
+<p>例如：删除表 MyClass中编号为1 的记录<br>mysql&gt; delete from MyClass where id=1;</p>
+<p>下面是一个删除数据前后表的对比。<br>FirstName    LastName    Age<br>Peter    Griffin    35<br>Glenn    Quagmire    33<br>下面以PHP代码为例删除 “Persons” 表中所有 LastName=’Griffin’ 的记录：</p>
+<pre><code>&lt;?php 
+   $con = mysql_connect(&quot;localhost&quot;,&quot;peter&quot;,&quot;abc123&quot;); 
+   if (!$con) 
+   {
+      die(&apos;Could not connect: &apos; . mysql_error()); 
+   } 
+   mysql_select_db(&quot;my_db&quot;, $con); 
+   mysql_query(&quot;DELETE FROM Persons WHERE LastName=&apos;Griffin&apos;&quot;); mysql_close($con); 
+?&gt;
+</code></pre><p>在这次删除之后，表是这样的：</p>
+<pre><code>FirstName    LastName    Age
+Glenn    Quagmire    33
+</code></pre><h2 id="5-6-修改表中数据"><a href="#5-6-修改表中数据" class="headerlink" title="5.6 修改表中数据"></a>5.6 修改表中数据</h2><p>语法：update 表名 set 字段=新值,… where 条件</p>
+<pre><code>mysql&gt; update MyClass set name=&apos;Mary&apos; where id=1;
+</code></pre><p>例子1：单表的MySQL UPDATE语句：</p>
+<pre><code>UPDATE [LOW_PRIORITY] [IGNORE] tbl_name SET col_name1=expr1 [, col_name2=expr2 ...] [WHERE where_definition] [ORDER BY ...] [LIMIT row_count]
+</code></pre><p>例子2：多表的UPDATE语句：</p>
+<pre><code>UPDATE [LOW_PRIORITY] [IGNORE] table_references SET col_name1=expr1 [, col_name2=expr2 ...] [WHERE where_definition]
+</code></pre><p>UPDATE语法可以用新值更新原有表行中的各列。SET子句指示要修改哪些列和要给予哪些值。WHERE子句指定应更新哪些行。如果没有WHERE子句，则更新所有的行。如果指定了ORDER BY子句，则按照被指定的顺序对行进行更新。LIMIT子句用于给定一个限值，限制可以被更新的行的数目。</p>
+<h2 id="5-7-增加字段"><a href="#5-7-增加字段" class="headerlink" title="5.7 增加字段"></a>5.7 增加字段</h2><p>命令：alter table 表名 add字段 类型 其他;<br>例如：在表MyClass中添加了一个字段passtest，类型为int(4)，默认值为0</p>
+<pre><code>mysql&gt; alter table MyClass add passtest int(4) default &apos;0&apos;
+</code></pre><p>加索引</p>
+<pre><code>  mysql&gt; alter table 表名 add index 索引名 (字段名1[，字段名2 …]);
+
+例子： mysql&gt; alter table employee add index emp_name (name);
+</code></pre><p>加主关键字的索引</p>
+<pre><code> mysql&gt; alter table 表名 add primary key (字段名);
+
+例子： mysql&gt; alter table employee add primary key(id);
+</code></pre><p>加唯一限制条件的索引</p>
+<pre><code>   mysql&gt; alter table 表名 add unique 索引名 (字段名);
+
+例子： mysql&gt; alter table employee add unique emp_name2(cardnumber);
+</code></pre><p>删除某个索引</p>
+<pre><code>   mysql&gt; alter table 表名 drop index 索引名;
+
+例子： mysql&gt;alter table employee drop index emp_name;
+</code></pre><p>增加字段：</p>
+<pre><code>mysql&gt; ALTER TABLE table_name ADD field_name field_type;
+</code></pre><p>修改原字段名称及类型：</p>
+<pre><code>mysql&gt; ALTER TABLE table_name CHANGE old_field_name new_field_name field_type;
+</code></pre><p>删除字段：</p>
+<pre><code>MySQL ALTER TABLE table_name DROP field_name;
+</code></pre><h2 id="5-8-修改表名"><a href="#5-8-修改表名" class="headerlink" title="5.8 修改表名"></a>5.8 修改表名</h2><p>命令：rename table 原表名 to 新表名;</p>
+<p>例如：在表MyClass名字更改为YouClass</p>
+<pre><code>mysql&gt; rename table MyClass to YouClass;
+</code></pre><p>当你执行 RENAME 时，你不能有任何锁定的表或活动的事务。你同样也必须有对原初表的 ALTER 和 DROP 权限，以及对新表的 CREATE 和 INSERT 权限。</p>
+<p>如果在多表更名中，MySQL 遭遇到任何错误，它将对所有被更名的表进行倒退更名，将每件事物退回到最初状态。</p>
+<p>RENAME TABLE 在 MySQL 3.23.23 中被加入。</p>
+<h1 id="6、备份数据库"><a href="#6、备份数据库" class="headerlink" title="6、备份数据库"></a>6、备份数据库</h1><p>命令在DOS的[url=file://\mysql\bin]\mysql\bin[/url]目录下执行</p>
+<p>1.导出整个数据库<br>导出文件默认是存在mysql\bin目录下</p>
+<pre><code>mysqldump -u 用户名 -p 数据库名 &gt; 导出的文件名
+mysqldump -u user_name -p123456 database_name &gt; outfile_name.sql
+</code></pre><p>2.导出一个表</p>
+<pre><code>mysqldump -u 用户名 -p 数据库名 表名&gt; 导出的文件名
+mysqldump -u user_name -p database_name table_name &gt; outfile_name.sql
+</code></pre><p>3.导出一个数据库结构</p>
+<pre><code>mysqldump -u user_name -p -d –add-drop-table database_name &gt; outfile_name.sql
+-d 没有数据 –add-drop-table 在每个create语句之前增加一个drop table
+</code></pre><p>4.带语言参数导出</p>
+<pre><code>mysqldump -uroot -p –default-character-set=latin1 –set-charset=gbk –skip-opt database_name &gt; outfile_name.sql
+</code></pre><p>例如，将aaa库备份到文件back_aaa中：<br>　　[root@test1 root]# cd　/home/data/mysql<br>　　[root@test1 mysql]# mysqldump -u root -p –opt aaa &gt; back_aaa</p>
+<h1 id="7-1-一个建库和建表的实例1"><a href="#7-1-一个建库和建表的实例1" class="headerlink" title="7.1 一个建库和建表的实例1"></a>7.1 一个建库和建表的实例1</h1><pre><code>drop database if exists school; //如果存在SCHOOL则删除
+create database school; //建立库SCHOOL
+use school; //打开库SCHOOL
+create table teacher //建立表TEACHER
+(
+    id int(3) auto_increment not null primary key,
+    name char(10) not null,
+    address varchar(50) default ‘深圳’,
+    year date
+); //建表结束
+
+//以下为插入字段
+insert into teacher values(”,’allen’,&apos;大连一中’,&apos;1976-10-10′);
+insert into teacher values(”,’jack’,&apos;大连二中’,&apos;1975-12-23′);
+</code></pre><p>如果你在mysql提示符键入上面的命令也可以，但不方便调试。<br>1、你可以将以上命令原样写入一个文本文件中，假设为school.sql，然后复制到c:\下，并在DOS状态进入目录[url=file://\mysql\bin]\mysql\bin[/url]，然后键入以下命令：</p>
+<pre><code>mysql -uroot -p密码 &lt; c:\\school.sql
+</code></pre><p>如果成功，空出一行无任何显示；如有错误，会有提示。（以上命令已经调试，你只要将//的注释去掉即可使用）。</p>
+<p>2、或者进入命令行后使用 mysql&gt; source c:\school.sql; 也可以将school.sql文件导入数据库中。</p>
+<h1 id="7-2-一个建库和建表的实例2"><a href="#7-2-一个建库和建表的实例2" class="headerlink" title="7.2 一个建库和建表的实例2"></a>7.2 一个建库和建表的实例2</h1><pre><code>drop database if exists school; //如果存在SCHOOL则删除
+create database school; //建立库SCHOOL
+use school; //打开库SCHOOL
+create table teacher //建立表TEACHER
+(
+    id int(3) auto_increment not null primary key,
+    name char(10) not null,
+    address varchar(50) default &apos;&apos;深圳&apos;&apos;,
+    year date
+); //建表结束
+
+//以下为插入字段
+insert into teacher values(&apos;&apos;&apos;&apos;,&apos;&apos;glchengang&apos;&apos;,&apos;&apos;深圳一中&apos;&apos;,&apos;&apos;1976-10-10&apos;&apos;);
+insert into teacher values(&apos;&apos;&apos;&apos;,&apos;&apos;jack&apos;&apos;,&apos;&apos;深圳一中&apos;&apos;,&apos;&apos;1975-12-23&apos;&apos;);
+</code></pre><p>注：在建表中<br>1、将ID设为长度为3的数字字段:int(3)；并让它每个记录自动加一:auto_increment；并不能为空:not null；而且让他成为主字段primary key。</p>
+<p>2、将NAME设为长度为10的字符字段</p>
+<p>3、将ADDRESS设为长度50的字符字段，而且缺省值为深圳。</p>
+<p>4、将YEAR设为日期字段。</p>
+<p>转载:<a href="https://www.cnblogs.com/zhangzhu/archive/2013/07/04/3172486.html" target="_blank" rel="external">Mysql命令大全</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;1、连接Mysql&quot;&gt;&lt;a href=&quot;#1、连接Mysql&quot; class=&quot;headerlink&quot; title=&quot;1、连接Mysql&quot;&gt;&lt;/a&gt;1、连接Mysql&lt;/h1&gt;&lt;p&gt;格式： mysql -h主机地址 -u用户名 －p用户密码&lt;/p&gt;
+&lt;h2 id=&quot;
+    
+    </summary>
+    
+      <category term="mysql" scheme="http://wangyuanjun.cn/categories/mysql/"/>
+    
+    
+      <category term="mysql" scheme="http://wangyuanjun.cn/tags/mysql/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Dubbo学习——Dubbo介绍(一)</title>
+    <link href="http://wangyuanjun.cn/2017/12/28/Dubbo%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Dubbo%E4%BB%8B%E7%BB%8D-%E4%B8%80/"/>
+    <id>http://wangyuanjun.cn/2017/12/28/Dubbo学习——Dubbo介绍-一/</id>
+    <published>2017-12-28T01:40:51.000Z</published>
+    <updated>2017-12-28T01:40:51.070Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Quartz学习———Quartz介绍(一)</title>
+    <link href="http://wangyuanjun.cn/2017/12/27/Quartz%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E2%80%94Quartz%E4%BB%8B%E7%BB%8D-%E4%B8%80/"/>
+    <id>http://wangyuanjun.cn/2017/12/27/Quartz学习——————Quartz介绍-一/</id>
+    <published>2017-12-27T15:02:10.000Z</published>
+    <updated>2018-01-08T06:34:38.709Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>Quartz是OpenSymphony开源组织在Job scheduling领域又一个开源项目，是完全由java开发的一个开源的任务日程管理系统，“任务进度管理器”就是一个在预先确定（被纳入日程）的时间到达时，负责执行（或者通知）其他软件组件的系统。<br>Quartz用一个小Java库发布文件（.jar文件），这个库文件包含了所有Quartz核心功能。这些功能的主要接口(API)是Scheduler接口。它提供了简单的操作，例如：将任务纳入日程或者从日程中取消，开始/停止/暂停日程进度。</p>
+<h2 id="quartz核心概念"><a href="#quartz核心概念" class="headerlink" title="quartz核心概念"></a>quartz核心概念</h2><p>先来看一张图：<br><img src="/2017/12/27/Quartz学习——————Quartz介绍-一/quartz.png" alt="quartz"></p>
+<ul>
+<li><p>Job( 任务，即被调度的任务)：要由表示要执行的“作业”的类实现的接口。只有一个方法 void execute(jobExecutionContext context) (jobExecutionContext 提供调度上下文各种信息，运行时数据保存在jobDataMap中) Job有个子接口StatefulJob ,代表有状态任务。</p>
+</li>
+<li><p>JobDetail：Quartz在每次执行Job时，都重新创建一个Job实例，所以它不直接接受一个Job的实例，相反它接收一个Job实现类，以便运行时通过newInstance()的反射机制实例化Job。因此需要通过一个类来描述Job的实现类及其它相关的静态信息，如Job名字、描述、关联监听器等信息，JobDetail承担了这一角色。<br>  传递给定作业实例的详细信息属性。 JobDetails将使用JobBuilder创建/定义。 </p>
+</li>
+<li><p>Trigger(触发器)：用于定义任务调度时间规则。是一个类，描述触发Job执行的时间触发规则。使用TriggerBuilder实例化实际触发器。主要有SimpleTrigger和CronTrigger这两个子类。当仅需触发一次或者以固定时间间隔周期执行，SimpleTrigger是最适合的选择；而CronTrigger则可以通过Cron表达式定义出各种复杂时间规则的调度方案：如每早晨9:00执行，周一、周三、周五下午5:00执行等；</p>
+</li>
+<li><p>Calendar：org.quartz.Calendar和java.util.Calendar不同，它是一些日历特定时间点的集合（可以简单地将org.quartz.Calendar看作java.util.Calendar的集合——java.util.Calendar代表一个日历时间点，无特殊说明后面的Calendar即指org.quartz.Calendar）。一个Trigger可以和多个Calendar关联，以便排除或包含某些时间点。假设，我们安排每周星期一早上10:00执行任务，但是如果碰到法定的节日，任务则不执行，这时就需要在Trigger触发机制的基础上使用Calendar进行定点排除。</p>
+</li>
+<li><p>Scheduler(任务调度器)：这是Quartz Scheduler的主要接口，代表一个Quartz的独立运行容器，Trigger和JobDetail可以注册到Scheduler中，两者在Scheduler中拥有各自的组及名称，组及名称是Scheduler查找定位容器中某一对象的依据，Trigger的组及名称必须唯一，JobDetail的组和名称也必须唯一（但可以和Trigger的组和名称相同，因为它们是不同类型的）。Scheduler定义了多个接口方法，允许外部通过组及名称访问和控制容器中Trigger和JobDetail。<br>一旦注册，调度程序负责执行作业，当他们的相关联的触发器触发（当他们的预定时间到达时）。</p>
+</li>
+<li><p>QuartzSchedulerThread ：负责执行向QuartzScheduler注册的触发Trigger的工作的线程。 </p>
+</li>
+<li><p>ThreadPool：Scheduler使用一个线程池作为任务运行的基础设施，任务通过共享线程池中的线程提供运行效率。 </p>
+</li>
+<li><p>QuartzSchedulerResources：包含创建QuartzScheduler实例所需的所有资源（JobStore，ThreadPool等）。 </p>
+</li>
+<li><p>SchedulerFactory( 调度程序工厂) ：提供用于获取调度程序实例的客户端可用句柄的机制。 </p>
+</li>
+<li><p>JobStore： 通过类实现的接口，这些类要为org.quartz.core.QuartzScheduler的使用提供一个org.quartz.Job和org.quartz.Trigger存储机制。作业和触发器的存储应该以其名称和组的组合为唯一性。</p>
+</li>
+<li><p>QuartzScheduler ：这是Quartz的核心，它是org.quartz.Scheduler接口的间接实现，包含调度org.quartz.Jobs，注册org.quartz.JobListener实例等的方法。  </p>
+</li>
+</ul>
+<h2 id="定时器种类"><a href="#定时器种类" class="headerlink" title="定时器种类"></a>定时器种类</h2><p>Quartz 中五种类型的 Trigger：SimpleTrigger，CronTirgger，DateIntervalTrigger，NthIncludedDayTrigger和Calendar 类（ org.quartz.Calendar）。<br>最常用的：<br>SimpleTrigger：用来触发只需执行一次或者在给定时间触发并且重复N次且每次执行延迟一定时间的任务。<br>CronTrigger：按照日历触发，例如“每个周五”，每个月10日中午或者10：15分。</p>
+<h2 id="Quartz中的设计模式"><a href="#Quartz中的设计模式" class="headerlink" title="Quartz中的设计模式"></a>Quartz中的设计模式</h2><ol>
+<li>Builder模式<br>所有关键组件都有Builder模式来构建  <builder> 如:JobBuilder、TriggerBuilder</builder></li>
+<li>Factory模式<br>最终由Scheduler的来进行组合各种组件  <factory> 如SchedulerFactory</factory></li>
+<li>Quartz项目中大量使用组件模式，插件式设计，可插拔，耦合性低，易扩展，开发者可自行定义自己的Job、Trigger等组件</li>
+<li>链式写法,Quartz中大量使用链式写法，与jQuery的写法有几分相似，实现也比较简单，如：<pre><code> $(this).addClass(&quot;divCurrColor&quot;).next(&quot;.divContent&quot;).css(&quot;display&quot;,&quot;block&quot;);  
+newTrigger().withIdentity( &quot;trigger3&quot;, &quot;group1&quot;).startAt( startTime)
+.withSchedule(simpleSchedule().withIntervalInSeconds(10).withRepeatCount(10)).build();
+</code></pre></li>
+</ol>
+<h2 id="存储方式"><a href="#存储方式" class="headerlink" title="存储方式"></a>存储方式</h2><p>RAMJobStore:<br>优点：不要外部数据库，配置容易，运行速度快<br>缺点：因为调度程序信息是存储在被分配给JVM的内存里面，所以，当应用程序停止运行时，所有调度信息将被丢失。另外因为存储到JVM内存里面，所以可以存储多少个Job和Trigger将会受到限制<br>JDBCJobStore:<br>优点：支持集群，因为所有的任务信息都会保存到数据库中，可以控制事物，还有就是如果应用服务器关闭或者重启，任务信息都不会丢失，并且可以恢复因服务器关闭或者重启而导致执行失败的任务<br>缺点：运行速度的快慢取决与连接数据库的快慢</p>
+<h2 id="表关系和解释"><a href="#表关系和解释" class="headerlink" title="表关系和解释"></a>表关系和解释</h2><p><img src="/2017/12/27/Quartz学习——————Quartz介绍-一/quartz表结构.png" alt="quartz表结构"></p>
+<table>
+<thead>
+<tr>
+<th>Tables</th>
+<th style="text-align:center">Means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>qrtz_blob_triggers</td>
+<td style="text-align:center">Trigger作为Blob类型存储(用于Quartz用户用JDBC创建他们自己定制的Trigger类型，JobStore 并不知道如何存储实例的时候)</td>
+</tr>
+<tr>
+<td>qrtz_calendars</td>
+<td style="text-align:center">以Blob类型存储Quartz的Calendar日历信息， quartz可配置一个日历来指定一个时间范围</td>
+</tr>
+<tr>
+<td>qrtz_cron_triggers</td>
+<td style="text-align:center">存储Cron Trigger，包括Cron表达式和时区信息。</td>
+</tr>
+<tr>
+<td>qrtz_fired_triggers</td>
+<td style="text-align:center">存储与已触发的Trigger相关的状态信息，以及相联Job的执行信息</td>
+</tr>
+<tr>
+<td>qrtz_job_details</td>
+<td style="text-align:center">存储每一个已配置的Job的详细信息</td>
+</tr>
+<tr>
+<td>qrtz_locks</td>
+<td style="text-align:center">存储程序的非观锁的信息(假如使用了悲观锁)</td>
+</tr>
+<tr>
+<td>qrtz_paused_trigger_graps</td>
+<td style="text-align:center">存储已暂停的Trigger组的信息</td>
+</tr>
+<tr>
+<td>qrtz_scheduler_state</td>
+<td style="text-align:center">存储少量的有关 Scheduler的状态信息，和别的 Scheduler 实例(假如是用于一个集群中)</td>
+</tr>
+<tr>
+<td>qrtz_simple_triggers</td>
+<td style="text-align:center">存储简单的 Trigger，包括重复次数，间隔，以及已触的次数</td>
+</tr>
+<tr>
+<td>qrtz_triggers</td>
+<td style="text-align:center">存储已配置的 Trigger的信息</td>
+</tr>
+<tr>
+<td>qrzt_simprop_triggers</td>
+</tr>
+</tbody>
+</table>
+<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><pre><code>quartz.properties 
+//调度标识名 集群中每一个实例都必须使用相同的名称 （区分特定的调度器实例） 
+org.quartz.scheduler.instanceName：DefaultQuartzScheduler 
+//ID设置为自动获取 每一个必须不同 （所有调度器实例中是唯一的） 
+org.quartz.scheduler.instanceId ：AUTO 
+//数据保存方式为持久化 
+org.quartz.jobStore.class ：org.quartz.impl.jdbcjobstore.JobStoreTX 
+//表的前缀 
+org.quartz.jobStore.tablePrefix ： QRTZ_ 
+//设置为TRUE不会出现序列化非字符串类到 BLOB 时产生的类版本问题 
+//org.quartz.jobStore.useProperties ： true 
+//加入集群 true 为集群 false不是集群 
+org.quartz.jobStore.isClustered ： false 
+//调度实例失效的检查时间间隔 
+org.quartz.jobStore.clusterCheckinInterval：20000 
+//容许的最大作业延长时间 
+org.quartz.jobStore.misfireThreshold ：60000 
+//ThreadPool 实现的类名 
+org.quartz.threadPool.class：org.quartz.simpl.SimpleThreadPool 
+//线程数量 
+org.quartz.threadPool.threadCount ： 10 
+//线程优先级 
+org.quartz.threadPool.threadPriority ： 5（threadPriority 属性的最大值是常量 java.lang.Thread.MAX_PRIORITY，等于10。最小值为常量 java.lang.Thread.MIN_PRIORITY，为1） 
+//自创建父线程 
+//org.quartz.threadPool.threadsInheritContextClassLoaderOfInitializingThread： true 
+//数据库别名 
+org.quartz.jobStore.dataSource ： qzDS 
+//设置数据源 
+org.quartz.dataSource.qzDS.driver:com.mysql.jdbc.Driver 
+org.quartz.dataSource.qzDS.URL:jdbc:mysql://localhost:3306/quartz 
+org.quartz.dataSource.qzDS.user:root 
+org.quartz.dataSource.qzDS.password:123456 
+org.quartz.dataSource.qzDS.maxConnection:10
+</code></pre><h2 id="思想"><a href="#思想" class="headerlink" title="思想"></a>思想</h2><pre><code>// 1、工厂模式 构建Scheduler的Factory，其中STD为Quartz默认的Factory  
+//    开发者亦可自行实现自己的Factory;Job、Trigger等组件  
+SchedulerFactory sf = new StdSchedulerFactory();  
+
+// 2、通过SchedulerFactory构建Scheduler对象  
+Scheduler sched = sf.getScheduler();  
+
+// 3、org.quartz.DateBuilder.evenMinuteDate  -- 通过DateBuilder构建Date  
+Date runTime = evenMinuteDate( new Date());  
+
+// 4、org.quartz.JobBuilder.newJob &lt;下一分钟&gt; --通过JobBuilder构建Job  
+JobDetail job = newJob(HelloJob.class).withIdentity(&quot;job1&quot;,&quot;group1&quot;).build();  
+
+// 5、通过TriggerBuilder进行构建Trigger  
+Trigger trigger = newTrigger().withIdentity(&quot;trigger1&quot;,&quot;group1&quot;)  
+            .startAt(runTime).build();  
+
+// 6、工厂模式，组装各个组件&lt;JOB，Trigger&gt;  
+sched.scheduleJob (job, trigger);  
+
+// 7、start   
+sched.start();  
+
+try {  
+  Thread.sleep(65L * 1000L);  
+} catch (Exception e) {  
+}  
+
+// 8、通过Scheduler销毁内置的Trigger和Job  
+sched.shutdown(true);      
+</code></pre><h2 id="一句话看懂Quartz"><a href="#一句话看懂Quartz" class="headerlink" title="一句话看懂Quartz"></a>一句话看懂Quartz</h2><ol>
+<li>创建调度工厂();    //工厂模式</li>
+<li>根据工厂取得调度器实例();  //工厂模式</li>
+<li>Builder模式构建子组件<job,trigger>  // builder模式, 如JobBuilder、TriggerBuilder、DateBuilder</job,trigger></li>
+<li>通过调度器组装子组件   调度器.组装&lt;子组件1,子组件2…&gt;  //工厂模式</li>
+<li>调度器.start(); //工厂模式</li>
+</ol>
+<p>参考:<br><a href="http://blog.csdn.net/guolong1983811/article/details/51501346" target="_blank" rel="external">quartz详解2：quartz由浅入深</a><br><a href="https://www.cnblogs.com/drift-ice/p/3817269.html" target="_blank" rel="external">Quartz使用总结</a><br><a href="http://blog.csdn.net/chenweitang123/article/details/37777399" target="_blank" rel="external">Quartz深入浅出(一)</a><br><a href="http://blog.csdn.net/u010648555/article/details/54863144" target="_blank" rel="external">Quartz学习——Quartz大致介绍（一）</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;介绍&quot;&gt;&lt;a href=&quot;#介绍&quot; class=&quot;headerlink&quot; title=&quot;介绍&quot;&gt;&lt;/a&gt;介绍&lt;/h2&gt;&lt;p&gt;Quartz是OpenSymphony开源组织在Job scheduling领域又一个开源项目，是完全由java开发的一个开源的任务日程管理
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>Oracle VM VirtualBox配置虚拟网卡(桥接),实现主机-虚拟机网络互通</title>
@@ -425,9 +1216,9 @@ public class HttpServiceTest {
       <category term="HttpClient" scheme="http://wangyuanjun.cn/categories/HttpClient/"/>
     
     
-      <category term="HttpClient" scheme="http://wangyuanjun.cn/tags/HttpClient/"/>
-    
       <category term="SpringBoot" scheme="http://wangyuanjun.cn/tags/SpringBoot/"/>
+    
+      <category term="HttpClient" scheme="http://wangyuanjun.cn/tags/HttpClient/"/>
     
   </entry>
   
@@ -706,9 +1497,9 @@ public class WebServiceTest {
       <category term="WebService" scheme="http://wangyuanjun.cn/categories/WebService/"/>
     
     
-      <category term="SpringBoot" scheme="http://wangyuanjun.cn/tags/SpringBoot/"/>
-    
       <category term="WebService" scheme="http://wangyuanjun.cn/tags/WebService/"/>
+    
+      <category term="SpringBoot" scheme="http://wangyuanjun.cn/tags/SpringBoot/"/>
     
   </entry>
   
@@ -1110,593 +1901,6 @@ private RedisTemplate&lt;String, DataGroup&gt; redisTemplate;
     
     
       <category term="SpringBoot" scheme="http://wangyuanjun.cn/tags/SpringBoot/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SpringMVC中使用aop注解无效的问题</title>
-    <link href="http://wangyuanjun.cn/2017/09/28/SpringMVC%E4%B8%AD%E4%BD%BF%E7%94%A8aop%E6%B3%A8%E8%A7%A3%E6%97%A0%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98/"/>
-    <id>http://wangyuanjun.cn/2017/09/28/SpringMVC中使用aop注解无效的问题/</id>
-    <published>2017-09-28T06:47:46.000Z</published>
-    <updated>2017-12-18T01:50:02.871Z</updated>
-    
-    <content type="html"><![CDATA[<p>最近在做一个项目,项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.git</a><br>写日志注解完，进行测试时，发现日志注解没有生效，代码如下:</p>
-<p>定义注解:</p>
-<pre><code>@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-public @interface SysLog {
-
-    String action() default &quot;&quot;;//动作
-
-}    
-</code></pre><p>切面:</p>
-<pre><code>@Aspect
-@Component
-public class SysLogAspect {
-
-    @Autowired
-    private SysLogService sysLogService;
-
-    @Pointcut(&quot;@annotation(com.wyj.annotation.SysLog)&quot;)
-    public void pointCut(){}
-
-    @Around(&quot;pointCut()&quot;)
-    public Object aroud(ProceedingJoinPoint joinPoint) throws Throwable{
-
-        // 开始时间
-        long beginTime = System.currentTimeMillis();
-
-        //执行目标方法
-        Object result = joinPoint.proceed();
-
-        //执行时长(毫秒)
-        long time = System.currentTimeMillis() - beginTime;
-
-        //保存日志
-        saveSysLog(joinPoint, time);
-        return result;
-    }
-}
-</code></pre><p>applicationContext.xml 配置:</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot; xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-    xmlns:p=&quot;http://www.springframework.org/schema/p&quot; xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xsi:schemaLocation=&quot;   
-         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd   
-   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd   
-   http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd   
-   http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd&quot;&gt;
-
-    &lt;bean id=&quot;propertyConfigurer&quot;
-        class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&gt;
-        &lt;property name=&quot;locations&quot;&gt;
-            &lt;list&gt;
-                &lt;value&gt;classpath:jdbc.properties&lt;/value&gt;
-            &lt;/list&gt;
-        &lt;/property&gt;
-    &lt;/bean&gt;
-
-    &lt;context:annotation-config /&gt;
-
-    &lt;context:component-scan base-package=&quot;com.wyj&quot; use-default-filters=&quot;false&quot;&gt;
-        &lt;context:exclude-filter type=&quot;annotation&quot; expression=&quot;org.springframework.stereotype.Controller&quot;/&gt;
-        &lt;context:exclude-filter type=&quot;annotation&quot; expression=&quot;org.springframework.web.bind.annotation.ControllerAdvice&quot; /&gt;
-    &lt;/context:component-scan&gt;
-
-    &lt;aop:aspectj-autoproxy proxy-target-class=&quot;true&quot; /&gt;
-&lt;/beans&gt;
-</code></pre><p>controller代码:</p>
-<pre><code>@Controller
-@RequestMapping(value = &quot;/user&quot;)
-public class UserController {
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-    @Autowired
-    private UserService userService;
-
-    @SysLog(action=&quot;新增/编辑用户&quot;)
-    @ResponseBody
-    @RequestMapping(value = &quot;/add&quot;, method = RequestMethod.POST)
-    public Retval save(User user) {
-        Retval retval = Retval.newInstance();
-        try {
-            if (user.getUserId() == null) {
-                userService.saveUser(user);
-            } else {
-                userService.updateUser(user);
-            }
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-        return retval;
-    }
-}
-</code></pre><p>和别人讨论了下，大致是Spring上下文的问题<br>我的AOP配置是这样的：AOP命名空间和<aop:aspectj-autoproxy proxy-target-class="true />这两个都配在了ApplicationContext.xml里面了，而不是SpringMVC框架自己约定的配置文件中（我这个项目里面，这个配置文件叫做springmvc-servlet.xml），正因为这样，出问题了。后来，我把AOP命名空间和<aop:aspectj-autoproxy  proxy-target-class=" true="">挪到SpringMVC自己的配置文件里面，AOP就生效了。</aop:aspectj-autoproxy></p>
-<p>代码如下:<br>springmvc-servlet.xml:</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-    xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot; xmlns:mvc=&quot;http://www.springframework.org/schema/mvc&quot;
-    xmlns:p=&quot;http://www.springframework.org/schema/p&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
-            http://www.springframework.org/schema/beans/spring-beans.xsd
-            http://www.springframework.org/schema/mvc
-            http://www.springframework.org/schema/mvc/spring-mvc.xsd
-                    http://www.springframework.org/schema/aop 
-        http://www.springframework.org/schema/aop/spring-aop-4.0.xsd 
-            http://www.springframework.org/schema/context
-            http://www.springframework.org/schema/context/spring-context.xsd&quot;
-    default-lazy-init=&quot;true&quot;&gt;
-
-    &lt;mvc:annotation-driven /&gt;
-
-    &lt;mvc:annotation-driven
-        content-negotiation-manager=&quot;contentNegotiationManager&quot;&gt;
-        &lt;mvc:message-converters register-defaults=&quot;true&quot;&gt;
-            &lt;bean class=&quot;org.springframework.http.converter.StringHttpMessageConverter&quot;&gt;
-                &lt;constructor-arg value=&quot;UTF-8&quot; /&gt;
-            &lt;/bean&gt;
-            &lt;bean
-                class=&quot;org.springframework.http.converter.json.MappingJackson2HttpMessageConverter&quot;&gt;
-                &lt;property name=&quot;prettyPrint&quot; value=&quot;true&quot; /&gt;
-            &lt;/bean&gt;
-        &lt;/mvc:message-converters&gt;
-    &lt;/mvc:annotation-driven&gt;
-
-    &lt;bean id=&quot;contentNegotiationManager&quot;
-        class=&quot;org.springframework.web.accept.ContentNegotiationManagerFactoryBean&quot;&gt;
-        &lt;property name=&quot;ignoreAcceptHeader&quot; value=&quot;true&quot; /&gt;
-        &lt;property name=&quot;defaultContentType&quot; value=&quot;application/json&quot; /&gt;
-        &lt;property name=&quot;mediaTypes&quot;&gt;
-            &lt;value&gt;
-                json=application/json
-                xml=application/xml
-            &lt;/value&gt;
-        &lt;/property&gt;
-    &lt;/bean&gt;
-
-    &lt;context:component-scan base-package=&quot;com.wyj&quot;&gt;&lt;/context:component-scan&gt;
-
-    &lt;bean id=&quot;viewResolver&quot;
-        class=&quot;org.springframework.web.servlet.view.UrlBasedViewResolver&quot;&gt;
-        &lt;property name=&quot;viewClass&quot;
-            value=&quot;org.springframework.web.servlet.view.JstlView&quot; /&gt;
-        &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/views/&quot; /&gt;
-        &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot; /&gt;
-    &lt;/bean&gt;
-
-    &lt;mvc:resources location=&quot;/resources/**&quot; mapping=&quot;/resources/**&quot; /&gt;
-
-    &lt;aop:aspectj-autoproxy proxy-target-class=&quot;true&quot; /&gt;
-&lt;/beans&gt;
-</code></pre><p>另外以上所述的是对controller进行切面时的配置，如果是对service进行切面，那么</p>
-<p><context:component-scan base-package="com.wyj"></context:component-scan></p>
-<aop:aspectj-autoproxy>
-
-<p>这两个注释就要用在ApplicationContext.xml里面了，注意此时不要开启aop的cglib代理模式。</p>
-<p>解释：</p>
-<p>1.SpringMVC这个框架简化了很多的配置，但是请注意@Controller和@Service都是SpringMVC框架包里面的，也就是说，这些类的实例化以及注入也是由SpringMVC这个框架完成的（确切的来说是这个框架自己有的上下文的IoC容器完成的）。</p>
-<p>2.而对AOP和事务的支持是Spring框架本身完成的，是Spring框架的应用上下文所扫描并处理的。</p>
-<p>从1.2可以得出一个结论，如果SpringMVC和Spring本身用的是一个应用上下文，一个Ioc容器，那随便你的<aop:aspectj-autoproxy>和命名空间配置在哪里，无论是Spring的ApplicationContext.xml还是SpringMVC的springmvc-servlet.xml里面，反正都是一个容器，怎么扫描，怎么处理都能找到。</aop:aspectj-autoproxy></p>
-<p>但关键的是以上假设不成立，总的来说SpringMVC的应用上下文的 “ 父 ” 上下文才是Spring的应用上下文。那么这个也就是说Spring的应用上下文初始化完成的时候，它开始扫描到底哪些Bean用了AspectJ的注解，哪些用了Transactional的注解，但是利用SpringMVC注解配置的这些Bean它是找不到的，因为用了这些注解的Bean还没有被实例化甚至是还没有被装载，为什么呢？因为管理这些bean的SpringMVC的上下文可能还没有完成初始化。OK，既然Spring的上下文找不到到底哪些Bean应用了注解，那他自然也没有办法给这些Bean提供声明式AOP和事务的支持了。</p>
-<p>至于为什么SpringMVC的应用上下文的 “ 父 ” 上下文才是Spring的应用上下文，这里有大牛为我们详解：<a href="http://blog.csdn.net/c289054531/article/details/9196149" target="_blank" rel="external">http://blog.csdn.net/c289054531/article/details/9196149</a></p>
-<p>另外，Spring中的切面类固然要用@Aspect标注，但也不要忘了用@Componet标注，这样才能被注册到容器中</p>
-</aop:aspectj-autoproxy>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;最近在做一个项目,项目地址: &lt;a href=&quot;https://github.com/wangyuanjun008/wyj-parent.git&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/wangyuanjun00
-    
-    </summary>
-    
-      <category term="spring" scheme="http://wangyuanjun.cn/categories/spring/"/>
-    
-    
-      <category term="SpringMVC" scheme="http://wangyuanjun.cn/tags/SpringMVC/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用Spring配置shiro时,自定义Realm中属性无法使用注解注入解决办法</title>
-    <link href="http://wangyuanjun.cn/2017/09/21/%E4%BD%BF%E7%94%A8Spring%E9%85%8D%E7%BD%AEshiro%E6%97%B6-%E8%87%AA%E5%AE%9A%E4%B9%89Realm%E4%B8%AD%E5%B1%9E%E6%80%A7%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8%E6%B3%A8%E8%A7%A3%E6%B3%A8%E5%85%A5%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/"/>
-    <id>http://wangyuanjun.cn/2017/09/21/使用Spring配置shiro时-自定义Realm中属性无法使用注解注入解决办法/</id>
-    <published>2017-09-21T15:30:17.000Z</published>
-    <updated>2017-12-18T15:04:30.739Z</updated>
-    
-    <content type="html"><![CDATA[<p>项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.github.com</a><br>最近在使用shiro框架与系统集成的时候，启动报错如下:</p>
-<pre><code>org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;shiroFilter&apos; defined in class path resource [spring-context-shiro.xml]: Cannot resolve reference to bean &apos;securityManager&apos; while setting bean property &apos;securityManager&apos;; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;securityManager&apos; defined in class path resource [spring-context-shiro.xml]: Cannot resolve reference to bean &apos;userRealm&apos; while setting bean property &apos;realm&apos;; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;userRealm&apos;: Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private com.wyj.service.system.UserService com.wyj.shiro.realm.UserRealm.userService; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [com.wyj.service.system.UserService] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
-at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:328) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:107) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1456) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1197) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:537) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:475) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:304) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:228) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:300) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-at org.springframework.context.support.PostProcessorRegistrationDelegate.registerBeanPostProcessors(PostProcessorRegistrationDelegate.java:232) ~[spring-context-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-at org.springframework.context.support.AbstractApplicationContext.registerBeanPostProcessors(AbstractApplicationContext.java:618) ~[spring-context-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:467) ~[spring-context-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-at org.springframework.web.context.ContextLoader.configureAndRefreshWebApplicationContext(ContextLoader.java:403) ~[spring-web-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-at org.springframework.web.context.ContextLoader.initWebApplicationContext(ContextLoader.java:306) ~[spring-web-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-at org.springframework.web.context.ContextLoaderListener.contextInitialized(ContextLoaderListener.java:106) [spring-web-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-at org.apache.catalina.core.StandardContext.listenerStart(StandardContext.java:4729) [catalina.jar:na]
-at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:5167) [catalina.jar:na]
-at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:150) [catalina.jar:na]
-at org.apache.catalina.core.ContainerBase.addChildInternal(ContainerBase.java:725) [catalina.jar:na]
-at org.apache.catalina.core.ContainerBase.addChild(ContainerBase.java:701) [catalina.jar:na]
-at org.apache.catalina.core.StandardHost.addChild(StandardHost.java:717) [catalina.jar:na]
-at org.apache.catalina.startup.HostConfig.deployDescriptor(HostConfig.java:586) [catalina.jar:8.0.26.B]
-at org.apache.catalina.startup.HostConfig$DeployDescriptor.run(HostConfig.java:1750) [catalina.jar:8.0.26.B]
-at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511) [na:1.8.0_77]
-at java.util.concurrent.FutureTask.run(FutureTask.java:266) [na:1.8.0_77]
-at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142) [na:1.8.0_77]
-at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617) [na:1.8.0_77]
-at java.lang.Thread.run(Thread.java:745) [na:1.8.0_77]
-Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;securityManager&apos; defined in class path resource [spring-context-shiro.xml]: Cannot resolve reference to bean &apos;userRealm&apos; while setting bean property &apos;realm&apos;; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;userRealm&apos;: Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private com.wyj.service.system.UserService com.wyj.shiro.realm.UserRealm.userService; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [com.wyj.service.system.UserService] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
-    at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:328) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:107) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1456) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1197) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:537) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:475) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:304) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:228) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:300) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:195) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:320) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    ... 28 common frames omitted
-Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;userRealm&apos;: Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private com.wyj.service.system.UserService com.wyj.shiro.realm.UserRealm.userService; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [com.wyj.service.system.UserService] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
-    at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:292) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1185) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:537) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:475) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:304) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:228) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:300) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:195) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:320) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    ... 38 common frames omitted
-Caused by: org.springframework.beans.factory.BeanCreationException: Could not autowire field: private com.wyj.service.system.UserService com.wyj.shiro.realm.UserRealm.userService; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [com.wyj.service.system.UserService] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
-    at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:508) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:87) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:289) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    ... 46 common frames omitted
-Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [com.wyj.service.system.UserService] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
-    at org.springframework.beans.factory.support.DefaultListableBeanFactory.raiseNoSuchBeanDefinitionException(DefaultListableBeanFactory.java:1100) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:960) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:855) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-    at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:480) ~[spring-beans-4.0.2.RELEASE.jar:4.0.2.RELEASE]
-... 48 common frames omitted
-</code></pre><p>在shiro.xml的配置是:</p>
-<pre><code>&lt;bean id=&quot;userRealm&quot; class=&quot;com.wyj.shiro.realm.UserRealm&quot;/&gt;
-</code></pre><p>UserRealm.java的代码是:</p>
-<pre><code>public class UserRealm extends AuthorizingRealm{
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private RoleService roleService;
-
-    @Autowired
-    private MenuService menuService;
-
-    /**
-     * 授权(验证权限时调用)
-     * 为当前登陆成功的用户授予权限和角色，已经登陆成功了
-     */
-    @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        ...
-        return info;
-    }
-
-    /**
-     * 认证(登录时调用)
-     * 验证当前登录的用户，获取认证信息
-     */
-    @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        ...
-        return info;
-    }
-
-}
-</code></pre><p>纠结了几个小时终于找到了问题所在,因为shiro的realm属于Filter,简单说就是初始化realm时,spring还未加载相关业务Bean,那么解决办法就是将springmvc的配置文件加载提前。</p>
-<p>解决办法<br>打开web.xml文件</p>
-<p><img src="/2017/09/21/使用Spring配置shiro时-自定义Realm中属性无法使用注解注入解决办法/shiro无法实例化bean-1.png" alt="shiro无法实例化bean-1"><br><img src="/2017/09/21/使用Spring配置shiro时-自定义Realm中属性无法使用注解注入解决办法/shiro无法实例化bean-2.png" alt="shiro无法实例化bean-2"></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;项目地址: &lt;a href=&quot;https://github.com/wangyuanjun008/wyj-parent.github.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/wangyuanjun008/
-    
-    </summary>
-    
-      <category term="shiro" scheme="http://wangyuanjun.cn/categories/shiro/"/>
-    
-    
-      <category term="shiro" scheme="http://wangyuanjun.cn/tags/shiro/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>树插件ztree异步加载数据与一次性加载全部数据的写法</title>
-    <link href="http://wangyuanjun.cn/2017/09/18/%E6%A0%91%E6%8F%92%E4%BB%B6ztree%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE%E4%B8%8E%E4%B8%80%E6%AC%A1%E6%80%A7%E5%8A%A0%E8%BD%BD%E5%85%A8%E9%83%A8%E6%95%B0%E6%8D%AE%E7%9A%84%E5%86%99%E6%B3%95/"/>
-    <id>http://wangyuanjun.cn/2017/09/18/树插件ztree异步加载数据与一次性加载全部数据的写法/</id>
-    <published>2017-09-18T13:12:47.000Z</published>
-    <updated>2017-12-25T08:23:04.531Z</updated>
-    
-    <content type="html"><![CDATA[<p>最近在做一个项目,项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.github.com</a><br>用到了ztree树，给大家分享异步加载数据与一次性加载数据的写法</p>
-<p>异步加载数据是为了防止大数据量而造成树卡死的情况,代码如下:<br>前台js:</p>
-<pre><code>&lt;div class=&quot;col-lg-12&quot; style=&quot;height:300px; overflow:scroll;&quot;&gt;
-    &lt;ul id=&quot;treeDemo&quot; class=&quot;ztree&quot;&gt;&lt;/ul&gt;
-&lt;/div&gt;
-function setting() {
-    var setting = {
-        async : {
-            enable : true,
-            type : &quot;get&quot;,
-            url : &apos;${ctx}/menu/renderTree&apos;,
-            autoParam : [ &quot;id&quot;, &quot;type&quot; ]
-        },
-        callback : {
-            onClick : zTreeOnClick
-        }
-    };
-    return setting;
-}
-$.fn.zTree.init($(&quot;#treeDemo&quot;), setting(treeUrl));
-</code></pre><p>后台java:</p>
-<pre><code>@ResponseBody
-@RequestMapping(value = &quot;/renderTree&quot;, method = RequestMethod.GET)
-public List&lt;Map&lt;String, Object&gt;&gt; renderTree1(Long id, String type) {
-    List&lt;Map&lt;String, Object&gt;&gt; returnList = new ArrayList&lt;Map&lt;String, Object&gt;&gt;();
-    // 加载根节点
-    if (StringUtils.isEmpty(id)) {
-        Map&lt;String, Object&gt; root = new HashMap&lt;String, Object&gt;();
-
-        root.put(&quot;id&quot;, 0);// 根节点的ID
-        root.put(&quot;name&quot;, &quot;权限管理系统&quot;); // 根节点的名字
-        root.put(&quot;isParent&quot;, true);//// 设置根节点为父节点
-
-        // 加载一级节点
-        List&lt;Map&lt;String, Object&gt;&gt; returnList1 = new ArrayList&lt;Map&lt;String, Object&gt;&gt;();
-
-        List&lt;Menu&gt; menus = menuService.listOneNodeMenus();
-        for (Menu menu : menus) {
-            Map&lt;String, Object&gt; node = new HashMap&lt;String, Object&gt;();
-            node.put(&quot;id&quot;, menu.getMenuId());
-            node.put(&quot;name&quot;, menu.getName());
-            node.put(&quot;isParent&quot;, menuService.isSubNodeById(menu.getMenuId()));
-            returnList1.add(node);
-        }
-
-        root.put(&quot;children&quot;, returnList1);
-        returnList.add(root);
-        return returnList;
-    }
-
-    // 加载子节点
-    List&lt;Menu&gt; menus = null;
-    if (id != null &amp;&amp; id &gt; 0L) {
-        menus = menuService.listSubMenuByParentId(id);
-        for (Menu menu : menus) {
-            Map&lt;String, Object&gt; node = new HashMap&lt;String, Object&gt;();
-            node.put(&quot;id&quot;, menu.getMenuId());
-            node.put(&quot;name&quot;, menu.getName());
-            node.put(&quot;isParent&quot;, menuService.isSubNodeById(menu.getMenuId()));
-            returnList.add(node);
-        }
-    }
-    return returnList;
-}
-</code></pre><p>加载全部数据:<br>前台js</p>
-<pre><code>&lt;div class=&quot;col-lg-12&quot; style=&quot;height:300px; overflow:scroll;&quot;&gt;
-    &lt;ul id=&quot;treeDemo&quot; class=&quot;ztree&quot;&gt;&lt;/ul&gt;
-&lt;/div&gt;
-function setting() {
-        var setting = {
-            data : {
-                simpleData : {
-                    enable : true,
-                    idKey : &quot;menuId&quot;,
-                    pIdKey : &quot;parentId&quot;,
-                    rootPId : null
-                },
-            check: {
-                enable: true,
-                chkStyle: &quot;checkbox&quot;,
-                chkboxType: { &quot;Y&quot;: &quot;ps&quot;, &quot;N&quot;: &quot;ps&quot; }
-            }
-        };
-        return setting;
-    }
-}
-var jsonTree = getDataStore(&apos;${ctx}/auth/renderTree&apos;);//获得所有节点
-var ztree=$.fn.zTree.init($(&quot;#treeDemo&quot;), setting(),jsonTree);
-</code></pre><p>后台java:</p>
-<pre><code>@ResponseBody
-@RequestMapping(value = &quot;/renderTree&quot;, method = RequestMethod.GET)
-public List&lt;Menu&gt; renderTree() {
-    return menuService.listTree();
-}
-</code></pre><p>希望能对大家有所帮助!</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;最近在做一个项目,项目地址: &lt;a href=&quot;https://github.com/wangyuanjun008/wyj-parent.github.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/wangyu
-    
-    </summary>
-    
-      <category term="ztree" scheme="http://wangyuanjun.cn/categories/ztree/"/>
-    
-    
-      <category term="jquery" scheme="http://wangyuanjun.cn/tags/jquery/"/>
-    
-      <category term="ztree" scheme="http://wangyuanjun.cn/tags/ztree/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>在java中调用存储过程</title>
-    <link href="http://wangyuanjun.cn/2017/09/14/%E5%9C%A8java%E4%B8%AD%E8%B0%83%E7%94%A8%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/"/>
-    <id>http://wangyuanjun.cn/2017/09/14/在java中调用存储过程/</id>
-    <published>2017-09-14T01:57:48.000Z</published>
-    <updated>2017-12-18T01:49:37.303Z</updated>
-    
-    <content type="html"><![CDATA[<p>最近在做一个需要调用存储过程的功能，大多数的写法是:</p>
-<pre><code>Connection conn=null;
-    CallableStatement csmt=null;
-    try {
-        conn=JDBCUtils.getConnection();
-        conn.setAutoCommit(false);
-        csmt=conn.prepareCall(&quot;call prc_1(?,?,?)&quot;);
-        csmt.setInt(1,80);
-        csmt.setString(2,&quot;ioc&quot;);
-        csmt.setString(3,&quot;fhp&quot;);
-        csmt.execute();
-        conn.commit();
-        System.out.println(&quot;success insert data&quot;);
-    } catch (SQLException e) {
-        e.printStackTrace();
-}
-</code></pre><p>但是在运用的过程是没有效果的，后来找了另外的方法，使用了jpa注解，代码如下:</p>
-<ol>
-<li>存储过程需要依赖在实体上，在实体上加上@NamedStoredProcedureQueries注解，@NamedStoredProcedureQuery中name为java的方法名，procedureName为存储过程的名字，@StoredProcedureParameter中mode代表入参，name是参数名，type是参数类型</li>
-</ol>
-<pre><code>@Entity
-Table(name = &quot;d_cp_delivery&quot;)
-@NamedStoredProcedureQueries({ @NamedStoredProcedureQuery(name = &quot;closePurchaseorder&quot;, procedureName = &quot;SRMANLI.closePurchaseorder&quot;, parameters = { @StoredProcedureParameter(mode = ParameterMode.IN, name = &quot;i_deliveryid&quot;, type = Long.class) }) })    
-</code></pre><p>2.调用方法如下</p>
-<pre><code>//java代码
-EntityManager em;
-
-@Override
-@PersistenceContext(unitName = &quot;srment&quot;)
-public void setEntityManager(EntityManager em) {
-    super.setEntityManager(em);
-    this.em = em;
-}
-
-@Override
-public void closePurchaseorder(Long deliveryId) {
-    Query qry = em.createNativeQuery(&quot;{call srmanli.closePurchaseorder(?1)}&quot;);
-    qry.setParameter(1, deliveryId);
-    qry.executeUpdate();
-    em.clear();
-}
-
-//存储过程
-  procedure closePurchaseorder(i_deliveryid in number) is
-v_PurchaseorderDtlNum number; --
-v_reqtime             date := sysdate; --请求时间
-v_err_msg             clob; --异常
-
-begin
-
-end;
-</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;最近在做一个需要调用存储过程的功能，大多数的写法是:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;Connection conn=null;
-    CallableStatement csmt=null;
-    try {
-        conn=JDBCUtils.getConn
-    
-    </summary>
-    
-      <category term="java" scheme="http://wangyuanjun.cn/categories/java/"/>
-    
-    
-      <category term="java" scheme="http://wangyuanjun.cn/tags/java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用select2下拉框ajax加载数据时,编辑赋值的方法</title>
-    <link href="http://wangyuanjun.cn/2017/09/14/%E4%BD%BF%E7%94%A8select2%E4%B8%8B%E6%8B%89%E6%A1%86ajax%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE%E6%97%B6-%E7%BC%96%E8%BE%91%E8%B5%8B%E5%80%BC%E7%9A%84%E6%96%B9%E6%B3%95/"/>
-    <id>http://wangyuanjun.cn/2017/09/14/使用select2下拉框ajax加载数据时-编辑赋值的方法/</id>
-    <published>2017-09-13T16:19:44.000Z</published>
-    <updated>2017-12-18T01:51:14.168Z</updated>
-    
-    <content type="html"><![CDATA[<p>最近在做一个项目,项目地址: <a href="https://github.com/wangyuanjun008/wyj-parent.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-parent.github.com</a><br>使用bootstrap select2下拉框插件，ajax从后台加载数据，保存编辑后，不知道怎么为下拉框赋值，下拉框代码如下:</p>
-<pre><code>&lt;label class=&quot;col-sm-1 control-label&quot;&gt;使用状态:&lt;/label&gt;
-&lt;select id=&quot;sel_status&quot; name=&quot;status&quot; class=&quot;col-sm-3 form-control select2&quot;&gt;&lt;/select&gt;
-
-$(&quot;#sel_status&quot;).select2({
-    placeholder : &quot;--请选择--&quot;,
-    dropdownParent : $(&quot;#myModal&quot;),
-    allowClear : true,
-    width : 150,
-    ajax : {
-        url : &apos;${ctx}/dataDict/getData?groupCode=&apos;+&apos;yesOrNo&apos;,
-        dataType : &apos;json&apos;,
-        type : &apos;get&apos;,
-        data: function (params) {
-            return {
-                q: params.term, // search term 请求参数
-                page: params.page
-            };
-        },
-        processResults: function (data, params) {
-            params.page = params.page || 1;
-            return {
-                results: data,//itemList
-                pagination: {
-                    more: (params.page * 30) &lt; data.total_count
-                }
-            };
-        },
-        cache: true
-    }
- });
-</code></pre><p>通过查询api知道，在select4.0之后可以使用 $(“select”).val(“id”).trigger(“change”);为下拉框赋值<br>你会发现下拉框中的数据是点击之后才会加载数据的，使用如上方法 ‘id’是未知的，原因是在编辑的时候下拉框的数据还没有加载出来</p>
-<p>解决方法如下:</p>
-<pre><code>function getDataByGroupCode(groupCode){
-    var dataStore;
-    $.ajax({
-        dataType : &apos;json&apos;,
-        type : &apos;get&apos;,
-        url : model.dataURL+groupCode,
-        async : false,
-        success: function(data){
-            dataStore=data;
-        }
-     });
-    return dataStore;
-}    
-var dataStore = getDataByGroupCode(&apos;yesOrNo&apos;);
-
-$(&quot;#sel_status&quot;).select2({
-    placeholder : &quot;--请选择--&quot;,
-    dropdownParent : $(&quot;#myModal&quot;),
-    allowClear : true,
-    width : 150,
-    minimumResultsForSearch: -1,
-    data : dataStore
-});
-</code></pre><p>在页面加载的时候就加载下拉框数据，在编辑时就能为其赋值，问题解决!</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;最近在做一个项目,项目地址: &lt;a href=&quot;https://github.com/wangyuanjun008/wyj-parent.github.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/wangyu
-    
-    </summary>
-    
-      <category term="jquery插件" scheme="http://wangyuanjun.cn/categories/jquery%E6%8F%92%E4%BB%B6/"/>
-    
-    
-      <category term="select2" scheme="http://wangyuanjun.cn/tags/select2/"/>
     
   </entry>
   
