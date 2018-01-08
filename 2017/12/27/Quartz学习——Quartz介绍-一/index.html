@@ -1,0 +1,195 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>Quartz学习———Quartz介绍(一) | 守望的稻草人</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Quartz学习———Quartz介绍(一)</h1><a id="logo" href="/.">守望的稻草人</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">Quartz学习———Quartz介绍(一)</h1><div class="post-meta"><a href="/2017/12/27/Quartz学习——Quartz介绍-一/#comments" class="comment-count"><i id="changyan_count_unit" data-xid="2017/12/27/Quartz学习——Quartz介绍-一/"></i>留言,<i id="changyan_parti_unit" data-xid="2017/12/27/Quartz学习——Quartz介绍-一/"></i>参与</a><p><span class="date">Dec 27, 2017</span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>Quartz是OpenSymphony开源组织在Job scheduling领域又一个开源项目，是完全由java开发的一个开源的任务日程管理系统，“任务进度管理器”就是一个在预先确定（被纳入日程）的时间到达时，负责执行（或者通知）其他软件组件的系统。<br>Quartz用一个小Java库发布文件（.jar文件），这个库文件包含了所有Quartz核心功能。这些功能的主要接口(API)是Scheduler接口。它提供了简单的操作，例如：将任务纳入日程或者从日程中取消，开始/停止/暂停日程进度。</p>
+<h2 id="quartz核心概念"><a href="#quartz核心概念" class="headerlink" title="quartz核心概念"></a>quartz核心概念</h2><p>先来看一张图：<br><img src="/2017/12/27/Quartz学习——Quartz介绍-一/quartz.png" alt="quartz"></p>
+<ul>
+<li><p>Job( 任务，即被调度的任务)：要由表示要执行的“作业”的类实现的接口。只有一个方法 void execute(jobExecutionContext context) (jobExecutionContext 提供调度上下文各种信息，运行时数据保存在jobDataMap中) Job有个子接口StatefulJob ,代表有状态任务。</p>
+</li>
+<li><p>JobDetail：Quartz在每次执行Job时，都重新创建一个Job实例，所以它不直接接受一个Job的实例，相反它接收一个Job实现类，以便运行时通过newInstance()的反射机制实例化Job。因此需要通过一个类来描述Job的实现类及其它相关的静态信息，如Job名字、描述、关联监听器等信息，JobDetail承担了这一角色。<br>  传递给定作业实例的详细信息属性。 JobDetails将使用JobBuilder创建/定义。 </p>
+</li>
+<li><p>Trigger(触发器)：用于定义任务调度时间规则。是一个类，描述触发Job执行的时间触发规则。使用TriggerBuilder实例化实际触发器。主要有SimpleTrigger和CronTrigger这两个子类。当仅需触发一次或者以固定时间间隔周期执行，SimpleTrigger是最适合的选择；而CronTrigger则可以通过Cron表达式定义出各种复杂时间规则的调度方案：如每早晨9:00执行，周一、周三、周五下午5:00执行等；</p>
+</li>
+<li><p>Calendar：org.quartz.Calendar和java.util.Calendar不同，它是一些日历特定时间点的集合（可以简单地将org.quartz.Calendar看作java.util.Calendar的集合——java.util.Calendar代表一个日历时间点，无特殊说明后面的Calendar即指org.quartz.Calendar）。一个Trigger可以和多个Calendar关联，以便排除或包含某些时间点。假设，我们安排每周星期一早上10:00执行任务，但是如果碰到法定的节日，任务则不执行，这时就需要在Trigger触发机制的基础上使用Calendar进行定点排除。</p>
+</li>
+<li><p>Scheduler(任务调度器)：这是Quartz Scheduler的主要接口，代表一个Quartz的独立运行容器，Trigger和JobDetail可以注册到Scheduler中，两者在Scheduler中拥有各自的组及名称，组及名称是Scheduler查找定位容器中某一对象的依据，Trigger的组及名称必须唯一，JobDetail的组和名称也必须唯一（但可以和Trigger的组和名称相同，因为它们是不同类型的）。Scheduler定义了多个接口方法，允许外部通过组及名称访问和控制容器中Trigger和JobDetail。<br>一旦注册，调度程序负责执行作业，当他们的相关联的触发器触发（当他们的预定时间到达时）。</p>
+</li>
+<li><p>QuartzSchedulerThread ：负责执行向QuartzScheduler注册的触发Trigger的工作的线程。 </p>
+</li>
+<li><p>ThreadPool：Scheduler使用一个线程池作为任务运行的基础设施，任务通过共享线程池中的线程提供运行效率。 </p>
+</li>
+<li><p>QuartzSchedulerResources：包含创建QuartzScheduler实例所需的所有资源（JobStore，ThreadPool等）。 </p>
+</li>
+<li><p>SchedulerFactory( 调度程序工厂) ：提供用于获取调度程序实例的客户端可用句柄的机制。 </p>
+</li>
+<li><p>JobStore： 通过类实现的接口，这些类要为org.quartz.core.QuartzScheduler的使用提供一个org.quartz.Job和org.quartz.Trigger存储机制。作业和触发器的存储应该以其名称和组的组合为唯一性。</p>
+</li>
+<li><p>QuartzScheduler ：这是Quartz的核心，它是org.quartz.Scheduler接口的间接实现，包含调度org.quartz.Jobs，注册org.quartz.JobListener实例等的方法。  </p>
+</li>
+</ul>
+<h2 id="定时器种类"><a href="#定时器种类" class="headerlink" title="定时器种类"></a>定时器种类</h2><p>Quartz 中五种类型的 Trigger：SimpleTrigger，CronTirgger，DateIntervalTrigger，NthIncludedDayTrigger和Calendar 类（ org.quartz.Calendar）。<br>最常用的：<br>SimpleTrigger：用来触发只需执行一次或者在给定时间触发并且重复N次且每次执行延迟一定时间的任务。<br>CronTrigger：按照日历触发，例如“每个周五”，每个月10日中午或者10：15分。</p>
+<h2 id="Quartz中的设计模式"><a href="#Quartz中的设计模式" class="headerlink" title="Quartz中的设计模式"></a>Quartz中的设计模式</h2><ol>
+<li>Builder模式<br>所有关键组件都有Builder模式来构建  <builder> 如:JobBuilder、TriggerBuilder</builder></li>
+<li>Factory模式<br>最终由Scheduler的来进行组合各种组件  <factory> 如SchedulerFactory</factory></li>
+<li>Quartz项目中大量使用组件模式，插件式设计，可插拔，耦合性低，易扩展，开发者可自行定义自己的Job、Trigger等组件</li>
+<li>链式写法,Quartz中大量使用链式写法，与jQuery的写法有几分相似，实现也比较简单，如：<pre><code> $(this).addClass(&quot;divCurrColor&quot;).next(&quot;.divContent&quot;).css(&quot;display&quot;,&quot;block&quot;);  
+newTrigger().withIdentity( &quot;trigger3&quot;, &quot;group1&quot;).startAt( startTime)
+.withSchedule(simpleSchedule().withIntervalInSeconds(10).withRepeatCount(10)).build();
+</code></pre></li>
+</ol>
+<h2 id="存储方式"><a href="#存储方式" class="headerlink" title="存储方式"></a>存储方式</h2><p>RAMJobStore:<br>优点：不要外部数据库，配置容易，运行速度快<br>缺点：因为调度程序信息是存储在被分配给JVM的内存里面，所以，当应用程序停止运行时，所有调度信息将被丢失。另外因为存储到JVM内存里面，所以可以存储多少个Job和Trigger将会受到限制<br>JDBCJobStore:<br>优点：支持集群，因为所有的任务信息都会保存到数据库中，可以控制事物，还有就是如果应用服务器关闭或者重启，任务信息都不会丢失，并且可以恢复因服务器关闭或者重启而导致执行失败的任务<br>缺点：运行速度的快慢取决与连接数据库的快慢</p>
+<h2 id="表关系和解释"><a href="#表关系和解释" class="headerlink" title="表关系和解释"></a>表关系和解释</h2><p><img src="/2017/12/27/Quartz学习——Quartz介绍-一/quartz表结构.png" alt="quartz表结构"></p>
+<table>
+<thead>
+<tr>
+<th>Tables</th>
+<th style="text-align:center">Means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>qrtz_blob_triggers</td>
+<td style="text-align:center">Trigger作为Blob类型存储(用于Quartz用户用JDBC创建他们自己定制的Trigger类型，JobStore 并不知道如何存储实例的时候)</td>
+</tr>
+<tr>
+<td>qrtz_calendars</td>
+<td style="text-align:center">以Blob类型存储Quartz的Calendar日历信息， quartz可配置一个日历来指定一个时间范围</td>
+</tr>
+<tr>
+<td>qrtz_cron_triggers</td>
+<td style="text-align:center">存储Cron Trigger，包括Cron表达式和时区信息。</td>
+</tr>
+<tr>
+<td>qrtz_fired_triggers</td>
+<td style="text-align:center">存储与已触发的Trigger相关的状态信息，以及相联Job的执行信息</td>
+</tr>
+<tr>
+<td>qrtz_job_details</td>
+<td style="text-align:center">存储每一个已配置的Job的详细信息</td>
+</tr>
+<tr>
+<td>qrtz_locks</td>
+<td style="text-align:center">存储程序的非观锁的信息(假如使用了悲观锁)</td>
+</tr>
+<tr>
+<td>qrtz_paused_trigger_graps</td>
+<td style="text-align:center">存储已暂停的Trigger组的信息</td>
+</tr>
+<tr>
+<td>qrtz_scheduler_state</td>
+<td style="text-align:center">存储少量的有关 Scheduler的状态信息，和别的 Scheduler 实例(假如是用于一个集群中)</td>
+</tr>
+<tr>
+<td>qrtz_simple_triggers</td>
+<td style="text-align:center">存储简单的 Trigger，包括重复次数，间隔，以及已触的次数</td>
+</tr>
+<tr>
+<td>qrtz_triggers</td>
+<td style="text-align:center">存储已配置的 Trigger的信息</td>
+</tr>
+<tr>
+<td>qrzt_simprop_triggers</td>
+</tr>
+</tbody>
+</table>
+<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><pre><code>quartz.properties 
+//调度标识名 集群中每一个实例都必须使用相同的名称 （区分特定的调度器实例） 
+org.quartz.scheduler.instanceName：DefaultQuartzScheduler 
+//ID设置为自动获取 每一个必须不同 （所有调度器实例中是唯一的） 
+org.quartz.scheduler.instanceId ：AUTO 
+//数据保存方式为持久化 
+org.quartz.jobStore.class ：org.quartz.impl.jdbcjobstore.JobStoreTX 
+//表的前缀 
+org.quartz.jobStore.tablePrefix ： QRTZ_ 
+//设置为TRUE不会出现序列化非字符串类到 BLOB 时产生的类版本问题 
+//org.quartz.jobStore.useProperties ： true 
+//加入集群 true 为集群 false不是集群 
+org.quartz.jobStore.isClustered ： false 
+//调度实例失效的检查时间间隔 
+org.quartz.jobStore.clusterCheckinInterval：20000 
+//容许的最大作业延长时间 
+org.quartz.jobStore.misfireThreshold ：60000 
+//ThreadPool 实现的类名 
+org.quartz.threadPool.class：org.quartz.simpl.SimpleThreadPool 
+//线程数量 
+org.quartz.threadPool.threadCount ： 10 
+//线程优先级 
+org.quartz.threadPool.threadPriority ： 5（threadPriority 属性的最大值是常量 java.lang.Thread.MAX_PRIORITY，等于10。最小值为常量 java.lang.Thread.MIN_PRIORITY，为1） 
+//自创建父线程 
+//org.quartz.threadPool.threadsInheritContextClassLoaderOfInitializingThread： true 
+//数据库别名 
+org.quartz.jobStore.dataSource ： qzDS 
+//设置数据源 
+org.quartz.dataSource.qzDS.driver:com.mysql.jdbc.Driver 
+org.quartz.dataSource.qzDS.URL:jdbc:mysql://localhost:3306/quartz 
+org.quartz.dataSource.qzDS.user:root 
+org.quartz.dataSource.qzDS.password:123456 
+org.quartz.dataSource.qzDS.maxConnection:10
+</code></pre><h2 id="思想"><a href="#思想" class="headerlink" title="思想"></a>思想</h2><pre><code>// 1、工厂模式 构建Scheduler的Factory，其中STD为Quartz默认的Factory  
+//    开发者亦可自行实现自己的Factory;Job、Trigger等组件  
+SchedulerFactory sf = new StdSchedulerFactory();  
+
+// 2、通过SchedulerFactory构建Scheduler对象  
+Scheduler sched = sf.getScheduler();  
+
+// 3、org.quartz.DateBuilder.evenMinuteDate  -- 通过DateBuilder构建Date  
+Date runTime = evenMinuteDate( new Date());  
+
+// 4、org.quartz.JobBuilder.newJob &lt;下一分钟&gt; --通过JobBuilder构建Job  
+JobDetail job = newJob(HelloJob.class).withIdentity(&quot;job1&quot;,&quot;group1&quot;).build();  
+
+// 5、通过TriggerBuilder进行构建Trigger  
+Trigger trigger = newTrigger().withIdentity(&quot;trigger1&quot;,&quot;group1&quot;)  
+            .startAt(runTime).build();  
+
+// 6、工厂模式，组装各个组件&lt;JOB，Trigger&gt;  
+sched.scheduleJob (job, trigger);  
+
+// 7、start   
+sched.start();  
+
+try {  
+  Thread.sleep(65L * 1000L);  
+} catch (Exception e) {  
+}  
+
+// 8、通过Scheduler销毁内置的Trigger和Job  
+sched.shutdown(true);      
+</code></pre><h2 id="一句话看懂Quartz"><a href="#一句话看懂Quartz" class="headerlink" title="一句话看懂Quartz"></a>一句话看懂Quartz</h2><ol>
+<li>创建调度工厂();    //工厂模式</li>
+<li>根据工厂取得调度器实例();  //工厂模式</li>
+<li>Builder模式构建子组件<job,trigger>  // builder模式, 如JobBuilder、TriggerBuilder、DateBuilder</job,trigger></li>
+<li>通过调度器组装子组件   调度器.组装&lt;子组件1,子组件2…&gt;  //工厂模式</li>
+<li>调度器.start(); //工厂模式</li>
+</ol>
+<p>参考:<br><a href="http://blog.csdn.net/guolong1983811/article/details/51501346" target="_blank" rel="external">quartz详解2：quartz由浅入深</a><br><a href="https://www.cnblogs.com/drift-ice/p/3817269.html" target="_blank" rel="external">Quartz使用总结</a><br><a href="http://blog.csdn.net/chenweitang123/article/details/37777399" target="_blank" rel="external">Quartz深入浅出(一)</a><br><a href="http://blog.csdn.net/u010648555/article/details/54863144" target="_blank" rel="external">Quartz学习——Quartz大致介绍（一）</a></p>
+</div><div class="tags"></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/12/28/Dubbo学习——Dubbo介绍-一/" class="pre">Dubbo学习——Dubbo介绍(一)</a><a href="/2017/12/25/Oracle-VM-VirtualBox配置虚拟网卡-桥接-实现主机-虚拟机网络互通/" class="next">Oracle VM VirtualBox配置虚拟网卡(桥接),实现主机-虚拟机网络互通</a></div><div id="comments"><div id="SOHUCS" sid="2017/12/27/Quartz学习——Quartz介绍-一/"></div></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#介绍"><span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#quartz核心概念"><span class="toc-text">quartz核心概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#定时器种类"><span class="toc-text">定时器种类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Quartz中的设计模式"><span class="toc-text">Quartz中的设计模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存储方式"><span class="toc-text">存储方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#表关系和解释"><span class="toc-text">表关系和解释</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置文件"><span class="toc-text">配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思想"><span class="toc-text">思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一句话看懂Quartz"><span class="toc-text">一句话看懂Quartz</span></a></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/01/03/Quartz学习——Quartz简单入门Demo-二/">Quartz学习——Quartz简单入门Demo(二)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/03/Docker之创建并进入mysql容器/">Docker之创建并进入mysql容器</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/03/常用mysql命令大全/">常用mysql命令大全</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/28/Dubbo学习——Dubbo介绍-一/">Dubbo学习——Dubbo介绍(一)</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/27/Quartz学习——Quartz介绍-一/">Quartz学习———Quartz介绍(一)</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/25/Oracle-VM-VirtualBox配置虚拟网卡-桥接-实现主机-虚拟机网络互通/">Oracle VM VirtualBox配置虚拟网卡(桥接),实现主机-虚拟机网络互通</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/25/解决虚拟机安装linux后首次输入ifconfig-IP地址显示为127-0-0-1/">解决虚拟机安装linux后首次输入ifconfig IP地址显示为127.0.0.1</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/25/解决项目war包部署到linux系统的tomcat中访问页面报404错误/">解决项目war包部署到linux系统的tomcat中访问页面报404错误</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/25/Java-Web项目导出war包并部署到linux系统的tomcat中/">Java Web项目导出war包并部署到linux系统的tomcat中</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/SpringBoot发布HttpClient服务和客户端调用HttpClient服务/">SpringBoot发布HttpClient服务和客户端调用HttpClient服务</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HttpClient/">HttpClient</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/WebService/">WebService</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/axios/">axios</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/element-ui/">element ui</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/extjs/">extjs</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/maven/">maven</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mybatis/">mybatis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/oracle/">oracle</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/select2/">select2</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/shiro/">shiro</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/spring/">spring</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/tomcat/">tomcat</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/weblogic/">weblogic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/webpack/">webpack</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ztree/">ztree</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编码规范/">编码规范</a><span class="category-list-count">1</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/webpack/" style="font-size: 15px;">webpack</a> <a href="/tags/docker/" style="font-size: 15px;">docker</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/maven/" style="font-size: 15px;">maven</a> <a href="/tags/tomcat/" style="font-size: 15px;">tomcat</a> <a href="/tags/redis/" style="font-size: 15px;">redis</a> <a href="/tags/Oracle-VM-VirtualBox/" style="font-size: 15px;">Oracle VM VirtualBox</a> <a href="/tags/linux/" style="font-size: 15px;">linux</a> <a href="/tags/spring-aop/" style="font-size: 15px;">spring aop</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/SpringMVC/" style="font-size: 15px;">SpringMVC</a> <a href="/tags/WebService/" style="font-size: 15px;">WebService</a> <a href="/tags/SpringBoot/" style="font-size: 15px;">SpringBoot</a> <a href="/tags/HttpClient/" style="font-size: 15px;">HttpClient</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/extjs/" style="font-size: 15px;">extjs</a> <a href="/tags/mybatis/" style="font-size: 15px;">mybatis</a> <a href="/tags/jquery/" style="font-size: 15px;">jquery</a> <a href="/tags/ztree/" style="font-size: 15px;">ztree</a> <a href="/tags/shiro/" style="font-size: 15px;">shiro</a> <a href="/tags/weblogic/" style="font-size: 15px;">weblogic</a> <a href="/tags/element-ui/" style="font-size: 15px;">element ui</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/java基础/" style="font-size: 15px;">java基础</a> <a href="/tags/axios/" style="font-size: 15px;">axios</a> <a href="/tags/git/" style="font-size: 15px;">git</a> <a href="/tags/select2/" style="font-size: 15px;">select2</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/oracle/" style="font-size: 15px;">oracle</a> <a href="/tags/编码规范/" style="font-size: 15px;">编码规范</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-you"> 友情链接</i></div><ul></ul><a href="https://github.com/wangyuanjun008" title="GitHub" target="_blank">GitHub</a></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">WangYuanJun.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script><script>window._config = { showScore: true };
+(function(){ 
+  var appid = 'cytn089Dg'; 
+  var conf = '4501ebcf59ba2646236d1827a7751555'; 
+  var width = window.innerWidth || document.documentElement.clientWidth; 
+  var nodes =document.getElementsByTagName("head")[0]||document.head||document.documentElement;
+  if (/(Android|iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent) && width < 750) {  
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+  }
+  else { 
+    var loadJs=function(d,a){
+      var b=document.createElement("script");b.setAttribute("type","text/javascript");
+      b.setAttribute("charset","UTF-8");
+      b.setAttribute("src",d);
+      if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}
+      nodes.appendChild(b)
+    };
+    loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); 
+  } 
+  var loadCss = function(cssString){  
+    var style=document.createElement("style");  
+    style.setAttribute("type", "text/css");  
+    if(style.styleSheet){// IE  
+        style.styleSheet.cssText = cssString;  
+    } else {// w3c  
+        var cssText = document.createTextNode(cssString);  
+        style.appendChild(cssText);  
+    }
+    nodes.appendChild(style);
+  }
+  window.onload=function(){loadCss('.module-hot-topic,.module-cmt-float-bar{display:none!important}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .wrap-action-w .cbox-prompt-w span.prompt-empty-w,#SOHUCS #SOHU_MAIN .module-cmt-float-bar .wrap-cont-w .cont-form-w .form-text-w span.text-null,#SOHUCS #SOHU_MAIN .module-cmt-float-bar .wrap-cont-w .cont-minwidth-w div.cont-comment-w a.comment-link-w,#SOHUCS #SOHU_MAIN .module-cmt-float-bar .wrap-cont-w .cont-minwidth-w div.cont-comment-w span.comment-text-w,#SOHUCS #SOHU_MAIN .module-cmt-footer .section-service-w div.service-wrap-w a:hover,#SOHUCS #SOHU_MAIN .module-cmt-header .section-cbox-w .block-head-w div.header-login,#SOHUCS #SOHU_MAIN .module-cmt-header .section-title-w .title-user-w .user-wrap-w span.wrap-name-w,#SOHUCS #SOHU_MAIN .module-cmt-list .action-click-gw span.click-disable-eg a em.icon-name-bg,#SOHUCS #SOHU_MAIN .module-cmt-list .block-title-gw ul li div.title-name-gw,#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type .cmt-list-number .comment-number span.cy-number,#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type .cmt-list-number span.comment-number,#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type .type-lists li.active,#SOHUCS #SOHU_MAIN .module-cmt-list .msg-wrap-gw .wrap-action-gw .action-click-gw span a:hover,#SOHUCS #SOHU_MAIN .module-cmt-list .picture-box-gw div.box-action-gw a:hover,#SOHUCS #SOHU_MAIN .module-cmt-list .wrap-action-gw .action-click-gw span a:hover em.icon-name-bg,#SOHUCS #SOHU_MAIN .module-cmt-list .wrap-user-gw span.user-name-gw a{color:#40759b!important}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .post-wrap-border-t div.post-wrap-border-t-r,#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w div.post-wrap-border-l,#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w div.post-wrap-border-r{display:none!important}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .post-wrap-border-t div.post-wrap-border-t-l{background:#FFF!important;top:-2px!important}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .wrap-action-w .action-function-w .uploading-wrapper-dw div.wrapper-image-dw,#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w div.post-wrap-main,#SOHUCS #SOHU_MAIN .module-cmt-float-bar .wrap-cont-w .cont-form-w div.form-text-w,#SOHUCS #SOHU_MAIN .module-cmt-header .section-cbox-w .block-head-w div.header-login,#SOHUCS #SOHU_MAIN .module-cmt-list .module-cmt-box .post-wrap-w div.post-wrap-main{border:1px solid #e6e6e6!important;border-radius:20px 20px 20px 20px;margin:0!important}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .wrap-action-w .action-issue-w .issue-btn-w a .btn-fw{width:130px!important;height:34px!important;line-height:33px!important;font-size:17px!important;background:#5483b1!important;border-radius:20px!important;color:#FFF!important;-webkit-box-shadow:0 -1px 4px #5483b1 inset;box-shadow:0 -1px 10px #5483b1 inset}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .wrap-action-w .action-issue-w .issue-btn-w a .btn-fw:before{content:"发表评论"}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .wrap-action-w .action-issue-w .issue-btn-w a:hover .btn-fw{color:#40759b!important;background:#FFF!important}#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type .type-lists li{background:none!important;border-bottom:1px solid #e6e6e6}#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type .type-lists li.active{border:1px solid #e6e6e6;border-radius:10px 10px 0 0;border-bottom:none}#SOHUCS #SOHU_MAIN .module-cmt-list .block-title-gw ul li .title-name-gw div.title-name-gw-tag{background:#5483b1!important;border-radius:3px}#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type div.cmt-list-border{background-color:#e6e6e6!important}#SOHUCS #SOHU_MAIN .module-cmt-notice ul.nt-list li.nt-item{border:1px solid #e6e6e6!important}#SOHUCS #SOHU_MAIN .module-cmt-notice ul.nt-list li.nt-item .nt-logo{text-align:center;line-height:40px;border-radius:50%!important;background:#e6e6e6!important}#SOHUCS #SOHU_MAIN .module-cmt-notice ul.nt-list li.nt-item .nt-logo:before{content:"畅";font-size:22px;color:#FFF}#SOHUCS #SOHU_MAIN .module-cmt-notice ul.nt-list li.nt-item a.nt-text,#SOHUCS #SOHU_MAIN .module-cmt-notice ul.nt-list li.nt-item a.nt-text i{color:#5483b1!important}#SOHUCS #SOHU_MAIN .module-cmt-header .section-title-w .title-user-w .user-wrap-w{background:#FFF!important}');};
+})();</script><script src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script></body></html>

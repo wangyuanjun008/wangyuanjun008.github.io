@@ -17,8 +17,8 @@
   
   <entry>
     <title>Quartz学习——Quartz简单入门Demo(二)</title>
-    <link href="http://wangyuanjun.cn/2018/01/03/Quartz%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Quartz%E7%AE%80%E5%8D%95%E5%85%A5%E9%97%A8De-%E4%BA%8C/"/>
-    <id>http://wangyuanjun.cn/2018/01/03/Quartz学习——Quartz简单入门De-二/</id>
+    <link href="http://wangyuanjun.cn/2018/01/03/Quartz%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Quartz%E7%AE%80%E5%8D%95%E5%85%A5%E9%97%A8Demo-%E4%BA%8C/"/>
+    <id>http://wangyuanjun.cn/2018/01/03/Quartz学习——Quartz简单入门Demo-二/</id>
     <published>2018-01-03T07:50:18.000Z</published>
     <updated>2018-01-08T06:34:41.225Z</updated>
     
@@ -119,8 +119,8 @@ public class RAMQuartzTest {
         logger.debug(&quot;启动时间 ：&quot;+new Date());
     }
 }
-</code></pre><p>运行结果：<br>SimpleScheduleBuilder：<br><img src="/2018/01/03/Quartz学习——Quartz简单入门De-二/SimpleRAMTest.png" alt="SimpleRAMTest"></p>
-<p>CronScheduleBuilder：<br><img src="/2018/01/03/Quartz学习——Quartz简单入门De-二/CronRAMTest.png" alt="CronRAMTest"></p>
+</code></pre><p>运行结果：<br>SimpleScheduleBuilder：<br><img src="/2018/01/03/Quartz学习——Quartz简单入门Demo-二/SimpleRAMTest.png" alt="SimpleRAMTest"></p>
+<p>CronScheduleBuilder：<br><img src="/2018/01/03/Quartz学习——Quartz简单入门Demo-二/CronRAMTest.png" alt="CronRAMTest"></p>
 <h2 id="JDBC方式"><a href="#JDBC方式" class="headerlink" title="JDBC方式"></a>JDBC方式</h2><p>使用jdbc方式，就要配置quartz.properties文件，并且在开始的时候在数据库中新增表！<br>我使用的数据库是mysql，数据库中表在wyj-quartz-demo项目里面有，需要的请在里面下载！<br>运行 tables_mysql.sql 这个文件。</p>
 <pre><code>#配置数据源属性  
 org.quartz.dataSource.qzDS.driver:com.mysql.jdbc.Driver
@@ -261,8 +261,8 @@ public class QuartzJdbcTest {
         }
     }
 }
-</code></pre><p>运行结果：<br>数据库信息：<br><img src="/2018/01/03/Quartz学习——Quartz简单入门De-二/jdbcTest1.png" alt="jdbcTest1"></p>
-<p>控制台信息：<br><img src="/2018/01/03/Quartz学习——Quartz简单入门De-二/jdbcTest2.png" alt="jdbcTest2"></p>
+</code></pre><p>运行结果：<br>数据库信息：<br><img src="/2018/01/03/Quartz学习——Quartz简单入门Demo-二/jdbcTest1.png" alt="jdbcTest1"></p>
+<p>控制台信息：<br><img src="/2018/01/03/Quartz学习——Quartz简单入门Demo-二/jdbcTest2.png" alt="jdbcTest2"></p>
 <p><strong>注意</strong>:<font color="red">Cron和Simple类型，Simple类型的如果JobDetail没有设置.storeDurably(true)，则job在运行完成之后会在数据库中删除！</font></p>
 ]]></content>
     
@@ -628,13 +628,13 @@ insert into teacher values(&apos;&apos;&apos;&apos;,&apos;&apos;jack&apos;&apos;
   
   <entry>
     <title>Quartz学习———Quartz介绍(一)</title>
-    <link href="http://wangyuanjun.cn/2017/12/27/Quartz%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E2%80%94Quartz%E4%BB%8B%E7%BB%8D-%E4%B8%80/"/>
-    <id>http://wangyuanjun.cn/2017/12/27/Quartz学习——————Quartz介绍-一/</id>
+    <link href="http://wangyuanjun.cn/2017/12/27/Quartz%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Quartz%E4%BB%8B%E7%BB%8D-%E4%B8%80/"/>
+    <id>http://wangyuanjun.cn/2017/12/27/Quartz学习——Quartz介绍-一/</id>
     <published>2017-12-27T15:02:10.000Z</published>
     <updated>2018-01-08T06:34:38.709Z</updated>
     
     <content type="html"><![CDATA[<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>Quartz是OpenSymphony开源组织在Job scheduling领域又一个开源项目，是完全由java开发的一个开源的任务日程管理系统，“任务进度管理器”就是一个在预先确定（被纳入日程）的时间到达时，负责执行（或者通知）其他软件组件的系统。<br>Quartz用一个小Java库发布文件（.jar文件），这个库文件包含了所有Quartz核心功能。这些功能的主要接口(API)是Scheduler接口。它提供了简单的操作，例如：将任务纳入日程或者从日程中取消，开始/停止/暂停日程进度。</p>
-<h2 id="quartz核心概念"><a href="#quartz核心概念" class="headerlink" title="quartz核心概念"></a>quartz核心概念</h2><p>先来看一张图：<br><img src="/2017/12/27/Quartz学习——————Quartz介绍-一/quartz.png" alt="quartz"></p>
+<h2 id="quartz核心概念"><a href="#quartz核心概念" class="headerlink" title="quartz核心概念"></a>quartz核心概念</h2><p>先来看一张图：<br><img src="/2017/12/27/Quartz学习——Quartz介绍-一/quartz.png" alt="quartz"></p>
 <ul>
 <li><p>Job( 任务，即被调度的任务)：要由表示要执行的“作业”的类实现的接口。只有一个方法 void execute(jobExecutionContext context) (jobExecutionContext 提供调度上下文各种信息，运行时数据保存在jobDataMap中) Job有个子接口StatefulJob ,代表有状态任务。</p>
 </li>
@@ -670,7 +670,7 @@ newTrigger().withIdentity( &quot;trigger3&quot;, &quot;group1&quot;).startAt( st
 </code></pre></li>
 </ol>
 <h2 id="存储方式"><a href="#存储方式" class="headerlink" title="存储方式"></a>存储方式</h2><p>RAMJobStore:<br>优点：不要外部数据库，配置容易，运行速度快<br>缺点：因为调度程序信息是存储在被分配给JVM的内存里面，所以，当应用程序停止运行时，所有调度信息将被丢失。另外因为存储到JVM内存里面，所以可以存储多少个Job和Trigger将会受到限制<br>JDBCJobStore:<br>优点：支持集群，因为所有的任务信息都会保存到数据库中，可以控制事物，还有就是如果应用服务器关闭或者重启，任务信息都不会丢失，并且可以恢复因服务器关闭或者重启而导致执行失败的任务<br>缺点：运行速度的快慢取决与连接数据库的快慢</p>
-<h2 id="表关系和解释"><a href="#表关系和解释" class="headerlink" title="表关系和解释"></a>表关系和解释</h2><p><img src="/2017/12/27/Quartz学习——————Quartz介绍-一/quartz表结构.png" alt="quartz表结构"></p>
+<h2 id="表关系和解释"><a href="#表关系和解释" class="headerlink" title="表关系和解释"></a>表关系和解释</h2><p><img src="/2017/12/27/Quartz学习——Quartz介绍-一/quartz表结构.png" alt="quartz表结构"></p>
 <table>
 <thead>
 <tr>
