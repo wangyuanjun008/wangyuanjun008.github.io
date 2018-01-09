@@ -875,10 +875,10 @@ insert into teacher values(&apos;&apos;&apos;&apos;,&apos;&apos;jack&apos;&apos;
     <link href="http://wangyuanjun.cn/2017/12/27/Quartz%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Quartz%E4%BB%8B%E7%BB%8D-%E4%B8%80/"/>
     <id>http://wangyuanjun.cn/2017/12/27/Quartz学习——Quartz介绍-一/</id>
     <published>2017-12-27T15:02:10.000Z</published>
-    <updated>2018-01-08T09:09:26.129Z</updated>
+    <updated>2018-01-09T03:04:58.106Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>Quartz是OpenSymphony开源组织在Job scheduling领域又一个开源项目，是完全由java开发的一个开源的任务日程管理系统，“任务进度管理器”就是一个在预先确定（被纳入日程）的时间到达时，负责执行（或者通知）其他软件组件的系统。<br>Quartz用一个小Java库发布文件（.jar文件），这个库文件包含了所有Quartz核心功能。这些功能的主要接口(API)是Scheduler接口。它提供了简单的操作，例如：将任务纳入日程或者从日程中取消，开始/停止/暂停日程进度。</p>
-<h2 id="quartz核心概念"><a href="#quartz核心概念" class="headerlink" title="quartz核心概念"></a>quartz核心概念</h2><p>先来看一张图：<br><img src="/2017/12/27/Quartz学习——Quartz介绍-一/quartz.png" alt="quartz"></p>
+    <content type="html"><![CDATA[<h1 id="一：介绍"><a href="#一：介绍" class="headerlink" title="一：介绍"></a>一：介绍</h1><p>Quartz是OpenSymphony开源组织在Job scheduling领域又一个开源项目，是完全由java开发的一个开源的任务日程管理系统，“任务进度管理器”就是一个在预先确定（被纳入日程）的时间到达时，负责执行（或者通知）其他软件组件的系统。<br>Quartz用一个小Java库发布文件（.jar文件），这个库文件包含了所有Quartz核心功能。这些功能的主要接口(API)是Scheduler接口。它提供了简单的操作，例如：将任务纳入日程或者从日程中取消，开始/停止/暂停日程进度。</p>
+<h1 id="二：quartz核心概念"><a href="#二：quartz核心概念" class="headerlink" title="二：quartz核心概念"></a>二：quartz核心概念</h1><p>先来看一张图：<br><img src="/2017/12/27/Quartz学习——Quartz介绍-一/quartz.png" alt="quartz"></p>
 <ul>
 <li><p>Job( 任务，即被调度的任务)：要由表示要执行的“作业”的类实现的接口。只有一个方法 void execute(jobExecutionContext context) (jobExecutionContext 提供调度上下文各种信息，运行时数据保存在jobDataMap中) Job有个子接口StatefulJob ,代表有状态任务。</p>
 </li>
@@ -903,17 +903,100 @@ insert into teacher values(&apos;&apos;&apos;&apos;,&apos;&apos;jack&apos;&apos;
 <li><p>QuartzScheduler ：这是Quartz的核心，它是org.quartz.Scheduler接口的间接实现，包含调度org.quartz.Jobs，注册org.quartz.JobListener实例等的方法。  </p>
 </li>
 </ul>
-<h2 id="定时器种类"><a href="#定时器种类" class="headerlink" title="定时器种类"></a>定时器种类</h2><p>Quartz 中五种类型的 Trigger：SimpleTrigger，CronTirgger，DateIntervalTrigger，NthIncludedDayTrigger和Calendar 类（ org.quartz.Calendar）。<br>最常用的：<br>SimpleTrigger：用来触发只需执行一次或者在给定时间触发并且重复N次且每次执行延迟一定时间的任务。<br>CronTrigger：按照日历触发，例如“每个周五”，每个月10日中午或者10：15分。</p>
-<h2 id="Quartz中的设计模式"><a href="#Quartz中的设计模式" class="headerlink" title="Quartz中的设计模式"></a>Quartz中的设计模式</h2><ol>
+<h1 id="三：Quartz中的设计模式"><a href="#三：Quartz中的设计模式" class="headerlink" title="三：Quartz中的设计模式"></a>三：Quartz中的设计模式</h1><ol>
 <li>Builder模式<br>所有关键组件都有Builder模式来构建  <builder> 如:JobBuilder、TriggerBuilder</builder></li>
 <li>Factory模式<br>最终由Scheduler的来进行组合各种组件  <factory> 如SchedulerFactory</factory></li>
-<li>Quartz项目中大量使用组件模式，插件式设计，可插拔，耦合性低，易扩展，开发者可自行定义自己的Job、Trigger等组件</li>
-<li>链式写法,Quartz中大量使用链式写法，与jQuery的写法有几分相似，实现也比较简单，如：<pre><code> $(this).addClass(&quot;divCurrColor&quot;).next(&quot;.divContent&quot;).css(&quot;display&quot;,&quot;block&quot;);  
+<li>组件模式<br>Quartz项目中大量使用组件模式，插件式设计，可插拔，耦合性低，易扩展，开发者可自行定义自己的Job、Trigger等组件</li>
+<li>链式写法<br>Quartz中大量使用链式写法，与jQuery的写法有几分相似，实现也比较简单，如：<pre><code> $(this).addClass(&quot;divCurrColor&quot;).next(&quot;.divContent&quot;).css(&quot;display&quot;,&quot;block&quot;);  
 newTrigger().withIdentity( &quot;trigger3&quot;, &quot;group1&quot;).startAt( startTime)
 .withSchedule(simpleSchedule().withIntervalInSeconds(10).withRepeatCount(10)).build();
 </code></pre></li>
 </ol>
-<h2 id="存储方式"><a href="#存储方式" class="headerlink" title="存储方式"></a>存储方式</h2><p>RAMJobStore:<br>优点：不要外部数据库，配置容易，运行速度快<br>缺点：因为调度程序信息是存储在被分配给JVM的内存里面，所以，当应用程序停止运行时，所有调度信息将被丢失。另外因为存储到JVM内存里面，所以可以存储多少个Job和Trigger将会受到限制<br>JDBCJobStore:<br>优点：支持集群，因为所有的任务信息都会保存到数据库中，可以控制事物，还有就是如果应用服务器关闭或者重启，任务信息都不会丢失，并且可以恢复因服务器关闭或者重启而导致执行失败的任务<br>缺点：运行速度的快慢取决与连接数据库的快慢</p>
+<h1 id="四：Quartz体系结构"><a href="#四：Quartz体系结构" class="headerlink" title="四：Quartz体系结构"></a>四：Quartz体系结构</h1><h2 id="三大核心"><a href="#三大核心" class="headerlink" title="三大核心"></a>三大核心</h2><ul>
+<li>调度器</li>
+<li>任务</li>
+<li>触发器<br><img src="/2017/12/27/Quartz学习——Quartz介绍-一/zy.jpg" alt="zy"></li>
+</ul>
+<h2 id="重要组成"><a href="#重要组成" class="headerlink" title="重要组成"></a>重要组成</h2><p>1）任务：</p>
+<ul>
+<li>Job：表示一个工作，要执行的具体内容。此接口中只有一个方法。要创建一个任务，必须得实现这个接口。该接口只有一个execute方法，任务每次被调用的时候都会执行这个execute方法的逻辑，类似TimerTask的run方法，在里面编写业务逻辑。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class TestJob implements Job &#123;</div><div class="line">      /**把要执行的操作，写在execute方法中  */</div><div class="line">      @Override</div><div class="line">      public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException &#123;</div><div class="line">          SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-MM-dd hh:mm:ss&quot;);</div><div class="line">          System.out.println(&quot;I can do something...&quot;);</div><div class="line">          System.out.println(sdf.format(new Date()));</div><div class="line">      &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>生命周期：在每次调度器执行job时，它在调用execute方法前会创建一个新的job实例，当调用完成之后，关联的job对象实例会被释放，释放的实例会被垃圾回收机制回收。</p>
+<ul>
+<li><p>JobBuilder：可向任务传递数据,通常情况下,我们使用它就可向任务类发送数据了，如有特别复杂的传递参数,它提供了一个传递递:JobDataMap对象的方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">JobDetail jobDetail =  JobBuilder.newJob(TestJob.class).withIdentity(&quot;testJob&quot;,&quot;group1&quot;).build();</div></pre></td></tr></table></figure>
+</li>
+<li><p>JobDetail：用来保存我们任务的详细信息。一个JobDetail可以有多个Trigger，但是一个Trigger只能对应一个JobDetail。下面是JobDetail的一些常用的属性和含义：<br><img src="/2017/12/27/Quartz学习——Quartz介绍-一/aa.png" alt="aa"></p>
+</li>
+<li><p>JobStore：负责跟踪所有你给scheduler的“工作数据”：jobs, triggers, calendars, 等。</p>
+<ol>
+<li><p>RAMJobStore：是使用最简单的也是最高效(依据CPU时间)的JobStore 。RAMJobStore 正如它名字描述的一样，它保存数据在RAM。缺点是你的应用结束之后所有的数据也丢失了–这意味着RAMJobStore 不具有保持job和trigger持久的能力。对于一些程序是可以接受的，甚至是期望的，但对于其他的程序可能是灾难性的。使用RAMJobStore配置Quartz：配置如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">org.quartz.jobStore.class = org.quartz.simpl.RAMJobStore：是使用最简单的也是最高效</div></pre></td></tr></table></figure>
+</li>
+<li><p>JDBCJobStore：以JDBC的方式保存数据在数据库中。它比RAMJobStore的配置复杂一点，也没有RAMJobStore快。然而,性能缺点不是糟透了,特别是如果你在数据库表主键上建立了索引。在机器之间的LAN(在scheduler 和数据库之间)合理的情况下，检索和更新一个被触发的Trigger花费的时间少于10毫秒。几乎适用于所有的数据库，广泛用于 Oracle。PostgreSQL, MySQL, MS SQLServer, HSQLDB, 和DB2。使用JDBCJobStore之前你必须首先创建一系列Quartz要使用的表。你可以发现表创建语句在Quartz发布目录的 “docs/dbTables”下面。你需要确定你的应用要使用的事务类型。如果你不想绑定调度命令(例如增加和移除Trigger)到其他的事务，你可以使用JobStoreTX (最常用的选择)作为你的Jobstore。如果你需要Quartz和其他的事务(例如在J2EE应用服务器中)一起工作，你应该使用JobStoreCMT ，Quartz 将让应用服务器容器管理这个事务。使用JobStoreTx配置Quartz：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">org.quartz.jobStore.class = org.quartz.impl.jdbcjobstore.JobStoreTX  </div><div class="line">  org.quartz.jobStore.driverDelegateClass = org.quartz.impl.jdbcjobstore.StdJDBCDelegate  </div><div class="line">  #配置表的前缀  </div><div class="line">  org.quartz.jobStore.tablePrefix = QRTZ_  </div><div class="line">  #使用JNDI数据源的时候，数据源的名字  </div><div class="line">  org.quartz.jobStore.dataSource = myDS</div></pre></td></tr></table></figure>
+</li>
+<li><p>TerracottaJobStore：提供了一个方法：在不使用数据库的情况下使它具有收缩性和强壮性。可以是集群的也可以是非集群的，在这两种情况下为你的job数据提供了一个存储机制用于应用程序重启之间持久,因为数据是存储在Terracotta服务器。它的性能比使用数据库访问JDBCJobStore好一点儿(大约是一个数量级)，但是明显比RAMJobStore慢。使用TerracottaJobStore配置Quartz：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">org.quartz.jobStore.class = org.terracotta.quartz.TerracottaJobStore  </div><div class="line">  org.quartz.jobStore.tcConfigUrl = localhost:9510</div></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>JobDataMap：中可以包含不限量的（序列化的）数据对象，在job实例执行的时候，可以使用其中的数据；JobDataMap是Java Map接口的一个实现，额外增加了一些便于存取基本类型的数据的方法。</p>
+<ol>
+<li><p>存：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">JobDetail jobDetail =  JobBuilder.newJob(TestJob.class).withIdentity(&quot;testJob&quot;,&quot;group1&quot;).usingJobData(&quot;date1&quot;,&quot;存内容&quot;).build();</div></pre></td></tr></table></figure>
+</li>
+<li><p>取：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class TestJob implements Job &#123;</div><div class="line">      /**把要执行的操作，写在execute方法中  */</div><div class="line">      @Override</div><div class="line">      public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException &#123;</div><div class="line">          JobKey key = jobExecutionContext.getJobDetail().getKey();</div><div class="line">          JobDataMap jobDataMap = jobExecutionContext.getJobDetail().getJobDataMap();</div><div class="line">          String date1 = jobDataMap.getString(&quot;date1&quot;);</div><div class="line">      &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ul>
+<p>2）触发器：用来触发执行Job<br><img src="/2017/12/27/Quartz学习——Quartz介绍-一/trigger.png" alt="trigger"><br>2.1）触发器通用属性：</p>
+<ul>
+<li>Jobkey：表示job实例的标识，触发器被触发时，该指定的job实例会被执行</li>
+<li>StartTime：表示触发器的时间表首次被触发的时间，它的值类型为：java.util.Date</li>
+<li>EndTime：指定触发器的不再被触发的时间，它的值类型为：java.util.Date</li>
+</ul>
+<p>2.2）触发器类型：</p>
+<ul>
+<li>SimpleTrigger： 主要是针对一些相对简单的时间触发进行配置使用，比如在指定的时间开始然后在一定的时间间隔之内重复执行一个Job，同时可以任意指定重复的次数。用来触发只需执行一次或者在给定时间触发并且重复N次且每次执行延迟一定时间的任务。 下面就是使用一个SimpleTrigger的例子:<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">//创建触发器 每3秒钟执行一次(无开始时间和结束时间)</div><div class="line">  Trigger trigger = TriggerBuilder.newTrigger()</div><div class="line">              .withIdentity(&quot;trigger1&quot;, &quot;group3&quot;)</div><div class="line">              .withSchedule(</div><div class="line">              SimpleScheduleBuilder.simpleSchedule()</div><div class="line">              .withIntervalInSeconds(3).repeatForever()).build();</div><div class="line">  //创建触发器 每3秒钟执行一次(有开始时间和结束时间)</div><div class="line">   long now = new Date().getTime();</div><div class="line">  Date start = new Date(now+6000);</div><div class="line">  Date end = new Date(now+12000);</div><div class="line">  //创建触发器 每3秒钟执行一次</div><div class="line">  Trigger trigger = TriggerBuilder.newTrigger()</div><div class="line">                    .withIdentity(&quot;trigger1&quot;, &quot;group3&quot;)</div><div class="line">                    .startAt(start)</div><div class="line">                    .endAt(end)</div><div class="line">                    .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(3).repeatForever()).build();</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>SimpleTrigger具有丰富的构造函数，根据业务需求构造不同的构造函数。</p>
+<ul>
+<li>CronTrigger： 可以配置更复杂的触发时刻表，基于日历的作业触发器，而不像SimpleTrigger那样精确指定间隔时间，按照日历触发，例如“每个周五”，每个月10日中午或者10：15分。比SimpleTrigger更加常用。</li>
+</ul>
+<p>Cron表达式：用于配置CronTrigger实例，是由7个表达式组成的字符串，描述了时间表的详细信息。</p>
+<p>格式为：[秒][分][时][日][月][周][年]</p>
+<p>Cron表达式特殊字符意义对应表：<br><img src="/2017/12/27/Quartz学习——Quartz介绍-一/table.png" alt="table"><br>通配符说明：<br><img src="/2017/12/27/Quartz学习——Quartz介绍-一/tongpeifu.png" alt="tongpeifu"><br>Cron表达式例子：<br><img src="/2017/12/27/Quartz学习——Quartz介绍-一/bds.png" alt="bds"></p>
+<pre><code>TriggerBuilder.newTrigger().withIdentity(&quot;trigger2&quot;,&quot;group2&quot;).withSchedule(CronScheduleBuilder.cronSchedule(&quot;0 0 9 ? * 6L *&quot;)).build();
+</code></pre><p>Cron表达式小技巧：</p>
+<ol>
+<li><p>‘L’和‘W’可以一起组合使用</p>
+</li>
+<li><p>周字段英文字母不区分大小写即MOM与mom相同</p>
+</li>
+<li><p>利用工具，在线生成cron表达式：cron.qqe2.com/</p>
+</li>
+</ol>
+<p>NthIncludedDayTrigger：是 Quartz 开发团队最新加入到框架中的一个 Trigger。它设计用于在每一间隔类型的第几天执行 Job。例如，你要在每个月的 15 号执行开票的 Job，用 NthIncludedDayTrigger就再合适不过了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">NthIncludedDayTrigger trigger = new NthIncludedDayTrigger(&quot;NthIncludedDayTrigger&quot;,Scheduler.DEFAULT_GROUP);</div><div class="line">              trigger.setN(15);</div><div class="line">              trigger.setIntervalType(NthIncludedDayTrigger.INTERVAL_TYPE_MONTHLY);</div></pre></td></tr></table></figure>
+<p>3）调度器Scheduler</p>
+<p>代表一个Quartz的独立运行容器，Trigger和JobDetail可以注册到Scheduler中，两者在Scheduler中拥有各自的组及名称，组及名称是Scheduler查找定位容器中某一对象的依据，Trigger的组及名称必须唯一，JobDetail的组和名称也必须唯一（但可以和Trigger的组和名称相同，因为它们是不同类型的）。Scheduler定义了多个接口方法，允许外部通过组及名称访问和控制容器中Trigger和JobDetail。</p>
+<p>Scheduler可以将Trigger绑定到某一JobDetail中，这样当Trigger触发时，对应的Job就被执行。一个Job可以对应多个Trigger，但一个Trigger只能对应一个Job。</p>
+<p>可以通过SchedulerFactory创建一个Scheduler实例。Scheduler拥有一个SchedulerContext，它类似于ServletContext，保存着Scheduler上下文信息，Job和Trigger都可以访问SchedulerContext内的信息。SchedulerContext内部通过一个Map，以键值对的方式维护这些上下文数据，SchedulerContext为保存和获取数据提供了多个put()和getXxx()的方法。可以通过Scheduler# getContext()获取对应的SchedulerContext实例；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">SchedulerFactory schedulerfactory=new StdSchedulerFactory();</div><div class="line">    Scheduler scheduler = schedulerfactory.getScheduler();</div><div class="line"></div><div class="line">     DirectSchedulerFactory factory = DirectSchedulerFactory.getInstance();</div><div class="line">    try &#123;</div><div class="line">        Scheduler scheduler = factory.getScheduler();</div><div class="line">    &#125; catch (SchedulerException e) &#123;</div><div class="line">        e.printStackTrace();</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>4)SchedulerFactory:</p>
+<ul>
+<li>使用一组参数（java.util.Properties）来创建和出书啊Quartz调度器</li>
+<li>配置参数一般存储在quartz.properties中</li>
+<li>调用getScheduler方法就能创建和初始化调度器</li>
+</ul>
+<p>5)quartz.properties:</p>
+<p>Quartz-Job的quartz.properties配置文件说明，此文件在quartz的jar包有，可直接拿过来使用不过只有基本的几个配置 自己可根据需要进行扩充；另外如果项目中没有对该配置文件重写，则Quartz会加载自己jar包中的quartz.properties文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div></pre></td><td class="code"><pre><div class="line"># Default Properties file for use by StdSchedulerFactory  </div><div class="line">    # to create a Quartz Scheduler Instance, if a different  </div><div class="line">    # properties file is not explicitly specified.  </div><div class="line">    #  </div><div class="line">    # ===========================================================================  </div><div class="line">    # Configure Main Scheduler Properties 调度器属性  </div><div class="line">    # ===========================================================================  </div><div class="line">    org.quartz.scheduler.instanceName: DefaultQuartzScheduler  </div><div class="line">    #org.quartz.scheduler.instanceid:AUTO  </div><div class="line">    org.quartz.scheduler.rmi.export: false  </div><div class="line">    org.quartz.scheduler.rmi.proxy: false  </div><div class="line">    org.quartz.scheduler.wrapJobExecutionInUserTransaction: false  </div><div class="line">    # ===========================================================================    </div><div class="line">    # Configure ThreadPool 线程池属性    </div><div class="line">    # ===========================================================================  </div><div class="line">    #线程池的实现类（一般使用SimpleThreadPool即可满足几乎所有用户的需求）  </div><div class="line">    org.quartz.threadPool.class: org.quartz.simpl.SimpleThreadPool  </div><div class="line">    #指定线程数，至少为1（无默认值）(一般设置为1-100直接的整数合适)  </div><div class="line">    org.quartz.threadPool.threadCount: 10  </div><div class="line">    #设置线程的优先级（最大为java.lang.Thread.MAX_PRIORITY 10，最小为Thread.MIN_PRIORITY 1，默认为5）  </div><div class="line">    org.quartz.threadPool.threadPriority: 5  </div><div class="line">    #设置SimpleThreadPool的一些属性  </div><div class="line">    #设置是否为守护线程  </div><div class="line">    #org.quartz.threadpool.makethreadsdaemons = false  </div><div class="line">    #org.quartz.threadPool.threadsInheritContextClassLoaderOfInitializingThread: true  </div><div class="line">    #org.quartz.threadpool.threadsinheritgroupofinitializingthread=false  </div><div class="line">    #线程前缀默认值是：[Scheduler Name]_Worker  </div><div class="line">    #org.quartz.threadpool.threadnameprefix=swhJobThead;  </div><div class="line">    # 配置全局监听(TriggerListener,JobListener) 则应用程序可以接收和执行 预定的事件通知  </div><div class="line">    # ===========================================================================  </div><div class="line">    # Configuring a Global TriggerListener 配置全局的Trigger监听器  </div><div class="line">    # MyTriggerListenerClass 类必须有一个无参数的构造函数，和 属性的set方法，目前2.2.x只支持原始数据类型的值（包括字符串）  </div><div class="line">    # ===========================================================================  </div><div class="line">    #org.quartz.triggerListener.NAME.class = com.swh.MyTriggerListenerClass  </div><div class="line">    #org.quartz.triggerListener.NAME.propName = propValue  </div><div class="line">    #org.quartz.triggerListener.NAME.prop2Name = prop2Value  </div><div class="line">    # ===========================================================================  </div><div class="line">    # Configuring a Global JobListener 配置全局的Job监听器  </div><div class="line">    # MyJobListenerClass 类必须有一个无参数的构造函数，和 属性的set方法，目前2.2.x只支持原始数据类型的值（包括字符串）  </div><div class="line">    # ===========================================================================  </div><div class="line">    #org.quartz.jobListener.NAME.class = com.swh.MyJobListenerClass  </div><div class="line">    #org.quartz.jobListener.NAME.propName = propValue  </div><div class="line">    #org.quartz.jobListener.NAME.prop2Name = prop2Value  </div><div class="line">    # ===========================================================================    </div><div class="line">    # Configure JobStore 存储调度信息（工作，触发器和日历等）  </div><div class="line">    # ===========================================================================  </div><div class="line">    # 信息保存时间 默认值60秒  </div><div class="line">    org.quartz.jobStore.misfireThreshold: 60000  </div><div class="line">    #保存job和Trigger的状态信息到内存中的类  </div><div class="line">    org.quartz.jobStore.class: org.quartz.simpl.RAMJobStore  </div><div class="line">    # ===========================================================================    </div><div class="line">    # Configure SchedulerPlugins 插件属性 配置  </div><div class="line">    # ===========================================================================  </div><div class="line">    # 自定义插件    </div><div class="line">    #org.quartz.plugin.NAME.class = com.swh.MyPluginClass  </div><div class="line">    #org.quartz.plugin.NAME.propName = propValue  </div><div class="line">    #org.quartz.plugin.NAME.prop2Name = prop2Value  </div><div class="line">    #配置trigger执行历史日志（可以看到类的文档和参数列表）  </div><div class="line">    org.quartz.plugin.triggHistory.class = org.quartz.plugins.history.LoggingTriggerHistoryPlugin    </div><div class="line">    org.quartz.plugin.triggHistory.triggerFiredMessage = Trigger &#123;1&#125;.&#123;0&#125; fired job &#123;6&#125;.&#123;5&#125; at: &#123;4, date, HH:mm:ss MM/dd/yyyy&#125;    </div><div class="line">    org.quartz.plugin.triggHistory.triggerCompleteMessage = Trigger &#123;1&#125;.&#123;0&#125; completed firing job &#123;6&#125;.&#123;5&#125; at &#123;4, date, HH:mm:ss MM/dd/yyyy&#125; with resulting trigger instruction code: &#123;9&#125;    </div><div class="line">    #配置job调度插件  quartz_jobs(jobs and triggers内容)的XML文档    </div><div class="line">    #加载 Job 和 Trigger 信息的类   （1.8之前用：org.quartz.plugins.xml.JobInitializationPlugin）  </div><div class="line">    org.quartz.plugin.jobInitializer.class = org.quartz.plugins.xml.XMLSchedulingDataProcessorPlugin  </div><div class="line">    #指定存放调度器(Job 和 Trigger)信息的xml文件，默认是classpath下quartz_jobs.xml  </div><div class="line">    org.quartz.plugin.jobInitializer.fileNames = my_quartz_job2.xml    </div><div class="line">    #org.quartz.plugin.jobInitializer.overWriteExistingJobs = false    </div><div class="line">    org.quartz.plugin.jobInitializer.failOnFileNotFound = true    </div><div class="line">    #自动扫描任务单并发现改动的时间间隔,单位为秒  </div><div class="line">    org.quartz.plugin.jobInitializer.scanInterval = 10  </div><div class="line">    #覆盖任务调度器中同名的jobDetail,避免只修改了CronExpression所造成的不能重新生效情况  </div><div class="line">    org.quartz.plugin.jobInitializer.wrapInUserTransaction = false  </div><div class="line">    # ===========================================================================    </div><div class="line">    # Sample configuration of ShutdownHookPlugin  ShutdownHookPlugin插件的配置样例  </div><div class="line">    # ===========================================================================  </div><div class="line">    #org.quartz.plugin.shutdownhook.class = \org.quartz.plugins.management.ShutdownHookPlugin  </div><div class="line">    #org.quartz.plugin.shutdownhook.cleanShutdown = true  </div><div class="line">    #  </div><div class="line">    # Configure RMI Settings 远程服务调用配置  </div><div class="line">    #  </div><div class="line">    #如果你想quartz-scheduler出口本身通过RMI作为服务器，然后设置“出口”标志true(默认值为false)。  </div><div class="line">    #org.quartz.scheduler.rmi.export = false  </div><div class="line">    #主机上rmi注册表(默认值localhost)  </div><div class="line">    #org.quartz.scheduler.rmi.registryhost = localhost  </div><div class="line">    #注册监听端口号（默认值1099）  </div><div class="line">    #org.quartz.scheduler.rmi.registryport = 1099  </div><div class="line">    #创建rmi注册，false/never：如果你已经有一个在运行或不想进行创建注册  </div><div class="line">    # true/as_needed:第一次尝试使用现有的注册，然后再回来进行创建  </div><div class="line">    # always:先进行创建一个注册，然后再使用回来使用注册  </div><div class="line">    #org.quartz.scheduler.rmi.createregistry = never  </div><div class="line">    #Quartz Scheduler服务端端口，默认是随机分配RMI注册表  </div><div class="line">    #org.quartz.scheduler.rmi.serverport = 1098  </div><div class="line">    #true:链接远程服务调度(客户端),这个也要指定registryhost和registryport，默认为false  </div><div class="line">    # 如果export和proxy同时指定为true，则export的设置将被忽略  </div><div class="line">    #org.quartz.scheduler.rmi.proxy = false</div></pre></td></tr></table></figure>
+<h1 id="五：存储方式"><a href="#五：存储方式" class="headerlink" title="五：存储方式"></a>五：存储方式</h1><p>RAMJobStore:<br>优点：不要外部数据库，配置容易，运行速度快<br>缺点：因为调度程序信息是存储在被分配给JVM的内存里面，所以，当应用程序停止运行时，所有调度信息将被丢失。另外因为存储到JVM内存里面，所以可以存储多少个Job和Trigger将会受到限制<br>JDBCJobStore:<br>优点：支持集群，因为所有的任务信息都会保存到数据库中，可以控制事物，还有就是如果应用服务器关闭或者重启，任务信息都不会丢失，并且可以恢复因服务器关闭或者重启而导致执行失败的任务<br>缺点：运行速度的快慢取决与连接数据库的快慢</p>
 <h2 id="表关系和解释"><a href="#表关系和解释" class="headerlink" title="表关系和解释"></a>表关系和解释</h2><p><img src="/2017/12/27/Quartz学习——Quartz介绍-一/quartz表结构.png" alt="quartz表结构"></p>
 <table>
 <thead>
@@ -968,40 +1051,7 @@ newTrigger().withIdentity( &quot;trigger3&quot;, &quot;group1&quot;).startAt( st
 </tr>
 </tbody>
 </table>
-<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><pre><code>quartz.properties 
-//调度标识名 集群中每一个实例都必须使用相同的名称 （区分特定的调度器实例） 
-org.quartz.scheduler.instanceName：DefaultQuartzScheduler 
-//ID设置为自动获取 每一个必须不同 （所有调度器实例中是唯一的） 
-org.quartz.scheduler.instanceId ：AUTO 
-//数据保存方式为持久化 
-org.quartz.jobStore.class ：org.quartz.impl.jdbcjobstore.JobStoreTX 
-//表的前缀 
-org.quartz.jobStore.tablePrefix ： QRTZ_ 
-//设置为TRUE不会出现序列化非字符串类到 BLOB 时产生的类版本问题 
-//org.quartz.jobStore.useProperties ： true 
-//加入集群 true 为集群 false不是集群 
-org.quartz.jobStore.isClustered ： false 
-//调度实例失效的检查时间间隔 
-org.quartz.jobStore.clusterCheckinInterval：20000 
-//容许的最大作业延长时间 
-org.quartz.jobStore.misfireThreshold ：60000 
-//ThreadPool 实现的类名 
-org.quartz.threadPool.class：org.quartz.simpl.SimpleThreadPool 
-//线程数量 
-org.quartz.threadPool.threadCount ： 10 
-//线程优先级 
-org.quartz.threadPool.threadPriority ： 5（threadPriority 属性的最大值是常量 java.lang.Thread.MAX_PRIORITY，等于10。最小值为常量 java.lang.Thread.MIN_PRIORITY，为1） 
-//自创建父线程 
-//org.quartz.threadPool.threadsInheritContextClassLoaderOfInitializingThread： true 
-//数据库别名 
-org.quartz.jobStore.dataSource ： qzDS 
-//设置数据源 
-org.quartz.dataSource.qzDS.driver:com.mysql.jdbc.Driver 
-org.quartz.dataSource.qzDS.URL:jdbc:mysql://localhost:3306/quartz 
-org.quartz.dataSource.qzDS.user:root 
-org.quartz.dataSource.qzDS.password:123456 
-org.quartz.dataSource.qzDS.maxConnection:10
-</code></pre><h2 id="思想"><a href="#思想" class="headerlink" title="思想"></a>思想</h2><pre><code>// 1、工厂模式 构建Scheduler的Factory，其中STD为Quartz默认的Factory  
+<h2 id="思想"><a href="#思想" class="headerlink" title="思想"></a>思想</h2><pre><code>// 1、工厂模式 构建Scheduler的Factory，其中STD为Quartz默认的Factory  
 //    开发者亦可自行实现自己的Factory;Job、Trigger等组件  
 SchedulerFactory sf = new StdSchedulerFactory();  
 
@@ -1038,12 +1088,12 @@ sched.shutdown(true);
 <li>通过调度器组装子组件   调度器.组装&lt;子组件1,子组件2…&gt;  //工厂模式</li>
 <li>调度器.start(); //工厂模式</li>
 </ol>
-<p>参考:<br><a href="http://blog.csdn.net/guolong1983811/article/details/51501346" target="_blank" rel="external">quartz详解2：quartz由浅入深</a><br><a href="https://www.cnblogs.com/drift-ice/p/3817269.html" target="_blank" rel="external">Quartz使用总结</a><br><a href="http://blog.csdn.net/chenweitang123/article/details/37777399" target="_blank" rel="external">Quartz深入浅出(一)</a><br><a href="http://blog.csdn.net/u010648555/article/details/54863144" target="_blank" rel="external">Quartz学习——Quartz大致介绍（一）</a></p>
+<p>参考:<br><a href="http://blog.csdn.net/guolong1983811/article/details/51501346" target="_blank" rel="external">quartz详解2：quartz由浅入深</a><br><a href="https://www.cnblogs.com/drift-ice/p/3817269.html" target="_blank" rel="external">Quartz使用总结</a><br><a href="http://blog.csdn.net/chenweitang123/article/details/37777399" target="_blank" rel="external">Quartz深入浅出(一)</a><br><a href="http://blog.csdn.net/u010648555/article/details/54863144" target="_blank" rel="external">Quartz学习——Quartz大致介绍（一）</a><br><a href="https://www.tuicool.com/articles/3uQ7V3B" target="_blank" rel="external">深入解读Quartz任务调度器</a></p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;h2 id=&quot;介绍&quot;&gt;&lt;a href=&quot;#介绍&quot; class=&quot;headerlink&quot; title=&quot;介绍&quot;&gt;&lt;/a&gt;介绍&lt;/h2&gt;&lt;p&gt;Quartz是OpenSymphony开源组织在Job scheduling领域又一个开源项目，是完全由java开发的一个开源的任务日程管理
+      &lt;h1 id=&quot;一：介绍&quot;&gt;&lt;a href=&quot;#一：介绍&quot; class=&quot;headerlink&quot; title=&quot;一：介绍&quot;&gt;&lt;/a&gt;一：介绍&lt;/h1&gt;&lt;p&gt;Quartz是OpenSymphony开源组织在Job scheduling领域又一个开源项目，是完全由java开发的一个开
     
     </summary>
     

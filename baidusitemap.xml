@@ -4,6 +4,26 @@
 
     
   <url>
+    <loc>http://wangyuanjun.cn/2017/12/27/Quartz%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Quartz%E4%BB%8B%E7%BB%8D-%E4%B8%80/</loc>
+    <lastmod>2018-01-09T03:04:58.106Z</lastmod>
+    <data>
+        <display>
+        <title>Quartz学习———Quartz介绍(一)</title>
+        <pubTime>2017-12-27T15:02:10.000Z</pubTime>
+        
+        <tag>quartz</tag>
+         
+         
+           
+             
+              <breadCrumb title="quartz" url="http://wangyuanjun.cn/categories/quartz/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://wangyuanjun.cn/2018/01/03/Quartz%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Quartz%E7%AE%80%E5%8D%95%E5%85%A5%E9%97%A8Demo-%E4%BA%8C/</loc>
     <lastmod>2018-01-08T09:09:39.895Z</lastmod>
     <data>
@@ -30,26 +50,6 @@
         <display>
         <title>Quartz学习——SSM和Quartz集成详解(四)</title>
         <pubTime>2018-01-08T07:31:45.000Z</pubTime>
-        
-        <tag>quartz</tag>
-         
-         
-           
-             
-              <breadCrumb title="quartz" url="http://wangyuanjun.cn/categories/quartz/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://wangyuanjun.cn/2017/12/27/Quartz%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Quartz%E4%BB%8B%E7%BB%8D-%E4%B8%80/</loc>
-    <lastmod>2018-01-08T09:09:26.129Z</lastmod>
-    <data>
-        <display>
-        <title>Quartz学习———Quartz介绍(一)</title>
-        <pubTime>2017-12-27T15:02:10.000Z</pubTime>
         
         <tag>quartz</tag>
          
