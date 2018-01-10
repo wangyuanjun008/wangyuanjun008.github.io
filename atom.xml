@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wangyuanjun.cn/"/>
-  <updated>2018-01-08T09:09:28.738Z</updated>
+  <updated>2018-01-10T06:28:38.413Z</updated>
   <id>http://wangyuanjun.cn/</id>
   
   <author>
@@ -14,6 +14,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用DaoCloud docker镜像加速器</title>
+    <link href="http://wangyuanjun.cn/2018/01/10/%E4%BD%BF%E7%94%A8DaoCloud%20docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E5%99%A8/"/>
+    <id>http://wangyuanjun.cn/2018/01/10/使用DaoCloud docker镜像加速器/</id>
+    <published>2018-01-10T06:10:46.000Z</published>
+    <updated>2018-01-10T06:28:38.413Z</updated>
+    
+    <content type="html"><![CDATA[<p>使用 Docker 的时候，需要经常从官方获取镜像，但是由于显而易见的网络原因，拉取镜像的过程非常耗时，严重影响使用Docker的体验。由于国内访问直接访问dockerhub网速比较慢，拉取镜像的时间就会比较长，甚至下载失败。一般我们会使用镜像加速或者直接从国内的一些平台镜像仓库上拉取。<br>我之前准备用阿里云的加速器的，试了好长时间没有成功，于是改用DaoCloud，下面向大家介绍在windows环境下使用docker toolbox来配置镜像加速器。<br>在docker客户端执行如下命令</p>
+<pre><code>docker-machine ssh default
+sudo sed -i &quot;s|EXTRA_ARGS=&apos;|EXTRA_ARGS=&apos;--registry-mirror=加速地址 |g&quot; /var/lib/boot2docker/profile
+exit
+docker-machine restart default 
+</code></pre><p>1.使用docker客户端连接名为default的虚拟机<br>2.配置DaoCloud加速器<br>3.退出虚拟机到docker客户端<br>4.名为default的虚拟机重启</p>
+<p>如果你想在linux,MC上配置加速器，请参考<a href="https://www.daocloud.io/mirror#accelerator-doc" target="_blank" rel="external">配置 Docker 加速器</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;使用 Docker 的时候，需要经常从官方获取镜像，但是由于显而易见的网络原因，拉取镜像的过程非常耗时，严重影响使用Docker的体验。由于国内访问直接访问dockerhub网速比较慢，拉取镜像的时间就会比较长，甚至下载失败。一般我们会使用镜像加速或者直接从国内的一些平台镜
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>Quartz学习——SSM和Quartz集成详解(四)</title>
@@ -1514,9 +1539,9 @@ public class HttpServiceTest {
       <category term="HttpClient" scheme="http://wangyuanjun.cn/categories/HttpClient/"/>
     
     
-      <category term="HttpClient" scheme="http://wangyuanjun.cn/tags/HttpClient/"/>
-    
       <category term="SpringBoot" scheme="http://wangyuanjun.cn/tags/SpringBoot/"/>
+    
+      <category term="HttpClient" scheme="http://wangyuanjun.cn/tags/HttpClient/"/>
     
   </entry>
   
@@ -1795,9 +1820,9 @@ public class WebServiceTest {
       <category term="WebService" scheme="http://wangyuanjun.cn/categories/WebService/"/>
     
     
-      <category term="SpringBoot" scheme="http://wangyuanjun.cn/tags/SpringBoot/"/>
-    
       <category term="WebService" scheme="http://wangyuanjun.cn/tags/WebService/"/>
+    
+      <category term="SpringBoot" scheme="http://wangyuanjun.cn/tags/SpringBoot/"/>
     
   </entry>
   
@@ -2011,37 +2036,6 @@ import &apos;ztree&apos;
 export const addDataGroup = params =&gt; { return axios.post(`/remote/dataGroup/add`, qs.stringify(params) ); };
 </code></pre><p>方法二：如果不想修改前端代码的话，需要对后台的代码做修改：<br>通过翻看axios的文档得知：在axios使用Post发送数据时，默认是直接把json放到请求体中提交到后端的，而后端获取数据的方式有两种，一种是@RequestParam（通过字符串中解析出参数）,另一种是@ResponseBody（从请求体中取参数），很显然，我们的后端用了第一种方式。</p>
 <p>参考文档：<a href="http://www.jzdlink.com/studynotes/201709141385.html" target="_blank" rel="external">http://www.jzdlink.com/studynotes/201709141385.html</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;最近在做一个项目,项目的后端是地址: &lt;a href=&quot;https://github.com/wangyuanjun008/wyj-springboot.github.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.co
-    
-    </summary>
-    
-      <category term="axios" scheme="http://wangyuanjun.cn/categories/axios/"/>
-    
-    
-      <category term="axios" scheme="http://wangyuanjun.cn/tags/axios/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>在vue中使用axios跨域访问数据，用proxyTable解决跨域问题</title>
-    <link href="http://wangyuanjun.cn/2017/12/04/%E5%9C%A8vue%E4%B8%AD%E4%BD%BF%E7%94%A8axios%E8%B7%A8%E5%9F%9F%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%EF%BC%8C%E7%94%A8proxyTable%E8%A7%A3%E5%86%B3%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98/"/>
-    <id>http://wangyuanjun.cn/2017/12/04/在vue中使用axios跨域访问数据，用proxyTable解决跨域问题/</id>
-    <published>2017-12-04T13:04:58.000Z</published>
-    <updated>2017-12-18T14:52:21.129Z</updated>
-    
-    <content type="html"><![CDATA[<p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中需要用到axios与后端接口交互的时候，遇到了跨域的问题，浏览器报错如下:</p>
-<p><img src="/2017/12/04/在vue中使用axios跨域访问数据，用proxyTable解决跨域问题/axios跨域报错.png" alt="axios跨域报错"></p>
-<p><img src="/2017/12/04/在vue中使用axios跨域访问数据，用proxyTable解决跨域问题/axios跨域返回数据.png" alt="axios跨域返回数据"></p>
-<p>能看到是有数据数据返回到前台的，说明前台没有接收到</p>
-<p>解决方法:</p>
-<p>进入你的vue项目下 -&gt; config -&gt; index.js，里面的dev对象下有一个proxyTable的属性，这个参数主要是一个地址映射表，可以帮助我们将复杂的url简化。</p>
-<p><img src="/2017/12/04/在vue中使用axios跨域访问数据，用proxyTable解决跨域问题/axios解决跨域.png" alt="axios解决跨域"></p>
-<p>如果请求的地址是 <a href="http://127.0.0.1:8081/remote/1" target="_blank" rel="external">http://127.0.0.1:8081/remote/1</a> ，使用proxyTable配置，请求的地址变为 /remote/1。在proxyTable中有个参数是changeOrigin，如果设置为true,那么本地会虚拟一个服务端接收你的请求并代你发送该请求，这样就不会有跨域问题了，当然这只适用于开发环境。</p>
-<p>参考文档：<a href="https://vuejs-templates.github.io/webpack/proxy.html" target="_blank" rel="external">https://vuejs-templates.github.io/webpack/proxy.html</a></p>
 ]]></content>
     
     <summary type="html">
