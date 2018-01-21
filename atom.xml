@@ -99,7 +99,7 @@
     <link href="http://wangyuanjun.cn/2018/01/16/Nginx%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E4%B8%8E%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1-%E4%B8%80/"/>
     <id>http://wangyuanjun.cn/2018/01/16/Nginx学习——反向代理与负载均衡-一/</id>
     <published>2018-01-16T08:04:25.000Z</published>
-    <updated>2018-01-18T02:14:43.524Z</updated>
+    <updated>2018-01-21T11:32:48.876Z</updated>
     
     <content type="html"><![CDATA[<h1 id="一：环境配置"><a href="#一：环境配置" class="headerlink" title="一：环境配置"></a>一：环境配置</h1><p>我本地是Windows系统，使用 Oracle VM VirtualBox 虚拟机安装一个虚拟的Linux系统，安装jdk1.8，nginx,两个tomcat </p>
 <p><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/架构图.png" alt="架构图"><br>一般需要用到三台服务器，一台 nginx 服务器，两台正式部署项目的服务器。为了方便操作，我只在一台服务器上面安装了一个nginx和两个tomcat(端口不一样)</p>
@@ -140,6 +140,10 @@
     
     </summary>
     
+      <category term="nginx" scheme="http://wangyuanjun.cn/categories/nginx/"/>
+    
+    
+      <category term="nginx" scheme="http://wangyuanjun.cn/tags/nginx/"/>
     
   </entry>
   
@@ -162,7 +166,7 @@
     <link href="http://wangyuanjun.cn/2018/01/11/Dubbo%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Dubbo-admin%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0%E6%90%AD%E5%BB%BA-%E4%B8%89/"/>
     <id>http://wangyuanjun.cn/2018/01/11/Dubbo学习——Dubbo-admin管理平台搭建-三/</id>
     <published>2018-01-11T03:05:23.000Z</published>
-    <updated>2018-01-11T05:30:50.777Z</updated>
+    <updated>2018-01-21T11:19:13.927Z</updated>
     
     <content type="html"><![CDATA[<h1 id="一：前言"><a href="#一：前言" class="headerlink" title="一：前言"></a>一：前言</h1><p>上一篇博文介绍的是dubbo的使用，包括有注册中心，消费者，提供者的使用，但是并不能看到有哪些消费者和提供者，为了更好的调试，发现问题，解决问题，因此引入dubbo-admin。通过dubbo-admin可以对消费者和提供者进行管理。</p>
 <h1 id="二：下载与配置打包"><a href="#二：下载与配置打包" class="headerlink" title="二：下载与配置打包"></a>二：下载与配置打包</h1><p>dubbo-admin的下载，可自行到官网下载：<a href="https://github.com/alibaba/dubbo" target="_blank" rel="external">https://github.com/alibaba/dubbo</a><br><img src="/2018/01/11/Dubbo学习——Dubbo-admin管理平台搭建-三/dubbo.png" alt="dubbo"></p>
@@ -194,6 +198,10 @@
     
     </summary>
     
+      <category term="Dubbo" scheme="http://wangyuanjun.cn/categories/Dubbo/"/>
+    
+    
+      <category term="Dubbo" scheme="http://wangyuanjun.cn/tags/Dubbo/"/>
     
   </entry>
   
@@ -202,7 +210,7 @@
     <link href="http://wangyuanjun.cn/2018/01/10/Dubbo%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Dubbo%E7%AE%80%E5%8D%95%E5%85%A5%E9%97%A8Demo-%E4%BA%8C/"/>
     <id>http://wangyuanjun.cn/2018/01/10/Dubbo学习——Dubbo简单入门Demo-二/</id>
     <published>2018-01-10T15:16:22.000Z</published>
-    <updated>2018-01-11T14:14:32.507Z</updated>
+    <updated>2018-01-21T11:06:01.930Z</updated>
     
     <content type="html"><![CDATA[<p>本文采用Dubbo与Zookeeper、Spring框架的整合。整个项目的代码已经上传到我的github <a href="https://github.com/wangyuanjun008/wyj-dubbo-demo.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-dubbo-demo.git</a> 欢迎查看。<br>主要是以下几个步骤： </p>
 <ol>
@@ -249,6 +257,10 @@
     
     </summary>
     
+      <category term="Dubbo" scheme="http://wangyuanjun.cn/categories/Dubbo/"/>
+    
+    
+      <category term="Dubbo" scheme="http://wangyuanjun.cn/tags/Dubbo/"/>
     
   </entry>
   
@@ -257,7 +269,7 @@
     <link href="http://wangyuanjun.cn/2018/01/10/%E4%BD%BF%E7%94%A8DaoCloud%20docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E5%99%A8/"/>
     <id>http://wangyuanjun.cn/2018/01/10/使用DaoCloud docker镜像加速器/</id>
     <published>2018-01-10T06:10:46.000Z</published>
-    <updated>2018-01-10T06:28:38.413Z</updated>
+    <updated>2018-01-21T11:04:36.494Z</updated>
     
     <content type="html"><![CDATA[<p>使用 Docker 的时候，需要经常从官方获取镜像，但是由于显而易见的网络原因，拉取镜像的过程非常耗时，严重影响使用Docker的体验。由于国内访问直接访问dockerhub网速比较慢，拉取镜像的时间就会比较长，甚至下载失败。一般我们会使用镜像加速或者直接从国内的一些平台镜像仓库上拉取。<br>我之前准备用阿里云的加速器的，试了好长时间没有成功，于是改用DaoCloud，下面向大家介绍在windows环境下使用docker toolbox来配置镜像加速器。<br>在docker客户端执行如下命令</p>
 <pre><code>docker-machine ssh default
@@ -274,6 +286,10 @@ docker-machine restart default
     
     </summary>
     
+      <category term="docker" scheme="http://wangyuanjun.cn/categories/docker/"/>
+    
+    
+      <category term="docker" scheme="http://wangyuanjun.cn/tags/docker/"/>
     
   </entry>
   
@@ -1123,7 +1139,7 @@ insert into teacher values(&apos;&apos;&apos;&apos;,&apos;&apos;jack&apos;&apos;
     <link href="http://wangyuanjun.cn/2017/12/28/Dubbo%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Dubbo%E4%BB%8B%E7%BB%8D-%E4%B8%80/"/>
     <id>http://wangyuanjun.cn/2017/12/28/Dubbo学习——Dubbo介绍-一/</id>
     <published>2017-12-28T01:40:51.000Z</published>
-    <updated>2018-01-10T15:13:23.715Z</updated>
+    <updated>2018-01-21T10:34:27.813Z</updated>
     
     <content type="html"><![CDATA[<p>互联网的发展，网站应用的规模不断扩大，常规的垂直应用架构已无法应对，分布式服务架构以及流动计算架构势在必行，Dubbo是一个分布式服务框架，在这种情况下诞生的。现在核心业务抽取出来，作为独立的服务，使前端应用能更快速和稳定的响应。<br>Dubbo是Alibaba开源的分布式服务框架，它最大的特点是按照分层的方式来架构，使用这种方式可以使各个层之间解耦合（或者最大限度地松耦合）。从服务模型的角度来看，Dubbo采用的是一种非常简单的模型，要么是提供方提供服务，要么是消费方消费服务，所以基于这一点可以抽象出服务提供方（Provider）和服务消费方（Consumer）两个角色。关于注册中心、协议支持、服务监控等内容，详见后面描述</p>
 <h1 id="一：Dubbo背景"><a href="#一：Dubbo背景" class="headerlink" title="一：Dubbo背景"></a>一：Dubbo背景</h1><p>大规模服务化之前，应用可能只是通过RMI或Hessian等工具，简单的暴露和引用远程服务，通过配置服务的URL地址进行调用，通过F5等硬件进行负载均衡。</p>
@@ -1232,6 +1248,10 @@ insert into teacher values(&apos;&apos;&apos;&apos;,&apos;&apos;jack&apos;&apos;
     
     </summary>
     
+      <category term="Dubbo" scheme="http://wangyuanjun.cn/categories/Dubbo/"/>
+    
+    
+      <category term="Dubbo" scheme="http://wangyuanjun.cn/tags/Dubbo/"/>
     
   </entry>
   
