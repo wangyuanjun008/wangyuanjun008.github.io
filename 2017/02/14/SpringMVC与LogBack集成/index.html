@@ -3,285 +3,440 @@
 
 jar包配置
 </code></pre><p>   如果要使用LogBack做为日志的插件的话，需要的jar包有如下，直接看一下Maven依赖</p>
-<p>   <span style="font-family:Comic Sans MS;font-size:18px;"><dependency><br>            <groupid>org.slf4j</groupid><br>            <artifactid>slf4j-api</artifactid><br>            <version>1.7.12</version><br>        </dependency><br>        <dependency><br>            <groupid>ch.qos.logback</groupid><br>            <artifactid>logback-classic</artifactid><br>            <version>1.1.3</version><br>            <scope>compile</scope><br>            <exclusions><br>                <exclusion><br>                    <artifactid>slf4j-api</artifactid><br>                    <groupid>org.slf4j</groupid><br>                </exclusion><br>            </exclusions><br>        </dependency></span></p>
-<pre><code>    &lt;dependency&gt;
-        &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
-        &lt;artifactId&gt;logback-core&lt;/artifactId&gt;
-        &lt;version&gt;1.1.3&lt;/version&gt;
-        &lt;exclusions&gt;
-            &lt;exclusion&gt;
-                &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
-                &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;
-            &lt;/exclusion&gt;
-        &lt;/exclusions&gt;
-        &lt;scope&gt;compile&lt;/scope&gt;
-    &lt;/dependency&gt;
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+    &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;
+    &lt;version&gt;1.7.12&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
+    &lt;artifactId&gt;logback-classic&lt;/artifactId&gt;
+    &lt;version&gt;1.1.3&lt;/version&gt;
+    &lt;scope&gt;compile&lt;/scope&gt;
+    &lt;exclusions&gt;
+        &lt;exclusion&gt;
+            &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;
+            &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+        &lt;/exclusion&gt;
+    &lt;/exclusions&gt;
+&lt;/dependency&gt;
 
-    &lt;dependency&gt;
-        &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
-        &lt;artifactId&gt;logback-access&lt;/artifactId&gt;
-        &lt;version&gt;1.1.3&lt;/version&gt;
-        &lt;exclusions&gt;
-            &lt;exclusion&gt;
-                &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
-                &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;
-            &lt;/exclusion&gt;
-        &lt;/exclusions&gt;
-        &lt;scope&gt;compile&lt;/scope&gt;
-    &lt;/dependency&gt;&lt;/span&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
+    &lt;artifactId&gt;logback-core&lt;/artifactId&gt;
+    &lt;version&gt;1.1.3&lt;/version&gt;
+    &lt;exclusions&gt;
+        &lt;exclusion&gt;
+            &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+            &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;
+        &lt;/exclusion&gt;
+    &lt;/exclusions&gt;
+    &lt;scope&gt;compile&lt;/scope&gt;
+&lt;/dependency&gt;
 
-Web.xml
-在web项目中需要通过web.xml来加载我们所需要的LogBack.xml具体如下
-&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-</code></pre><web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemalocation="http://java.sun.com/xml/ns/javaee
-    http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+&lt;dependency&gt;
+    &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
+    &lt;artifactId&gt;logback-access&lt;/artifactId&gt;
+    &lt;version&gt;1.1.3&lt;/version&gt;
+    &lt;exclusions&gt;
+        &lt;exclusion&gt;
+            &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+            &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;
+        &lt;/exclusion&gt;
+    &lt;/exclusions&gt;
+    &lt;scope&gt;compile&lt;/scope&gt;
+&lt;/dependency&gt;
+</code></pre><p>Web.xml<br>在web项目中需要通过web.xml来加载我们所需要的LogBack.xml具体如下</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;web-app version=&quot;2.5&quot; xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee
+    http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot;&gt;
+
+    &lt;!-- logback-begin --&gt;
+    &lt;context-param&gt;
+        &lt;param-name&gt;logbackConfigLocation&lt;/param-name&gt;
+        &lt;param-value&gt; classpath:logback.xml&lt;/param-value&gt;
+    &lt;/context-param&gt;
+    &lt;listener&gt;
+        &lt;listener-class&gt;com.util.LogbackConfigListener&lt;/listener-class&gt;
+    &lt;/listener&gt;
+    &lt;!-- logback-end --&gt;
 
 
+    &lt;filter&gt;
+        &lt;filter-name&gt;encodingFilter&lt;/filter-name&gt;
+        &lt;filter-class&gt;org.springframework.web.filter.CharacterEncodingFilter&lt;/filter-class&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;encoding&lt;/param-name&gt;
+            &lt;param-value&gt;UTF-8&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;forceEncoding&lt;/param-name&gt;
+            &lt;param-value&gt;true&lt;/param-value&gt;
+        &lt;/init-param&gt;
+    &lt;/filter&gt;
+    &lt;filter-mapping&gt;
+        &lt;filter-name&gt;encodingFilter&lt;/filter-name&gt;
+        &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+    &lt;/filter-mapping&gt;
 
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+            &lt;param-value&gt; classpath:springMVC-servlet.xml&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+    &lt;/servlet&gt;
+    &lt;!-- 这里一定要是/根据Servlet规范来的 --&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;/&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
 
-<pre><code>&lt;!-- logback-begin --&gt;
-&lt;context-param&gt;
-    &lt;param-name&gt;logbackConfigLocation&lt;/param-name&gt;
-    &lt;param-value&gt; classpath:logback.xml&lt;/param-value&gt;
-&lt;/context-param&gt;
-&lt;listener&gt;
-    &lt;listener-class&gt;com.util.LogbackConfigListener&lt;/listener-class&gt;
-&lt;/listener&gt;
-&lt;!-- logback-end --&gt;
-
-
-&lt;filter&gt;
-    &lt;filter-name&gt;encodingFilter&lt;/filter-name&gt;
-    &lt;filter-class&gt;org.springframework.web.filter.CharacterEncodingFilter&lt;/filter-class&gt;
-    &lt;init-param&gt;
-        &lt;param-name&gt;encoding&lt;/param-name&gt;
-        &lt;param-value&gt;UTF-8&lt;/param-value&gt;
-    &lt;/init-param&gt;
-    &lt;init-param&gt;
-        &lt;param-name&gt;forceEncoding&lt;/param-name&gt;
-        &lt;param-value&gt;true&lt;/param-value&gt;
-    &lt;/init-param&gt;
-&lt;/filter&gt;
-&lt;filter-mapping&gt;
-    &lt;filter-name&gt;encodingFilter&lt;/filter-name&gt;
-    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
-&lt;/filter-mapping&gt;
-
-&lt;servlet&gt;
-    &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
-    &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
-    &lt;init-param&gt;
-        &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
-        &lt;param-value&gt; classpath:springMVC-servlet.xml&lt;/param-value&gt;
-    &lt;/init-param&gt;
-    &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
-&lt;/servlet&gt;
-&lt;!-- 这里一定要是/根据Servlet规范来的 --&gt;
-&lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;/&lt;/url-pattern&gt;
-&lt;/servlet-mapping&gt;
-</code></pre><p></p></web-app><p></p>
-<p>上面的XML中用到了自定义的监听器，分别是三个类，如下所示</p>
+&lt;/web-app&gt;
+</code></pre><p>上面的XML中用到了自定义的监听器，分别是三个类，如下所示</p>
 <p>LogbackConfigListener类</p>
-<p>package com.util;</p>
-<p>import javax.servlet.ServletContextEvent;<br>import javax.servlet.ServletContextListener;</p>
-<p>public class LogbackConfigListener implements ServletContextListener {</p>
-<pre><code>public void contextInitialized(ServletContextEvent event) {
-    LogbackWebConfigurer.initLogging(event.getServletContext());
-}
+<pre><code>package com.util;
 
-public void contextDestroyed(ServletContextEvent event) {
-    LogbackWebConfigurer.shutdownLogging(event.getServletContext());
-}
-</code></pre><p>}</p>
-<p>LogbackConfigurer类</p>
-<p>package com.util;</p>
-<p>import java.io.File;<br>import java.io.FileNotFoundException;<br>import java.net.URL;</p>
-<p>import org.slf4j.LoggerFactory;<br>import org.springframework.util.ResourceUtils;<br>import org.springframework.util.SystemPropertyUtils;</p>
-<p>import ch.qos.logback.classic.LoggerContext;<br>import ch.qos.logback.classic.joran.JoranConfigurator;<br>import ch.qos.logback.core.joran.spi.JoranException;</p>
-<p>public abstract class LogbackConfigurer {</p>
-<pre><code>/** Pseudo URL prefix for loading from the class path: &quot;classpath:&quot; */
-public static final String CLASSPATH_URL_PREFIX = &quot;classpath:&quot;;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
-/** Extension that indicates a logback XML config file: &quot;.xml&quot; */
-public static final String XML_FILE_EXTENSION = &quot;.xml&quot;;
+public class LogbackConfigListener implements ServletContextListener {
 
-private static LoggerContext lc = (LoggerContext) LoggerFactory
-        .getILoggerFactory();
-private static JoranConfigurator configurator = new JoranConfigurator();
-
-/**
- * Initialize logback from the given file location, with no config file
- * refreshing. Assumes an XML file in case of a &quot;.xml&quot; file extension, and a
- * properties file otherwise.
- * 
- * @param location
- *            the location of the config file: either a &quot;classpath:&quot;
- *            location (e.g. &quot;classpath:mylogback.properties&quot;), an absolute
- *            file URL (e.g.
- *            &quot;file:C:/logback.properties), or a plain absolute path in the file system (e.g. &quot;
- *            C:/logback.properties&quot;)
- * @throws FileNotFoundException
- *             if the location specifies an invalid file path
- */
-public static void initLogging(String location)
-        throws FileNotFoundException {
-    String resolvedLocation = SystemPropertyUtils
-            .resolvePlaceholders(location);
-    URL url = ResourceUtils.getURL(resolvedLocation);
-    if (resolvedLocation.toLowerCase().endsWith(XML_FILE_EXTENSION)) {
-        // DOMConfigurator.configure(url);
-        configurator.setContext(lc);
-        lc.reset();
-        try {
-            configurator.doConfigure(url);
-        } catch (JoranException ex) {
-            throw new FileNotFoundException(url.getPath());
-        }
-        lc.start();
-    }
-    // else {
-    // PropertyConfigurator.configure(url);
-    // }
-}
-
-/**
- * Shut down logback, properly releasing all file locks.
- * &lt;p&gt;
- * This isn&apos;t strictly necessary, but recommended for shutting down logback
- * in a scenario where the host VM stays alive (for example, when shutting
- * down an application in a J2EE environment).
- */
-public static void shutdownLogging() {
-    lc.stop();
-}
-
-/**
- * Set the specified system property to the current working directory.
- * &lt;p&gt;
- * This can be used e.g. for test environments, for applications that
- * leverage logbackWebConfigurer&apos;s &quot;webAppRootKey&quot; support in a web
- * environment.
- * 
- * @param key
- *            system property key to use, as expected in logback
- *            configuration (for example: &quot;demo.root&quot;, used as
- *            &quot;${demo.root}/WEB-INF/demo.log&quot;)
- * @see org.springframework.web.util.logbackWebConfigurer
- */
-public static void setWorkingDirSystemProperty(String key) {
-    System.setProperty(key, new File(&quot;&quot;).getAbsolutePath());
-}
-</code></pre><p>}</p>
-<p>LogbackWebConfigurer类</p>
-<p>package com.util;</p>
-<p>import java.io.FileNotFoundException;</p>
-<p>import javax.servlet.ServletContext;</p>
-<p>import org.springframework.util.ResourceUtils;<br>import org.springframework.util.SystemPropertyUtils;<br>import org.springframework.web.util.WebUtils;</p>
-<p>public abstract class LogbackWebConfigurer {</p>
-<pre><code>/** Parameter specifying the location of the logback config file */
-public static final String CONFIG_LOCATION_PARAM = &quot;logbackConfigLocation&quot;;
-
-/**
- * Parameter specifying the refresh interval for checking the logback config
- * file
- */
-public static final String REFRESH_INTERVAL_PARAM = &quot;logbackRefreshInterval&quot;;
-
-/** Parameter specifying whether to expose the web app root system property */
-public static final String EXPOSE_WEB_APP_ROOT_PARAM = &quot;logbackExposeWebAppRoot&quot;;
-
-/**
- * Initialize logback, including setting the web app root system property.
- * 
- * @param servletContext
- *            the current ServletContext
- * @see WebUtils#setWebAppRootSystemProperty
- */
-public static void initLogging(ServletContext servletContext) {
-    // Expose the web app root system property.
-    if (exposeWebAppRoot(servletContext)) {
-        WebUtils.setWebAppRootSystemProperty(servletContext);
+    public void contextInitialized(ServletContextEvent event) {
+        LogbackWebConfigurer.initLogging(event.getServletContext());
     }
 
-    // Only perform custom logback initialization in case of a config file.
-    String location = servletContext
-            .getInitParameter(CONFIG_LOCATION_PARAM);
-    if (location != null) {
-        // Perform actual logback initialization; else rely on logback&apos;s
-        // default initialization.
-        try {
-            // Return a URL (e.g. &quot;classpath:&quot; or &quot;file:&quot;) as-is;
-            // consider a plain file path as relative to the web application
-            // root directory.
-            if (!ResourceUtils.isUrl(location)) {
-                // Resolve system property placeholders before resolving
-                // real path.
-                location = SystemPropertyUtils
-                        .resolvePlaceholders(location);
-                location = WebUtils.getRealPath(servletContext, location);
+    public void contextDestroyed(ServletContextEvent event) {
+        LogbackWebConfigurer.shutdownLogging(event.getServletContext());
+    }
+}
+
+LogbackConfigurer类
+
+
+package com.util;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.URL;
+
+import org.slf4j.LoggerFactory;
+import org.springframework.util.ResourceUtils;
+import org.springframework.util.SystemPropertyUtils;
+
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.joran.JoranConfigurator;
+import ch.qos.logback.core.joran.spi.JoranException;
+
+public abstract class LogbackConfigurer {
+
+    /** Pseudo URL prefix for loading from the class path: &quot;classpath:&quot; */
+    public static final String CLASSPATH_URL_PREFIX = &quot;classpath:&quot;;
+
+    /** Extension that indicates a logback XML config file: &quot;.xml&quot; */
+    public static final String XML_FILE_EXTENSION = &quot;.xml&quot;;
+
+    private static LoggerContext lc = (LoggerContext) LoggerFactory
+            .getILoggerFactory();
+    private static JoranConfigurator configurator = new JoranConfigurator();
+
+    /**
+     * Initialize logback from the given file location, with no config file
+     * refreshing. Assumes an XML file in case of a &quot;.xml&quot; file extension, and a
+     * properties file otherwise.
+     * 
+     * @param location
+     *            the location of the config file: either a &quot;classpath:&quot;
+     *            location (e.g. &quot;classpath:mylogback.properties&quot;), an absolute
+     *            file URL (e.g.
+     *            &quot;file:C:/logback.properties), or a plain absolute path in the file system (e.g. &quot;
+     *            C:/logback.properties&quot;)
+     * @throws FileNotFoundException
+     *             if the location specifies an invalid file path
+     */
+    public static void initLogging(String location)
+            throws FileNotFoundException {
+        String resolvedLocation = SystemPropertyUtils
+                .resolvePlaceholders(location);
+        URL url = ResourceUtils.getURL(resolvedLocation);
+        if (resolvedLocation.toLowerCase().endsWith(XML_FILE_EXTENSION)) {
+            // DOMConfigurator.configure(url);
+            configurator.setContext(lc);
+            lc.reset();
+            try {
+                configurator.doConfigure(url);
+            } catch (JoranException ex) {
+                throw new FileNotFoundException(url.getPath());
             }
-
-            // Write log message to server log.
-            servletContext.log(&quot;Initializing logback from [&quot; + location
-                    + &quot;]&quot;);
-
-            // Initialize without refresh check, i.e. without logback&apos;s
-            // watchdog thread.
-            LogbackConfigurer.initLogging(location);
-
-        } catch (FileNotFoundException ex) {
-            throw new IllegalArgumentException(
-                    &quot;Invalid &apos;logbackConfigLocation&apos; parameter: &quot;
-                            + ex.getMessage());
+            lc.start();
         }
+        // else {
+        // PropertyConfigurator.configure(url);
+        // }
     }
-}
 
-/**
- * Shut down logback, properly releasing all file locks and resetting the
- * web app root system property.
- * 
- * @param servletContext
- *            the current ServletContext
- * @see WebUtils#removeWebAppRootSystemProperty
- */
-public static void shutdownLogging(ServletContext servletContext) {
-    servletContext.log(&quot;Shutting down logback&quot;);
-    try {
-        LogbackConfigurer.shutdownLogging();
-    } finally {
-        // Remove the web app root system property.
+    /**
+     * Shut down logback, properly releasing all file locks.
+     * &lt;p&gt;
+     * This isn&apos;t strictly necessary, but recommended for shutting down logback
+     * in a scenario where the host VM stays alive (for example, when shutting
+     * down an application in a J2EE environment).
+     */
+    public static void shutdownLogging() {
+        lc.stop();
+    }
+
+    /**
+     * Set the specified system property to the current working directory.
+     * &lt;p&gt;
+     * This can be used e.g. for test environments, for applications that
+     * leverage logbackWebConfigurer&apos;s &quot;webAppRootKey&quot; support in a web
+     * environment.
+     * 
+     * @param key
+     *            system property key to use, as expected in logback
+     *            configuration (for example: &quot;demo.root&quot;, used as
+     *            &quot;${demo.root}/WEB-INF/demo.log&quot;)
+     * @see org.springframework.web.util.logbackWebConfigurer
+     */
+    public static void setWorkingDirSystemProperty(String key) {
+        System.setProperty(key, new File(&quot;&quot;).getAbsolutePath());
+    }
+
+}
+</code></pre><p>LogbackWebConfigurer类</p>
+<pre><code>package com.util;
+
+import java.io.FileNotFoundException;
+
+import javax.servlet.ServletContext;
+
+import org.springframework.util.ResourceUtils;
+import org.springframework.util.SystemPropertyUtils;
+import org.springframework.web.util.WebUtils;
+
+public abstract class LogbackWebConfigurer {
+
+    /** Parameter specifying the location of the logback config file */
+    public static final String CONFIG_LOCATION_PARAM = &quot;logbackConfigLocation&quot;;
+
+    /**
+     * Parameter specifying the refresh interval for checking the logback config
+     * file
+     */
+    public static final String REFRESH_INTERVAL_PARAM = &quot;logbackRefreshInterval&quot;;
+
+    /** Parameter specifying whether to expose the web app root system property */
+    public static final String EXPOSE_WEB_APP_ROOT_PARAM = &quot;logbackExposeWebAppRoot&quot;;
+
+    /**
+     * Initialize logback, including setting the web app root system property.
+     * 
+     * @param servletContext
+     *            the current ServletContext
+     * @see WebUtils#setWebAppRootSystemProperty
+     */
+    public static void initLogging(ServletContext servletContext) {
+        // Expose the web app root system property.
         if (exposeWebAppRoot(servletContext)) {
-            WebUtils.removeWebAppRootSystemProperty(servletContext);
+            WebUtils.setWebAppRootSystemProperty(servletContext);
+        }
+
+        // Only perform custom logback initialization in case of a config file.
+        String location = servletContext
+                .getInitParameter(CONFIG_LOCATION_PARAM);
+        if (location != null) {
+            // Perform actual logback initialization; else rely on logback&apos;s
+            // default initialization.
+            try {
+                // Return a URL (e.g. &quot;classpath:&quot; or &quot;file:&quot;) as-is;
+                // consider a plain file path as relative to the web application
+                // root directory.
+                if (!ResourceUtils.isUrl(location)) {
+                    // Resolve system property placeholders before resolving
+                    // real path.
+                    location = SystemPropertyUtils
+                            .resolvePlaceholders(location);
+                    location = WebUtils.getRealPath(servletContext, location);
+                }
+
+                // Write log message to server log.
+                servletContext.log(&quot;Initializing logback from [&quot; + location
+                        + &quot;]&quot;);
+
+                // Initialize without refresh check, i.e. without logback&apos;s
+                // watchdog thread.
+                LogbackConfigurer.initLogging(location);
+
+            } catch (FileNotFoundException ex) {
+                throw new IllegalArgumentException(
+                        &quot;Invalid &apos;logbackConfigLocation&apos; parameter: &quot;
+                                + ex.getMessage());
+            }
         }
     }
-}
 
-/**
- * Return whether to expose the web app root system property, checking the
- * corresponding ServletContext init parameter.
- * 
- * @see #EXPOSE_WEB_APP_ROOT_PARAM
- */
-private static boolean exposeWebAppRoot(ServletContext servletContext) {
-    String exposeWebAppRootParam = servletContext
-            .getInitParameter(EXPOSE_WEB_APP_ROOT_PARAM);
-    return (exposeWebAppRootParam == null || Boolean
-            .valueOf(exposeWebAppRootParam));
-}
-</code></pre><p>}</p>
-<p>   logback.XML配置<br>下面来看一下这个xml是如何配置的</p>
-<p>&lt;?xml version=”1.0” encoding=”UTF-8”?&gt;<br><!-- ROOT 节点 --><br><!-- 属性描述 scan：性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true scanPeriod:设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。当scan为true时，此属性生效。默认的时间间隔为1分钟。 
-    debug:当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。 --></p>
-<configuration scan="true" scanperiod="60 seconds" debug="false"><br>    <!-- 定义日志文件 输入位置,注意此处的/ --><br>    <property name="log_dir" value="E:/logs"><br>    <!-- 日志最大的历史 60天 --><br>    <property name="maxHistory" value="60"></property><br><br><br>    <!-- 控制台输出日志 --><br>    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender"><br>        <encoder><br>            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -<br>                %msg%n</pattern><br>        </encoder><br><br>    </appender><br><br><br>    <!-- 出错日志 appender --><br>    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender"><br>        <!-- 在多数的Log工具中，级别是可以传递，例如如果指定了日志输出级别为DEBUG， 那么INFO、ERROR级别的log也会出现在日志文件。这种默认给程序的调试带来了很多的麻烦 
-            通过配置Filter 来严格控制日志输入级别 <filter class="ch.qos.logback.classic.filter.LevelFilter"> 
-            <level>ERROR/level> <onMatch>ACCEPT</onMatch> <onMismatch>DENY</onMismatch> 
-            </filter> --><br>        <rollingpolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"><br>            <!-- 按天回滚 daily --><br>            <filenamepattern>${log_dir}/error-log-%d{yyyy-MM-dd}.log<br>            </filenamepattern><br>            <!-- 日志最大的历史 60天 --><br>            <maxhistory>${maxHistory}</maxhistory><br>        </rollingpolicy><br>        <encoder><br>            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -<br>                %msg%n</pattern><br>        </encoder><br>    </appender><br><br>    <!-- INFO 日志 appender --><br>    <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender"><br>        <rollingpolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"><br>            <!-- 按天回滚 daily --><br>            <filenamepattern>${log_dir}/info-log-%d{yyyy-MM-dd}.log<br>            </filenamepattern><br>            <!-- 日志最大的历史 60天 --><br>            <maxhistory>${maxHistory}</maxhistory><br>        </rollingpolicy><br>        <encoder><br>            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -<br>                %msg%n</pattern><br>        </encoder><br>    </appender><br><br><br>    <!-- 访问日志 appender --><br>    <appender name="ACCESS" class="ch.qos.logback.core.rolling.RollingFileAppender"><br>        <rollingpolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"><br>            <!-- 按天回滚 daily --><br>            <filenamepattern>${log_dir}/access-log-%d{yyyy-MM-dd}.log<br>            </filenamepattern><br>            <!-- 日志最大的历史 60天 --><br>            <maxhistory>${maxHistory}</maxhistory><br>        </rollingpolicy><br>        <encoder><br>            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -<br>                %msg%n</pattern><br>        </encoder><br>    </appender><br><br>    <!-- 系统用户操作日志 appender --><br>    <appender name="SYS-USER" class="ch.qos.logback.core.rolling.RollingFileAppender"><br>        <rollingpolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"><br>            <!-- 按天回滚 daily --><br>            <filenamepattern>${log_dir}/sys_user-log-%d{yyyy-MM-dd}.log<br>            </filenamepattern><br>            <!-- 日志最大的历史 60天 --><br>            <maxhistory>${maxHistory}</maxhistory><br>        </rollingpolicy><br>        <encoder><br>            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -<br>                %msg%n</pattern><br>        </encoder><br>    </appender><br><br><br>    <!-- 打印SQL输出 --><br>    <logger name="java.sql.Connection" level="DEBUG"><br>    <logger name="java.sql.Statement" level="DEBUG"><br>    <logger name="java.sql.PreparedStatement" level="DEBUG"><br><br><br><br>    <!--error错误日志 additivity="false"表示不向上传递 --><br>    <!-- <logger name="com.test" level="error" > --><br>    <!-- <appender-ref ref="ERROR" /> --><br>    <!-- </logger> --><br>    <!--info日志 --><br>    <logger name="com.test" level="info" additivity="false"><br>        <appender-ref ref="INFO"><br>    </appender-ref></logger><br>    <!--访问日志 --><br>    <!-- <logger name="com.test" level="info" additivity="false"> --><br>    <!-- <appender-ref ref="ACCESS" /> --><br>    <!-- </logger> --><br>    <!--系统用户操作日志 --><br>    <!-- <logger name="com.test" level="info" additivity="false"> --><br>    <!-- <appender-ref ref="SYS-USER" /> --><br>    <!-- </logger> --><br><br>    <root><br>        <level value="INFO"><br>        <appender-ref ref="stdout"><br>    </appender-ref></level></root><br></logger></logger></logger></property></configuration>
+    /**
+     * Shut down logback, properly releasing all file locks and resetting the
+     * web app root system property.
+     * 
+     * @param servletContext
+     *            the current ServletContext
+     * @see WebUtils#removeWebAppRootSystemProperty
+     */
+    public static void shutdownLogging(ServletContext servletContext) {
+        servletContext.log(&quot;Shutting down logback&quot;);
+        try {
+            LogbackConfigurer.shutdownLogging();
+        } finally {
+            // Remove the web app root system property.
+            if (exposeWebAppRoot(servletContext)) {
+                WebUtils.removeWebAppRootSystemProperty(servletContext);
+            }
+        }
+    }
 
-<p>关于这个XML文件的详细讲解请参考<a href="http://blog.csdn.net/haidage/article/details/6794509" target="_blank" rel="external">http://blog.csdn.net/haidage/article/details/6794509</a></p>
-</div><div class="tags"><a href="/tags/SpringMVC/">SpringMVC</a></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/02/21/spring-读取properties的两种方法/" class="pre">spring 读取properties的两种方法</a><a href="/2017/01/12/如何相互转换逗号分隔的字符串和List/" class="next">如何相互转换逗号分隔的字符串和List</a></div><div id="comments"><div id="SOHUCS" sid="2017/02/14/SpringMVC与LogBack集成/"></div></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/01/11/HTML-CSS基础知识学习笔记/">HTML/CSS基础知识学习笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/11/Dubbo学习——Dubbo-admin管理平台搭建-三/">Dubbo学习——Dubbo-admin管理平台搭建(三)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/10/Dubbo学习——Dubbo简单入门Demo-二/">Dubbo学习——Dubbo简单入门Demo(二)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/10/使用DaoCloud docker镜像加速器/">使用DaoCloud docker镜像加速器</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/08/Quartz学习——SSM和Quartz集成详解-四/">Quartz学习——SSM和Quartz集成详解(四)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/08/Quartz学习——Spring和Quartz集成详解-三/">Quartz学习——Spring和Quartz集成详解(三)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/03/Quartz学习——Quartz简单入门Demo-二/">Quartz学习——Quartz简单入门Demo(二)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/03/Docker之创建并进入mysql容器/">Docker之创建并进入mysql容器</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/03/常用mysql命令大全/">常用mysql命令大全</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/28/Dubbo学习——Dubbo介绍-一/">Dubbo学习——Dubbo介绍(一)</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HttpClient/">HttpClient</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/WebService/">WebService</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/axios/">axios</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/element-ui/">element ui</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/extjs/">extjs</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/maven/">maven</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mybatis/">mybatis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/oracle/">oracle</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/">quartz</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/select2/">select2</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/shiro/">shiro</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/spring/">spring</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/tomcat/">tomcat</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/weblogic/">weblogic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/webpack/">webpack</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ztree/">ztree</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编码规范/">编码规范</a><span class="category-list-count">1</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/docker/" style="font-size: 15px;">docker</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/tomcat/" style="font-size: 15px;">tomcat</a> <a href="/tags/maven/" style="font-size: 15px;">maven</a> <a href="/tags/Oracle-VM-VirtualBox/" style="font-size: 15px;">Oracle VM VirtualBox</a> <a href="/tags/linux/" style="font-size: 15px;">linux</a> <a href="/tags/quartz/" style="font-size: 15px;">quartz</a> <a href="/tags/redis/" style="font-size: 15px;">redis</a> <a href="/tags/spring-aop/" style="font-size: 15px;">spring aop</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/SpringMVC/" style="font-size: 15px;">SpringMVC</a> <a href="/tags/WebService/" style="font-size: 15px;">WebService</a> <a href="/tags/SpringBoot/" style="font-size: 15px;">SpringBoot</a> <a href="/tags/HttpClient/" style="font-size: 15px;">HttpClient</a> <a href="/tags/extjs/" style="font-size: 15px;">extjs</a> <a href="/tags/webpack/" style="font-size: 15px;">webpack</a> <a href="/tags/mybatis/" style="font-size: 15px;">mybatis</a> <a href="/tags/jquery/" style="font-size: 15px;">jquery</a> <a href="/tags/ztree/" style="font-size: 15px;">ztree</a> <a href="/tags/shiro/" style="font-size: 15px;">shiro</a> <a href="/tags/element-ui/" style="font-size: 15px;">element ui</a> <a href="/tags/weblogic/" style="font-size: 15px;">weblogic</a> <a href="/tags/select2/" style="font-size: 15px;">select2</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/axios/" style="font-size: 15px;">axios</a> <a href="/tags/git/" style="font-size: 15px;">git</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/oracle/" style="font-size: 15px;">oracle</a> <a href="/tags/java基础/" style="font-size: 15px;">java基础</a> <a href="/tags/编码规范/" style="font-size: 15px;">编码规范</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-you"> 友情链接</i></div><ul></ul><a href="https://github.com/wangyuanjun008" title="GitHub" target="_blank">GitHub</a></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">WangYuanJun.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    /**
+     * Return whether to expose the web app root system property, checking the
+     * corresponding ServletContext init parameter.
+     * 
+     * @see #EXPOSE_WEB_APP_ROOT_PARAM
+     */
+    private static boolean exposeWebAppRoot(ServletContext servletContext) {
+        String exposeWebAppRootParam = servletContext
+                .getInitParameter(EXPOSE_WEB_APP_ROOT_PARAM);
+        return (exposeWebAppRootParam == null || Boolean
+                .valueOf(exposeWebAppRootParam));
+    }
+
+}
+</code></pre><p>   logback.XML配置<br>下面来看一下这个xml是如何配置的</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!-- ROOT 节点 --&gt;
+&lt;!-- 属性描述 scan：性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true scanPeriod:设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。当scan为true时，此属性生效。默认的时间间隔为1分钟。 
+    debug:当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。 --&gt;
+&lt;configuration scan=&quot;true&quot; scanPeriod=&quot;60 seconds&quot; debug=&quot;false&quot;&gt;
+    &lt;!-- 定义日志文件 输入位置,注意此处的/ --&gt;
+    &lt;property name=&quot;log_dir&quot; value=&quot;E:/logs&quot; /&gt;
+    &lt;!-- 日志最大的历史 60天 --&gt;
+    &lt;property name=&quot;maxHistory&quot; value=&quot;60&quot;&gt;&lt;/property&gt;
+
+
+    &lt;!-- 控制台输出日志 --&gt;
+    &lt;appender name=&quot;STDOUT&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;
+        &lt;encoder&gt;
+            &lt;pattern&gt;%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -
+                %msg%n&lt;/pattern&gt;
+        &lt;/encoder&gt;
+
+    &lt;/appender&gt;
+
+
+    &lt;!-- 出错日志 appender --&gt;
+    &lt;appender name=&quot;ERROR&quot;
+        class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&gt;
+        &lt;!-- 在多数的Log工具中，级别是可以传递，例如如果指定了日志输出级别为DEBUG， 那么INFO、ERROR级别的log也会出现在日志文件。这种默认给程序的调试带来了很多的麻烦 
+            通过配置Filter 来严格控制日志输入级别 &lt;filter class=&quot;ch.qos.logback.classic.filter.LevelFilter&quot;&gt; 
+            &lt;level&gt;ERROR/level&gt; &lt;onMatch&gt;ACCEPT&lt;/onMatch&gt; &lt;onMismatch&gt;DENY&lt;/onMismatch&gt; 
+            &lt;/filter&gt; --&gt;
+        &lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&gt;
+            &lt;!-- 按天回滚 daily --&gt;
+            &lt;fileNamePattern&gt;${log_dir}/error-log-%d{yyyy-MM-dd}.log
+            &lt;/fileNamePattern&gt;
+            &lt;!-- 日志最大的历史 60天 --&gt;
+            &lt;maxHistory&gt;${maxHistory}&lt;/maxHistory&gt;
+        &lt;/rollingPolicy&gt;
+        &lt;encoder&gt;
+            &lt;pattern&gt;%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -
+                %msg%n&lt;/pattern&gt;
+        &lt;/encoder&gt;
+    &lt;/appender&gt;
+
+    &lt;!-- INFO 日志 appender --&gt;
+    &lt;appender name=&quot;INFO&quot;
+        class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&gt;
+        &lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&gt;
+            &lt;!-- 按天回滚 daily --&gt;
+            &lt;fileNamePattern&gt;${log_dir}/info-log-%d{yyyy-MM-dd}.log
+            &lt;/fileNamePattern&gt;
+            &lt;!-- 日志最大的历史 60天 --&gt;
+            &lt;maxHistory&gt;${maxHistory}&lt;/maxHistory&gt;
+        &lt;/rollingPolicy&gt;
+        &lt;encoder&gt;
+            &lt;pattern&gt;%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -
+                %msg%n&lt;/pattern&gt;
+        &lt;/encoder&gt;
+    &lt;/appender&gt;
+
+
+    &lt;!-- 访问日志 appender --&gt;
+    &lt;appender name=&quot;ACCESS&quot;
+        class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&gt;
+        &lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&gt;
+            &lt;!-- 按天回滚 daily --&gt;
+            &lt;fileNamePattern&gt;${log_dir}/access-log-%d{yyyy-MM-dd}.log
+            &lt;/fileNamePattern&gt;
+            &lt;!-- 日志最大的历史 60天 --&gt;
+            &lt;maxHistory&gt;${maxHistory}&lt;/maxHistory&gt;
+        &lt;/rollingPolicy&gt;
+        &lt;encoder&gt;
+            &lt;pattern&gt;%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -
+                %msg%n&lt;/pattern&gt;
+        &lt;/encoder&gt;
+    &lt;/appender&gt;
+
+    &lt;!-- 系统用户操作日志 appender --&gt;
+    &lt;appender name=&quot;SYS-USER&quot;
+        class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&gt;
+        &lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&gt;
+            &lt;!-- 按天回滚 daily --&gt;
+            &lt;fileNamePattern&gt;${log_dir}/sys_user-log-%d{yyyy-MM-dd}.log
+            &lt;/fileNamePattern&gt;
+            &lt;!-- 日志最大的历史 60天 --&gt;
+            &lt;maxHistory&gt;${maxHistory}&lt;/maxHistory&gt;
+        &lt;/rollingPolicy&gt;
+        &lt;encoder&gt;
+            &lt;pattern&gt;%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -
+                %msg%n&lt;/pattern&gt;
+        &lt;/encoder&gt;
+    &lt;/appender&gt;
+
+
+    &lt;!-- 打印SQL输出 --&gt;
+    &lt;logger name=&quot;java.sql.Connection&quot; level=&quot;DEBUG&quot; /&gt;
+    &lt;logger name=&quot;java.sql.Statement&quot; level=&quot;DEBUG&quot; /&gt;
+    &lt;logger name=&quot;java.sql.PreparedStatement&quot; level=&quot;DEBUG&quot; /&gt;
+
+
+
+    &lt;!--error错误日志 additivity=&quot;false&quot;表示不向上传递 --&gt;
+    &lt;!-- &lt;logger name=&quot;com.test&quot; level=&quot;error&quot; &gt; --&gt;
+    &lt;!-- &lt;appender-ref ref=&quot;ERROR&quot; /&gt; --&gt;
+    &lt;!-- &lt;/logger&gt; --&gt;
+    &lt;!--info日志 --&gt;
+    &lt;logger name=&quot;com.test&quot; level=&quot;info&quot; additivity=&quot;false&quot;&gt;
+        &lt;appender-ref ref=&quot;INFO&quot; /&gt;
+    &lt;/logger&gt;
+    &lt;!--访问日志 --&gt;
+    &lt;!-- &lt;logger name=&quot;com.test&quot; level=&quot;info&quot; additivity=&quot;false&quot;&gt; --&gt;
+    &lt;!-- &lt;appender-ref ref=&quot;ACCESS&quot; /&gt; --&gt;
+    &lt;!-- &lt;/logger&gt; --&gt;
+    &lt;!--系统用户操作日志 --&gt;
+    &lt;!-- &lt;logger name=&quot;com.test&quot; level=&quot;info&quot; additivity=&quot;false&quot;&gt; --&gt;
+    &lt;!-- &lt;appender-ref ref=&quot;SYS-USER&quot; /&gt; --&gt;
+    &lt;!-- &lt;/logger&gt; --&gt;
+
+    &lt;root&gt;
+        &lt;level value=&quot;INFO&quot; /&gt;
+        &lt;appender-ref ref=&quot;stdout&quot; /&gt;
+    &lt;/root&gt;
+&lt;/configuration&gt;
+</code></pre><p>关于这个XML文件的详细讲解请参考<a href="http://blog.csdn.net/haidage/article/details/6794509" target="_blank" rel="external">http://blog.csdn.net/haidage/article/details/6794509</a></p>
+</div><div class="tags"><a href="/tags/SpringMVC/">SpringMVC</a></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/02/21/spring-读取properties的两种方法/" class="pre">spring 读取properties的两种方法</a><a href="/2017/01/12/如何相互转换逗号分隔的字符串和List/" class="next">如何相互转换逗号分隔的字符串和List</a></div><div id="comments"><div id="SOHUCS" sid="2017/02/14/SpringMVC与LogBack集成/"></div></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/01/16/Nginx学习——session共享-二/">Nginx学习——session共享(二)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/16/Nginx学习——反向代理与负载均衡-一/">Nginx学习——反向代理与负载均衡(一)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/11/HTML-CSS基础知识学习笔记/">HTML/CSS基础知识学习笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/11/Dubbo学习——Dubbo-admin管理平台搭建-三/">Dubbo学习——Dubbo-admin管理平台搭建(三)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/10/Dubbo学习——Dubbo简单入门Demo-二/">Dubbo学习——Dubbo简单入门Demo(二)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/10/使用DaoCloud docker镜像加速器/">使用DaoCloud docker镜像加速器</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/08/Quartz学习——SSM和Quartz集成详解-四/">Quartz学习——SSM和Quartz集成详解(四)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/08/Quartz学习——Spring和Quartz集成详解-三/">Quartz学习——Spring和Quartz集成详解(三)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/03/Quartz学习——Quartz简单入门Demo-二/">Quartz学习——Quartz简单入门Demo(二)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/03/Docker之创建并进入mysql容器/">Docker之创建并进入mysql容器</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HttpClient/">HttpClient</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/WebService/">WebService</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/axios/">axios</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/element-ui/">element ui</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/extjs/">extjs</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/maven/">maven</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mybatis/">mybatis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/oracle/">oracle</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/">quartz</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/select2/">select2</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/shiro/">shiro</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/spring/">spring</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/tomcat/">tomcat</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/weblogic/">weblogic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/webpack/">webpack</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ztree/">ztree</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编码规范/">编码规范</a><span class="category-list-count">1</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/docker/" style="font-size: 15px;">docker</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/tomcat/" style="font-size: 15px;">tomcat</a> <a href="/tags/maven/" style="font-size: 15px;">maven</a> <a href="/tags/Oracle-VM-VirtualBox/" style="font-size: 15px;">Oracle VM VirtualBox</a> <a href="/tags/linux/" style="font-size: 15px;">linux</a> <a href="/tags/quartz/" style="font-size: 15px;">quartz</a> <a href="/tags/redis/" style="font-size: 15px;">redis</a> <a href="/tags/spring-aop/" style="font-size: 15px;">spring aop</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/HttpClient/" style="font-size: 15px;">HttpClient</a> <a href="/tags/SpringBoot/" style="font-size: 15px;">SpringBoot</a> <a href="/tags/WebService/" style="font-size: 15px;">WebService</a> <a href="/tags/SpringMVC/" style="font-size: 15px;">SpringMVC</a> <a href="/tags/extjs/" style="font-size: 15px;">extjs</a> <a href="/tags/webpack/" style="font-size: 15px;">webpack</a> <a href="/tags/jquery/" style="font-size: 15px;">jquery</a> <a href="/tags/ztree/" style="font-size: 15px;">ztree</a> <a href="/tags/mybatis/" style="font-size: 15px;">mybatis</a> <a href="/tags/shiro/" style="font-size: 15px;">shiro</a> <a href="/tags/select2/" style="font-size: 15px;">select2</a> <a href="/tags/element-ui/" style="font-size: 15px;">element ui</a> <a href="/tags/weblogic/" style="font-size: 15px;">weblogic</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/java基础/" style="font-size: 15px;">java基础</a> <a href="/tags/git/" style="font-size: 15px;">git</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/axios/" style="font-size: 15px;">axios</a> <a href="/tags/oracle/" style="font-size: 15px;">oracle</a> <a href="/tags/编码规范/" style="font-size: 15px;">编码规范</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-you"> 友情链接</i></div><ul></ul><a href="https://github.com/wangyuanjun008" title="GitHub" target="_blank">GitHub</a></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">WangYuanJun.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
 </script><script>window._config = { showScore: true };
 (function(){ 
   var appid = 'cytn089Dg'; 

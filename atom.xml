@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wangyuanjun.cn/"/>
-  <updated>2018-01-11T09:21:16.726Z</updated>
+  <updated>2018-01-19T15:44:54.587Z</updated>
   <id>http://wangyuanjun.cn/</id>
   
   <author>
@@ -14,6 +14,134 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Nginx学习——session共享(二)</title>
+    <link href="http://wangyuanjun.cn/2018/01/16/Nginx%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94session%E5%85%B1%E4%BA%AB-%E4%BA%8C/"/>
+    <id>http://wangyuanjun.cn/2018/01/16/Nginx学习——session共享-二/</id>
+    <published>2018-01-16T08:04:58.000Z</published>
+    <updated>2018-01-19T15:44:54.587Z</updated>
+    
+    <content type="html"><![CDATA[<p>上一篇博文说到了nginx session共享问题。由于 nginx 是随机分配请求，假设一个用户登录时访问网站登录时被分配到 192.168.43.3:8080 上，然后进行了登录操作，此时该服务器上就会有该用户登录的 session 信息，然后登陆后重定向到网站首页或个人中心时，此时如果被分配到 192.168.43.3:8081 上，那么这台服务器上没有该用户 session 信息，于是又会变成未登录状态，所以由于 nginx 的负载均衡会导致 session 共享的问题。</p>
+<ol>
+<li><p>不使用session，换用cookie<br>session是存放在服务器端的，cookie是存放在客户端的，我们可以把用户访问页面产生的session放到cookie里面，就是以cookie为中转站。你访问web服务器A，产生了session然后把它放到cookie里面，当你的请求被分配到B服务器时，服务器B先判断服务器有没有这个session，如果没有，再去看看客户端的cookie里面有没有这个session，如果也没有，说明session真的不存，如果cookie里面有，就把cookie里面的sessoin同步到服务器B，这样就可以实现session的同步了。<br>说明：这种方法实现起来简单，方便，也不会加大数据库的负担，但是如果客户端把cookie禁掉了的话，那么session就无从同步了，这样会给网站带来损失；cookie的安全性不高，虽然它已经加了密，但是还是可以伪造的。</p>
+</li>
+<li><p>session存在数据库（MySQL等）中<br>java可以配置将session保存在数据库中，这种方法是把存放session的表和其他数据库表放在一起，如果mysql也做了集群了话，每个mysql节点都要有这张表，并且这张session表的数据表要实时同步。<br>说明：用数据库来同步session，会加大数据库的IO，增加数据库的负担。而且数据库读写速度较慢，不利于session的适时同步。</p>
+</li>
+<li><p>ip_hash 策略<br>nginx 提供了 ip_hash 策略，可以保持用户 ip 进行 hash 值计算固定分配到某台服务器上，然后只要是该 ip 则会保持分配到该服务器上，保证用户访问的是同一台服务器，那么 session 问题就不存在了。这也是解决 session 共享的一种方式，也称为黏性 session。但是假设一台 tomcat 服务器挂了的话，那么 session 也会丢失。所以比较好的方案是抽取 session。</p>
+</li>
+<li><p>upstream_hash<br>为了解决ip_hash的一些问题，可以使用upstream_hash这个第三方模块，这个模块多数情况下是用作url_hash的，但是并不妨碍将它用来做session共享。没试过真心的不明白</p>
+</li>
+<li><p>session存在memcache或者redis中<br>此种方式将将用户的登录信息存储到redis中，因为是基于内存的读取，因此效率不会是响应效率的瓶颈，cookie中存储着jsessionid，不需要加密或处理，只需要存储redis中的key保存统一客户通过cookie中的key可以准确的登录信息或是其他有效的信息，此种方式，cookie的存储不需要加密计算成本，其次redis将信息存储到缓存中，存取效率高，后面会详细介绍此种方式实现过程。</p>
+</li>
+<li><p>基于tomcat容器session<br>此种方式在根本上实现共享session，他的实际情况是通过tomcat管理配置将一个tomct下的session复制到其他的tomcat的session池中，实现真实上的session共享；此种方式需要兼容tomcat配置及需要对其进行扩展，依赖性太强。</p>
+</li>
+</ol>
+<h1 id="一：Redis-环境搭建"><a href="#一：Redis-环境搭建" class="headerlink" title="一：Redis 环境搭建"></a>一：Redis 环境搭建</h1><p>redis 依赖 gcc，先安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install -y gcc-c++</div></pre></td></tr></table></figure></p>
+<p>下载 redis，我使用的是 redis-3.2.11.tar.gz，上传至 linux /usr/local/redis-src / 中，解压</p>
+<p>进入解压后目录 redis-3.2.11，执行 make 命令进行编译</p>
+<p>安装到目录 /usr/local/redis</p>
+<p>执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make PREFIX=/usr/local/redis install</div></pre></td></tr></table></figure></p>
+<p>安装完成之后将 redis 配置文件拷贝到安装目录下，redis.conf 是 redis 的配置文件，redis.conf 在 redis 源码目录, port 默认 6379。<br>执行命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp /root/wyj/tools/redis/redis-3.2.11/redis.conf /usr/local/redis/</div></pre></td></tr></table></figure></p>
+<p>在 redis 安装目录启动和关闭 redis：</p>
+<p>启动：<br><img src="/2018/01/16/Nginx学习——session共享-二/redis.png" alt="redis"><br>这种启动方式叫做前端启动，必须保持在当前窗口，如果 ctrl + c 退出，那么 redis 也就退出了，不建议使用</p>
+<p>那么后端启动：</p>
+<p>首先修改 redis.conf 中 daemonize 的值，打开可以看到默认是 no，修改为 daemonize yes，启动即可。也可以在该配置文件中修改 redis 默认端口 6379 为其他值。<br><img src="/2018/01/16/Nginx学习——session共享-二/redis启动.png" alt="redis启动"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./bin/redis-cli shutdown</div></pre></td></tr></table></figure></p>
+<p>至此，redis 服务器搭建完成。</p>
+<h1 id="二：下载相关jar"><a href="#二：下载相关jar" class="headerlink" title="二：下载相关jar"></a>二：下载相关jar</h1><ul>
+<li><p>环境为 tomcat7 + jdk1.6 ：<br>  在所有需要共享 session 的服务器的 tomcat 中目录下：</p>
+<p>  lib 目录中添加以下五个 jar 包，注意版本最好一致，不然极容易出现错误，下边的测试是可用的：</p>
+<ul>
+<li>下载<a href="https://github.com/jcoleman/tomcat-redis-session-manager/downloads" target="_blank" rel="external">tomcat-redis-session-manager</a></li>
+<li>下载<a href="http://mvnrepository.com/artifact/commons-pool/commons-pool/1.6" target="_blank" rel="external">commons-pool 1.6</a></li>
+<li>下载<a href="http://mvnrepository.com/artifact/redis.clients/jedis/2.2.0" target="_blank" rel="external">jedis 2.2</a></li>
+<li>下载<a href="http://mvnrepository.com/artifact/org.apache.tomcat.extras/tomcat-extras-juli-adapters/7.0.82" target="_blank" rel="external">tomcat-juli-adapters.jar</a></li>
+<li>下载<a href="http://mvnrepository.com/artifact/org.apache.tomcat/tomcat-juli/7.0.82" target="_blank" rel="external">tomcat-juli.jar</a><br><img src="/2018/01/16/Nginx学习——session共享-二/tomcat7jdk1.6.png" alt="tomcat7jdk1.6"><br>conf 目录中 content.xml 中加入：配置 redis 服务<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;Valve className=&quot;com.radiadesign.catalina.session.RedisSessionHandlerValve&quot;/&gt; </div><div class="line">&lt;Manager className=&quot;com.radiadesign.catalina.session.RedisSessionManager&quot;</div><div class="line">host=&quot;localhost&quot;</div><div class="line">port=&quot;6379&quot;</div><div class="line">database=&quot;0&quot;  </div><div class="line">maxInactiveInterval=&quot;60&quot; /&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>环境为 tomcat7 + jdk1.7 或 1.8 ：<br>  在所有需要共享 session 的服务器的 tomcat 中目录下：</p>
+<p>  lib 目录中添加以下五个 jar 包，其中<font color="red">tomcat-redis-session-manager.jar需要重新下载编译打包，不然会报错</font>。</p>
+<ul>
+<li>下载<a href="https://github.com/jcoleman/tomcat-redis-session-manager/downloads" target="_blank" rel="external">tomcat-redis-session-manager</a>,我用的jdk8所以用的是-7-java.jar</li>
+<li>下载<a href="http://mvnrepository.com/artifact/org.apache.commons/commons-pool2/2.4.1" target="_blank" rel="external">commons-pool 2.4.1</a></li>
+<li>下载<a href="http://mvnrepository.com/artifact/redis.clients/jedis/2.6.2" target="_blank" rel="external">jedis 2.6.2</a></li>
+<li>下载<a href="http://mvnrepository.com/artifact/org.apache.tomcat.extras/tomcat-extras-juli-adapters/7.0.82" target="_blank" rel="external">tomcat-juli-adapters.jar</a></li>
+<li><p>下载<a href="http://mvnrepository.com/artifact/org.apache.tomcat/tomcat-juli/7.0.82" target="_blank" rel="external">tomcat-juli.jar</a><br><img src="/2018/01/16/Nginx学习——session共享-二/tomcat7jdk1.71.8.png" alt="tomcat7jdk1.71.8"></p>
+<p>conf 目录中 content.xml 中加入：配置 redis 服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;Valve className=&quot;com.orangefunction.tomcat.redissessions.RedisSessionHandlerValve&quot; /&gt;       </div><div class="line">&lt;Manager className=&quot;com.orangefunction.tomcat.redissessions.RedisSessionManager&quot;</div><div class="line">host=&quot;localhost&quot;  </div><div class="line">port=&quot;6379&quot;  </div><div class="line">database=&quot;0&quot;              </div><div class="line">maxInactiveInterval=&quot;60&quot;/&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="三：配置Tomcat"><a href="#三：配置Tomcat" class="headerlink" title="三：配置Tomcat"></a>三：配置Tomcat</h1><p>根据我这测试，是 jkd1.8+tomcat7，在 137 和 139 两台 tomcat 中加入 jar 包且进行如上配置：</p>
+<p>上传 jar 包<br><img src="/2018/01/16/Nginx学习——session共享-二/加jar包1.png" alt="加jar包1"><br><img src="/2018/01/16/Nginx学习——session共享-二/加jar包2.png" alt="加jar包2"><br>修改 content.xml<br><img src="/2018/01/16/Nginx学习——session共享-二/tomcatcontent.png" alt="tomcatcontent"><br>启动 redis 服务，重新启动所有 tomcat，启动 nginx，刷新 nginx 页面, 两台 tomcat 页面可以看到 sessionid 值不变，关闭某台 tomcat，nginx 中 sessionid 不变，说明 session 是共享的。</p>
+<p>请注意！！！！</p>
+<p>context.xml 配置说明：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;Valve className=&quot;com.orangefunction.tomcat.redissessions.RedisSessionHandlerValve&quot; /&gt;      </div><div class="line">&lt;Manager className=&quot;com.orangefunction.tomcat.redissessions.RedisSessionManager&quot;</div><div class="line">//这里是redis服务器地址</div><div class="line">host=&quot;localhost&quot;</div><div class="line">//这里是redis端口，redis默认端口是6379</div><div class="line">port=&quot;6379&quot;</div><div class="line">//这里是redis数据库中的标识，标识第0个，默认使用0即可</div><div class="line">database=&quot;0&quot;            </div><div class="line">//需要注意的是这里由于redis过期时间默认设置为60，单位是秒，session过期时间为30分钟，所以需要设置为1800对应30分钟</div><div class="line">maxInactiveInterval=&quot;1800&quot;/&gt;</div></pre></td></tr></table></figure>
+<h1 id="四：项目搭建中遇到的问题"><a href="#四：项目搭建中遇到的问题" class="headerlink" title="四：项目搭建中遇到的问题"></a>四：项目搭建中遇到的问题</h1><p>将相关commons-pool2-2.4.1.jar，tomcat-redis-session-manager-1.2-tomcat-7-java-7.jar，jedis-2.6.2.jar，放到comcat的lib目录下，启动后报错：<br><img src="/2018/01/16/Nginx学习——session共享-二/报错1.png" alt="报错1"></p>
+<p>查看下载的包tomcat-redis-session-manager-1.2-tomcat-7-java-7.jar或tomcat-redis-session-manager-1.2-tomcat-7.jar相关包的里面并没有类:com.orangefunction.tomcat.redissessions.RedisSessionHandlerValve。<br>从 <a href="https://github.com/jcoleman/tomcat-redis-session-manager" target="_blank" rel="external">https://github.com/jcoleman/tomcat-redis-session-manager</a> 直接下载源码，发现源码里面存在相应的类。同时源码（tomcat-redis-session-manager）依赖了tomcat其他的包：tomcat-juli.jar，而tomcat默认是没有这些包的，从 <a href="https://mirrors.cnnic.cn/apache/tomcat/tomcat-7/v7.0.82/bin/extras/" target="_blank" rel="external">https://mirrors.cnnic.cn/apache/tomcat/tomcat-7/v7.0.82/bin/extras/</a> 下载<a href="http://mvnrepository.com/artifact/org.apache.tomcat.extras/tomcat-extras-juli-adapters/7.0.82" target="_blank" rel="external">tomcat-juli-adapters.jar</a>和<a href="http://mvnrepository.com/artifact/org.apache.tomcat/tomcat-juli/7.0.82" target="_blank" rel="external">tomcat-juli.jar</a>两个包，放在apache-tomcat-7.0.82\lib目录下，同时将tomcat-juli.jar放在apache-tomcat-7.0.82\bin目录下同时将编译tomcat-redis-session-manager的源码，通过相应的依赖包common-pool2.2，jedis以及tomcat-juli.jar编译，并打成自己的jar包。<br>打包详情如下：<br><img src="/2018/01/16/Nginx学习——session共享-二/导出jar包.png" alt="导出jar包"><br>点击 <a href="http://download.csdn.net/download/wangyuanjun008/10214996" target="_blank" rel="external">http://download.csdn.net/download/wangyuanjun008/10214996</a> 下载<br>总结<br>这篇文章写下来可真是费了些力气，中间出了好多错，不过一个一个有耐心的解决掉，最后出来的结果还是令人挺有成就感的。毕竟心里的一块大石算是落了。以后有空再尝试一下其他几种方法。</p>
+<p>PS : 修改配置文件的时候，一定要先备份再修改，不然出了问题都不能恢复。</p>
+<p>参考:<br><a href="https://www.jianshu.com/p/1d035ca278e3" target="_blank" rel="external">Nginx 反向代理，负载均衡，redis session 共享，keepalived 高可用</a><br><a href="https://www.cnblogs.com/zhengbin/p/5488415.html#autoid-0-3-0" target="_blank" rel="external">搭建Nginx（负载均衡）+Redis（Session共享）+Tomcat集群</a><br><a href="http://blog.csdn.net/wkwanglei/article/details/47776871" target="_blank" rel="external">tomcat7和redis的sessoin共享问题处理</a><br><a href="http://blog.csdn.net/onlysunnyboy/article/details/50513305" target="_blank" rel="external">tomcat集群基于redis共享session解决方案</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;上一篇博文说到了nginx session共享问题。由于 nginx 是随机分配请求，假设一个用户登录时访问网站登录时被分配到 192.168.43.3:8080 上，然后进行了登录操作，此时该服务器上就会有该用户登录的 session 信息，然后登陆后重定向到网站首页或个
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Nginx学习——反向代理与负载均衡(一)</title>
+    <link href="http://wangyuanjun.cn/2018/01/16/Nginx%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E4%B8%8E%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1-%E4%B8%80/"/>
+    <id>http://wangyuanjun.cn/2018/01/16/Nginx学习——反向代理与负载均衡-一/</id>
+    <published>2018-01-16T08:04:25.000Z</published>
+    <updated>2018-01-18T02:14:43.524Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="一：环境配置"><a href="#一：环境配置" class="headerlink" title="一：环境配置"></a>一：环境配置</h1><p>我本地是Windows系统，使用 Oracle VM VirtualBox 虚拟机安装一个虚拟的Linux系统，安装jdk1.8，nginx,两个tomcat </p>
+<p><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/架构图.png" alt="架构图"><br>一般需要用到三台服务器，一台 nginx 服务器，两台正式部署项目的服务器。为了方便操作，我只在一台服务器上面安装了一个nginx和两个tomcat(端口不一样)</p>
+<h1 id="二：配置tomcat集群"><a href="#二：配置tomcat集群" class="headerlink" title="二：配置tomcat集群"></a>二：配置tomcat集群</h1><p>首先在服务器上安装两个 tomcat：这个也是简单，不多说</p>
+<p>安装 tomcat：上传解压即可使用，bin 目录下 startup.sh 启动，shutdown.sh 关闭</p>
+<p>配置防火墙端口：vim /etc/sysconfig/iptables 编辑，开放 8080 端口，8081 端口，80 端口等一些常用端口，当然后边有用到一些端口都是需要配置开放的，不建议关闭防火墙</p>
+<p><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/tomcat防火墙.png" alt="tomcat防火墙"></p>
+<p>编辑好后 service iptables restart 重新加载防火墙配置<br><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/防火墙规则.png" alt="防火墙规则"></p>
+<blockquote>
+<p>如果是自己测试嫌配置麻烦，关闭防火墙： service iptables stop 重启后防火墙打开，即在此次开机状态下有效，完全关闭再使用 chkconfig iptables off , 即会在重启后也关闭防火墙，注意有时候服务都起了但访问出错，可能就是防火墙问题哦</p>
+</blockquote>
+<p>启动 tomcat 访问：192.168.43.3:8080，192.168.43.3:8081，打开 tomcat 首页即成功。</p>
+<p>然后编写测试项目，部署到两台 tomcat 上，eclipse 新建 web 项目，项目名为 testproject，在 webapp 下新建一个 jsp 页面为 index.jsp, 添加如下内容<br><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/jsp.png" alt="jsp"></p>
+<p>maven导出为 war 包，spring-demo.war，将该 war 包上传到服务器的两台 tomcat 的 webapps 中<br><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/tomcat1.png" alt="tomcat1"><br><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/tomcat2.png" alt="tomcat2"></p>
+<p>此时，重新启动 tomcat，访问 192.168.43.3:8080，192.168.43.3:8081, 显示 index.jsp 内容：两台服务器访问显示如下<br><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/t1.png" alt="t1"><br><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/t2.png" alt="t2"></p>
+<p>至此，两台 tomcat 服务器搭建完成。</p>
+<h1 id="三：Nginx的安装配置与测试"><a href="#三：Nginx的安装配置与测试" class="headerlink" title="三：Nginx的安装配置与测试"></a>三：Nginx的安装配置与测试</h1><p>先使用 yum 命令安装 gcc，安装 pcre，zlib，openssl：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">yum install -y gcc   </div><div class="line">yum install -y pcre pcre-devel   </div><div class="line">yum install -y zlib zlib-devel   </div><div class="line">yum install -y openssl openssl-develplain</div></pre></td></tr></table></figure></p>
+<p>在 /root/wyj/tools 目录下新建 nginx 目录，将 nginx-1.17.7.tar.gz 放到此处，解压<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar -zxvf nginx-1.17.7.tar.gz</div></pre></td></tr></table></figure></p>
+<p>进入解压后目录<br><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/nginx.png" alt="nginx"><br>依次执行命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">./configure   </div><div class="line"></div><div class="line">make   </div><div class="line"></div><div class="line">mkae install</div></pre></td></tr></table></figure></p>
+<p>此时 nginx 安装完毕，安装目录是 /usr/local/nginx，nginx 默认占用 80 端口<br><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/nginx安装.png" alt="nginx安装"><br>其中，sbin 目录为 nginx 执行命令，conf 目录下的 nginx.conf 为默认加载的配置文件</p>
+<p>启动 nginx：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./nginx</div></pre></td></tr></table></figure></p>
+<p>关闭 nginx：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./nginx -s stop</div></pre></td></tr></table></figure></p>
+<p>重启<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./nginx  -s reload</div></pre></td></tr></table></figure></p>
+<p>启动 nginx 后访问 192.168.50.133:80 即可访问 nginx：显示 nginx 欢迎页<br><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/nginx欢迎.png" alt="nginx欢迎"></p>
+<p>至此，nginx 安装完毕。</p>
+<h1 id="四：反向代理与负载均衡配置"><a href="#四：反向代理与负载均衡配置" class="headerlink" title="四：反向代理与负载均衡配置"></a>四：反向代理与负载均衡配置</h1><p>现有一台服务器，为 192.168.43.3，服务器上有一台 tomcat，端口为 8080 和 8081，经过配置 nginx，当访问 192.168.43.3:80 时，即可访问 192.168.43.3:8080，192.168.43.3:8081 中随机一台，此时 192.168.43.3:80 被 nginx 监听，当有请求时，代理到 192.168.43.3:8080，192.168.43.3:8081 随机一台即可，即为 nginx 反向代理功能，同时此时可以通过 nginx 将请求进行转发，保证了一个入口，将所有请求转发到两台服务器上也减轻了任何一台的负载压力，当有大量请求时，可以搭建大量服务器，在入口代理服务器上使用 nginx 进行转发，即是负载均衡功能。</p>
+<p>配置即是配置 nginx 安装目录中 conf 目录下的 nginx.conf 文件即可：具体配置如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">#user  nobody;</div><div class="line">worker_processes  1;</div><div class="line"></div><div class="line">#error_log  logs/error.log;</div><div class="line">#error_log  logs/error.log  notice;</div><div class="line">#error_log  logs/error.log  info;</div><div class="line"></div><div class="line">#pid        logs/nginx.pid;</div><div class="line"></div><div class="line"></div><div class="line">events &#123;</div><div class="line">    worker_connections  1024;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">http &#123;</div><div class="line">    include       mime.types;</div><div class="line">    default_type  application/octet-stream;</div><div class="line"></div><div class="line">    #log_format  main  &apos;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &apos;</div><div class="line">    #                  &apos;$status $body_bytes_sent &quot;$http_referer&quot; &apos;</div><div class="line">    #                  &apos;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&apos;;</div><div class="line"></div><div class="line">    #access_log  logs/access.log  main;</div><div class="line"></div><div class="line">    sendfile        on;</div><div class="line">    #tcp_nopush     on;</div><div class="line"></div><div class="line">    #keepalive_timeout  0;</div><div class="line">    keepalive_timeout  65;</div><div class="line"></div><div class="line">    #gzip  on;</div><div class="line"></div><div class="line"> 	#配置被代理的服务器</div><div class="line">    upstream blank &#123;</div><div class="line">        #ip_hash;</div><div class="line">        server 192.168.43.3:8080 weight=2;</div><div class="line">        server 192.168.43.3:8081 weight=1;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    server &#123;</div><div class="line">    	#nginx监听80端口，请求该端口时转发到真实目标</div><div class="line">        listen       80;</div><div class="line">        server_name  localhost;</div><div class="line"></div><div class="line">        #charset koi8-r;</div><div class="line"></div><div class="line">        #access_log  logs/host.access.log  main;</div><div class="line"></div><div class="line">        location / &#123;</div><div class="line">            #这里配置代理是指上面定义的两个被代理目标，blank名字必须一致</div><div class="line">          proxy_pass http://blank;</div><div class="line"></div><div class="line">            root   html;</div><div class="line">            index  index.html index.htm;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        #error_page  404              /404.html;</div><div class="line"></div><div class="line">        # redirect server error pages to the static page /50x.html</div><div class="line">        #</div><div class="line">        error_page   500 502 503 504  /50x.html;</div><div class="line">        location = /50x.html &#123;</div><div class="line">            root   html;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        # proxy the PHP scripts to Apache listening on 127.0.0.1:80</div><div class="line">        #</div><div class="line">        #location ~ \.php$ &#123;</div><div class="line">        #    proxy_pass   http://127.0.0.1;</div><div class="line">        #&#125;</div><div class="line"></div><div class="line">        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</div><div class="line">        #</div><div class="line">        #location ~ \.php$ &#123;</div><div class="line">        #    root           html;</div><div class="line">        #    fastcgi_pass   127.0.0.1:9000;</div><div class="line">        #    fastcgi_index  index.php;</div><div class="line">        #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;</div><div class="line">        #    include        fastcgi_params;</div><div class="line">        #&#125;</div><div class="line"></div><div class="line">        # deny access to .htaccess files, if Apache&apos;s document root</div><div class="line">        # concurs with nginx&apos;s one</div><div class="line">        #</div><div class="line">        #location ~ /\.ht &#123;</div><div class="line">        #    deny  all;</div><div class="line">        #&#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    # another virtual host using mix of IP-, name-, and port-based configuration</div><div class="line">    #</div><div class="line">    #server &#123;</div><div class="line">    #    listen       8000;</div><div class="line">    #    listen       somename:8080;</div><div class="line">    #    server_name  somename  alias  another.alias;</div><div class="line"></div><div class="line">    #    location / &#123;</div><div class="line">    #        root   html;</div><div class="line">    #        index  index.html index.htm;</div><div class="line">    #    &#125;</div><div class="line">    #&#125;</div><div class="line"></div><div class="line"></div><div class="line">    # HTTPS server</div><div class="line">    #</div><div class="line">    #server &#123;</div><div class="line">    #    listen       443 ssl;</div><div class="line">    #    server_name  localhost;</div><div class="line"></div><div class="line">    #    ssl_certificate      cert.pem;</div><div class="line">    #    ssl_certificate_key  cert.key;</div><div class="line"></div><div class="line">    #    ssl_session_cache    shared:SSL:1m;</div><div class="line">    #    ssl_session_timeout  5m;</div><div class="line"></div><div class="line">    #    ssl_ciphers  HIGH:!aNULL:!MD5;</div><div class="line">    #    ssl_prefer_server_ciphers  on;</div><div class="line"></div><div class="line">    #    location / &#123;</div><div class="line">    #        root   html;</div><div class="line">    #        index  index.html index.htm;</div><div class="line">    #    &#125;</div><div class="line">    #&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>启动两台 tomcat，重新启动 nginx：</p>
+<p>访问 192.168.43.3:80 将会随机访问 192.168.43.3:8080 和 192.168.43.3:8081 其中一台。（问题：每次刷新 nginx 服务器地址 sessionid 会变，session 不能共享。）</p>
+<p><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/nginxtomcat1.png" alt="nginxtomcat1"><br><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/nginxtomcat2.png" alt="nginxtomcat2"></p>
+<p>尝试不断刷新，两个页面会交替显示，即成功。<br>但发现SessionID并不相同，下一篇博文来通过Redis来实现Session的共享（同步）。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;一：环境配置&quot;&gt;&lt;a href=&quot;#一：环境配置&quot; class=&quot;headerlink&quot; title=&quot;一：环境配置&quot;&gt;&lt;/a&gt;一：环境配置&lt;/h1&gt;&lt;p&gt;我本地是Windows系统，使用 Oracle VM VirtualBox 虚拟机安装一个虚拟的Linux系
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>HTML/CSS基础知识学习笔记</title>
@@ -1751,9 +1879,9 @@ public class HttpServiceTest {
       <category term="HttpClient" scheme="http://wangyuanjun.cn/categories/HttpClient/"/>
     
     
-      <category term="SpringBoot" scheme="http://wangyuanjun.cn/tags/SpringBoot/"/>
-    
       <category term="HttpClient" scheme="http://wangyuanjun.cn/tags/HttpClient/"/>
+    
+      <category term="SpringBoot" scheme="http://wangyuanjun.cn/tags/SpringBoot/"/>
     
   </entry>
   
@@ -2032,9 +2160,9 @@ public class WebServiceTest {
       <category term="WebService" scheme="http://wangyuanjun.cn/categories/WebService/"/>
     
     
-      <category term="WebService" scheme="http://wangyuanjun.cn/tags/WebService/"/>
-    
       <category term="SpringBoot" scheme="http://wangyuanjun.cn/tags/SpringBoot/"/>
+    
+      <category term="WebService" scheme="http://wangyuanjun.cn/tags/WebService/"/>
     
   </entry>
   
@@ -2082,76 +2210,6 @@ CNAME：将CNAME指向你的用户名.github.io，这样可以保证无论是否
     
     
       <category term="hexo" scheme="http://wangyuanjun.cn/tags/hexo/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>github-hexo搭建博客之畅言实现博客的评论</title>
-    <link href="http://wangyuanjun.cn/2017/12/18/github-hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E4%B9%8B%E7%95%85%E8%A8%80%E5%AE%9E%E7%8E%B0%E5%8D%9A%E5%AE%A2%E7%9A%84%E8%AF%84%E8%AE%BA/"/>
-    <id>http://wangyuanjun.cn/2017/12/18/github-hexo搭建博客之畅言实现博客的评论/</id>
-    <published>2017-12-18T07:16:28.000Z</published>
-    <updated>2017-12-18T14:48:46.573Z</updated>
-    
-    <content type="html"><![CDATA[<p>前几天在整理自己的博客想添加一个评论的功能，希望我写的博客能被广大人员所知，解决了域名添加百度搜索引擎之后，我决定用畅言作为我的评论插件。</p>
-<h2 id="注册畅言"><a href="#注册畅言" class="headerlink" title="注册畅言"></a>注册畅言</h2><pre><code>进入畅言官网 , 点击右上角 “免费注册”，并填写注册信息
-</code></pre><h2 id="绑定域名"><a href="#绑定域名" class="headerlink" title="绑定域名"></a>绑定域名</h2><p>详情见之前的博客<br><a href="(http://wangyuanjun.cn/2017/12/18/github-hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E4%B9%8Bhexo%E6%8F%90%E4%BA%A4%E7%99%BE%E5%BA%A6%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/">github-hexo搭建博客之hexo提交百度搜索引擎</a></p>
-<h2 id="登录并进入畅言后台"><a href="#登录并进入畅言后台" class="headerlink" title="登录并进入畅言后台"></a>登录并进入畅言后台</h2><pre><code>注册完后，登录进入畅言官网，获取你的畅言 app id 和 app key。
-</code></pre><p><img src="/2017/12/18/github-hexo搭建博客之畅言实现博客的评论/畅言.png" alt="畅言"></p>
-<h2 id="使用畅言系统"><a href="#使用畅言系统" class="headerlink" title="使用畅言系统"></a>使用畅言系统</h2><pre><code>在主题的目录下_config.yml，添加上changyan_appid和changyan_conf的值。
-
-#Cmments
-comment:
-  cloudTie: ## 网易云跟帖(productKey)
-  changyan: ## 畅言需在下方配置两个参数，此处不填。
-    appid: xxxxxxxxxxx
-    appkey: xxxxxxxxxxxxxxxxxxxxxxxx
-</code></pre><p>效果:<br><img src="/2017/12/18/github-hexo搭建博客之畅言实现博客的评论/评论.png" alt="评论"></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;前几天在整理自己的博客想添加一个评论的功能，希望我写的博客能被广大人员所知，解决了域名添加百度搜索引擎之后，我决定用畅言作为我的评论插件。&lt;/p&gt;
-&lt;h2 id=&quot;注册畅言&quot;&gt;&lt;a href=&quot;#注册畅言&quot; class=&quot;headerlink&quot; title=&quot;注册畅言&quot;&gt;&lt;
-    
-    </summary>
-    
-      <category term="hexo" scheme="http://wangyuanjun.cn/categories/hexo/"/>
-    
-    
-      <category term="hexo" scheme="http://wangyuanjun.cn/tags/hexo/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用element ui select下拉框多选，编辑状态下回显数据</title>
-    <link href="http://wangyuanjun.cn/2017/12/07/%E4%BD%BF%E7%94%A8element-ui-select%E4%B8%8B%E6%8B%89%E6%A1%86%E5%A4%9A%E9%80%89%EF%BC%8C%E7%BC%96%E8%BE%91%E7%8A%B6%E6%80%81%E4%B8%8B%E5%9B%9E%E6%98%BE%E6%95%B0%E6%8D%AE/"/>
-    <id>http://wangyuanjun.cn/2017/12/07/使用element-ui-select下拉框多选，编辑状态下回显数据/</id>
-    <published>2017-12-07T14:55:20.000Z</published>
-    <updated>2017-12-18T14:58:51.069Z</updated>
-    
-    <content type="html"><![CDATA[<p>最近在做一个项目,项目的后端是地址: <a href="https://github.com/wangyuanjun008/wyj-springboot.github.com" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-springboot.github.com</a><br>前端地址是 <a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security.git</a> ,使用的前端语言是vue,使用webpack构建vue-cli全家桶<br>在项目中使用的是 element ui 组件库，在使用select多选下拉框时，编辑页面不知道怎么为其赋值回显数据。<br>下拉框的代码如下:</p>
-<pre><code>&lt;el-form-item label=&quot;可选角色&quot;&gt;
-    &lt;el-select v-model=&quot;commonForm.roles&quot; multiple placeholder=&quot;请选择&quot;&gt;
-        &lt;el-option v-for=&quot;item in rolesItems&quot; :key=&quot;item.id&quot; :label=&quot;item.text&quot; :value=&quot;item.id&quot; &gt;&lt;/el-option&gt;
-    &lt;/el-select&gt; 
-&lt;/el-form-item&gt;
-</code></pre><p>猜想:<br>多选下拉框是多条数据，将数据放到数组里面，将数据赋值给多选下拉框，就会有效果。</p>
-<p>验证:<br>将多选数据以数组的形式从后台返回到前台，后台字段类型是List<br>返回结果如下:</p>
-<p><img src="/2017/12/07/使用element-ui-select下拉框多选，编辑状态下回显数据/ElementUI多选下拉回显数据.png" alt="ElementUI多选下拉回显数据"></p>
-<p>查看页面多选回显数据成功</p>
-<p>参考地址: <a href="https://github.com/wangyuanjun008/wyj-vue-security/blob/master/src/view/user/user.vue" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-vue-security/blob/master/src/view/user/user.vue</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;最近在做一个项目,项目的后端是地址: &lt;a href=&quot;https://github.com/wangyuanjun008/wyj-springboot.github.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.co
-    
-    </summary>
-    
-      <category term="element ui" scheme="http://wangyuanjun.cn/categories/element-ui/"/>
-    
-    
-      <category term="element ui" scheme="http://wangyuanjun.cn/tags/element-ui/"/>
     
   </entry>
   
