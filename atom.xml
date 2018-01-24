@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wangyuanjun.cn/"/>
-  <updated>2018-01-19T15:44:54.587Z</updated>
+  <updated>2018-01-23T08:46:07.922Z</updated>
   <id>http://wangyuanjun.cn/</id>
   
   <author>
@@ -16,11 +16,56 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>微信公共号开发教程——基础知识和环境搭建(一)</title>
+    <link href="http://wangyuanjun.cn/2018/01/23/%E5%BE%AE%E4%BF%A1%E5%85%AC%E5%85%B1%E5%8F%B7%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B%E2%80%94%E2%80%94%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA-%E4%B8%80/"/>
+    <id>http://wangyuanjun.cn/2018/01/23/微信公共号开发教程——基础知识和环境搭建-一/</id>
+    <published>2018-01-23T08:46:07.000Z</published>
+    <updated>2018-01-23T08:46:07.922Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>nginx中修改server_name无效，修改为www.wecharttest.com无法访问，通过localhost可以访问</title>
+    <link href="http://wangyuanjun.cn/2018/01/22/nginx%E4%B8%AD%E4%BF%AE%E6%94%B9server-name%E6%97%A0%E6%95%88%EF%BC%8C%E4%BF%AE%E6%94%B9%E4%B8%BAwww-wecharttest-com%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE%EF%BC%8C%E9%80%9A%E8%BF%87localhost%E5%8F%AF%E4%BB%A5%E8%AE%BF%E9%97%AE/"/>
+    <id>http://wangyuanjun.cn/2018/01/22/nginx中修改server-name无效，修改为www-wecharttest-com无法访问，通过localhost可以访问/</id>
+    <published>2018-01-22T06:00:00.000Z</published>
+    <updated>2018-01-22T06:06:47.002Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近在看微信公共号，需要通过软件Nginx，直接使用自己的内网作为电脑的服务器来进行一系列的操作以及调试(实现内网穿透，将内网的服务器映射到外网给别人访问)<br>但是在Nginx中，把server_name配置成自己的域名www.wecharttest.com无效。<br>解决方法：</p>
+<p>linux下：</p>
+<ol>
+<li>sudo vi /etc/host</li>
+</ol>
+<p>增加 www.wecharttest.com 127.0.0.1</p>
+<ol>
+<li>sudo vi /etc/hosts</li>
+</ol>
+<p>增加 127.0.0.1 www.wecharttest.com</p>
+<p>然后esc、:wq保存退出即可。</p>
+<p>windows下：</p>
+<p>修改C:\Windows\System32\drivers\etc下hosts文件即可，内容如linux下。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近在看微信公共号，需要通过软件Nginx，直接使用自己的内网作为电脑的服务器来进行一系列的操作以及调试(实现内网穿透，将内网的服务器映射到外网给别人访问)&lt;br&gt;但是在Nginx中，把server_name配置成自己的域名www.wecharttest.com无效。&lt;br
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>Nginx学习——session共享(二)</title>
     <link href="http://wangyuanjun.cn/2018/01/16/Nginx%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94session%E5%85%B1%E4%BA%AB-%E4%BA%8C/"/>
     <id>http://wangyuanjun.cn/2018/01/16/Nginx学习——session共享-二/</id>
     <published>2018-01-16T08:04:58.000Z</published>
-    <updated>2018-01-19T15:44:54.587Z</updated>
+    <updated>2018-01-22T01:53:42.113Z</updated>
     
     <content type="html"><![CDATA[<p>上一篇博文说到了nginx session共享问题。由于 nginx 是随机分配请求，假设一个用户登录时访问网站登录时被分配到 192.168.43.3:8080 上，然后进行了登录操作，此时该服务器上就会有该用户登录的 session 信息，然后登陆后重定向到网站首页或个人中心时，此时如果被分配到 192.168.43.3:8081 上，那么这台服务器上没有该用户 session 信息，于是又会变成未登录状态，所以由于 nginx 的负载均衡会导致 session 共享的问题。</p>
 <ol>
@@ -91,6 +136,10 @@
     
     </summary>
     
+      <category term="nginx" scheme="http://wangyuanjun.cn/categories/nginx/"/>
+    
+    
+      <category term="nginx" scheme="http://wangyuanjun.cn/tags/nginx/"/>
     
   </entry>
   
@@ -1902,334 +1951,6 @@ public class HttpServiceTest {
       <category term="HttpClient" scheme="http://wangyuanjun.cn/tags/HttpClient/"/>
     
       <category term="SpringBoot" scheme="http://wangyuanjun.cn/tags/SpringBoot/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SpringBoot整合cxf发布WebService服务和客户端调用WebService服务</title>
-    <link href="http://wangyuanjun.cn/2017/12/21/SpringBoot%E6%95%B4%E5%90%88cxf%E5%8F%91%E5%B8%83WebService%E6%9C%8D%E5%8A%A1%E5%92%8C%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B0%83%E7%94%A8WebService%E6%9C%8D%E5%8A%A1/"/>
-    <id>http://wangyuanjun.cn/2017/12/21/SpringBoot整合cxf发布WebService服务和客户端调用WebService服务/</id>
-    <published>2017-12-21T05:19:10.000Z</published>
-    <updated>2017-12-21T07:47:32.037Z</updated>
-    
-    <content type="html"><![CDATA[<p>最近在做公司项目的一个功能需要写WebSerice接口，为了系统得学习WebService，决定写一个测试接口的例子。<br>测试项目中使用的是SpringBoot(spring整合cxf需添加cxf-rt-frontend-jaxws，cxf-rt-transports-http依赖)</p>
-<h2 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h2><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
-    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
-
-    &lt;groupId&gt;com.wyj&lt;/groupId&gt;
-    &lt;artifactId&gt;wyj-interface-service&lt;/artifactId&gt;
-    &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
-    &lt;packaging&gt;jar&lt;/packaging&gt;
-
-    &lt;name&gt;wyj-interface-service&lt;/name&gt;
-    &lt;description&gt;Demo project for Spring Boot&lt;/description&gt;
-
-    &lt;parent&gt;
-        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
-        &lt;version&gt;1.5.9.RELEASE&lt;/version&gt;
-        &lt;relativePath /&gt; &lt;!-- lookup parent from repository --&gt;
-    &lt;/parent&gt;
-
-    &lt;properties&gt;
-        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
-        &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt;
-        &lt;java.version&gt;1.8&lt;/java.version&gt;
-    &lt;/properties&gt;
-
-    &lt;dependencies&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
-        &lt;/dependency&gt;
-
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
-            &lt;scope&gt;test&lt;/scope&gt;
-        &lt;/dependency&gt;
-
-        &lt;!-- http --&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.apache.httpcomponents&lt;/groupId&gt;
-            &lt;artifactId&gt;httpclient&lt;/artifactId&gt;
-            &lt;version&gt;4.5.4&lt;/version&gt;
-        &lt;/dependency&gt;
-
-        &lt;dependency&gt;
-            &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
-            &lt;artifactId&gt;fastjson&lt;/artifactId&gt;
-            &lt;version&gt;1.1.41&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;!-- 热部署模块 --&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;
-            &lt;optional&gt;true&lt;/optional&gt; &lt;!-- 这个需要为 true 热部署才有效 --&gt;
-        &lt;/dependency&gt;
-
-        &lt;!-- CXF webservice --&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.apache.cxf&lt;/groupId&gt;
-            &lt;artifactId&gt;cxf-spring-boot-starter-jaxws&lt;/artifactId&gt;
-            &lt;version&gt;3.1.11&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;!-- CXF webservice --&gt;
-
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.scala-lang&lt;/groupId&gt;
-            &lt;artifactId&gt;scala-library&lt;/artifactId&gt;
-            &lt;version&gt;2.11.0&lt;/version&gt;
-        &lt;/dependency&gt;
-    &lt;/dependencies&gt;
-    &lt;build&gt;
-        &lt;plugins&gt;
-            &lt;plugin&gt;
-                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
-            &lt;/plugin&gt;
-        &lt;/plugins&gt;
-    &lt;/build&gt;
-&lt;/project&gt;
-</code></pre><h2 id="服务端接口"><a href="#服务端接口" class="headerlink" title="服务端接口"></a>服务端接口</h2><pre><code>package com.wyj.webservice;
-
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebResult;
-import javax.jws.WebService;
-
-/**
- * webservice测试接口
- * 
- * 
- * @author：WangYuanJun
- * @date：2017年12月19日 下午9:36:49
- */
-@WebService(name = &quot;TestService&quot;, // 暴露服务名称
-targetNamespace = &quot;http://service.wyj.com&quot;// 命名空间,一般是接口的包名倒序
-)
-public interface TestService {
-
-    @WebMethod
-    @WebResult(name = &quot;String&quot;, targetNamespace = &quot;&quot;)
-    String sendMessage(@WebParam(name = &quot;username&quot;) String username);
-}
-</code></pre><h2 id="服务端接口实现"><a href="#服务端接口实现" class="headerlink" title="服务端接口实现"></a>服务端接口实现</h2><pre><code>package com.wyj.webservice;
-
-import javax.jws.WebService;
-
-import org.springframework.stereotype.Component;
-
-    /**
-     * webservice测试接口实现
-     * 
-     * 
-     * @author：WangYuanJun
-     * @date：2017年12月19日 下午9:37:20
-     */
-    @WebService(serviceName = &quot;TestService&quot;, // 与接口中指定的name一致
-    targetNamespace = &quot;http://service.wyj.com&quot;, // 与接口中的命名空间一致,一般是接口的包名倒
-    endpointInterface = &quot;com.wyj.webservice.TestService&quot;// 接口地址
-    )
-    @Component
-    public class TestServiceImpl implements TestService {
-
-        @Override
-        public String sendMessage(String username) {
-
-            return &quot;hello &quot;+username;
-        }
-
-    }
-</code></pre><h2 id="cxf配置"><a href="#cxf配置" class="headerlink" title="cxf配置"></a>cxf配置</h2><pre><code>package com.wyj.webservice;
-
-import javax.xml.ws.Endpoint;
-
-import org.apache.cxf.Bus;
-import org.apache.cxf.jaxws.EndpointImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-/**
- * cxf配置
- * 
- * 
- * @author：WangYuanJun
- * @date：2017年12月19日 下午9:38:24
- */
-@Configuration
-public class CxfConfig {
-
-    @Autowired
-    private Bus bus;
-
-    @Autowired
-    private TestService testService;
-
-    @Bean
-    public Endpoint endpoint(){
-        EndpointImpl endpoint = new EndpointImpl(bus, testService);
-        endpoint.publish(&quot;/TestService&quot;);
-        return endpoint;
-    }
-}
-</code></pre><p>默认服务在Host:port/services/<em>*</em>路径下<br>将TestService接口发布在了路径/services/TestService下,wsdl文档路径为，<a href="http://localhost:8080/services/TestService?wsdl" target="_blank" rel="external">http://localhost:8080/services/TestService?wsdl</a></p>
-<h2 id="TestService的wsdl信息"><a href="#TestService的wsdl信息" class="headerlink" title="TestService的wsdl信息"></a>TestService的wsdl信息</h2><pre><code>&lt;?xml version=&apos;1.0&apos; encoding=&apos;UTF-8&apos;?&gt;&lt;wsdl:definitions xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:wsdl=&quot;http://schemas.xmlsoap.org/wsdl/&quot; xmlns:tns=&quot;http://service.wyj.com&quot; xmlns:soap=&quot;http://schemas.xmlsoap.org/wsdl/soap/&quot; xmlns:ns1=&quot;http://schemas.xmlsoap.org/soap/http&quot; name=&quot;TestService&quot; targetNamespace=&quot;http://service.wyj.com&quot;&gt;
-  &lt;wsdl:types&gt;
-&lt;xs:schema xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:tns=&quot;http://service.wyj.com&quot; elementFormDefault=&quot;unqualified&quot; targetNamespace=&quot;http://service.wyj.com&quot; version=&quot;1.0&quot;&gt;
-
-  &lt;xs:element name=&quot;sendMessage&quot; type=&quot;tns:sendMessage&quot;/&gt;
-
-  &lt;xs:element name=&quot;sendMessageResponse&quot; type=&quot;tns:sendMessageResponse&quot;/&gt;
-
-  &lt;xs:complexType name=&quot;sendMessage&quot;&gt;
-    &lt;xs:sequence&gt;
-      &lt;xs:element minOccurs=&quot;0&quot; name=&quot;username&quot; type=&quot;xs:string&quot;/&gt;
-    &lt;/xs:sequence&gt;
-  &lt;/xs:complexType&gt;
-
-  &lt;xs:complexType name=&quot;sendMessageResponse&quot;&gt;
-    &lt;xs:sequence&gt;
-      &lt;xs:element minOccurs=&quot;0&quot; name=&quot;String&quot; type=&quot;xs:string&quot;/&gt;
-    &lt;/xs:sequence&gt;
-  &lt;/xs:complexType&gt;
-
-&lt;/xs:schema&gt;
-  &lt;/wsdl:types&gt;
-  &lt;wsdl:message name=&quot;sendMessage&quot;&gt;
-    &lt;wsdl:part element=&quot;tns:sendMessage&quot; name=&quot;parameters&quot;&gt;
-    &lt;/wsdl:part&gt;
-  &lt;/wsdl:message&gt;
-  &lt;wsdl:message name=&quot;sendMessageResponse&quot;&gt;
-    &lt;wsdl:part element=&quot;tns:sendMessageResponse&quot; name=&quot;parameters&quot;&gt;
-    &lt;/wsdl:part&gt;
-  &lt;/wsdl:message&gt;
-  &lt;wsdl:portType name=&quot;TestService&quot;&gt;
-    &lt;wsdl:operation name=&quot;sendMessage&quot;&gt;
-      &lt;wsdl:input message=&quot;tns:sendMessage&quot; name=&quot;sendMessage&quot;&gt;
-    &lt;/wsdl:input&gt;
-      &lt;wsdl:output message=&quot;tns:sendMessageResponse&quot; name=&quot;sendMessageResponse&quot;&gt;
-    &lt;/wsdl:output&gt;
-    &lt;/wsdl:operation&gt;
-  &lt;/wsdl:portType&gt;
-  &lt;wsdl:binding name=&quot;TestServiceSoapBinding&quot; type=&quot;tns:TestService&quot;&gt;
-    &lt;soap:binding style=&quot;document&quot; transport=&quot;http://schemas.xmlsoap.org/soap/http&quot;/&gt;
-    &lt;wsdl:operation name=&quot;sendMessage&quot;&gt;
-      &lt;soap:operation soapAction=&quot;&quot; style=&quot;document&quot;/&gt;
-      &lt;wsdl:input name=&quot;sendMessage&quot;&gt;
-        &lt;soap:body use=&quot;literal&quot;/&gt;
-      &lt;/wsdl:input&gt;
-      &lt;wsdl:output name=&quot;sendMessageResponse&quot;&gt;
-        &lt;soap:body use=&quot;literal&quot;/&gt;
-      &lt;/wsdl:output&gt;
-    &lt;/wsdl:operation&gt;
-  &lt;/wsdl:binding&gt;
-  &lt;wsdl:service name=&quot;TestService&quot;&gt;
-    &lt;wsdl:port binding=&quot;tns:TestServiceSoapBinding&quot; name=&quot;TestServiceImplPort&quot;&gt;
-      &lt;soap:address location=&quot;http://localhost:8080/services/TestService&quot;/&gt;
-    &lt;/wsdl:port&gt;
-  &lt;/wsdl:service&gt;
-&lt;/wsdl:definitions&gt;
-</code></pre><h2 id="基于cxf的客户端调用webservice接口"><a href="#基于cxf的客户端调用webservice接口" class="headerlink" title="基于cxf的客户端调用webservice接口"></a>基于cxf的客户端调用webservice接口</h2><pre><code>package webservice;
-
-import org.apache.cxf.endpoint.Client;
-import org.apache.cxf.jaxws.endpoint.dynamic.JaxWsDynamicClientFactory;
-import org.junit.Test;
-
-/**
- * webservice客户端
- * 
- * 
- * @author：WangYuanJun
- * @date：2017年12月19日 下午9:39:49
- */
-public class WebServiceTest {
-
-    @Test
-    public void testSend1(){
-
-        // 创建动态客户端
-        JaxWsDynamicClientFactory dcf = JaxWsDynamicClientFactory.newInstance();
-        Client client = dcf.createClient(&quot;http://localhost:8080/services/TestService?wsdl&quot;);
-
-        // 需要密码的情况需要加上用户名和密码
-        // client.getOutInterceptors().add(new ClientLoginInterceptor(USER_NAME,PASS_WORD));
-        Object[] objects = new Object[0];
-        try {
-
-            // invoke(&quot;方法名&quot;,参数1,参数2,参数3....);
-            objects = client.invoke(&quot;sendMessage&quot;, &quot;wyj&quot;);
-            System.out.println(&quot;返回数据:&quot; + objects[0]);
-        } catch (java.lang.Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-</code></pre><h2 id="调用后返回结果输出为"><a href="#调用后返回结果输出为" class="headerlink" title="调用后返回结果输出为"></a>调用后返回结果输出为</h2><p><img src="/2017/12/21/SpringBoot整合cxf发布WebService服务和客户端调用WebService服务/TestService-result.png" alt="TestService-result"></p>
-<h2 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h2><p><a href="https://github.com/wangyuanjun008/wyj-interface-client/blob/master/src/main/java/webservice/WebServiceTest.java" target="_blank" rel="external">SpringBoot整合cxf的WebService客户端地址</a><br><a href="https://github.com/wangyuanjun008/wyj-interface-service/tree/master/src/main/java/com/wyj/webservice" target="_blank" rel="external">SpringBoot整合cxf的WebService服务端地址</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;最近在做公司项目的一个功能需要写WebSerice接口，为了系统得学习WebService，决定写一个测试接口的例子。&lt;br&gt;测试项目中使用的是SpringBoot(spring整合cxf需添加cxf-rt-frontend-jaxws，cxf-rt-transports-
-    
-    </summary>
-    
-      <category term="WebService" scheme="http://wangyuanjun.cn/categories/WebService/"/>
-    
-    
-      <category term="SpringBoot" scheme="http://wangyuanjun.cn/tags/SpringBoot/"/>
-    
-      <category term="WebService" scheme="http://wangyuanjun.cn/tags/WebService/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>github-hexo搭建博客之hexo提交百度搜索引擎</title>
-    <link href="http://wangyuanjun.cn/2017/12/18/github-hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E4%B9%8Bhexo%E6%8F%90%E4%BA%A4%E7%99%BE%E5%BA%A6%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/"/>
-    <id>http://wangyuanjun.cn/2017/12/18/github-hexo搭建博客之hexo提交百度搜索引擎/</id>
-    <published>2017-12-18T09:13:23.000Z</published>
-    <updated>2017-12-18T14:35:25.791Z</updated>
-    
-    <content type="html"><![CDATA[<p>前几天在整理自己的博客想添加一个评论的功能，希望我写的博客能被广大人员所知，突然发现自己写的博客在百度上搜索不到，那我添加评论功能就没有意义，百度一下才知道github禁止了百度爬虫，晕死。折腾了好久才解决，接下来我向大家介绍我的解决方法。</p>
-<h2 id="域名"><a href="#域名" class="headerlink" title="域名"></a>域名</h2><h3 id="1-注册域名：我是在dnspod中注册域名的，下面我以dnspod为例；"><a href="#1-注册域名：我是在dnspod中注册域名的，下面我以dnspod为例；" class="headerlink" title="1.注册域名：我是在dnspod中注册域名的，下面我以dnspod为例；"></a>1.注册域名：我是在dnspod中注册域名的，下面我以dnspod为例；</h3><h3 id="2-绑定域名"><a href="#2-绑定域名" class="headerlink" title="2.绑定域名"></a>2.绑定域名</h3><pre><code>绑定域名分2种情况：CNAME和A记录。
-A记录：A记录填写IP，由于不带www方式只能采用A记录，所以必须先才cmd的ping一下你的用户名.github.io的IP，然后到你的域名DNS设置页，将A记录指向你ping出来的IP
-CNAME：将CNAME指向你的用户名.github.io，这样可以保证无论是否添加www都可以访问
-</code></pre><p><img src="/2017/12/18/github-hexo搭建博客之hexo提交百度搜索引擎/绑定域名.png" alt="绑定域名"></p>
-<h3 id="3-跳转"><a href="#3-跳转" class="headerlink" title="3.跳转"></a>3.跳转</h3><p>在source文件夹中新建一个CNAME文件（无后缀名），然后用文本编辑器打开，在首行添加你的网站域名，如 <a href="http://xxxx.com" target="_blank" rel="external">http://xxxx.com</a> ，注意前面没有 http:// ，也没有www，然后使用hexo g &amp;&amp; hexo d上传部署。在你绑定了新域名之后，原来的你的用户名.github.io并没有失效，而是会自动跳转到你的新域名。</p>
-<h2 id="验证网站"><a href="#验证网站" class="headerlink" title="验证网站"></a>验证网站</h2><h3 id="1-百度搜索引擎入口："><a href="#1-百度搜索引擎入口：" class="headerlink" title="1.百度搜索引擎入口："></a>1.百度搜索引擎入口：</h3><p><a href="http://ziyuan.baidu.com/linksubmit/url" target="_blank" rel="external">百度搜索引擎入口</a></p>
-<h3 id="2-文件验证"><a href="#2-文件验证" class="headerlink" title="2.文件验证:"></a>2.文件验证:</h3><p>先添加域名，然后验证网站，这里统一都使用文件验证，就是下载对应的html文件，放到域名根目录下，也就收博客根目录下的public/下面 。<br>然后部署到服务器,输入地址：<a href="http://wangyuanjun008.github.io/baidu_verify_oLfvXCaeZ4.html" target="_blank" rel="external">http://wangyuanjun008.github.io/baidu_verify_oLfvXCaeZ4.html</a> 能访问到就可以点验证按钮(按照百度的引导步骤就好)。</p>
-<h3 id="3-网页抓取-1-主动推送-2-自动推送-3-sitemap-4-手动提交"><a href="#3-网页抓取-1-主动推送-2-自动推送-3-sitemap-4-手动提交" class="headerlink" title="3.网页抓取:(1.主动推送 2.自动推送 3.sitemap 4.手动提交 )"></a>3.网页抓取:(1.主动推送 2.自动推送 3.sitemap 4.手动提交 )</h3><p>我选择的是自动推送<br>    自动推送很简单，就是在你代码里面嵌入自动推送JS代码，在页面被访问时，页面URL将立即被推送给百度，可将代码添加到\themes\landscape\layout_partial\after_footer.ejs中的最下面就行。<br>    代码如下：</p>
-<pre><code>&lt;script&gt;
-(function(){
-    var bp = document.createElement(&apos;script&apos;);
-    var curProtocol = window.location.protocol.split(&apos;:&apos;)[0];
-    if (curProtocol === &apos;https&apos;) {
-        bp.src = &apos;https://zz.bdstatic.com/linksubmit/push.js&apos;;        
-    }
-    else {
-        bp.src = &apos;http://push.zhanzhang.baidu.com/push.js&apos;;
-    }
-    var s = document.getElementsByTagName(&quot;script&quot;)[0];
-    s.parentNode.insertBefore(bp, s);
-})();
-&lt;/script&gt;
-</code></pre><p>参考: <a href="https://www.cnblogs.com/tengj/p/5357879.html" target="_blank" rel="external">hexo干货系列：（六）hexo提交搜索引擎（百度+谷歌）</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;前几天在整理自己的博客想添加一个评论的功能，希望我写的博客能被广大人员所知，突然发现自己写的博客在百度上搜索不到，那我添加评论功能就没有意义，百度一下才知道github禁止了百度爬虫，晕死。折腾了好久才解决，接下来我向大家介绍我的解决方法。&lt;/p&gt;
-&lt;h2 id=&quot;域名&quot;&gt;
-    
-    </summary>
-    
-      <category term="hexo" scheme="http://wangyuanjun.cn/categories/hexo/"/>
-    
-    
-      <category term="hexo" scheme="http://wangyuanjun.cn/tags/hexo/"/>
     
   </entry>
   
