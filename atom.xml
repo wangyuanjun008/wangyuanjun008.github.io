@@ -30,20 +30,6 @@
   </entry>
   
   <entry>
-    <title>微信公共号开发教程java版——基础知识和环境搭建(一)</title>
-    <link href="http://wangyuanjun.cn/2018/01/23/%E5%BE%AE%E4%BF%A1%E5%85%AC%E5%85%B1%E5%8F%B7%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B%E2%80%94%E2%80%94%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA-%E4%B8%80/"/>
-    <id>http://wangyuanjun.cn/2018/01/23/微信公共号开发教程——基础知识和环境搭建-一/</id>
-    <published>2018-01-23T08:46:07.000Z</published>
-    <updated>2018-01-24T09:45:34.933Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
     <title>nginx中修改server_name无效，修改为www.wecharttest.com无法访问，通过localhost可以访问</title>
     <link href="http://wangyuanjun.cn/2018/01/22/nginx%E4%B8%AD%E4%BF%AE%E6%94%B9server-name%E6%97%A0%E6%95%88%EF%BC%8C%E4%BF%AE%E6%94%B9%E4%B8%BAwww-wecharttest-com%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE%EF%BC%8C%E9%80%9A%E8%BF%87localhost%E5%8F%AF%E4%BB%A5%E8%AE%BF%E9%97%AE/"/>
     <id>http://wangyuanjun.cn/2018/01/22/nginx中修改server-name无效，修改为www-wecharttest-com无法访问，通过localhost可以访问/</id>
@@ -1677,6 +1663,294 @@ sched.shutdown(true);
     
     
       <category term="nginx" scheme="http://wangyuanjun.cn/tags/nginx/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SpringBoot发布HttpClient服务和客户端调用HttpClient服务</title>
+    <link href="http://wangyuanjun.cn/2017/12/23/SpringBoot%E5%8F%91%E5%B8%83HttpClient%E6%9C%8D%E5%8A%A1%E5%92%8C%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B0%83%E7%94%A8HttpClient%E6%9C%8D%E5%8A%A1/"/>
+    <id>http://wangyuanjun.cn/2017/12/23/SpringBoot发布HttpClient服务和客户端调用HttpClient服务/</id>
+    <published>2017-12-23T06:28:27.000Z</published>
+    <updated>2017-12-21T07:49:02.701Z</updated>
+    
+    <content type="html"><![CDATA[<p>之前在做公司项目的一个功能需要写WebSerice接口，写完之后我们老大说也可以用HttpClient来写接口，所以写了一个接口例子。</p>
+<h2 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h2><pre><code>&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&quot;&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    &lt;groupId&gt;com.wyj&lt;/groupId&gt;
+    &lt;artifactId&gt;wyj-interface-client&lt;/artifactId&gt;
+    &lt;packaging&gt;war&lt;/packaging&gt;
+    &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
+    &lt;name&gt;wyj-interface-client Maven Webapp&lt;/name&gt;
+    &lt;url&gt;http://maven.apache.org&lt;/url&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;junit&lt;/groupId&gt;
+            &lt;artifactId&gt;junit&lt;/artifactId&gt;
+            &lt;version&gt;4.12&lt;/version&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+        &lt;!-- http --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.httpcomponents&lt;/groupId&gt;
+            &lt;artifactId&gt;httpclient&lt;/artifactId&gt;
+            &lt;version&gt;4.5.4&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+            &lt;artifactId&gt;fastjson&lt;/artifactId&gt;
+            &lt;version&gt;1.1.41&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;!--webservice cxf --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.cxf&lt;/groupId&gt;
+            &lt;artifactId&gt;cxf-rt-transports-http&lt;/artifactId&gt;
+            &lt;version&gt;3.1.8&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.cxf&lt;/groupId&gt;
+            &lt;artifactId&gt;cxf-rt-frontend-jaxws&lt;/artifactId&gt;
+            &lt;version&gt;3.1.8&lt;/version&gt;
+        &lt;/dependency&gt;
+
+    &lt;/dependencies&gt;
+    &lt;build&gt;
+        &lt;finalName&gt;wyj-interface-client&lt;/finalName&gt;
+    &lt;/build&gt;
+&lt;/project&gt;
+</code></pre><h2 id="HttpClient客户端"><a href="#HttpClient客户端" class="headerlink" title="HttpClient客户端"></a>HttpClient客户端</h2><p>可以传输json和map数据，可以使用get和post请求，详情见备注</p>
+<pre><code>package http;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.junit.Test;
+
+import com.alibaba.fastjson.JSON;
+
+/**
+ * http客户端
+ * 
+ * 
+ * @author：WangYuanJun
+ * @date：2017年12月20日 下午8:26:51
+ */
+public class HttpClientTest {
+
+    /**
+     * post请求传输map数据
+     * 
+     * @param url
+     * @param map
+     * @param encoding
+     * @return
+     * @throws ClientProtocolException
+     * @throws IOException
+     */
+    public static String sendPostDataByMap(String url, Map&lt;String, String&gt; map, String encoding) throws ClientProtocolException, IOException {
+        String result = &quot;&quot;;
+
+        // 创建httpclient对象
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        // 创建post方式请求对象
+        HttpPost httpPost = new HttpPost(url);
+
+        // 装填参数
+        List&lt;NameValuePair&gt; nameValuePairs = new ArrayList&lt;NameValuePair&gt;();
+        if (map != null) {
+            for (Entry&lt;String, String&gt; entry : map.entrySet()) {
+                nameValuePairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+            }
+        }
+
+        // 设置参数到请求对象中
+        httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, encoding));
+
+        // 设置header信息
+        // 指定报文头【Content-type】、【User-Agent】
+        httpPost.setHeader(&quot;Content-type&quot;, &quot;application/x-www-form-urlencoded&quot;);
+        httpPost.setHeader(&quot;User-Agent&quot;, &quot;Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)&quot;);
+
+        // 执行请求操作，并拿到结果（同步阻塞）
+        CloseableHttpResponse response = httpClient.execute(httpPost);
+        // 获取结果实体
+        // 判断网络连接状态码是否正常(0--200都数正常)
+        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+            result = EntityUtils.toString(response.getEntity(), &quot;utf-8&quot;);
+        }
+        // 释放链接
+        response.close();
+
+        return result;
+    }
+
+    /**
+     * post请求传输json数据
+     * 
+     * @param url
+     * @param json
+     * @param encoding
+     * @return
+     * @throws ClientProtocolException
+     * @throws IOException
+     */
+    public static String sendPostDataByJson(String url, String json, String encoding) throws ClientProtocolException, IOException {
+        String result = &quot;&quot;;
+
+        // 创建httpclient对象
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+
+        // 创建post方式请求对象
+        HttpPost httpPost = new HttpPost(url);
+
+        // 设置参数到请求对象中
+        StringEntity stringEntity = new StringEntity(json, ContentType.APPLICATION_JSON);
+        stringEntity.setContentEncoding(&quot;utf-8&quot;);
+        httpPost.setEntity(stringEntity);
+
+        // 执行请求操作，并拿到结果（同步阻塞）
+        CloseableHttpResponse response = httpClient.execute(httpPost);
+
+        // 获取结果实体
+        // 判断网络连接状态码是否正常(0--200都数正常)
+        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+            result = EntityUtils.toString(response.getEntity(), &quot;utf-8&quot;);
+        }
+        // 释放链接
+        response.close();
+
+        return result;
+    }
+
+    /**
+     * get请求传输数据
+     * 
+     * @param url
+     * @param encoding
+     * @return
+     * @throws ClientProtocolException
+     * @throws IOException
+     */
+    public String sendGetData(String url, String encoding) throws ClientProtocolException, IOException {
+        String result = &quot;&quot;;
+
+        // 创建httpclient对象
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+
+        // 创建get方式请求对象
+        HttpGet httpGet = new HttpGet(url);
+        httpGet.addHeader(&quot;Content-type&quot;, &quot;application/json&quot;);
+        // 通过请求对象获取响应对象
+        CloseableHttpResponse response = httpClient.execute(httpGet);
+
+        // 获取结果实体
+        // 判断网络连接状态码是否正常(0--200都数正常)
+        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+            result = EntityUtils.toString(response.getEntity(), &quot;utf-8&quot;);
+        }
+        // 释放链接
+        response.close();
+
+        return result;
+    }
+
+    @Test
+    public void testSendPostDataByMap() throws ClientProtocolException, IOException {
+        String url = &quot;http://localhost:8080/httpService/sendPostDataByMap&quot;;
+        Map&lt;String, String&gt; map = new HashMap&lt;String, String&gt;();
+        map.put(&quot;name&quot;, &quot;wyj&quot;);
+        map.put(&quot;city&quot;, &quot;南京&quot;);
+        String body = sendPostDataByMap(url, map, &quot;utf-8&quot;);
+        System.out.println(&quot;响应结果：&quot; + body);
+    }
+
+    @Test
+    public void testSendPostDataByJson() throws ClientProtocolException, IOException {
+        String url = &quot;http://localhost:8080/httpService/sendPostDataByJson&quot;;
+        Map&lt;String, String&gt; map = new HashMap&lt;String, String&gt;();
+        map.put(&quot;name&quot;, &quot;wyj&quot;);
+        map.put(&quot;city&quot;, &quot;南京&quot;);
+        String body = sendPostDataByJson(url, JSON.toJSONString(map), &quot;utf-8&quot;);
+        System.out.println(&quot;响应结果：&quot; + body);
+    }
+
+    @Test
+    public void testSendGetData() throws ClientProtocolException, IOException {
+        String url = &quot;http://localhost:8080/httpService/sendGetData?name=wyj&amp;city=南京&quot;;
+        String body = sendGetData(url, &quot;utf-8&quot;);
+        System.out.println(&quot;响应结果：&quot; + body);
+    }
+
+}
+</code></pre><h2 id="HttpClient服务端"><a href="#HttpClient服务端" class="headerlink" title="HttpClient服务端"></a>HttpClient服务端</h2><p>package com.wyj.http;</p>
+<p>import javax.servlet.http.HttpServletRequest;<br>import javax.servlet.http.HttpServletResponse;</p>
+<p>import org.springframework.web.bind.annotation.RequestBody;<br>import org.springframework.web.bind.annotation.RequestMapping;<br>import org.springframework.web.bind.annotation.RequestMethod;<br>import org.springframework.web.bind.annotation.RestController;</p>
+<p>import com.alibaba.fastjson.JSON;<br>import com.alibaba.fastjson.JSONObject;</p>
+<pre><code>/**
+ * http服务端
+ * 
+ * 
+ * @author：WangYuanJun
+ * @date：2017年12月21日 下午8:27:08
+ */
+@RestController
+@RequestMapping(&quot;/httpService&quot;)
+public class HttpServiceTest {
+
+    @RequestMapping(value = &quot;/sendPostDataByMap&quot;, method = RequestMethod.POST)
+    public String sendPostDataByMap(HttpServletRequest request, HttpServletResponse response) {
+        String result = &quot;调用成功：数据是 &quot; + &quot;name:&quot; + request.getParameter(&quot;name&quot;) + &quot; city:&quot; + request.getParameter(&quot;city&quot;);
+        return JSON.toJSONString(result);
+    }
+
+    @RequestMapping(value = &quot;/sendPostDataByJson&quot;, method = RequestMethod.POST)
+    public String sendPostDataByJson(HttpServletRequest request, HttpServletResponse response, @RequestBody String requestBody) {
+        JSONObject jsonObject = JSONObject.parseObject(requestBody);
+        String result = &quot;调用成功：数据是 &quot; + &quot;name:&quot; + jsonObject.getString(&quot;name&quot;) + &quot; city:&quot; + jsonObject.getString(&quot;city&quot;);
+        return JSON.toJSONString(result);
+    }
+
+    @RequestMapping(value = &quot;/sendGetData&quot;, method = RequestMethod.GET)
+    public String sendGetData(HttpServletRequest request, HttpServletResponse response) {
+        String result = &quot;调用成功：数据是 &quot; + &quot;name:&quot; + request.getParameter(&quot;name&quot;) + &quot; city:&quot; + request.getParameter(&quot;city&quot;);
+        return JSON.toJSONString(result);
+    }
+}
+</code></pre><h2 id="调用后返回结果输出为"><a href="#调用后返回结果输出为" class="headerlink" title="调用后返回结果输出为"></a>调用后返回结果输出为</h2><p><img src="/2017/12/23/SpringBoot发布HttpClient服务和客户端调用HttpClient服务/HttpClient-result.png" alt="HttpClient-result"></p>
+<h2 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h2><p><a href="https://github.com/wangyuanjun008/wyj-interface-client/blob/master/src/main/java/http/HttpClientTest.java" target="_blank" rel="external">SpringBoot整合的HttpClient客户端地址</a><br><a href="https://github.com/wangyuanjun008/wyj-interface-service/blob/master/src/main/java/com/wyj/http/HttpServiceTest.java" target="_blank" rel="external">SpringBoot整合的HttpClient服务端地址</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;之前在做公司项目的一个功能需要写WebSerice接口，写完之后我们老大说也可以用HttpClient来写接口，所以写了一个接口例子。&lt;/p&gt;
+&lt;h2 id=&quot;添加依赖&quot;&gt;&lt;a href=&quot;#添加依赖&quot; class=&quot;headerlink&quot; title=&quot;添加依赖&quot;&gt;&lt;/a
+    
+    </summary>
+    
+      <category term="HttpClient" scheme="http://wangyuanjun.cn/categories/HttpClient/"/>
+    
+    
+      <category term="HttpClient" scheme="http://wangyuanjun.cn/tags/HttpClient/"/>
+    
+      <category term="SpringBoot" scheme="http://wangyuanjun.cn/tags/SpringBoot/"/>
     
   </entry>
   
