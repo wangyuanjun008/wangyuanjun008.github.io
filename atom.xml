@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wangyuanjun.cn/"/>
-  <updated>2018-01-30T14:25:09.585Z</updated>
+  <updated>2018-02-01T03:11:22.860Z</updated>
   <id>http://wangyuanjun.cn/</id>
   
   <author>
@@ -16,11 +16,883 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Java虚拟机学习——Java内存区域与内存溢出异常</title>
+    <link href="http://wangyuanjun.cn/2018/02/01/Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Java%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E4%B8%8E%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA%E5%BC%82%E5%B8%B8/"/>
+    <id>http://wangyuanjun.cn/2018/02/01/Java虚拟机学习——Java内存区域与内存溢出异常/</id>
+    <published>2018-02-01T02:50:54.000Z</published>
+    <updated>2018-02-01T03:11:22.860Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="运行时数据区域"><a href="#运行时数据区域" class="headerlink" title="运行时数据区域"></a>运行时数据区域</h1><h2 id="程序计数器-PC寄存器"><a href="#程序计数器-PC寄存器" class="headerlink" title="程序计数器(PC寄存器)"></a>程序计数器(PC寄存器)</h2><p>每个线程都有一个pc寄存器<br>在线程创建是创建<br>指向下一条指令的地址</p>
+<h2 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h2><p>保存类的元信息，对类进行描述</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;运行时数据区域&quot;&gt;&lt;a href=&quot;#运行时数据区域&quot; class=&quot;headerlink&quot; title=&quot;运行时数据区域&quot;&gt;&lt;/a&gt;运行时数据区域&lt;/h1&gt;&lt;h2 id=&quot;程序计数器-PC寄存器&quot;&gt;&lt;a href=&quot;#程序计数器-PC寄存器&quot; class=&quot;he
+    
+    </summary>
+    
+      <category term="JVM" scheme="http://wangyuanjun.cn/categories/JVM/"/>
+    
+    
+      <category term="JVM" scheme="http://wangyuanjun.cn/tags/JVM/"/>
+    
+      <category term="java虚拟机" scheme="http://wangyuanjun.cn/tags/java%E8%99%9A%E6%8B%9F%E6%9C%BA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>IntelliJ IDEA 2017.3激活</title>
+    <link href="http://wangyuanjun.cn/2018/01/31/IntelliJ-IDEA-2017-3%E6%BF%80%E6%B4%BB/"/>
+    <id>http://wangyuanjun.cn/2018/01/31/IntelliJ-IDEA-2017-3激活/</id>
+    <published>2018-01-31T15:42:34.000Z</published>
+    <updated>2018-02-01T13:21:04.866Z</updated>
+    
+    <content type="html"><![CDATA[<p>最新的IDEA激活方式，博主使用的是3.4的版本</p>
+<h1 id="方法一：使用激活服务器激活方法-博主使用此方法"><a href="#方法一：使用激活服务器激活方法-博主使用此方法" class="headerlink" title="方法一：使用激活服务器激活方法(博主使用此方法)"></a>方法一：使用激活服务器激活方法(博主使用此方法)</h1><p>由于JetBrains封杀，大部分激活服务器已经不能使用，目前可用的网址有：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://idea.java.sx</div></pre></td></tr></table></figure>
+<p><img src="/2018/01/31/IntelliJ-IDEA-2017-3激活/1.png" alt="1"></p>
+<p>步骤<br>1、打开注册/激活窗口；</p>
+<p>2、选择 License server；</p>
+<p>3、填入上述其中一个网址；</p>
+<p>4、点击Activate即可完美激活!</p>
+<h1 id="方法二：注册码激活方法"><a href="#方法二：注册码激活方法" class="headerlink" title="方法二：注册码激活方法"></a>方法二：注册码激活方法</h1><p>1、进入hosts文件中：C:\Windows\System32\drivers\etc\hosts<br><img src="/2018/01/31/IntelliJ-IDEA-2017-3激活/2.png" alt="2"><br>2、将“0.0.0.0 account.jetbrains.com”添加到hosts文件中<br>注意：添加只有重新打开hosts文件进行确认之后在进行下一步操作。<br>修改成功后如图所示：<br><img src="/2018/01/31/IntelliJ-IDEA-2017-3激活/3.png" alt="3"><br>注：将这条数据加入之后会提示保存，然后确认之后，重新打开hosts文件确认是否添加成功，有时候会提示确认两次。<br>3、点击获得注册码，<a href="http://idea.lanyus.com/" target="_blank" rel="external">点我</a>，然后将注册码复制，粘贴到IDEA中<br><img src="/2018/01/31/IntelliJ-IDEA-2017-3激活/4.png" alt="4"><br>4、点击获得注册码即可获得IDEA激活码。<br><img src="/2018/01/31/IntelliJ-IDEA-2017-3激活/5.png" alt="5"></p>
+<h1 id="方法三：本地搭建激活服务器激活方法"><a href="#方法三：本地搭建激活服务器激活方法" class="headerlink" title="方法三：本地搭建激活服务器激活方法"></a>方法三：本地搭建激活服务器激活方法</h1><p>1、下载IDEA本地服务器，<a href="https://pan.baidu.com/s/1qZAnpF2" target="_blank" rel="external">点我下载(密码jx0m)</a></p>
+<p>2、解压到本地硬盘任意位置，运行相应程序，32位操作系统请双击运行32位程序，64位操作系统请双击运行64位程序，如下图：<br><img src="/2018/01/31/IntelliJ-IDEA-2017-3激活/6.png" alt="6"><br>3、运行结果如图：<br><img src="/2018/01/31/IntelliJ-IDEA-2017-3激活/7.png" alt="7"><br>4、打开IDEA，在激活框内输入上图标示的网址即可。</p>
+<p>注：在新版本IDEA2017.3中可能会出现无法激活的情况，此时将网址改为<a href="http://0.0.0.0:1017即可。" target="_blank" rel="external">http://0.0.0.0:1017即可。</a></p>
+<h1 id="方法四：破解补丁激活方法"><a href="#方法四：破解补丁激活方法" class="headerlink" title="方法四：破解补丁激活方法"></a>方法四：破解补丁激活方法</h1><p>（1）破解补丁下载<br><a href="https://pan.baidu.com/s/1pM6l95h" target="_blank" rel="external">点我下载(密码jilt)</a><br>将下载的破解补丁放在你的安装IDEA下面的bin的目录下面（如图），本文示例为E:\develop-tools\toolsInstall\idea\IntelliJ IDEA 2017.3.4\bin<br><img src="/2018/01/31/IntelliJ-IDEA-2017-3激活/8.png" alt="8"><br>（2）修改配置文件</p>
+<p>在安装的IDEA下面的bin目录下面有2个文件 ： idea.exe.vmoptions和idea64.exe.vmoptions。<br><img src="/2018/01/31/IntelliJ-IDEA-2017-3激活/10.png" alt="10"><br>用记事本打开，在上述两个文件的最后一行均加上下面这段代码（红色字体部分为你的IDEA安装目录）：</p>
+<p>-javaagent:E:\develop-tools\toolsInstall\idea\IntelliJ IDEA 2017.3.4\bin\JetbrainsCrack-2.6.10-release-enc.jar</p>
+<p>（3）输入激活码</p>
+<p>启动IDEA，第一次进入会提示激活，选择Activation Code，并输入如下激活码：</p>
+<pre><code>BIG3CLIK6F-eyJsaWNlbnNlSWQiOiJCSUczQ0xJSzZGIiwibGljZW5zZWVOYW1lIjoibGFuIHl1IiwiYXNzaWduZWVOYW1lIjoiIiwiYXNzaWduZWVFbWFpbCI6IiIsImxpY2Vuc2VSZXN0cmljdGlvbiI6IkZvciBlZHVjYXRpb25hbCB1c2Ugb25seSIsImNoZWNrQ29uY3VycmVudFVzZSI6ZmFsc2UsInByb2R1Y3RzIjpbeyJjb2RlIjoiQUMiLCJwYWlkVXBUbyI6IjIwMTctMTEtMjMifSx7ImNvZGUiOiJETSIsInBhaWRVcFRvIjoiMjAxNy0xMS0yMyJ9LHsiY29kZSI6IklJIiwicGFpZFVwVG8iOiIyMDE3LTExLTIzIn0seyJjb2RlIjoiUlMwIiwicGFpZFVwVG8iOiIyMDE3LTExLTIzIn0seyJjb2RlIjoiV1MiLCJwYWlkVXBUbyI6IjIwMTctMTEtMjMifSx7ImNvZGUiOiJEUE4iLCJwYWlkVXBUbyI6IjIwMTctMTEtMjMifSx7ImNvZGUiOiJSQyIsInBhaWRVcFRvIjoiMjAxNy0xMS0yMyJ9LHsiY29kZSI6IlBTIiwicGFpZFVwVG8iOiIyMDE3LTExLTIzIn0seyJjb2RlIjoiREMiLCJwYWlkVXBUbyI6IjIwMTctMTEtMjMifSx7ImNvZGUiOiJEQiIsInBhaWRVcFRvIjoiMjAxNy0xMS0yMyJ9LHsiY29kZSI6IlJNIiwicGFpZFVwVG8iOiIyMDE3LTExLTIzIn0seyJjb2RlIjoiUEMiLCJwYWlkVXBUbyI6IjIwMTctMTEtMjMifSx7ImNvZGUiOiJDTCIsInBhaWRVcFRvIjoiMjAxNy0xMS0yMyJ9XSwiaGFzaCI6IjQ3NzU1MTcvMCIsImdyYWNlUGVyaW9kRGF5cyI6MCwiYXV0b1Byb2xvbmdhdGVkIjpmYWxzZSwiaXNBdXRvUHJvbG9uZ2F0ZWQiOmZhbHNlfQ==-iygsIMXTVeSyYkUxAqpHmymrgwN5InkOfeRhhPIPa88FO9FRuZosIBTY18tflChACznk3qferT7iMGKm7pumDTR4FbVVlK/3n1ER0eMKu2NcaXb7m10xT6kLW1Xb3LtuZEnuis5pYuEwT1zR7GskeNWdYZ0dAJpNDLFrqPyAPo5s1KLDHKpw+VfVd4uf7RMjOIzuJhAAYAG+amyivQt61I9aYiwpHQvUphvTwi0X0qL/oDJHAQbIv4Qwscyo4aYZJBKutYioZH9rgOP6Yw/sCltpoPWlJtDOcw/iEWYiCVG1pH9AWjCYXZ9AbbEBOWV71IQr5VWrsqFZ7cg7hLEJ3A==-MIIEPjCCAiagAwIBAgIBBTANBgkqhkiG9w0BAQsFADAYMRYwFAYDVQQDDA1KZXRQcm9maWxlIENBMB4XDTE1MTEwMjA4MjE0OFoXDTE4MTEwMTA4MjE0OFowETEPMA0GA1UEAwwGcHJvZDN5MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxcQkq+zdxlR2mmRYBPzGbUNdMN6OaXiXzxIWtMEkrJMO/5oUfQJbLLuMSMK0QHFmaI37WShyxZcfRCidwXjot4zmNBKnlyHodDij/78TmVqFl8nOeD5+07B8VEaIu7c3E1N+e1doC6wht4I4+IEmtsPAdoaj5WCQVQbrI8KeT8M9VcBIWX7fD0fhexfg3ZRt0xqwMcXGNp3DdJHiO0rCdU+Itv7EmtnSVq9jBG1usMSFvMowR25mju2JcPFp1+I4ZI+FqgR8gyG8oiNDyNEoAbsR3lOpI7grUYSvkB/xVy/VoklPCK2h0f0GJxFjnye8NT1PAywoyl7RmiAVRE/EKwIDAQABo4GZMIGWMAkGA1UdEwQCMAAwHQYDVR0OBBYEFGEpG9oZGcfLMGNBkY7SgHiMGgTcMEgGA1UdIwRBMD+AFKOetkhnQhI2Qb1t4Lm0oFKLl/GzoRykGjAYMRYwFAYDVQQDDA1KZXRQcm9maWxlIENBggkA0myxg7KDeeEwEwYDVR0lBAwwCgYIKwYBBQUHAwEwCwYDVR0PBAQDAgWgMA0GCSqGSIb3DQEBCwUAA4ICAQC9WZuYgQedSuOc5TOUSrRigMw4/+wuC5EtZBfvdl4HT/8vzMW/oUlIP4YCvA0XKyBaCJ2iX+ZCDKoPfiYXiaSiH+HxAPV6J79vvouxKrWg2XV6ShFtPLP+0gPdGq3x9R3+kJbmAm8w+FOdlWqAfJrLvpzMGNeDU14YGXiZ9bVzmIQbwrBA+c/F4tlK/DV07dsNExihqFoibnqDiVNTGombaU2dDup2gwKdL81ua8EIcGNExHe82kjF4zwfadHk3bQVvbfdAwxcDy4xBjs3L4raPLU3yenSzr/OEur1+jfOxnQSmEcMXKXgrAQ9U55gwjcOFKrgOxEdek/Sk1VfOjvS+nuM4eyEruFMfaZHzoQiuw4IqgGc45ohFH0UUyjYcuFxxDSU9lMCv8qdHKm+wnPRb0l9l5vXsCBDuhAGYD6ss+Ga+aDY6f/qXZuUCEUOH3QUNbbCUlviSz6+GiRnt1kA9N2Qachl+2yBfaqUqr8h7Z2gsx5LcIf5kYNsqJ0GavXTVyWh7PYiKX4bs354ZQLUwwa/cG++2+wNWP+HtBhVxMRNTdVhSm38AknZlD+PTAsWGu9GyLmhti2EnVwGybSD2Dxmhxk3IPCkhKAK+pl0eWYGZWG3tJ9mZ7SowcXLWDFAk0lRJnKGFMTggrWjV8GYpw5bq23VmIqqDLgkNzuoog==
+</code></pre><p>（4）软件启动，进入Help，选择About，页面显示December 31，2099到期，完成激活。如下图：<br><img src="/2018/01/31/IntelliJ-IDEA-2017-3激活/9.png" alt="9"></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最新的IDEA激活方式，博主使用的是3.4的版本&lt;/p&gt;
+&lt;h1 id=&quot;方法一：使用激活服务器激活方法-博主使用此方法&quot;&gt;&lt;a href=&quot;#方法一：使用激活服务器激活方法-博主使用此方法&quot; class=&quot;headerlink&quot; title=&quot;方法一：使用激活服务器激活方
+    
+    </summary>
+    
+      <category term="IDEA" scheme="http://wangyuanjun.cn/categories/IDEA/"/>
+    
+    
+      <category term="工具" scheme="http://wangyuanjun.cn/tags/%E5%B7%A5%E5%85%B7/"/>
+    
+      <category term="IDEA" scheme="http://wangyuanjun.cn/tags/IDEA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java虚拟机学习——类加载机制</title>
+    <link href="http://wangyuanjun.cn/2018/01/31/Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/"/>
+    <id>http://wangyuanjun.cn/2018/01/31/Java虚拟机学习——类加载机制/</id>
+    <published>2018-01-31T09:28:16.000Z</published>
+    <updated>2018-02-01T02:57:42.821Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+      <category term="JVM" scheme="http://wangyuanjun.cn/categories/JVM/"/>
+    
+    
+      <category term="JVM" scheme="http://wangyuanjun.cn/tags/JVM/"/>
+    
+      <category term="java虚拟机" scheme="http://wangyuanjun.cn/tags/java%E8%99%9A%E6%8B%9F%E6%9C%BA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>JDK1.8源码解析——String</title>
+    <link href="http://wangyuanjun.cn/2018/01/30/JDK1.8%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E2%80%94%E2%80%94String/"/>
+    <id>http://wangyuanjun.cn/2018/01/30/JDK1.8源码解析——String/</id>
+    <published>2018-01-30T14:32:49.000Z</published>
+    <updated>2018-02-01T02:52:33.769Z</updated>
+    
+    <content type="html"><![CDATA[<p>String源码分析 </p>
+<h1 id="一：类的声明"><a href="#一：类的声明" class="headerlink" title="一：类的声明"></a>一：类的声明</h1><p>在java.lang包中，此类被final修饰，表示String的对象是不可变量，不可继承。<br>String类实现了Serizlizable，Comparable, CharSequence接口。<br>Serizlizable接口没有任何方法和域，仅用于标识序列化的语意，实现此接口的类是可序列化的，是java提供的通用数据保存和读取的接口。<br>Comparable接口只有一个compareTo(To)方法。<br><img src="/2018/01/30/JDK1.8源码解析——String/Comparable接口.png" alt="Comparable接口"><br>CharSequence接口如下图<br><img src="/2018/01/30/JDK1.8源码解析——String/CharSequence接口.png" alt="CharSequence接口"></p>
+<h1 id="类的成员变量"><a href="#类的成员变量" class="headerlink" title="类的成员变量"></a>类的成员变量</h1><pre><code>/** The value is used for character storage. */
+private final char value[]; //使用字符数组存放字符串
+
+/** Cache the hash code for the string */
+private int hash; // Default to 0  存放哈希值
+</code></pre><h1 id="类的构造方法"><a href="#类的构造方法" class="headerlink" title="类的构造方法"></a>类的构造方法</h1><h2 id="无参构造器"><a href="#无参构造器" class="headerlink" title="无参构造器"></a>无参构造器</h2><pre><code>// 无参构造方法 因为String对象内容不可变，所以没有必要调用此方法。
+public String() {
+    this.value = &quot;&quot;.value;
+}
+</code></pre><h2 id="String-参数"><a href="#String-参数" class="headerlink" title="String 参数"></a>String 参数</h2><pre><code>//初始化一个新创建的 String 对象，使其表示一个与参数相同的字符序列；换句话说，新创建的字符串是该参数字符串的副本。
+public String(String original) {
+    this.value = original.value;
+    this.hash = original.hash;
+}
+</code></pre><p>可以看到只是将value引用指向original中的value数组，因为两者都是final的，所以这个看来也没那么必要。因为String s1=new String(“s1s1”); String s2=new String(s1);这种用法完全没有必要，而不如直接引用，s2=s1;</p>
+<h2 id="char-参数"><a href="#char-参数" class="headerlink" title="char[]参数"></a>char[]参数</h2><pre><code>// 分配一个新的 String，使其表示字符数组参数中当前包含的字符序列。
+public String(char value[]) {
+    this.value = Arrays.copyOf(value, value.length);
+}
+//可以发现当通过char数组构建时，只是将char数组复制到value中，而且是复制，而不是简单的引用相等。
+
+// 分配一个新的 String，它包含取自字符数组参数一个子数组的字符。
+// offset是起始位置，count是字符数量
+public String(char value[], int offset, int count) {    
+    if (offset &lt; 0) { // 如果起始位置小于0
+        throw new StringIndexOutOfBoundsException(offset);
+    }
+    if (count &lt;= 0) { // 如果字符数量小于1
+        if (count &lt; 0) { // 如果字符数量小于0
+            throw new StringIndexOutOfBoundsException(count);
+        }
+        if (offset &lt;= value.length) { // 如果起始位置不超过参数中字符数组长度
+            this.value = &quot;&quot;.value; // 设置为空字符串
+            return;
+        }
+    }
+    // Note: offset or count might be near -1&gt;&gt;&gt;1.
+    if (offset &gt; value.length - count) { // 如果起始位置与字符数量不符合逻辑
+        throw new StringIndexOutOfBoundsException(offset + count);
+    }
+
+    // 创建字符数组副本
+    this.value = Arrays.copyOfRange(value, offset, offset+count);
+}
+与上面的区别是，这里只是利用char数组中的一部分来构建String，其中offset代表起始下标，count是所有构建的长度。
+</code></pre><h2 id="int-参数"><a href="#int-参数" class="headerlink" title="int[]参数"></a>int[]参数</h2><pre><code>//分配一个新的 String，它包含 Unicode 代码点数组参数一个子数组的字符。
+public String(int[] codePoints, int offset, int count) {
+    if (offset &lt; 0) {
+        throw new StringIndexOutOfBoundsException(offset);
+    }
+    if (count &lt;= 0) {
+        if (count &lt; 0) {
+            throw new StringIndexOutOfBoundsException(count);
+        }
+        if (offset &lt;= codePoints.length) {
+            this.value = &quot;&quot;.value;
+            return;
+        }
+    }
+    // Note: offset or count might be near -1&gt;&gt;&gt;1.
+    if (offset &gt; codePoints.length - count) {
+        throw new StringIndexOutOfBoundsException(offset + count);
+    }
+
+    final int end = offset + count;
+
+    // Pass 1: Compute precise size of char[]
+    int n = count;
+    for (int i = offset; i &lt; end; i++) {
+        int c = codePoints[i];
+        if (Character.isBmpCodePoint(c))
+            continue;
+        else if (Character.isValidCodePoint(c))
+            n++;
+        else throw new IllegalArgumentException(Integer.toString(c));
+    }
+
+    // Pass 2: Allocate and fill in char[]
+    final char[] v = new char[n];
+
+    for (int i = offset, j = 0; i &lt; end; i++, j++) {
+        int c = codePoints[i];
+        if (Character.isBmpCodePoint(c))
+            v[j] = (char)c;
+        else
+            Character.toSurrogates(c, v, j++);
+    }
+
+    this.value = v;
+}
+</code></pre><h2 id="byte-参数"><a href="#byte-参数" class="headerlink" title="byte[]参数"></a>byte[]参数</h2><p>所谓好的适用性模块，一定是能有一坨坨的各种适应代码的。下面是一系列的利用byte[]数组来构建String对象的构造器，主要差别是可能需要指定特殊的字符集来解码，但是这一点其实在web编程，网络编程中还是很重要的</p>
+<pre><code>//通过使用指定的字符集解码指定的 byte 子数组，构造一个新的 String。
+public String(byte bytes[], int offset, int length, String charsetName)
+        throws UnsupportedEncodingException {
+    if (charsetName == null)
+        throw new NullPointerException(&quot;charsetName&quot;);
+    checkBounds(bytes, offset, length);
+    this.value = StringCoding.decode(charsetName, bytes, offset, length);
+}
+
+//通过使用指定的 charset 解码指定的 byte 子数组，构造一个新的 String。
+public String(byte bytes[], int offset, int length, Charset charset) {
+    if (charset == null)
+        throw new NullPointerException(&quot;charset&quot;);
+    checkBounds(bytes, offset, length);
+    this.value =  StringCoding.decode(charset, bytes, offset, length);
+}
+
+// 通过使用指定的 charset 解码指定的 byte 数组，构造一个新的 String。
+public String(byte bytes[], String charsetName)
+        throws UnsupportedEncodingException {
+    this(bytes, 0, bytes.length, charsetName);
+}
+
+//通过使用指定的 charset 解码指定的 byte 数组，构造一个新的 String。
+public String(byte bytes[], Charset charset) {
+    this(bytes, 0, bytes.length, charset);
+}
+
+//通过使用平台的默认字符集解码指定的 byte 子数组，构造一个新的 String。
+public String(byte bytes[], int offset, int length) {
+    checkBounds(bytes, offset, length);
+    this.value = StringCoding.decode(bytes, offset, length);
+}
+
+//通过使用平台的默认字符集解码指定的 byte 数组，构造一个新的 String。
+public String(byte bytes[]) {
+    this(bytes, 0, bytes.length);
+}
+</code></pre><h2 id="基于StringBuilder-StringBuffer参数"><a href="#基于StringBuilder-StringBuffer参数" class="headerlink" title="基于StringBuilder,StringBuffer参数"></a>基于StringBuilder,StringBuffer参数</h2><pre><code>//分配一个新的字符串，它包含字符串缓冲区参数中当前包含的字符序列。
+public String(StringBuffer buffer) {
+    synchronized(buffer) {
+        this.value = Arrays.copyOf(buffer.getValue(), buffer.length());
+    }
+}
+
+//分配一个新的字符串，它包含字符串生成器参数中当前包含的字符序列。
+public String(StringBuilder builder) {
+    this.value = Arrays.copyOf(builder.getValue(), builder.length());
+}
+
+String(char[] value, boolean share) {
+    // assert share : &quot;unshared not supported&quot;;
+    this.value = value;
+}
+</code></pre><h1 id="重要方法"><a href="#重要方法" class="headerlink" title="重要方法"></a>重要方法</h1><h2 id="length"><a href="#length" class="headerlink" title="length"></a>length</h2><pre><code>//获取字符串长度
+//返回字符串中所包含的字符数目，即value数组的长度
+public int length() {
+    return value.length;
+}
+</code></pre><h2 id="isEmpty"><a href="#isEmpty" class="headerlink" title="isEmpty"></a>isEmpty</h2><pre><code>// 判断字符串是否为空
+// 判断字符串是否为空，即判断value数组的长度为0即可
+public boolean isEmpty() {
+    return value.length == 0;
+}
+</code></pre><h2 id="charAt"><a href="#charAt" class="headerlink" title="charAt"></a>charAt</h2><pre><code>//按下标获取单个字符
+//返回指定索引处的 char 值。索引范围为从 0 到 length() - 1。序列的第一个 char 值位于索引 0 处，第二个位于索引 1 处，依此类推，这类似于数组索引。 
+public char charAt(int index) {
+    if ((index &lt; 0) || (index &gt;= value.length)) {
+        throw new StringIndexOutOfBoundsException(index);
+    }
+    return value[index];
+}
+</code></pre><h2 id="getChars"><a href="#getChars" class="headerlink" title="getChars"></a>getChars</h2><pre><code>//将字符串拷贝到目标字符数组
+void getChars(char dst[], int dstBegin) {
+    System.arraycopy(value, 0, dst, dstBegin, value.length);
+}
+
+// 获取子串，把它拷贝到目标字符数组
+public void getChars(int srcBegin, int srcEnd, char dst[], int dstBegin) {
+    if (srcBegin &lt; 0) { // 如果源数组开始位置&lt;0
+        throw new StringIndexOutOfBoundsException(srcBegin);
+    }
+    if (srcEnd &gt; value.length) { // 如果源数组结束位置&gt;字符数组长度
+        throw new StringIndexOutOfBoundsException(srcEnd);
+    }
+    if (srcBegin &gt; srcEnd) { // 如果源数组开始位置&gt;源数组结束位置
+        throw new StringIndexOutOfBoundsException(srcEnd - srcBegin);
+    }
+    System.arraycopy(value, srcBegin, dst, dstBegin, srcEnd - srcBegin);
+}
+</code></pre><h2 id="getBytes"><a href="#getBytes" class="headerlink" title="getBytes"></a>getBytes</h2><pre><code>//使用指定的字符集将此 String 编码为 byte 序列，并将结果存储到一个新的 byte 数组中。 
+public byte[] getBytes(String charsetName)
+        throws UnsupportedEncodingException {
+    if (charsetName == null) throw new NullPointerException();
+    return StringCoding.encode(charsetName, value, 0, value.length);
+}
+
+//使用给定的 charset 将此 String 编码到 byte 序列，并将结果存储到新的 byte 数组。 
+public byte[] getBytes(Charset charset) {
+    if (charset == null) throw new NullPointerException();
+    return StringCoding.encode(charset, value, 0, value.length);
+}
+
+//使用平台的默认字符集将此 String 编码为 byte 序列，并将结果存储到一个新的 byte 数组中。 
+public byte[] getBytes() {
+    return StringCoding.encode(value, 0, value.length);
+}
+</code></pre><h2 id="equals"><a href="#equals" class="headerlink" title="equals"></a>equals</h2><pre><code>//将此字符串与指定的对象比较。当且仅当该参数不为 null，并且是与此对象表示相同字符序列的 String 对象时，结果才为 true。 
+//比较两个引用指向的String对象内容是否相同
+public boolean equals(Object anObject) {
+    if (this == anObject) { // 如果两个引用指向的是同一个String对象
+        return true;
+    }
+    if (anObject instanceof String) { // 如果第2个引用指向的对象是String实例
+        String anotherString = (String)anObject; // 强制类型转换
+        int n = value.length; // 获取第1个引用指向的String对象的字符串长度
+        if (n == anotherString.value.length) { // 如果两个字符串长度相等
+            // 定义字符数组指针
+            char v1[] = value; 
+            char v2[] = anotherString.value;
+
+            // 字符依次比较
+            int i = 0;
+            while (n-- != 0) {
+                if (v1[i] != v2[i])
+                    return false;
+                i++;
+            }
+            return true;
+        }
+    }
+    return false;
+}
+</code></pre><p>可以看到equals方法重写了，会判断两个字符串的每一个字符是否相等。    </p>
+<h2 id="equalsIgnoreCase"><a href="#equalsIgnoreCase" class="headerlink" title="equalsIgnoreCase"></a>equalsIgnoreCase</h2><pre><code>//将此 String 与另一个 String 比较，不考虑大小写。如果两个字符串的长度相同，并且其中的相应字符都相等（忽略大小写），则认为这两个字符串是相等的。
+public boolean equalsIgnoreCase(String anotherString) {
+        return (this == anotherString) ? true
+                : (anotherString != null)
+                &amp;&amp; (anotherString.value.length == value.length)
+                &amp;&amp; regionMatches(true, 0, anotherString, 0, value.length);
+    }
+    判断两个字符串在忽略大小写的情况下是否相等，主要调用regionMatches方法
+
+    public boolean regionMatches(boolean ignoreCase, int toffset,
+            String other, int ooffset, int len) {
+        char ta[] = value;
+        int to = toffset;
+        char pa[] = other.value;
+        int po = ooffset;
+        // Note: toffset, ooffset, or len might be near -1&gt;&gt;&gt;1.
+        if ((ooffset &lt; 0) || (toffset &lt; 0)
+                || (toffset &gt; (long)value.length - len)
+                || (ooffset &gt; (long)other.value.length - len)) {
+            return false;
+        }
+        while (len-- &gt; 0) {
+            char c1 = ta[to++];
+            char c2 = pa[po++];
+            //在这里先行判断，如果相等就直接跳过后面即可，可以提高效率
+            if (c1 == c2) {
+                continue;
+            }
+            if (ignoreCase) {
+                // If characters don&apos;t match but case may be ignored,
+                // try converting both characters to uppercase.
+                // If the results match, then the comparison scan should
+                // continue.
+                char u1 = Character.toUpperCase(c1);
+                char u2 = Character.toUpperCase(c2);
+                //都转换成大写的形式，如果相等，则跳过
+                if (u1 == u2) {
+                    continue;
+                }
+                // Unfortunately, conversion to uppercase does not work properly
+                // for the Georgian alphabet, which has strange rules about case
+                // conversion.  So we need to make one last check before
+                // exiting.
+                if (Character.toLowerCase(u1) == Character.toLowerCase(u2)) {
+                    continue;
+                }
+            }
+            return false;
+        }
+        return true;
+    }
+</code></pre><h2 id="compareTo"><a href="#compareTo" class="headerlink" title="compareTo"></a>compareTo</h2><pre><code>// 比较两个String对象的大小
+public int compareTo(String anotherString) {
+    // 获取字符数组长度
+    int len1 = value.length;
+    int len2 = anotherString.value.length;
+    // 获取最小长度
+    int lim = Math.min(len1, len2);
+    // 定义字符数组指针
+    char v1[] = value;
+    char v2[] = anotherString.value;
+
+    int k = 0;
+    while (k &lt; lim) {
+        char c1 = v1[k];
+        char c2 = v2[k];
+        if (c1 != c2) { // 如果两个字符不相等
+            return c1 - c2;
+        }
+        k++;
+    }
+
+    // 根据长度比较大小
+    return len1 - len2;
+}
+</code></pre><p>比较两个字符串的大小。如果两个字符串的字符序列相等，则返回0；不相等时，从两个字符串第0个字符开始比较，返回第一个不相等的字符差。另一种情况，较长的字符串的前面部分恰好是较短的字符串，则返回他们的长度差。</p>
+<h2 id="startsWith"><a href="#startsWith" class="headerlink" title="startsWith"></a>startsWith</h2><pre><code>//测试此字符串从指定索引开始的子字符串是否以指定前缀开始。
+public boolean startsWith(String prefix, int toffset) {
+    char ta[] = value;
+    int to = toffset;
+    char pa[] = prefix.value;
+    int po = 0;
+    int pc = prefix.value.length;
+    // Note: toffset might be near -1&gt;&gt;&gt;1.
+    if ((toffset &lt; 0) || (toffset &gt; value.length - pc)) {
+        return false;
+    }
+    while (--pc &gt;= 0) {
+        if (ta[to++] != pa[po++]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+//测试此字符串是否以指定的前缀开始。 
+public boolean startsWith(String prefix) {
+    return startsWith(prefix, 0);
+}
+</code></pre><h2 id="endsWith"><a href="#endsWith" class="headerlink" title="endsWith"></a>endsWith</h2><pre><code>//测试此字符串是否以指定的后缀结束。
+public boolean endsWith(String suffix) {
+    return startsWith(suffix, value.length - suffix.value.length);
+}
+</code></pre><h2 id="hashCode"><a href="#hashCode" class="headerlink" title="hashCode"></a>hashCode</h2><pre><code>//返回此字符串的哈希码。String 对象的哈希码根据以下公式计算： s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1] 使用 int 算法，这里 s[i] 是字符串的第 i 个字符，n 是字符串的长度，^ 表示求幂。（空字符串的哈希值为 0。） 
+// 获取散列码方法
+public int hashCode() {
+    // 获取字符串缓存散列码
+    int h = hash;
+    if (h == 0 &amp;&amp; value.length &gt; 0) { // 如果字符串缓存散列码为0并且字符串数组长度大于0
+        // 定义字符数组指针
+        char val[] = value;
+
+        // 遍历每个字符
+        for (int i = 0; i &lt; value.length; i++) {
+            h = 31 * h + val[i]; // 31 * h会被JVM优化成(h &lt;&lt; 5) - h
+        }
+        hash = h; // 修改字符串缓存散列码
+    }
+    return h;
+}
+</code></pre><h2 id="indexOf"><a href="#indexOf" class="headerlink" title="indexOf"></a>indexOf</h2><pre><code>// 获取指定字符在此字符串中第一次出现处的索引
+public int indexOf(int ch) {
+    return indexOf(ch, 0); // 从0开始查找
+}
+
+// 获取在此字符串中第一次出现指定字符处的索引，从指定的索引开始搜索。
+// Unicode指统一码（采用双字节对字符进行编码）
+public int indexOf(int ch, int fromIndex) {
+    // 获取字符数组长度
+    final int max = value.length;
+    if (fromIndex &lt; 0) { // 如果起始位置&lt;0
+        fromIndex = 0; // 起始位置置0
+    } else if (fromIndex &gt;= max) { // 如果起始位置&gt;=字符数组长度
+        // Note: fromIndex might be near -1&gt;&gt;&gt;1.
+        return -1;
+    }
+
+    // Character.MIN_SUPPLEMENTARY_CODE_POINT是BmpCode代码点
+    // 值是2的16次方，是2个字节最大值+1
+    // 如果ch是非辅助代码点或者负值（无效代码点）
+    if (ch &lt; Character.MIN_SUPPLEMENTARY_CODE_POINT) { 
+        // handle most cases here (ch is a BMP code point or a
+        // negative value (invalid code point))
+        final char[] value = this.value; // 创建字符数组的指针
+        for (int i = fromIndex; i &lt; max; i++) { // 从fromIndex开始遍历每个字符
+            if (value[i] == ch) { // 如果找到ch字符
+                return i;
+            }
+        }
+        return -1;
+    } else { // 寻找ch在辅助部分中的索引
+        return indexOfSupplementary(ch, fromIndex);
+    }
+}
+
+//返回指定字符在此字符串中最后一次出现处的索引。
+public int lastIndexOf(int ch) {
+    return lastIndexOf(ch, value.length - 1);
+}
+
+//返回指定字符在此字符串中最后一次出现处的索引，从指定的索引处开始进行反向搜索。
+public int lastIndexOf(int ch, int fromIndex) {
+    if (ch &lt; Character.MIN_SUPPLEMENTARY_CODE_POINT) {
+        // handle most cases here (ch is a BMP code point or a
+        // negative value (invalid code point))
+        final char[] value = this.value;
+        int i = Math.min(fromIndex, value.length - 1);
+        for (; i &gt;= 0; i--) {
+            if (value[i] == ch) {
+                return i;
+            }
+        }
+        return -1;
+    } else {
+        return lastIndexOfSupplementary(ch, fromIndex);
+    }
+}
+
+//返回指定子字符串在此字符串中第一次出现处的索引。
+public int indexOf(String str) {
+    return indexOf(str, 0);
+}
+
+//返回指定子字符串在此字符串中第一次出现处的索引，从指定的索引开始。
+public int indexOf(String str, int fromIndex) {
+    return indexOf(value, 0, value.length,
+            str.value, 0, str.value.length, fromIndex);
+}
+
+
+// 获取参数子串在该字符串中从起始位置开始第一次出现的位置
+static int indexOf(char[] source, int sourceOffset, int sourceCount,
+        String target, int fromIndex) {
+    return indexOf(source, sourceOffset, sourceCount,
+                   target.value, 0, target.value.length,
+                   fromIndex);
+}
+
+/* @param   source       the characters being searched.//这里就是value数组
+     * @param   sourceOffset offset of the source string./ //源字符串的偏移量
+     * @param   sourceCount  count of the source string.    //这里是value数组的长度
+     * @param   target       the characters being searched for.  //待搜索目标字符串
+     * @param   targetOffset offset of the target string.   //待搜索目标字符串的偏移量
+     * @param   targetCount  count of the target string.   //待搜索目标字符串的长度
+     * @param   fromIndex    the index to begin searching from. //起始位置
+     */
+    // 获取参数子串在该字符串中从起始位置开始第一次出现的位置
+    // source是目标串（该字符串），target是模式串（子串）
+    static int indexOf(char[] source, int sourceOffset, int sourceCount,
+        char[] target, int targetOffset, int targetCount,
+        int fromIndex) {
+        if (fromIndex &gt;= sourceCount) {//越界了
+            return (targetCount == 0 ? sourceCount : -1);
+        }
+        if (fromIndex &lt; 0) {
+            fromIndex = 0;
+        }
+        if (targetCount == 0) {
+            return fromIndex;
+        }
+
+        char first = target[targetOffset];//待搜索字符串第一个字符
+        int max = sourceOffset + (sourceCount - targetCount);//搜索第一个匹配的字符时所能达到的最大值，因为要保证后面的长度&gt;=targetCount
+
+        // 朴素匹配算法
+        //下面这里就是核心搜索算法了，会先匹配第一个字符，然后依次向后移，直到完全匹配
+        //或者是匹配到max仍然没有匹配成功
+        for (int i = sourceOffset + fromIndex; i &lt;= max; i++) {
+            /* Look for first character. */
+            if (source[i] != first) {// 如果第一个字符不匹配
+                while (++i &lt;= max &amp;&amp; source[i] != first);// 寻找第一个匹配上的字符
+            }
+
+            /* Found first character, now look at the rest of v2 */
+            //可以注意这里i下标只是用来匹配第一个字符，因为有可能部分匹配时，需要从先在匹配
+            //所以这里重新应用下标j
+            if (i &lt;= max) {// 匹配除了第一个字符的其他部分
+                int j = i + 1;
+                int end = j + targetCount - 1;
+                for (int k = targetOffset + 1; j &lt; end &amp;&amp; source[j]
+                        == target[k]; j++, k++);
+
+                if (j == end) {
+                    /* Found whole string. */
+                    return i - sourceOffset;
+                }
+            }
+        }
+        return -1;
+    }//当匹配失败时，返回-1
+
+//返回指定子字符串在此字符串中最右边出现处的索引。
+public int lastIndexOf(String str) {
+    return lastIndexOf(str, value.length);
+}
+
+
+public int lastIndexOf(String str, int fromIndex) {
+    return lastIndexOf(value, 0, value.length,
+            str.value, 0, str.value.length, fromIndex);
+}
+</code></pre><p>static int lastIndexOf(char[] source, int sourceOffset, int sourceCount,<br>            char[] target, int targetOffset, int targetCount,<br>            int fromIndex) {<br>                /*</p>
+<pre><code>     * Check arguments; return immediately where possible. For
+     * consistency, don&apos;t check for null str.
+     */
+    //第一个字符所能匹配的最大位置，类似于上面的max
+    int rightIndex = sourceCount - targetCount;
+    if (fromIndex &lt; 0) {
+        return -1;
+    }
+    if (fromIndex &gt; rightIndex) {
+        fromIndex = rightIndex;
+    }
+    /* Empty string always matches. */
+    if (targetCount == 0) {
+        return fromIndex;
+    }
+
+    int strLastIndex = targetOffset + targetCount - 1;//目标字符串最后一个字符下标
+    char strLastChar = target[strLastIndex];//最后一个字符
+    int min = sourceOffset + targetCount - 1;//目标字符串最后一个字符所能匹配的源字符串最小下标
+    int i = min + fromIndex;//这里i下标永远是最后一个字符匹配的下标索引
+
+startSearchForLastChar:
+    while (true) {
+        while (i &gt;= min &amp;&amp; source[i] != strLastChar) {
+            i--;
+        }
+        //小于min则不可能在搜索到了
+        if (i &lt; min) {
+            return -1;
+        }
+        int j = i - 1;
+        int start = j - (targetCount - 1);
+        int k = strLastIndex - 1;
+
+        while (j &gt; start) {
+            if (source[j--] != target[k--]) {
+                //当存在部分匹配，而前半部分不匹配时，跳出当前查找，整体向前窗移
+                i--;
+                continue startSearchForLastChar;//直接跳到顶层while循环
+            }
+        }
+        return start - sourceOffset + 1;
+    }
+}
+</code></pre><p>可以看到与indexOf方法是对应的，只不过是反向搜索。</p>
+<h2 id="substring"><a href="#substring" class="headerlink" title="substring"></a>substring</h2><pre><code>//返回一个新的字符串，它是此字符串的一个子字符串。该子字符串从指定索引处的字符开始，直到此字符串末尾。
+public String substring(int beginIndex) {
+    if (beginIndex &lt; 0) { // 如果起始下标&lt;0
+        throw new StringIndexOutOfBoundsException(beginIndex);
+    }
+    int subLen = value.length - beginIndex; // 获取截取长度
+    if (subLen &lt; 0) { // 如果截取长度&lt;0
+        throw new StringIndexOutOfBoundsException(subLen);
+    }
+    return (beginIndex == 0) ? this : new String(value, beginIndex, subLen);
+}
+
+//返回一个新字符串，它是此字符串的一个子字符串。该子字符串从指定的 beginIndex 处开始，直到索引 endIndex - 1 处的字符。因此，该子字符串的长度为 endIndex-beginIndex。 
+public String substring(int beginIndex, int endIndex) {
+    if (beginIndex &lt; 0) { // 如果起始下标&lt;0
+        throw new StringIndexOutOfBoundsException(beginIndex);
+    }
+    if (endIndex &gt; value.length) { // 如果末尾下标&gt;字符数组长度
+        throw new StringIndexOutOfBoundsException(endIndex);
+    }
+    int subLen = endIndex - beginIndex; // 获取截取长度
+    if (subLen &lt; 0) { // 如果截取长度&lt;0
+        throw new StringIndexOutOfBoundsException(subLen);
+    }
+    return ((beginIndex == 0) &amp;&amp; (endIndex == value.length)) ? this
+            : new String(value, beginIndex, subLen);
+}
+</code></pre><h2 id="concat"><a href="#concat" class="headerlink" title="concat"></a>concat</h2><pre><code>//将指定字符串连接到此字符串的结尾。 
+//如果参数字符串的长度为 0，则返回此 String 对象。否则，创建一个新的 String 对象，用来表示由此 String 对象表示的字符序列和参数字符串表示的字符序列连接而成的字符序列。
+public String concat(String str) {
+    int otherLen = str.length();
+    if (otherLen == 0) {
+        return this;
+    }
+    int len = value.length;
+    char buf[] = Arrays.copyOf(value, len + otherLen);
+    str.getChars(buf, len);
+    return new String(buf, true);
+}
+
+void getChars(char dst[], int dstBegin) {
+            System.arraycopy(value, 0, dst, dstBegin, value.length);
+    }
+</code></pre><h2 id="replace"><a href="#replace" class="headerlink" title="replace"></a>replace</h2><pre><code>public String replace(char oldChar, char newChar) {
+    if (oldChar != newChar) {
+        int len = value.length;
+        int i = -1;
+        char[] val = value; /* avoid getfield opcode */
+
+        while (++i &lt; len) {
+            if (val[i] == oldChar) {
+                break;
+            }
+        }
+        if (i &lt; len) {
+            char buf[] = new char[len];
+            for (int j = 0; j &lt; i; j++) {
+                buf[j] = val[j];
+            }
+            while (i &lt; len) {
+                char c = val[i];
+                buf[i] = (c == oldChar) ? newChar : c;
+                i++;
+            }
+            return new String(buf, true);
+        }
+    }
+    return this;
+}
+</code></pre><h2 id="matches"><a href="#matches" class="headerlink" title="matches"></a>matches</h2><pre><code>//告知此字符串是否匹配给定的正则表达式。
+public boolean matches(String regex) {
+    return Pattern.matches(regex, this);
+}
+</code></pre><h2 id="split"><a href="#split" class="headerlink" title="split"></a>split</h2><pre><code>//根据给定正则表达式的匹配拆分此字符串。 
+public String[] split(String regex, int limit) {
+    /* fastpath if the regex is a
+     (1)one-char String and this character is not one of the
+        RegEx&apos;s meta characters &quot;.$|()[{^?*+\\&quot;, or
+     (2)two-char String and the first char is the backslash and
+        the second is not the ascii digit or ascii letter.
+     */
+    char ch = 0;
+    if (((regex.value.length == 1 &amp;&amp;
+         &quot;.$|()[{^?*+\\&quot;.indexOf(ch = regex.charAt(0)) == -1) ||
+         (regex.length() == 2 &amp;&amp;
+          regex.charAt(0) == &apos;\\&apos; &amp;&amp;
+          (((ch = regex.charAt(1))-&apos;0&apos;)|(&apos;9&apos;-ch)) &lt; 0 &amp;&amp;
+          ((ch-&apos;a&apos;)|(&apos;z&apos;-ch)) &lt; 0 &amp;&amp;
+          ((ch-&apos;A&apos;)|(&apos;Z&apos;-ch)) &lt; 0)) &amp;&amp;
+        (ch &lt; Character.MIN_HIGH_SURROGATE ||
+         ch &gt; Character.MAX_LOW_SURROGATE))
+    {
+        int off = 0;
+        int next = 0;
+        boolean limited = limit &gt; 0;
+        ArrayList&lt;String&gt; list = new ArrayList&lt;&gt;();
+        while ((next = indexOf(ch, off)) != -1) {
+            if (!limited || list.size() &lt; limit - 1) {
+                list.add(substring(off, next));
+                off = next + 1;
+            } else {    // last one
+                //assert (list.size() == limit - 1);
+                list.add(substring(off, value.length));
+                off = value.length;
+                break;
+            }
+        }
+        // If no match was found, return this
+        if (off == 0)
+            return new String[]{this};
+
+        // Add remaining segment
+        if (!limited || list.size() &lt; limit)
+            list.add(substring(off, value.length));
+
+        // Construct result
+        int resultSize = list.size();
+        if (limit == 0) {
+            while (resultSize &gt; 0 &amp;&amp; list.get(resultSize - 1).length() == 0) {
+                resultSize--;
+            }
+        }
+        String[] result = new String[resultSize];
+        return list.subList(0, resultSize).toArray(result);
+    }
+    return Pattern.compile(regex).split(this, limit);
+}
+
+public String[] split(String regex) {
+    return split(regex, 0);
+}
+</code></pre><h2 id="trim"><a href="#trim" class="headerlink" title="trim"></a>trim</h2><pre><code>//返回字符串的副本，忽略前导空白和尾部空白。
+public String trim() {
+    int len = value.length;
+    int st = 0;
+    char[] val = value;    /* avoid getfield opcode */
+
+    while ((st &lt; len) &amp;&amp; (val[st] &lt;= &apos; &apos;)) {
+        st++;
+    }
+    while ((st &lt; len) &amp;&amp; (val[len - 1] &lt;= &apos; &apos;)) {
+        len--;
+    }
+    return ((st &gt; 0) || (len &lt; value.length)) ? substring(st, len) : this;
+}
+</code></pre><p>这个trim()是去掉首尾的空格，而实现方式也非常简单，分别找到第一个非空格字符的下标，与最后一个非空格字符的下标<br>然后返回之间的子字符串。注意这里由于应用了substring方法，所以len变量的控制要小心</p>
+<h2 id="toString-NaN"><a href="#toString-NaN" class="headerlink" title="toString"></a>toString</h2><pre><code>//获取当前String对象
+public String toString() {
+    return this;
+}
+</code></pre><h2 id="toCharArray"><a href="#toCharArray" class="headerlink" title="toCharArray"></a>toCharArray</h2><pre><code>//将此字符串转换为一个新的字符数组。 
+public char[] toCharArray() {
+    // Cannot use Arrays.copyOf because of class initialization order issues
+    char result[] = new char[value.length];
+    System.arraycopy(value, 0, result, 0, value.length);
+    return result;
+}
+</code></pre><h2 id="format"><a href="#format" class="headerlink" title="format"></a>format</h2><pre><code>//使用指定的格式字符串和参数返回一个格式化字符串。
+public static String format(String format, Object... args) {
+    return new Formatter().format(format, args).toString();
+}
+
+//使用指定的语言环境、格式字符串和参数返回一个格式化字符串。 
+public static String format(Locale l, String format, Object... args) {
+    return new Formatter(l).format(format, args).toString();
+}
+</code></pre><h2 id="valueOf-NaN"><a href="#valueOf-NaN" class="headerlink" title="valueOf"></a>valueOf</h2><pre><code>//返回 Object 参数的字符串表示形式。
+public static String valueOf(Object obj) {
+    return (obj == null) ? &quot;null&quot; : obj.toString();
+}
+
+//返回 char 数组参数的字符串表示形式。字符数组的内容已被复制，后续修改不会影响新创建的字符串。 
+public static String valueOf(char data[]) {
+    return new String(data);
+}
+
+//返回 char 数组参数的特定子数组的字符串表示形式。 
+//offset 参数是子数组的第一个字符的索引。count 参数指定子数组的长度。字符数组的内容已被复制，后续修改不会影响新创建的字符串。 
+public static String valueOf(char data[], int offset, int count) {
+    return new String(data, offset, count);
+}
+
+//返回指定数组中表示该字符序列的 String。 
+public static String copyValueOf(char data[], int offset, int count) {
+    return new String(data, offset, count);
+}
+
+//返回指定数组中表示该字符序列的 String。 
+public static String copyValueOf(char data[]) {
+    return new String(data);
+}
+
+//返回 boolean 参数的字符串表示形式。 
+public static String valueOf(boolean b) {
+    return b ? &quot;true&quot; : &quot;false&quot;;
+}
+
+//返回 char 参数的字符串表示形式。 
+public static String valueOf(char c) {
+    char data[] = {c};
+    return new String(data, true);
+}
+
+//返回 int 参数的字符串表示形式。 
+public static String valueOf(int i) {
+    return Integer.toString(i);
+}
+
+//返回 long 参数的字符串表示形式。 
+public static String valueOf(long l) {
+    return Long.toString(l);
+}
+
+//返回 float 参数的字符串表示形式。 
+public static String valueOf(float f) {
+    return Float.toString(f);
+}
+
+//返回 double 参数的字符串表示形式。 
+public static String valueOf(double d) {
+    return Double.toString(d);
+}
+
+//本地方法，把该字符串存入常量池，返回此字符串的引用
+public native String intern();
+</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;String源码分析 &lt;/p&gt;
+&lt;h1 id=&quot;一：类的声明&quot;&gt;&lt;a href=&quot;#一：类的声明&quot; class=&quot;headerlink&quot; title=&quot;一：类的声明&quot;&gt;&lt;/a&gt;一：类的声明&lt;/h1&gt;&lt;p&gt;在java.lang包中，此类被final修饰，表示String的对象
+    
+    </summary>
+    
+      <category term="JDK1.8源码" scheme="http://wangyuanjun.cn/categories/JDK1-8%E6%BA%90%E7%A0%81/"/>
+    
+    
+      <category term="JDK1.8源码" scheme="http://wangyuanjun.cn/tags/JDK1-8%E6%BA%90%E7%A0%81/"/>
+    
+  </entry>
+  
+  <entry>
     <title>成为Java顶尖程序员 ，看这11本书就够了</title>
     <link href="http://wangyuanjun.cn/2018/01/30/%E6%88%90%E4%B8%BAJava%E9%A1%B6%E5%B0%96%E7%A8%8B%E5%BA%8F%E5%91%98-%EF%BC%8C%E7%9C%8B%E8%BF%9911%E6%9C%AC%E4%B9%A6%E5%B0%B1%E5%A4%9F%E4%BA%86/"/>
     <id>http://wangyuanjun.cn/2018/01/30/成为Java顶尖程序员-，看这11本书就够了/</id>
     <published>2018-01-30T09:40:17.000Z</published>
-    <updated>2018-01-30T14:25:09.585Z</updated>
+    <updated>2018-02-01T02:56:11.943Z</updated>
     
     <content type="html"><![CDATA[<p>“学习的最好途径就是看书”，这是我自己学习并且小有了一定的积累之后的第一体会。个人认为看书有两点好处：<br><img src="/2018/01/30/成为Java顶尖程序员-，看这11本书就够了/1.jpg" alt="1"><br>1.能出版出来的书一定是经过反复的思考、雕琢和审核的，因此从专业性的角度来说，一本好书的价值远超其他资料</p>
 <p>2.对着书上的代码自己敲的时候方便</p>
@@ -105,6 +977,10 @@
     
     </summary>
     
+      <category term="学习" scheme="http://wangyuanjun.cn/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="学习" scheme="http://wangyuanjun.cn/tags/%E5%AD%A6%E4%B9%A0/"/>
     
   </entry>
   
@@ -113,7 +989,7 @@
     <link href="http://wangyuanjun.cn/2018/01/27/%E8%A7%A3%E5%86%B3%E5%BE%AE%E4%BF%A1%E5%85%AC%E5%85%B1%E5%8F%B7%E5%BC%80%E5%8F%91%E5%87%BA%E7%8E%B0-redirect-uri%E5%9F%9F%E5%90%8D%E4%B8%8E%E5%90%8E%E5%8F%B0%E9%85%8D%E7%BD%AE%E4%B8%8D%E4%B8%80%E8%87%B4%EF%BC%8C%E9%94%99%E8%AF%AF%E7%A0%8110003-%E9%94%99%E8%AF%AF/"/>
     <id>http://wangyuanjun.cn/2018/01/27/解决微信公共号开发出现-redirect-uri域名与后台配置不一致，错误码10003-错误/</id>
     <published>2018-01-27T15:27:54.000Z</published>
-    <updated>2018-01-29T09:03:30.935Z</updated>
+    <updated>2018-02-01T02:51:47.008Z</updated>
     
     <content type="html"><![CDATA[<p>做微信网页OAuth2.0 授权开发，进入授权页面是报错，redirect_uri域名与后台配置不一致，错误码10003<br><img src="/2018/01/27/解决微信公共号开发出现-redirect-uri域名与后台配置不一致，错误码10003-错误/报错.png" alt="报错"></p>
 <p>问题原因：<font color="red">可能OAuth2.0网页授权页面没有填写授权回调页面域名，或者域名前面加了 http://</font></p>
@@ -126,6 +1002,10 @@
     
     </summary>
     
+      <category term="微信公共号" scheme="http://wangyuanjun.cn/categories/%E5%BE%AE%E4%BF%A1%E5%85%AC%E5%85%B1%E5%8F%B7/"/>
+    
+    
+      <category term="微信公共号" scheme="http://wangyuanjun.cn/tags/%E5%BE%AE%E4%BF%A1%E5%85%AC%E5%85%B1%E5%8F%B7/"/>
     
   </entry>
   
@@ -803,7 +1683,7 @@
     <link href="http://wangyuanjun.cn/2018/01/25/%E5%BE%AE%E4%BF%A1%E5%85%AC%E5%85%B1%E5%8F%B7%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8Bjava%E7%89%88%E2%80%94%E2%80%94%E5%90%AF%E7%94%A8%E5%BC%80%E5%8F%91%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%8C%E6%8E%A5%E5%85%A5%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%B9%B3%E5%8F%B0%E5%BC%80%E5%8F%91-%E4%BA%8C/"/>
     <id>http://wangyuanjun.cn/2018/01/25/微信公共号开发教程java版——启用开发者模式，接入微信公众平台开发-二/</id>
     <published>2018-01-25T08:45:30.000Z</published>
-    <updated>2018-01-27T14:33:05.980Z</updated>
+    <updated>2018-02-01T12:41:44.602Z</updated>
     
     <content type="html"><![CDATA[<h1 id="一：微信公众号对接的基本介绍"><a href="#一：微信公众号对接的基本介绍" class="headerlink" title="一：微信公众号对接的基本介绍"></a>一：微信公众号对接的基本介绍</h1><h2 id="填写服务器配置信息的介绍"><a href="#填写服务器配置信息的介绍" class="headerlink" title="填写服务器配置信息的介绍"></a>填写服务器配置信息的介绍</h2><p>在微信公众平台认证之前，我们可以先申请一个测试的公众号来进行测试，这对开发人员来说还是有很大好处的！<br>为什么要申请测试账号？</p>
 <p>主要是因为测试账号比我们没有认证的微信账号权限大一点。足够测试我们的接口了，点击<a href="http://mp.weixin.qq.com/debug/cgi-bin/sandbox?t=sandbox/login" target="_blank" rel="external">http://mp.weixin.qq.com/debug/cgi-bin/sandbox?t=sandbox/login</a></p>
@@ -862,7 +1742,7 @@
 <li><p>开发者获得加密后的字符串可与signature对比，标识该请求来源于微信</p>
 </li>
 </ol>
-<h2 id="Token校验是否成功"><a href="#Token校验是否成功" class="headerlink" title="Token校验是否成功"></a>Token校验是否成功</h2><p>成功启用后如图：<br><img src="/2018/01/25/微信公共号开发教程java版——启用开发者模式，接入微信公众平台开发-二/测试号管理.png" alt="测试号管理"><br><img src="/2018/01/25/微信公共号开发教程java版——启用开发者模式，接入微信公众平台开发-二/a.png" alt="a"><br>恭喜，你成功启用开发模式。</p>
+<h2 id="Token校验是否成功"><a href="#Token校验是否成功" class="headerlink" title="Token校验是否成功"></a>Token校验是否成功</h2><p>成功启用后如图：<br><img src="/2018/01/25/微信公共号开发教程java版——启用开发者模式，接入微信公众平台开发-二/a.png" alt="a"><br>恭喜，你成功启用开发模式。</p>
 <p>启用并设置服务器配置后，用户发给公众号的消息以及开发者需要的事件推送，将被微信转发到该URL中。</p>
 <p>成为开发者后，用户每次向公众号发送消息、或者产生自定义菜单、或产生微信支付订单等情况时，开发者填写的服务器配置URL将得到微信服务器推送过来的消息和事件，开发者可以依据自身业务逻辑进行响应，如回复消息。</p>
 <p>这些配置可以参照我的其他博客文章进行配置，这里就不多说了。<br>以上介绍也可以参考  <a href="https://mp.weixin.qq.com/wiki?t=resource/res_main&amp;id=mp1445241432" target="_blank" rel="external">微信开发文档</a>。</p>
@@ -887,7 +1767,7 @@
     <link href="http://wangyuanjun.cn/2018/01/23/%E5%BE%AE%E4%BF%A1%E5%85%AC%E5%85%B1%E5%8F%B7%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8Bjava%E7%89%88%E2%80%94%E2%80%94%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA-%E4%B8%80/"/>
     <id>http://wangyuanjun.cn/2018/01/23/微信公共号开发教程java版——基础知识和环境搭建-一/</id>
     <published>2018-01-23T08:46:07.000Z</published>
-    <updated>2018-01-29T07:30:42.163Z</updated>
+    <updated>2018-02-01T12:27:42.171Z</updated>
     
     <content type="html"><![CDATA[<h1 id="一：微信公共号基础知识"><a href="#一：微信公共号基础知识" class="headerlink" title="一：微信公共号基础知识"></a>一：微信公共号基础知识</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>微信公众号是开发者或商家在微信公众平台上申请的应用账号，该帐号与QQ账号互通，通过公众号，商家可在微信平台上实现和特定群体的文字、图片、语音、视频的全方位沟通、互动 。形成了一种主流的线上线下微信互动营销方式。</p>
 <h2 id="分类及区别"><a href="#分类及区别" class="headerlink" title="分类及区别"></a>分类及区别</h2><p>微信公众号分为订阅号和服务号。<br>1、订阅号，任何组织和个人都可以申请，每天群发一条信息，认证后有自定义菜单。没有高级接口，不能用开发模式。<br>2、选择服务号，只面向企业或组织机构申请注册，申请后自带自定义菜单。认证后可以有高级接口，每周群发一条信息。均不可主动添加微信好友。</p>
@@ -896,7 +1776,7 @@
 <h1 id="二：微信公共号环境搭建"><a href="#二：微信公共号环境搭建" class="headerlink" title="二：微信公共号环境搭建"></a>二：微信公共号环境搭建</h1><h2 id="服务器准备"><a href="#服务器准备" class="headerlink" title="服务器准备"></a>服务器准备</h2><ol>
 <li><p>方式一：买的云主机。</p>
 </li>
-<li><p>方式二：BAE（注册百度账号，然后登录 <a href="https://login.bce.baidu.com/" target="_blank" rel="external">百度云</a> ）。</p>
+<li><p>方式二：BAE（注册百度账号，然后登录 <a href="https://login.bce.baidu.com/" target="_blank" rel="external">百度云开发平台</a> ）。</p>
 </li>
 <li><p>方式三：SAE（注册新浪微博，然后登录 <a href="http://www.sinacloud.com/sae.html" target="_blank" rel="external">新浪云SAE</a> ）。</p>
 </li>
@@ -937,7 +1817,7 @@
     <link href="http://wangyuanjun.cn/2018/01/22/nginx%E4%B8%AD%E4%BF%AE%E6%94%B9server-name%E6%97%A0%E6%95%88%EF%BC%8C%E4%BF%AE%E6%94%B9%E4%B8%BAwww-wecharttest-com%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE%EF%BC%8C%E9%80%9A%E8%BF%87localhost%E5%8F%AF%E4%BB%A5%E8%AE%BF%E9%97%AE/"/>
     <id>http://wangyuanjun.cn/2018/01/22/nginx中修改server-name无效，修改为www-wecharttest-com无法访问，通过localhost可以访问/</id>
     <published>2018-01-22T06:00:00.000Z</published>
-    <updated>2018-01-22T06:06:47.002Z</updated>
+    <updated>2018-02-01T12:24:09.227Z</updated>
     
     <content type="html"><![CDATA[<p>最近在看微信公共号，需要通过软件Nginx，直接使用自己的内网作为电脑的服务器来进行一系列的操作以及调试(实现内网穿透，将内网的服务器映射到外网给别人访问)<br>但是在Nginx中，把server_name配置成自己的域名www.wecharttest.com无效。<br>解决方法：</p>
 <p>linux下：</p>
@@ -960,6 +1840,10 @@
     
     </summary>
     
+      <category term="nginx" scheme="http://wangyuanjun.cn/categories/nginx/"/>
+    
+    
+      <category term="nginx" scheme="http://wangyuanjun.cn/tags/nginx/"/>
     
   </entry>
   
@@ -1213,539 +2097,6 @@
     
     
       <category term="Dubbo" scheme="http://wangyuanjun.cn/tags/Dubbo/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用DaoCloud docker镜像加速器</title>
-    <link href="http://wangyuanjun.cn/2018/01/10/%E4%BD%BF%E7%94%A8DaoCloud%20docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E5%99%A8/"/>
-    <id>http://wangyuanjun.cn/2018/01/10/使用DaoCloud docker镜像加速器/</id>
-    <published>2018-01-10T06:10:46.000Z</published>
-    <updated>2018-01-21T11:04:36.494Z</updated>
-    
-    <content type="html"><![CDATA[<p>使用 Docker 的时候，需要经常从官方获取镜像，但是由于显而易见的网络原因，拉取镜像的过程非常耗时，严重影响使用Docker的体验。由于国内访问直接访问dockerhub网速比较慢，拉取镜像的时间就会比较长，甚至下载失败。一般我们会使用镜像加速或者直接从国内的一些平台镜像仓库上拉取。<br>我之前准备用阿里云的加速器的，试了好长时间没有成功，于是改用DaoCloud，下面向大家介绍在windows环境下使用docker toolbox来配置镜像加速器。<br>在docker客户端执行如下命令</p>
-<pre><code>docker-machine ssh default
-sudo sed -i &quot;s|EXTRA_ARGS=&apos;|EXTRA_ARGS=&apos;--registry-mirror=加速地址 |g&quot; /var/lib/boot2docker/profile
-exit
-docker-machine restart default 
-</code></pre><p>1.使用docker客户端连接名为default的虚拟机<br>2.配置DaoCloud加速器<br>3.退出虚拟机到docker客户端<br>4.名为default的虚拟机重启</p>
-<p>如果你想在linux,MC上配置加速器，请参考<a href="https://www.daocloud.io/mirror#accelerator-doc" target="_blank" rel="external">配置 Docker 加速器</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;使用 Docker 的时候，需要经常从官方获取镜像，但是由于显而易见的网络原因，拉取镜像的过程非常耗时，严重影响使用Docker的体验。由于国内访问直接访问dockerhub网速比较慢，拉取镜像的时间就会比较长，甚至下载失败。一般我们会使用镜像加速或者直接从国内的一些平台镜
-    
-    </summary>
-    
-      <category term="docker" scheme="http://wangyuanjun.cn/categories/docker/"/>
-    
-    
-      <category term="docker" scheme="http://wangyuanjun.cn/tags/docker/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Quartz学习——SSM和Quartz集成详解(四)</title>
-    <link href="http://wangyuanjun.cn/2018/01/08/Quartz%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94SSM%E5%92%8CQuartz%E9%9B%86%E6%88%90%E8%AF%A6%E8%A7%A3-%E5%9B%9B/"/>
-    <id>http://wangyuanjun.cn/2018/01/08/Quartz学习——SSM和Quartz集成详解-四/</id>
-    <published>2018-01-08T07:31:45.000Z</published>
-    <updated>2018-01-08T09:09:28.738Z</updated>
-    
-    <content type="html"><![CDATA[<p>下面介绍SSM+Quartz的示例，项目地址: <font color="red" size="5" face="微软雅黑"><a href="https://github.com/wangyuanjun008/wyj-quartz-ssm.git" target="_blank" rel="external">quartz-spring</a></font></p>
-<h2 id="一：环境介绍"><a href="#一：环境介绍" class="headerlink" title="一：环境介绍"></a>一：环境介绍</h2> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">工具：Spring Tool Suite + Mysql </div><div class="line">框架：Spring+SpringMVC+Mybatis</div><div class="line">前端: easy ui </div><div class="line">日志：logback </div><div class="line">构建工具：Maven </div><div class="line">Quartz版本：2.2.3</div></pre></td></tr></table></figure>
-<h2 id="二：SSM-Quartz集成详解"><a href="#二：SSM-Quartz集成详解" class="headerlink" title="二：SSM+Quartz集成详解"></a>二：SSM+Quartz集成详解</h2><h3 id="1-项目结构"><a href="#1-项目结构" class="headerlink" title="1.项目结构"></a>1.项目结构</h3><p><img src="/2018/01/08/Quartz学习——SSM和Quartz集成详解-四/结构项目.png" alt="结构项目"></p>
-<h3 id="2-配置文件介绍"><a href="#2-配置文件介绍" class="headerlink" title="2.配置文件介绍"></a>2.配置文件介绍</h3><p>（1）：在ApplicationContext.xml中添加下面的配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;bean name=&quot;quartzScheduler&quot;</div><div class="line">	class=&quot;org.springframework.scheduling.quartz.SchedulerFactoryBean&quot;&gt;</div><div class="line">	&lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot; /&gt;&lt;!-- 读取spring配置的数据库，不去加载quartz.properties --&gt;</div><div class="line">	&lt;property name=&quot;applicationContextSchedulerContextKey&quot; value=&quot;applicationContextKey&quot; /&gt;</div><div class="line">	&lt;property name=&quot;configLocation&quot; value=&quot;classpath:quartz.properties&quot; /&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure></p>
-<p>（2）：添加quartz.properties配置文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"># Default Properties file for use by StdSchedulerFactory  </div><div class="line"># to create a Quartz Scheduler Instance, if a different  </div><div class="line"># properties file is not explicitly specified.  </div><div class="line">#  </div><div class="line">  </div><div class="line"></div><div class="line">org.quartz.scheduler.instanceName: DefaultQuartzScheduler</div><div class="line">#org.quartz.scheduler.instanceId = AUTO</div><div class="line"> </div><div class="line">org.quartz.scheduler.rmi.export: false  </div><div class="line">org.quartz.scheduler.rmi.proxy: false  </div><div class="line">org.quartz.scheduler.wrapJobExecutionInUserTransaction: false  </div><div class="line">  </div><div class="line">org.quartz.threadPool.class: org.quartz.simpl.SimpleThreadPool  </div><div class="line">org.quartz.threadPool.threadCount: 10  </div><div class="line">org.quartz.threadPool.threadPriority: 5  </div><div class="line">org.quartz.threadPool.threadsInheritContextClassLoaderOfInitializingThread: true  </div><div class="line">  </div><div class="line">#持久化配置</div><div class="line">org.quartz.jobStore.misfireThreshold: 60000  </div><div class="line">org.quartz.jobStore.class: org.quartz.impl.jdbcjobstore.JobStoreTX </div><div class="line">org.quartz.jobStore.driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate  </div><div class="line">org.quartz.jobStore.useProperties:true  </div><div class="line">#指定前缀</div><div class="line">org.quartz.jobStore.tablePrefix: QRTZ_</div></pre></td></tr></table></figure></p>
-<h3 id="3-核心代码"><a href="#3-核心代码" class="headerlink" title="3.核心代码"></a>3.核心代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div></pre></td><td class="code"><pre><div class="line">package com.wyj.controller;</div><div class="line"></div><div class="line">import java.util.ArrayList;</div><div class="line">import java.util.List;</div><div class="line">import java.util.Set;</div><div class="line"></div><div class="line">import javax.servlet.http.HttpServletRequest;</div><div class="line">import javax.servlet.http.HttpServletResponse;</div><div class="line"></div><div class="line">import org.apache.commons.lang.StringUtils;</div><div class="line">import org.quartz.CronTrigger;</div><div class="line">import org.quartz.JobDataMap;</div><div class="line">import org.quartz.JobDetail;</div><div class="line">import org.quartz.JobKey;</div><div class="line">import org.quartz.Scheduler;</div><div class="line">import org.quartz.SchedulerException;</div><div class="line">import org.quartz.Trigger;</div><div class="line">import org.quartz.TriggerKey;</div><div class="line">import org.quartz.impl.matchers.GroupMatcher;</div><div class="line">import org.slf4j.Logger;</div><div class="line">import org.slf4j.LoggerFactory;</div><div class="line">import org.springframework.beans.factory.annotation.Autowired;</div><div class="line">import org.springframework.stereotype.Controller;</div><div class="line">import org.springframework.web.bind.annotation.RequestMapping;</div><div class="line">import org.springframework.web.bind.annotation.RequestMethod;</div><div class="line">import org.springframework.web.bind.annotation.RequestParam;</div><div class="line">import org.springframework.web.bind.annotation.ResponseBody;</div><div class="line"></div><div class="line">import com.alibaba.fastjson.JSON;</div><div class="line">import com.wyj.entity.JobDto;</div><div class="line">import com.wyj.entity.Retval;</div><div class="line">import com.wyj.service.QuartzService;</div><div class="line"></div><div class="line">/**</div><div class="line"> * 定时任务 Controller</div><div class="line"> * </div><div class="line"> * </div><div class="line"> * @author：WangYuanJun</div><div class="line"> * @date：2018年1月7日 下午10:15:33</div><div class="line"> */</div><div class="line"></div><div class="line">@Controller</div><div class="line">@RequestMapping(value = &quot;/quartz&quot;)</div><div class="line">public class QuartzController &#123;</div><div class="line">    private Logger logger = LoggerFactory.getLogger(this.getClass());</div><div class="line">    @Autowired</div><div class="line">    private Scheduler quartzScheduler;</div><div class="line"></div><div class="line">    @Autowired</div><div class="line">    private QuartzService quartzService;</div><div class="line"></div><div class="line">    @RequestMapping(&quot;/index&quot;)</div><div class="line">    public String index() &#123;</div><div class="line">        return &quot;/quartz/list&quot;;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 定时列表页</div><div class="line">     * </div><div class="line">     * @return</div><div class="line">     * @throws SchedulerException</div><div class="line">     */</div><div class="line">    @ResponseBody</div><div class="line">    @RequestMapping(value = &quot;/list&quot;)</div><div class="line">    public String listJob(HttpServletRequest request, HttpServletResponse response) throws SchedulerException &#123;</div><div class="line">        List&lt;JobDto&gt; jobInfos = this.getSchedulerJobInfo();</div><div class="line">        return JSON.toJSONString(jobInfos);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 新建job</div><div class="line">     * </div><div class="line">     * @param jobDto</div><div class="line">     * @return</div><div class="line">     */</div><div class="line">    @ResponseBody</div><div class="line">    @RequestMapping(value = &quot;/add&quot;)</div><div class="line">    public Retval save(JobDto jobDto) &#123;</div><div class="line">        Retval retval = Retval.newInstance();</div><div class="line">        try &#123;</div><div class="line">            quartzService.addJob(jobDto.getJobName(), jobDto.getJobGroupName(), jobDto.getTriggerName(), jobDto.getTriggerGroupName(), Class.forName(jobDto.getJobClass()), jobDto.getCronExpression());</div><div class="line">        &#125; catch (Exception e) &#123;</div><div class="line">            logger.error(e.getMessage());</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        return retval;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 编辑job</div><div class="line">     * </div><div class="line">     * @param jobDto</div><div class="line">     * @return</div><div class="line">     */</div><div class="line">    @ResponseBody</div><div class="line">    @RequestMapping(value = &quot;/edit&quot;, method = RequestMethod.POST)</div><div class="line">    public Retval edit(JobDto jobDto) &#123;</div><div class="line">        Retval retval = Retval.newInstance();</div><div class="line">        try &#123;</div><div class="line">            boolean result = quartzService.modifyJobTime(jobDto.getOldJobName(), jobDto.getOldJobGroupName(), jobDto.getOldTriggerName(), jobDto.getOldTriggerGroupName(), jobDto.getJobName(), jobDto.getJobGroupName(), jobDto.getTriggerName(), jobDto.getTriggerGroupName(), jobDto.getCronExpression());</div><div class="line">            if (result) &#123;</div><div class="line">                retval.put(&quot;message&quot;, &quot;修改任务成功!&quot;);</div><div class="line">            &#125; else &#123;</div><div class="line">                retval.put(&quot;message&quot;, &quot;修改任务失败!&quot;);</div><div class="line">            &#125;</div><div class="line">        &#125; catch (Exception e) &#123;</div><div class="line">            logger.error(e.getMessage());</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        return retval;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 暂停job</div><div class="line">     * </div><div class="line">     * @param jobName</div><div class="line">     * @param jobGroupName</div><div class="line">     * @return</div><div class="line">     */</div><div class="line">    @ResponseBody</div><div class="line">    @RequestMapping(value = &quot;/stopJob&quot;, method = RequestMethod.POST)</div><div class="line">    public Retval stopJob(@RequestParam(&quot;jobName&quot;) String jobName, @RequestParam(&quot;jobGroupName&quot;) String jobGroupName) &#123;</div><div class="line">        Retval retval = Retval.newInstance();</div><div class="line">        if (StringUtils.isEmpty(jobName) || StringUtils.isEmpty(jobGroupName)) &#123;</div><div class="line">            retval.fail();</div><div class="line">            retval.put(&quot;message&quot;, &quot;暂停失败&quot;);</div><div class="line">        &#125; else &#123;</div><div class="line">            try &#123;</div><div class="line">                quartzService.pauseJob(jobName, jobGroupName);</div><div class="line">                retval.put(&quot;message&quot;, &quot;暂停成功&quot;);</div><div class="line">            &#125; catch (Exception e) &#123;</div><div class="line">                logger.error(e.getMessage());</div><div class="line">            &#125;</div><div class="line"></div><div class="line">        &#125;</div><div class="line">        return retval;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 恢复job</div><div class="line">     * </div><div class="line">     * @param jobName</div><div class="line">     * @param jobGroupName</div><div class="line">     * @return</div><div class="line">     */</div><div class="line">    @ResponseBody</div><div class="line">    @RequestMapping(value = &quot;/resumeJob&quot;, method = RequestMethod.POST)</div><div class="line">    public Retval resumeJob(@RequestParam(&quot;jobName&quot;) String jobName, @RequestParam(&quot;jobGroupName&quot;) String jobGroupName) &#123;</div><div class="line">        Retval retval = Retval.newInstance();</div><div class="line">        if (StringUtils.isEmpty(jobName) || StringUtils.isEmpty(jobGroupName)) &#123;</div><div class="line">            retval.fail();</div><div class="line">            retval.put(&quot;message&quot;, &quot;恢复失败&quot;);</div><div class="line">        &#125; else &#123;</div><div class="line">            try &#123;</div><div class="line">                quartzService.resumeJob(jobName, jobGroupName);</div><div class="line">                retval.put(&quot;message&quot;, &quot;恢复成功&quot;);</div><div class="line">            &#125; catch (Exception e) &#123;</div><div class="line">                logger.error(e.getMessage());</div><div class="line">            &#125;</div><div class="line"></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        return retval;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 删除job</div><div class="line">     * </div><div class="line">     * @param jobName</div><div class="line">     * @param jobGroupName</div><div class="line">     * @param triggerName</div><div class="line">     * @param triggerGroupName</div><div class="line">     * @return</div><div class="line">     */</div><div class="line">    @RequestMapping(value = &quot;/deleteJob&quot;, method = RequestMethod.POST)</div><div class="line">    @ResponseBody</div><div class="line">    public Retval deleteJob(@RequestParam(&quot;jobName&quot;) String jobName, @RequestParam(&quot;jobGroupName&quot;) String jobGroupName, @RequestParam(&quot;triggerName&quot;) String triggerName, @RequestParam(&quot;triggerGroupName&quot;) String triggerGroupName) &#123;</div><div class="line">        Retval retval = Retval.newInstance();</div><div class="line"></div><div class="line">        if (StringUtils.isEmpty(jobName) || StringUtils.isEmpty(jobGroupName) || StringUtils.isEmpty(triggerName) || StringUtils.isEmpty(triggerGroupName)) &#123;</div><div class="line">            retval.fail();</div><div class="line">            retval.put(&quot;message&quot;, &quot;删除失败&quot;);</div><div class="line">        &#125; else &#123;</div><div class="line">            try &#123;</div><div class="line">                quartzService.removeJob(jobName, jobGroupName, triggerName, triggerGroupName);</div><div class="line">                retval.put(&quot;message&quot;, &quot;删除成功&quot;);</div><div class="line">            &#125; catch (Exception e) &#123;</div><div class="line">                logger.error(e.getMessage());</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        return retval;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private List&lt;JobDto&gt; getSchedulerJobInfo() throws SchedulerException &#123;</div><div class="line">        List&lt;JobDto&gt; jobInfos = new ArrayList&lt;JobDto&gt;();</div><div class="line">        List&lt;String&gt; triggerGroupNames = quartzScheduler.getTriggerGroupNames();</div><div class="line">        for (String triggerGroupName : triggerGroupNames) &#123;</div><div class="line">            Set&lt;TriggerKey&gt; triggerKeySet = quartzScheduler.getTriggerKeys(GroupMatcher.triggerGroupEquals(triggerGroupName));</div><div class="line">            for (TriggerKey triggerKey : triggerKeySet) &#123;</div><div class="line">                Trigger t = quartzScheduler.getTrigger(triggerKey);</div><div class="line">                if (t instanceof CronTrigger) &#123;</div><div class="line">                    CronTrigger trigger = (CronTrigger) t;</div><div class="line">                    JobKey jobKey = trigger.getJobKey();</div><div class="line">                    JobDetail jd = quartzScheduler.getJobDetail(jobKey);</div><div class="line">                    JobDto jobInfo = new JobDto();</div><div class="line">                    jobInfo.setJobName(jobKey.getName());</div><div class="line">                    jobInfo.setJobGroupName(jobKey.getGroup());</div><div class="line">                    jobInfo.setTriggerName(triggerKey.getName());</div><div class="line">                    jobInfo.setTriggerGroupName(triggerKey.getGroup());</div><div class="line">                    jobInfo.setCronExpression(trigger.getCronExpression());</div><div class="line">                    jobInfo.setNextFireTime(trigger.getNextFireTime());</div><div class="line">                    jobInfo.setPreviousFireTime(trigger.getPreviousFireTime());</div><div class="line">                    jobInfo.setStartTime(trigger.getStartTime());</div><div class="line">                    jobInfo.setEndTime(trigger.getEndTime());</div><div class="line">                    jobInfo.setJobClass(jd.getJobClass().getCanonicalName());</div><div class="line">                    // jobInfo.setDuration(Long.parseLong(jd.getDescription()));</div><div class="line">                    Trigger.TriggerState triggerState = quartzScheduler.getTriggerState(trigger.getKey());</div><div class="line">                    jobInfo.setJobStatus(triggerState.toString());// NONE无,</div><div class="line">                                                                  // NORMAL正常,</div><div class="line">                                                                  // PAUSED暂停,</div><div class="line">                                                                  // COMPLETE完全,</div><div class="line">                                                                  // ERROR错误,</div><div class="line">                                                                  // BLOCKED阻塞</div><div class="line">                    JobDataMap map = quartzScheduler.getJobDetail(jobKey).getJobDataMap();</div><div class="line">                    if (null != map &amp;&amp; map.size() != 0) &#123;</div><div class="line">                        jobInfo.setCount(Long.valueOf((String) map.get(&quot;count&quot;)));</div><div class="line">                        jobInfo.setJobDataMap(map);</div><div class="line">                    &#125; else &#123;</div><div class="line">                        jobInfo.setJobDataMap(new JobDataMap());</div><div class="line">                    &#125;</div><div class="line">                    jobInfos.add(jobInfo);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        return jobInfos;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="4-job"><a href="#4-job" class="headerlink" title="4.job"></a>4.job</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">package com.wyj.job;</div><div class="line"></div><div class="line">import java.util.Date;</div><div class="line"></div><div class="line">import org.quartz.Job;</div><div class="line">import org.quartz.JobExecutionContext;</div><div class="line">import org.quartz.JobExecutionException;</div><div class="line">/**</div><div class="line"> * Job任务</div><div class="line"> * </div><div class="line"> * </div><div class="line"> * @author：WangYuanJun</div><div class="line"> * @date：2018年1月5日 下午10:22:42</div><div class="line"> */</div><div class="line">public class HelloWorldJob implements Job &#123;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void execute(JobExecutionContext context) throws JobExecutionException &#123;</div><div class="line">        System.out.println(&quot;----hello world---&quot; + new Date());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="三：运行效果介绍"><a href="#三：运行效果介绍" class="headerlink" title="三：运行效果介绍"></a>三：运行效果介绍</h2><p><img src="/2018/01/08/Quartz学习——SSM和Quartz集成详解-四/编辑页面.png" alt="编辑页面"><br><img src="/2018/01/08/Quartz学习——SSM和Quartz集成详解-四/控制台.png" alt="控制台"></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;下面介绍SSM+Quartz的示例，项目地址: &lt;font color=&quot;red&quot; size=&quot;5&quot; face=&quot;微软雅黑&quot;&gt;&lt;a href=&quot;https://github.com/wangyuanjun008/wyj-quartz-ssm.git&quot; target=&quot;_bl
-    
-    </summary>
-    
-      <category term="quartz" scheme="http://wangyuanjun.cn/categories/quartz/"/>
-    
-    
-      <category term="quartz" scheme="http://wangyuanjun.cn/tags/quartz/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Quartz学习——Spring和Quartz集成详解(三)</title>
-    <link href="http://wangyuanjun.cn/2018/01/08/Quartz%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Spring%E5%92%8CQuartz%E9%9B%86%E6%88%90%E8%AF%A6%E8%A7%A3-%E4%B8%89/"/>
-    <id>http://wangyuanjun.cn/2018/01/08/Quartz学习——Spring和Quartz集成详解-三/</id>
-    <published>2018-01-08T06:46:30.000Z</published>
-    <updated>2018-01-08T09:09:22.610Z</updated>
-    
-    <content type="html"><![CDATA[<p>下面介绍Spring集成Quartz的示例，项目地址: <font color="red" size="5" face="微软雅黑"><a href="https://github.com/wangyuanjun008/wyj-quartz-spring.git" target="_blank" rel="external">quartz-spring</a></font><br>介绍Spring和Quartz集成存储方式使用的是RAM方式和JDBC方式！ </p>
-<h2 id="jar包依赖"><a href="#jar包依赖" class="headerlink" title="jar包依赖"></a>jar包依赖</h2><pre><code>&lt;properties&gt;
-    &lt;!-- 项目构建源码编码方式 --&gt;
-    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
-    &lt;!-- 主要依赖库的版本定义 --&gt;
-    &lt;!-- spring版本号 --&gt;
-    &lt;spring.version&gt;4.0.2.RELEASE&lt;/spring.version&gt;
-    &lt;!-- 日志文件管理包版本 --&gt;
-    &lt;slf4j.version&gt;1.7.7&lt;/slf4j.version&gt;
-    &lt;junit.version&gt;4.11&lt;/junit.version&gt;
-    &lt;jackson.version&gt;2.4.0&lt;/jackson.version&gt;
-    &lt;mysql.version&gt;5.1.30&lt;/mysql.version&gt;
-    &lt;quartz.version&gt;2.2.3&lt;/quartz.version&gt;
-    &lt;fastjson.version&gt;1.1.41&lt;/fastjson.version&gt;
-
-&lt;/properties&gt;
-
-
-&lt;dependencies&gt;
-
-    &lt;!-- spring核心包 --&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-core&lt;/artifactId&gt;
-        &lt;version&gt;${spring.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-web&lt;/artifactId&gt;
-        &lt;version&gt;${spring.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-oxm&lt;/artifactId&gt;
-        &lt;version&gt;${spring.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-tx&lt;/artifactId&gt;
-        &lt;version&gt;${spring.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-jdbc&lt;/artifactId&gt;
-        &lt;version&gt;${spring.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-webmvc&lt;/artifactId&gt;
-        &lt;version&gt;${spring.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-aop&lt;/artifactId&gt;
-        &lt;version&gt;${spring.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-aspects&lt;/artifactId&gt;
-        &lt;version&gt;${spring.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-context-support&lt;/artifactId&gt;
-        &lt;version&gt;${spring.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-test&lt;/artifactId&gt;
-        &lt;version&gt;${spring.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-
-    &lt;!-- 导入java ee jar 包 --&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;javax&lt;/groupId&gt;
-        &lt;artifactId&gt;javaee-api&lt;/artifactId&gt;
-        &lt;version&gt;7.0&lt;/version&gt;
-        &lt;scope&gt;provided&lt;/scope&gt;
-    &lt;/dependency&gt;
-    &lt;!-- JSTL标签类 --&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
-        &lt;artifactId&gt;jstl&lt;/artifactId&gt;
-        &lt;version&gt;1.2&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;!-- 日志文件管理包 --&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
-        &lt;artifactId&gt;logback-classic&lt;/artifactId&gt;
-        &lt;version&gt;1.1.3&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.logback-extensions&lt;/groupId&gt;
-        &lt;artifactId&gt;logback-ext-spring&lt;/artifactId&gt;
-        &lt;version&gt;0.1.2&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;!-- 代码直接调用commons-logging会被桥接到slf4j --&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
-        &lt;artifactId&gt;jcl-over-slf4j&lt;/artifactId&gt;
-        &lt;version&gt;1.7.12&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;!-- 代码直接调用java.util.logging会被桥接到slf4j --&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
-        &lt;artifactId&gt;jul-to-slf4j&lt;/artifactId&gt;
-        &lt;version&gt;1.7.12&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;!-- 格式化对象，方便输出日志 --&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
-        &lt;artifactId&gt;fastjson&lt;/artifactId&gt;
-        &lt;version&gt;${fastjson.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-
-    &lt;dependency&gt;
-        &lt;groupId&gt;junit&lt;/groupId&gt;
-        &lt;artifactId&gt;junit&lt;/artifactId&gt;
-        &lt;version&gt;${junit.version}&lt;/version&gt;
-        &lt;scope&gt;test&lt;/scope&gt;
-    &lt;/dependency&gt;
-    &lt;!-- 导入Mysql数据库链接jar包 --&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;mysql&lt;/groupId&gt;
-        &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
-        &lt;version&gt;${mysql.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;!-- velocity --&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.apache.velocity&lt;/groupId&gt;
-        &lt;artifactId&gt;velocity&lt;/artifactId&gt;
-        &lt;version&gt;1.7&lt;/version&gt;
-    &lt;/dependency&gt;
-
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.apache.velocity&lt;/groupId&gt;
-        &lt;artifactId&gt;velocity-tools&lt;/artifactId&gt;
-        &lt;version&gt;2.0&lt;/version&gt;
-    &lt;/dependency&gt;
-
-
-    &lt;!-- JSON begin --&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
-        &lt;artifactId&gt;jackson-core&lt;/artifactId&gt;
-        &lt;version&gt;${jackson.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
-        &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;
-        &lt;version&gt;${jackson.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;com.fasterxml.jackson.module&lt;/groupId&gt;
-        &lt;artifactId&gt;jackson-module-jaxb-annotations&lt;/artifactId&gt;
-        &lt;version&gt;${jackson.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;!-- freemarker --&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.freemarker&lt;/groupId&gt;
-        &lt;artifactId&gt;freemarker&lt;/artifactId&gt;
-        &lt;version&gt;2.3.27-incubating&lt;/version&gt;
-    &lt;/dependency&gt;
-
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.quartz-scheduler&lt;/groupId&gt;
-        &lt;artifactId&gt;quartz&lt;/artifactId&gt;
-        &lt;version&gt;${quartz.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.quartz-scheduler&lt;/groupId&gt;
-        &lt;artifactId&gt;quartz-jobs&lt;/artifactId&gt;
-        &lt;version&gt;${quartz.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-&lt;/dependencies&gt;
-</code></pre><h2 id="配置文件spring-quartz-xml"><a href="#配置文件spring-quartz-xml" class="headerlink" title="配置文件spring-quartz.xml"></a>配置文件spring-quartz.xml</h2><h3 id="RAM存储方式的xml配置文件"><a href="#RAM存储方式的xml配置文件" class="headerlink" title="RAM存储方式的xml配置文件"></a>RAM存储方式的xml配置文件</h3><p>（1）：配置文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</div><div class="line">&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;</div><div class="line">	xmlns:context=&quot;http://www.springframework.org/schema/context&quot; xmlns:p=&quot;http://www.springframework.org/schema/p&quot;</div><div class="line">	xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot; xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot;</div><div class="line">	xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</div><div class="line">	xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd</div><div class="line">	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd</div><div class="line">	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd</div><div class="line">	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd&quot;&gt;</div><div class="line"></div><div class="line">	&lt;!-- ====================================RAM版============================================== --&gt;</div><div class="line">	&lt;!-- </div><div class="line">		Spring整合Quartz进行配置遵循下面的步骤：</div><div class="line">		1：定义工作任务的Job</div><div class="line">		2：定义触发器Trigger，并将触发器与工作任务绑定</div><div class="line">		3：定义调度器，并将Trigger注册到Scheduler</div><div class="line">	 --&gt;</div><div class="line">	&lt;!-- 1：定义任务的bean ，这里使用JobDetailFactoryBean,也可以使用MethodInvokingJobDetailFactoryBean ，配置类似--&gt;</div><div class="line">	&lt;bean name=&quot;hwJob&quot; class=&quot;org.springframework.scheduling.quartz.JobDetailFactoryBean&quot;&gt;</div><div class="line">		&lt;!-- 指定job的名称 --&gt;</div><div class="line">		&lt;property name=&quot;name&quot; value=&quot;hw_job&quot;/&gt;</div><div class="line">		&lt;!-- 指定job的分组 --&gt;</div><div class="line">		&lt;property name=&quot;group&quot; value=&quot;hw_group&quot;/&gt;</div><div class="line">		&lt;!-- 指定具体的job类 --&gt;</div><div class="line">		&lt;property name=&quot;jobClass&quot; value=&quot;com.wyj.exampleRAM.RAMJob&quot;/&gt;</div><div class="line">		&lt;!-- 必须设置为true，如果为false，当没有活动的触发器与之关联时会在调度器中会删除该任务  --&gt;</div><div class="line">		&lt;property name=&quot;durability&quot; value=&quot;true&quot;/&gt;</div><div class="line">		&lt;!-- 指定spring容器的key，如果不设定在job中的jobmap中是获取不到spring容器的 --&gt;</div><div class="line">		&lt;property name=&quot;applicationContextJobDataKey&quot; value=&quot;applicationContext&quot;/&gt;</div><div class="line">	&lt;/bean&gt;</div><div class="line">	&lt;!-- 2.1：定义触发器的bean，定义一个Simple的Trigger，一个触发器只能和一个任务进行绑定 --&gt;</div><div class="line">	&lt;!-- &lt;bean name=&quot;simpleTrigger&quot; class=&quot;org.springframework.scheduling.quartz.SimpleTriggerFactoryBean&quot;&gt;</div><div class="line">		指定Trigger的名称</div><div class="line">		&lt;property name=&quot;name&quot; value=&quot;hw_trigger&quot;/&gt;</div><div class="line">		指定Trigger的名称</div><div class="line">		&lt;property name=&quot;group&quot; value=&quot;hw_trigger_group&quot;/&gt;</div><div class="line">		指定Tirgger绑定的Job</div><div class="line">		&lt;property name=&quot;jobDetail&quot; ref=&quot;hwJob&quot;/&gt;</div><div class="line">		指定Trigger的延迟时间 1s后运行</div><div class="line">		&lt;property name=&quot;startDelay&quot; value=&quot;1000&quot;/&gt;</div><div class="line">		指定Trigger的重复间隔  5s</div><div class="line">		&lt;property name=&quot;repeatInterval&quot; value=&quot;5000&quot;/&gt;</div><div class="line">		指定Trigger的重复次数</div><div class="line">		&lt;property name=&quot;repeatCount&quot; value=&quot;5&quot;/&gt;</div><div class="line">	&lt;/bean&gt; --&gt;</div><div class="line">	</div><div class="line">	&lt;!-- 2.2：定义触发器的bean，定义一个Cron的Trigger，一个触发器只能和一个任务进行绑定 --&gt;</div><div class="line">	&lt;bean id=&quot;cronTrigger&quot; class=&quot;org.springframework.scheduling.quartz.CronTriggerFactoryBean&quot;&gt;</div><div class="line">		&lt;!-- 指定Trigger的名称 --&gt;</div><div class="line">		&lt;property name=&quot;name&quot; value=&quot;hw_trigger&quot;/&gt;</div><div class="line">		&lt;!-- 指定Trigger的名称 --&gt;</div><div class="line">		&lt;property name=&quot;group&quot; value=&quot;hw_trigger_group&quot;/&gt;</div><div class="line">		&lt;!-- 指定Tirgger绑定的Job --&gt;</div><div class="line">		&lt;property name=&quot;jobDetail&quot; ref=&quot;hwJob&quot;/&gt;</div><div class="line">		&lt;!-- 指定Cron 的表达式 ，当前是每隔1s运行一次 --&gt;</div><div class="line">		&lt;property name=&quot;cronExpression&quot; value=&quot;0/1 * * * * ?&quot; /&gt;</div><div class="line">	&lt;/bean&gt;</div><div class="line">	</div><div class="line">	</div><div class="line">	&lt;!-- 3.定义调度器，并将Trigger注册到调度器中--&gt;</div><div class="line">	&lt;bean name=&quot;scheduler&quot; class=&quot;org.springframework.scheduling.quartz.SchedulerFactoryBean&quot;&gt;</div><div class="line">		&lt;property name=&quot;triggers&quot;&gt;</div><div class="line">			&lt;list&gt;</div><div class="line">&lt;!--  				&lt;ref bean=&quot;simpleTrigger&quot;/&gt;   --&gt;</div><div class="line">				&lt;ref bean=&quot;cronTrigger&quot;/&gt; </div><div class="line">			&lt;/list&gt;</div><div class="line">		&lt;/property&gt;</div><div class="line">	&lt;/bean&gt;</div><div class="line">&lt;/beans&gt;</div></pre></td></tr></table></figure>
-<p>（2）：运行结果<br>CronScheduleBuilder：<br><img src="/2018/01/08/Quartz学习——Spring和Quartz集成详解-三/RAMTest.png" alt="RAMTest"></p>
-<h3 id="JDBC存储方式的xml配置文件"><a href="#JDBC存储方式的xml配置文件" class="headerlink" title="JDBC存储方式的xml配置文件"></a>JDBC存储方式的xml配置文件</h3><p>（1）：配置文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</div><div class="line">&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;</div><div class="line">	xmlns:context=&quot;http://www.springframework.org/schema/context&quot; xmlns:p=&quot;http://www.springframework.org/schema/p&quot;</div><div class="line">	xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot; xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot;</div><div class="line">	xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</div><div class="line">	xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd</div><div class="line">	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd</div><div class="line">	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd</div><div class="line">	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd&quot;&gt;</div><div class="line">	</div><div class="line">	&lt;!-- ====================================JDBC版============================================== --&gt;</div><div class="line">	&lt;!-- </div><div class="line">		持久化数据配置，需要添加quartz.properties</div><div class="line">	 --&gt;</div><div class="line"> 	&lt;bean name=&quot;scheduler&quot; class=&quot;org.springframework.scheduling.quartz.SchedulerFactoryBean&quot;&gt; </div><div class="line">        &lt;property name=&quot;applicationContextSchedulerContextKey&quot; value=&quot;applicationContextKey&quot;/&gt; </div><div class="line">        &lt;property name=&quot;configLocation&quot; value=&quot;classpath:quartz.properties&quot;/&gt;	</div><div class="line">	&lt;/bean&gt; </div><div class="line">	</div><div class="line">&lt;/beans&gt;</div></pre></td></tr></table></figure>
-<p>（2）：quartz.properties<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"># Default Properties file for use by StdSchedulerFactory  </div><div class="line"># to create a Quartz Scheduler Instance, if a different  </div><div class="line"># properties file is not explicitly specified.  </div><div class="line">#  </div><div class="line">  </div><div class="line">#org.quartz.scheduler.instanceName: DefaultQuartzScheduler </div><div class="line"></div><div class="line">org.quartz.scheduler.instanceName: DefaultQuartzScheduler</div><div class="line">#org.quartz.scheduler.instanceId = AUTO</div><div class="line"> </div><div class="line">org.quartz.scheduler.rmi.export: false  </div><div class="line">org.quartz.scheduler.rmi.proxy: false  </div><div class="line">org.quartz.scheduler.wrapJobExecutionInUserTransaction: false  </div><div class="line">  </div><div class="line">org.quartz.threadPool.class: org.quartz.simpl.SimpleThreadPool  </div><div class="line">org.quartz.threadPool.threadCount: 10  </div><div class="line">org.quartz.threadPool.threadPriority: 5  </div><div class="line">org.quartz.threadPool.threadsInheritContextClassLoaderOfInitializingThread: true  </div><div class="line">  </div><div class="line">#创建数据源</div><div class="line">org.quartz.jobStore.misfireThreshold: 60000  </div><div class="line">#JDBC连接方式</div><div class="line">org.quartz.jobStore.class: org.quartz.impl.jdbcjobstore.JobStoreTX </div><div class="line">#JDBC代理类 </div><div class="line">org.quartz.jobStore.driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate  </div><div class="line">org.quartz.jobStore.useProperties:true  </div><div class="line">#指定前缀</div><div class="line">org.quartz.jobStore.tablePrefix: QRTZ_</div><div class="line">#数据源名称</div><div class="line">org.quartz.jobStore.dataSource: qzDS  </div><div class="line">#配置数据源属性  </div><div class="line">org.quartz.dataSource.qzDS.driver:com.mysql.jdbc.Driver</div><div class="line">org.quartz.dataSource.qzDS.URL:jdbc:mysql://192.168.99.100:3306/quartz_test?useUnicode=true&amp;characterEncoding=utf-8</div><div class="line">org.quartz.dataSource.qzDS.user:root</div><div class="line">org.quartz.dataSource.qzDS.password:admin</div><div class="line">org.quartz.dataSource.qzDS.maxConnections:10</div></pre></td></tr></table></figure></p>
-<p>（3）：job<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">package com.wyj.exampleJDBC;</div><div class="line"></div><div class="line">import java.text.SimpleDateFormat;</div><div class="line">import java.util.Date;</div><div class="line"></div><div class="line">import org.quartz.Job;</div><div class="line">import org.quartz.JobExecutionContext;</div><div class="line">import org.quartz.JobExecutionException;</div><div class="line">import org.slf4j.Logger;</div><div class="line">import org.slf4j.LoggerFactory;</div><div class="line">/**</div><div class="line"> * JdbcJob</div><div class="line"> * </div><div class="line"> * </div><div class="line"> * @author：WangYuanJun</div><div class="line"> * @date：2017年12月29日 下午10:05:18</div><div class="line"> */</div><div class="line">public class JdbcJob implements Job&#123;</div><div class="line"></div><div class="line">	private Logger logger = LoggerFactory.getLogger(JdbcJob.class);</div><div class="line"></div><div class="line">	public void execute(JobExecutionContext arg0) throws JobExecutionException &#123;</div><div class="line"></div><div class="line">		logger.debug(&quot;MyJDBCJob is start ...&quot;);</div><div class="line">		</div><div class="line">		logger.debug(&quot;MyJDBCJob quzrtz &quot;+new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss &quot;).format(new Date()));</div><div class="line">		</div><div class="line">		logger.debug(&quot;MyJDBCJob is end ...&quot;);</div><div class="line">		</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>（4）：jobTest<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div></pre></td><td class="code"><pre><div class="line">package com.wyj.exampleJDBC;</div><div class="line"></div><div class="line">import java.util.List;</div><div class="line"></div><div class="line">import org.quartz.CronScheduleBuilder;</div><div class="line">import org.quartz.CronTrigger;</div><div class="line">import org.quartz.JobBuilder;</div><div class="line">import org.quartz.JobDetail;</div><div class="line">import org.quartz.JobKey;</div><div class="line">import org.quartz.Scheduler;</div><div class="line">import org.quartz.SchedulerException;</div><div class="line">import org.quartz.SchedulerFactory;</div><div class="line">import org.quartz.SimpleScheduleBuilder;</div><div class="line">import org.quartz.SimpleTrigger;</div><div class="line">import org.quartz.Trigger;</div><div class="line">import org.quartz.TriggerBuilder;</div><div class="line">import org.quartz.impl.StdScheduler;</div><div class="line">import org.quartz.impl.StdSchedulerFactory;</div><div class="line">import org.springframework.context.ApplicationContext;</div><div class="line">import org.springframework.context.support.ClassPathXmlApplicationContext;</div><div class="line">/**</div><div class="line"> * JdbcJobtest</div><div class="line"> * </div><div class="line"> * </div><div class="line"> * @author：WangYuanJun</div><div class="line"> * @date：2017年12月29日 下午10:05:26</div><div class="line"> */</div><div class="line">public class QuartzJdbcTest &#123;</div><div class="line">    private static Scheduler scheduler;</div><div class="line">    </div><div class="line">    </div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        ApplicationContext ac = new ClassPathXmlApplicationContext(&quot;spring-quartz.xml&quot;);</div><div class="line">        scheduler = (StdScheduler)ac.getBean(&quot;scheduler&quot;);</div><div class="line"></div><div class="line">        testStartSchedule();</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    /**</div><div class="line">     *  开始一个simpleSchedule()调度</div><div class="line">     */</div><div class="line">	public static void testStartSchedule()&#123;</div><div class="line">		</div><div class="line">		try &#123;</div><div class="line">			// 1、创建一个JobDetail实例，指定Quartz</div><div class="line">			JobDetail jobDetail = JobBuilder.newJob(JdbcJob.class)</div><div class="line">					// 任务执行类</div><div class="line">					.withIdentity(&quot;job_1&quot;, &quot;jGroup1&quot;)// 任务名，任务组</div><div class="line">					.build();</div><div class="line">			//触发器类型</div><div class="line">			//SimpleScheduleBuilder builder = SimpleScheduleBuilder.simpleSchedule().repeatSecondlyForTotalCount(5); // 设置执行次数</div><div class="line">					</div><div class="line">		    CronScheduleBuilder builder = CronScheduleBuilder.cronSchedule(&quot;0/2 * * * * ?&quot;);</div><div class="line">		    //  2、创建Trigger</div><div class="line">			</div><div class="line">			Trigger trigger = TriggerBuilder.newTrigger()</div><div class="line">					.withIdentity(&quot;trigger_1&quot;,&quot;triggerGroup1&quot;)</div><div class="line">					.withSchedule(builder)</div><div class="line">					.build();</div><div class="line">			</div><div class="line">			// 3、创建Scheduler</div><div class="line">			Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();</div><div class="line">			scheduler.start();</div><div class="line">			</div><div class="line">			// 4、调度执行</div><div class="line">			scheduler.scheduleJob(jobDetail,trigger);</div><div class="line">			</div><div class="line">			try &#123;</div><div class="line">				Thread.sleep(60000);</div><div class="line">			&#125; catch (Exception e) &#123;</div><div class="line">			    e.printStackTrace();</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">			//关闭调度器</div><div class="line">			scheduler.shutdown();</div><div class="line">			</div><div class="line">			</div><div class="line">		&#125; catch (Exception e) &#123;</div><div class="line">		    e.printStackTrace();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 从数据库中找到已经存在的job，并重新开户调度</div><div class="line">	 */</div><div class="line">	public static void resumeJob()&#123;</div><div class="line">		try &#123;</div><div class="line">			SchedulerFactory schedulerFactory = new StdSchedulerFactory();</div><div class="line">			Scheduler scheduler = schedulerFactory.getScheduler();</div><div class="line">			JobKey jobKey = new JobKey(&quot;job1_1&quot;, &quot;jGroup1&quot;);</div><div class="line">			List&lt;? extends Trigger&gt; triggers = scheduler.getTriggersOfJob(jobKey);</div><div class="line">            //SELECT TRIGGER_NAME, TRIGGER_GROUP FROM &#123;0&#125;TRIGGERS WHERE SCHED_NAME = &#123;1&#125; AND JOB_NAME = ? AND JOB_GROUP = ?</div><div class="line">            // 重新恢复在jGroup1组中，名为job1_1的 job的触发器运行</div><div class="line">            if(triggers.size() &gt; 0)&#123;</div><div class="line">                for (Trigger tg : triggers) &#123;</div><div class="line">                    // 根据类型判断</div><div class="line">                    if ((tg instanceof CronTrigger) || (tg instanceof SimpleTrigger)) &#123;</div><div class="line">                        // 恢复job运行</div><div class="line">                        scheduler.resumeJob(jobKey);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">                scheduler.start();</div><div class="line">            &#125;</div><div class="line">			</div><div class="line">		&#125; catch (Exception e) &#123;</div><div class="line">		    e.printStackTrace();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>运行结果：<br>CronScheduleBuilder：<br><img src="/2018/01/08/Quartz学习——Spring和Quartz集成详解-三/jdbcTest.png" alt="jdbcTest"></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;下面介绍Spring集成Quartz的示例，项目地址: &lt;font color=&quot;red&quot; size=&quot;5&quot; face=&quot;微软雅黑&quot;&gt;&lt;a href=&quot;https://github.com/wangyuanjun008/wyj-quartz-spring.git&quot; targ
-    
-    </summary>
-    
-      <category term="quartz" scheme="http://wangyuanjun.cn/categories/quartz/"/>
-    
-    
-      <category term="quartz" scheme="http://wangyuanjun.cn/tags/quartz/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Quartz学习——Quartz简单入门Demo(二)</title>
-    <link href="http://wangyuanjun.cn/2018/01/03/Quartz%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Quartz%E7%AE%80%E5%8D%95%E5%85%A5%E9%97%A8Demo-%E4%BA%8C/"/>
-    <id>http://wangyuanjun.cn/2018/01/03/Quartz学习——Quartz简单入门Demo-二/</id>
-    <published>2018-01-03T07:50:18.000Z</published>
-    <updated>2018-01-08T09:09:39.895Z</updated>
-    
-    <content type="html"><![CDATA[<p>下面介绍Quartz入门的示例，项目地址: <font color="red" size="5" face="微软雅黑"><a href="https://github.com/wangyuanjun008/wyj-quartz-demo" target="_blank" rel="external">quartz-demo</a></font><br>由于Quartz的存储方式分为RAM和JDBC，分别对这两种进行简单的说明。并附上代码！<br>首先需要添加Quartz的依赖 ，我使用的是quartz.2.2.3版本！ </p>
-<pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;org.quartz-scheduler&lt;/groupId&gt;
-    &lt;artifactId&gt;quartz&lt;/artifactId&gt;
-    &lt;version&gt;2.2.3&lt;/version&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.quartz-scheduler&lt;/groupId&gt;
-    &lt;artifactId&gt;quartz-jobs&lt;/artifactId&gt;
-    &lt;version&gt;2.2.3&lt;/version&gt;
-&lt;/dependency&gt;
-</code></pre><h2 id="RAM方式"><a href="#RAM方式" class="headerlink" title="RAM方式"></a>RAM方式</h2><p>要测试RAMdemo的代码，请先删除demo中这个quartz.properties文件，或者重命名！否则会测试不成功！<br>（1）：Job</p>
-<pre><code>package com.wyj.exampleRAM;
-
-import java.util.Date;
-
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-/**
- * RAMjob
- * 
- * 
- * @author：WangYuanJun
- * @date：2017年12月28日 下午10:03:31
- */
-public class RAMJob implements Job{
-
-    private Logger logger = LoggerFactory.getLogger(RAMJob.class);
-
-    public void execute(JobExecutionContext arg0) throws JobExecutionException {
-        logger.debug(&quot;hello world ! hello Quartz - &quot;+new Date());
-    }
-
-}
-</code></pre><p>（2）：JobTest</p>
-<pre><code>package com.wyj.exampleRAM;
-
-import java.util.Date;
-
-import org.quartz.CronScheduleBuilder;
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.SchedulerFactory;
-import org.quartz.Trigger;
-import org.quartz.TriggerBuilder;
-import org.quartz.impl.StdSchedulerFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-/**
- * RAMtest
- * 
- * 
- * @author：WangYuanJun
- * @date：2017年12月28日 下午10:03:50
- */
-public class RAMQuartzTest {
-
-    private static Logger logger = LoggerFactory.getLogger(RAMJob.class);
-
-    public static void main(String[] args) throws SchedulerException {
-        //1.创建Scheduler的工厂
-        SchedulerFactory sf = new StdSchedulerFactory();
-
-        //2.从工厂中获取调度器实例
-        Scheduler scheduler = sf.getScheduler();
-
-        //3.创建JobDetail
-        JobDetail jb = JobBuilder.newJob(RAMJob.class)
-                .withDescription(&quot;this is hello job&quot;)//job的描述
-                .withIdentity(&quot;helloJob&quot;, &quot;helloGroup&quot;)//job 的name和group
-                .build();
-
-         //任务运行的时间，SimpleSchedle类型触发器有效
-        long time=  System.currentTimeMillis() + 3*1000L; //3秒后启动任务
-        Date statTime = new Date(time);
-        //4.创建Trigger
-        //使用SimpleScheduleBuilder或者CronScheduleBuilder
-        Trigger trigger = TriggerBuilder.newTrigger()
-                            .withDescription(&quot;&quot;)
-                            .withIdentity(&quot;helloTrigger&quot;, &quot;helloTriggerGroup&quot;)
-                            .startAt(statTime)//默认当前时间启动
-                            .withSchedule(CronScheduleBuilder.cronSchedule(&quot;0/2 * * * * ?&quot;))//两秒执行一次
-                            .build();
-
-        //5.注册任务和定时器
-        scheduler.scheduleJob(jb, trigger);
-
-        //6.启动 调度器
-        scheduler.start();
-        logger.debug(&quot;启动时间 ：&quot;+new Date());
-    }
-}
-</code></pre><p>运行结果：<br>SimpleScheduleBuilder：<br><img src="/2018/01/03/Quartz学习——Quartz简单入门Demo-二/SimpleRAMTest.png" alt="SimpleRAMTest"></p>
-<p>CronScheduleBuilder：<br><img src="/2018/01/03/Quartz学习——Quartz简单入门Demo-二/CronRAMTest.png" alt="CronRAMTest"></p>
-<h2 id="JDBC方式"><a href="#JDBC方式" class="headerlink" title="JDBC方式"></a>JDBC方式</h2><p>使用jdbc方式，就要配置quartz.properties文件，并且在开始的时候在数据库中新增表！<br>我使用的数据库是mysql，数据库中表在wyj-quartz-demo项目里面有，需要的请在里面下载！<br>运行 tables_mysql.sql 这个文件。</p>
-<pre><code>#配置数据源属性  
-org.quartz.dataSource.qzDS.driver:com.mysql.jdbc.Driver
-org.quartz.dataSource.qzDS.URL:jdbc:mysql://192.168.99.100:3306/quartz_test?useUnicode=true&amp;characterEncoding=utf-8
-org.quartz.dataSource.qzDS.user:root
-org.quartz.dataSource.qzDS.password:admin
-org.quartz.dataSource.qzDS.maxConnections:10
-</code></pre><p>（1）job</p>
-<pre><code>package com.wyj.exampleJDBC;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-/**
- * JdbcJob
- * 
- * 
- * @author：WangYuanJun
- * @date：2017年12月28日 下午10:04:03
- */
-public class JdbcJob implements Job{
-
-    private Logger logger = LoggerFactory.getLogger(JdbcJob.class);
-
-    public void execute(JobExecutionContext arg0) throws JobExecutionException {
-
-        logger.debug(&quot;MyJDBCJob is start ...&quot;);
-
-        logger.debug(&quot;MyJDBCJob quzrtz &quot;+new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss &quot;).format(new Date()));
-
-        logger.debug(&quot;MyJDBCJob is end ...&quot;);
-    }
-}
-</code></pre><p>（2）jobTest</p>
-<pre><code>package com.wyj.exampleJDBC;
-
-import java.util.List;
-
-import org.quartz.CronScheduleBuilder;
-import org.quartz.CronTrigger;
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
-import org.quartz.JobKey;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerFactory;
-import org.quartz.SimpleTrigger;
-import org.quartz.Trigger;
-import org.quartz.TriggerBuilder;
-import org.quartz.impl.StdSchedulerFactory;
-/**
- * JdbcJobtest
- * 
- * 
- * @author：WangYuanJun
- * @date：2017年12月28日 下午10:04:14
- */
-public class QuartzJdbcTest {
-
-    public static void main(String[] args) {
-        testStartSchedule();
-//        resumeJob();
-    }
-
-
-    /**
-     *  开始一个simpleSchedule()调度
-     */
-    public static void testStartSchedule(){
-
-        try {
-            // 1、创建一个JobDetail实例，指定Quartz
-            JobDetail jobDetail = JobBuilder.newJob(JdbcJob.class)
-                    // 任务执行类
-                    .withIdentity(&quot;job_1&quot;, &quot;jGroup1&quot;)// 任务名，任务组
-                    .build();
-            //触发器类型
-//            SimpleScheduleBuilder builder = SimpleScheduleBuilder.simpleSchedule().repeatSecondlyForTotalCount(5); // 设置执行次数
-
-            CronScheduleBuilder builder = CronScheduleBuilder.cronSchedule(&quot;0/2 * * * * ?&quot;);
-            //  2、创建Trigger
-
-            Trigger trigger = TriggerBuilder.newTrigger()
-                    .withIdentity(&quot;trigger_1&quot;,&quot;triggerGroup1&quot;)
-                    .withSchedule(builder)
-                    .build();
-
-            // 3、创建Scheduler
-            Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
-            scheduler.start();
-
-            // 4、调度执行
-            scheduler.scheduleJob(jobDetail,trigger);
-
-            try {
-                Thread.sleep(60000);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            //关闭调度器
-            scheduler.shutdown();
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 从数据库中找到已经存在的job，并重新开户调度
-     */
-    public static void resumeJob(){
-        try {
-            SchedulerFactory schedulerFactory = new StdSchedulerFactory();
-            Scheduler scheduler = schedulerFactory.getScheduler();
-            JobKey jobKey = new JobKey(&quot;job1_1&quot;, &quot;jGroup1&quot;);
-            List&lt;? extends Trigger&gt; triggers = scheduler.getTriggersOfJob(jobKey);
-            //SELECT TRIGGER_NAME, TRIGGER_GROUP FROM {0}TRIGGERS WHERE SCHED_NAME = {1} AND JOB_NAME = ? AND JOB_GROUP = ?
-            // 重新恢复在jGroup1组中，名为job1_1的 job的触发器运行
-            if(triggers.size() &gt; 0){
-                for (Trigger tg : triggers) {
-                    // 根据类型判断
-                    if ((tg instanceof CronTrigger) || (tg instanceof SimpleTrigger)) {
-                        // 恢复job运行
-                        scheduler.resumeJob(jobKey);
-                    }
-                }
-                scheduler.start();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-</code></pre><p>运行结果：<br>数据库信息：<br><img src="/2018/01/03/Quartz学习——Quartz简单入门Demo-二/jdbcTest1.png" alt="jdbcTest1"></p>
-<p>控制台信息：<br><img src="/2018/01/03/Quartz学习——Quartz简单入门Demo-二/jdbcTest2.png" alt="jdbcTest2"></p>
-<p><strong>注意</strong>:<font color="red">Cron和Simple类型，Simple类型的如果JobDetail没有设置.storeDurably(true)，则job在运行完成之后会在数据库中删除！</font></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;下面介绍Quartz入门的示例，项目地址: &lt;font color=&quot;red&quot; size=&quot;5&quot; face=&quot;微软雅黑&quot;&gt;&lt;a href=&quot;https://github.com/wangyuanjun008/wyj-quartz-demo&quot; target=&quot;_blank&quot; 
-    
-    </summary>
-    
-      <category term="quartz" scheme="http://wangyuanjun.cn/categories/quartz/"/>
-    
-    
-      <category term="quartz" scheme="http://wangyuanjun.cn/tags/quartz/"/>
     
   </entry>
   

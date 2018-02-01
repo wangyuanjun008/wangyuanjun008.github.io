@@ -1,0 +1,792 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>JDK1.8源码解析——String | 守望的稻草人</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">JDK1.8源码解析——String</h1><a id="logo" href="/.">守望的稻草人</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">JDK1.8源码解析——String</h1><div class="post-meta"><a href="/2018/01/30/JDK1.8源码解析——String/#comments" class="comment-count"><i id="changyan_count_unit" data-xid="2018/01/30/JDK1.8源码解析——String/"></i>留言,<i id="changyan_parti_unit" data-xid="2018/01/30/JDK1.8源码解析——String/"></i>参与</a><p><span class="date">Jan 30, 2018</span><span><a href="/categories/JDK1-8源码/" class="category">JDK1.8源码</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><p>String源码分析 </p>
+<h1 id="一：类的声明"><a href="#一：类的声明" class="headerlink" title="一：类的声明"></a>一：类的声明</h1><p>在java.lang包中，此类被final修饰，表示String的对象是不可变量，不可继承。<br>String类实现了Serizlizable，Comparable, CharSequence接口。<br>Serizlizable接口没有任何方法和域，仅用于标识序列化的语意，实现此接口的类是可序列化的，是java提供的通用数据保存和读取的接口。<br>Comparable接口只有一个compareTo(To)方法。<br><img src="/2018/01/30/JDK1.8源码解析——String/Comparable接口.png" alt="Comparable接口"><br>CharSequence接口如下图<br><img src="/2018/01/30/JDK1.8源码解析——String/CharSequence接口.png" alt="CharSequence接口"></p>
+<h1 id="类的成员变量"><a href="#类的成员变量" class="headerlink" title="类的成员变量"></a>类的成员变量</h1><pre><code>/** The value is used for character storage. */
+private final char value[]; //使用字符数组存放字符串
+
+/** Cache the hash code for the string */
+private int hash; // Default to 0  存放哈希值
+</code></pre><h1 id="类的构造方法"><a href="#类的构造方法" class="headerlink" title="类的构造方法"></a>类的构造方法</h1><h2 id="无参构造器"><a href="#无参构造器" class="headerlink" title="无参构造器"></a>无参构造器</h2><pre><code>// 无参构造方法 因为String对象内容不可变，所以没有必要调用此方法。
+public String() {
+    this.value = &quot;&quot;.value;
+}
+</code></pre><h2 id="String-参数"><a href="#String-参数" class="headerlink" title="String 参数"></a>String 参数</h2><pre><code>//初始化一个新创建的 String 对象，使其表示一个与参数相同的字符序列；换句话说，新创建的字符串是该参数字符串的副本。
+public String(String original) {
+    this.value = original.value;
+    this.hash = original.hash;
+}
+</code></pre><p>可以看到只是将value引用指向original中的value数组，因为两者都是final的，所以这个看来也没那么必要。因为String s1=new String(“s1s1”); String s2=new String(s1);这种用法完全没有必要，而不如直接引用，s2=s1;</p>
+<h2 id="char-参数"><a href="#char-参数" class="headerlink" title="char[]参数"></a>char[]参数</h2><pre><code>// 分配一个新的 String，使其表示字符数组参数中当前包含的字符序列。
+public String(char value[]) {
+    this.value = Arrays.copyOf(value, value.length);
+}
+//可以发现当通过char数组构建时，只是将char数组复制到value中，而且是复制，而不是简单的引用相等。
+
+// 分配一个新的 String，它包含取自字符数组参数一个子数组的字符。
+// offset是起始位置，count是字符数量
+public String(char value[], int offset, int count) {    
+    if (offset &lt; 0) { // 如果起始位置小于0
+        throw new StringIndexOutOfBoundsException(offset);
+    }
+    if (count &lt;= 0) { // 如果字符数量小于1
+        if (count &lt; 0) { // 如果字符数量小于0
+            throw new StringIndexOutOfBoundsException(count);
+        }
+        if (offset &lt;= value.length) { // 如果起始位置不超过参数中字符数组长度
+            this.value = &quot;&quot;.value; // 设置为空字符串
+            return;
+        }
+    }
+    // Note: offset or count might be near -1&gt;&gt;&gt;1.
+    if (offset &gt; value.length - count) { // 如果起始位置与字符数量不符合逻辑
+        throw new StringIndexOutOfBoundsException(offset + count);
+    }
+
+    // 创建字符数组副本
+    this.value = Arrays.copyOfRange(value, offset, offset+count);
+}
+与上面的区别是，这里只是利用char数组中的一部分来构建String，其中offset代表起始下标，count是所有构建的长度。
+</code></pre><h2 id="int-参数"><a href="#int-参数" class="headerlink" title="int[]参数"></a>int[]参数</h2><pre><code>//分配一个新的 String，它包含 Unicode 代码点数组参数一个子数组的字符。
+public String(int[] codePoints, int offset, int count) {
+    if (offset &lt; 0) {
+        throw new StringIndexOutOfBoundsException(offset);
+    }
+    if (count &lt;= 0) {
+        if (count &lt; 0) {
+            throw new StringIndexOutOfBoundsException(count);
+        }
+        if (offset &lt;= codePoints.length) {
+            this.value = &quot;&quot;.value;
+            return;
+        }
+    }
+    // Note: offset or count might be near -1&gt;&gt;&gt;1.
+    if (offset &gt; codePoints.length - count) {
+        throw new StringIndexOutOfBoundsException(offset + count);
+    }
+
+    final int end = offset + count;
+
+    // Pass 1: Compute precise size of char[]
+    int n = count;
+    for (int i = offset; i &lt; end; i++) {
+        int c = codePoints[i];
+        if (Character.isBmpCodePoint(c))
+            continue;
+        else if (Character.isValidCodePoint(c))
+            n++;
+        else throw new IllegalArgumentException(Integer.toString(c));
+    }
+
+    // Pass 2: Allocate and fill in char[]
+    final char[] v = new char[n];
+
+    for (int i = offset, j = 0; i &lt; end; i++, j++) {
+        int c = codePoints[i];
+        if (Character.isBmpCodePoint(c))
+            v[j] = (char)c;
+        else
+            Character.toSurrogates(c, v, j++);
+    }
+
+    this.value = v;
+}
+</code></pre><h2 id="byte-参数"><a href="#byte-参数" class="headerlink" title="byte[]参数"></a>byte[]参数</h2><p>所谓好的适用性模块，一定是能有一坨坨的各种适应代码的。下面是一系列的利用byte[]数组来构建String对象的构造器，主要差别是可能需要指定特殊的字符集来解码，但是这一点其实在web编程，网络编程中还是很重要的</p>
+<pre><code>//通过使用指定的字符集解码指定的 byte 子数组，构造一个新的 String。
+public String(byte bytes[], int offset, int length, String charsetName)
+        throws UnsupportedEncodingException {
+    if (charsetName == null)
+        throw new NullPointerException(&quot;charsetName&quot;);
+    checkBounds(bytes, offset, length);
+    this.value = StringCoding.decode(charsetName, bytes, offset, length);
+}
+
+//通过使用指定的 charset 解码指定的 byte 子数组，构造一个新的 String。
+public String(byte bytes[], int offset, int length, Charset charset) {
+    if (charset == null)
+        throw new NullPointerException(&quot;charset&quot;);
+    checkBounds(bytes, offset, length);
+    this.value =  StringCoding.decode(charset, bytes, offset, length);
+}
+
+// 通过使用指定的 charset 解码指定的 byte 数组，构造一个新的 String。
+public String(byte bytes[], String charsetName)
+        throws UnsupportedEncodingException {
+    this(bytes, 0, bytes.length, charsetName);
+}
+
+//通过使用指定的 charset 解码指定的 byte 数组，构造一个新的 String。
+public String(byte bytes[], Charset charset) {
+    this(bytes, 0, bytes.length, charset);
+}
+
+//通过使用平台的默认字符集解码指定的 byte 子数组，构造一个新的 String。
+public String(byte bytes[], int offset, int length) {
+    checkBounds(bytes, offset, length);
+    this.value = StringCoding.decode(bytes, offset, length);
+}
+
+//通过使用平台的默认字符集解码指定的 byte 数组，构造一个新的 String。
+public String(byte bytes[]) {
+    this(bytes, 0, bytes.length);
+}
+</code></pre><h2 id="基于StringBuilder-StringBuffer参数"><a href="#基于StringBuilder-StringBuffer参数" class="headerlink" title="基于StringBuilder,StringBuffer参数"></a>基于StringBuilder,StringBuffer参数</h2><pre><code>//分配一个新的字符串，它包含字符串缓冲区参数中当前包含的字符序列。
+public String(StringBuffer buffer) {
+    synchronized(buffer) {
+        this.value = Arrays.copyOf(buffer.getValue(), buffer.length());
+    }
+}
+
+//分配一个新的字符串，它包含字符串生成器参数中当前包含的字符序列。
+public String(StringBuilder builder) {
+    this.value = Arrays.copyOf(builder.getValue(), builder.length());
+}
+
+String(char[] value, boolean share) {
+    // assert share : &quot;unshared not supported&quot;;
+    this.value = value;
+}
+</code></pre><h1 id="重要方法"><a href="#重要方法" class="headerlink" title="重要方法"></a>重要方法</h1><h2 id="length"><a href="#length" class="headerlink" title="length"></a>length</h2><pre><code>//获取字符串长度
+//返回字符串中所包含的字符数目，即value数组的长度
+public int length() {
+    return value.length;
+}
+</code></pre><h2 id="isEmpty"><a href="#isEmpty" class="headerlink" title="isEmpty"></a>isEmpty</h2><pre><code>// 判断字符串是否为空
+// 判断字符串是否为空，即判断value数组的长度为0即可
+public boolean isEmpty() {
+    return value.length == 0;
+}
+</code></pre><h2 id="charAt"><a href="#charAt" class="headerlink" title="charAt"></a>charAt</h2><pre><code>//按下标获取单个字符
+//返回指定索引处的 char 值。索引范围为从 0 到 length() - 1。序列的第一个 char 值位于索引 0 处，第二个位于索引 1 处，依此类推，这类似于数组索引。 
+public char charAt(int index) {
+    if ((index &lt; 0) || (index &gt;= value.length)) {
+        throw new StringIndexOutOfBoundsException(index);
+    }
+    return value[index];
+}
+</code></pre><h2 id="getChars"><a href="#getChars" class="headerlink" title="getChars"></a>getChars</h2><pre><code>//将字符串拷贝到目标字符数组
+void getChars(char dst[], int dstBegin) {
+    System.arraycopy(value, 0, dst, dstBegin, value.length);
+}
+
+// 获取子串，把它拷贝到目标字符数组
+public void getChars(int srcBegin, int srcEnd, char dst[], int dstBegin) {
+    if (srcBegin &lt; 0) { // 如果源数组开始位置&lt;0
+        throw new StringIndexOutOfBoundsException(srcBegin);
+    }
+    if (srcEnd &gt; value.length) { // 如果源数组结束位置&gt;字符数组长度
+        throw new StringIndexOutOfBoundsException(srcEnd);
+    }
+    if (srcBegin &gt; srcEnd) { // 如果源数组开始位置&gt;源数组结束位置
+        throw new StringIndexOutOfBoundsException(srcEnd - srcBegin);
+    }
+    System.arraycopy(value, srcBegin, dst, dstBegin, srcEnd - srcBegin);
+}
+</code></pre><h2 id="getBytes"><a href="#getBytes" class="headerlink" title="getBytes"></a>getBytes</h2><pre><code>//使用指定的字符集将此 String 编码为 byte 序列，并将结果存储到一个新的 byte 数组中。 
+public byte[] getBytes(String charsetName)
+        throws UnsupportedEncodingException {
+    if (charsetName == null) throw new NullPointerException();
+    return StringCoding.encode(charsetName, value, 0, value.length);
+}
+
+//使用给定的 charset 将此 String 编码到 byte 序列，并将结果存储到新的 byte 数组。 
+public byte[] getBytes(Charset charset) {
+    if (charset == null) throw new NullPointerException();
+    return StringCoding.encode(charset, value, 0, value.length);
+}
+
+//使用平台的默认字符集将此 String 编码为 byte 序列，并将结果存储到一个新的 byte 数组中。 
+public byte[] getBytes() {
+    return StringCoding.encode(value, 0, value.length);
+}
+</code></pre><h2 id="equals"><a href="#equals" class="headerlink" title="equals"></a>equals</h2><pre><code>//将此字符串与指定的对象比较。当且仅当该参数不为 null，并且是与此对象表示相同字符序列的 String 对象时，结果才为 true。 
+//比较两个引用指向的String对象内容是否相同
+public boolean equals(Object anObject) {
+    if (this == anObject) { // 如果两个引用指向的是同一个String对象
+        return true;
+    }
+    if (anObject instanceof String) { // 如果第2个引用指向的对象是String实例
+        String anotherString = (String)anObject; // 强制类型转换
+        int n = value.length; // 获取第1个引用指向的String对象的字符串长度
+        if (n == anotherString.value.length) { // 如果两个字符串长度相等
+            // 定义字符数组指针
+            char v1[] = value; 
+            char v2[] = anotherString.value;
+
+            // 字符依次比较
+            int i = 0;
+            while (n-- != 0) {
+                if (v1[i] != v2[i])
+                    return false;
+                i++;
+            }
+            return true;
+        }
+    }
+    return false;
+}
+</code></pre><p>可以看到equals方法重写了，会判断两个字符串的每一个字符是否相等。    </p>
+<h2 id="equalsIgnoreCase"><a href="#equalsIgnoreCase" class="headerlink" title="equalsIgnoreCase"></a>equalsIgnoreCase</h2><pre><code>//将此 String 与另一个 String 比较，不考虑大小写。如果两个字符串的长度相同，并且其中的相应字符都相等（忽略大小写），则认为这两个字符串是相等的。
+public boolean equalsIgnoreCase(String anotherString) {
+        return (this == anotherString) ? true
+                : (anotherString != null)
+                &amp;&amp; (anotherString.value.length == value.length)
+                &amp;&amp; regionMatches(true, 0, anotherString, 0, value.length);
+    }
+    判断两个字符串在忽略大小写的情况下是否相等，主要调用regionMatches方法
+
+    public boolean regionMatches(boolean ignoreCase, int toffset,
+            String other, int ooffset, int len) {
+        char ta[] = value;
+        int to = toffset;
+        char pa[] = other.value;
+        int po = ooffset;
+        // Note: toffset, ooffset, or len might be near -1&gt;&gt;&gt;1.
+        if ((ooffset &lt; 0) || (toffset &lt; 0)
+                || (toffset &gt; (long)value.length - len)
+                || (ooffset &gt; (long)other.value.length - len)) {
+            return false;
+        }
+        while (len-- &gt; 0) {
+            char c1 = ta[to++];
+            char c2 = pa[po++];
+            //在这里先行判断，如果相等就直接跳过后面即可，可以提高效率
+            if (c1 == c2) {
+                continue;
+            }
+            if (ignoreCase) {
+                // If characters don&apos;t match but case may be ignored,
+                // try converting both characters to uppercase.
+                // If the results match, then the comparison scan should
+                // continue.
+                char u1 = Character.toUpperCase(c1);
+                char u2 = Character.toUpperCase(c2);
+                //都转换成大写的形式，如果相等，则跳过
+                if (u1 == u2) {
+                    continue;
+                }
+                // Unfortunately, conversion to uppercase does not work properly
+                // for the Georgian alphabet, which has strange rules about case
+                // conversion.  So we need to make one last check before
+                // exiting.
+                if (Character.toLowerCase(u1) == Character.toLowerCase(u2)) {
+                    continue;
+                }
+            }
+            return false;
+        }
+        return true;
+    }
+</code></pre><h2 id="compareTo"><a href="#compareTo" class="headerlink" title="compareTo"></a>compareTo</h2><pre><code>// 比较两个String对象的大小
+public int compareTo(String anotherString) {
+    // 获取字符数组长度
+    int len1 = value.length;
+    int len2 = anotherString.value.length;
+    // 获取最小长度
+    int lim = Math.min(len1, len2);
+    // 定义字符数组指针
+    char v1[] = value;
+    char v2[] = anotherString.value;
+
+    int k = 0;
+    while (k &lt; lim) {
+        char c1 = v1[k];
+        char c2 = v2[k];
+        if (c1 != c2) { // 如果两个字符不相等
+            return c1 - c2;
+        }
+        k++;
+    }
+
+    // 根据长度比较大小
+    return len1 - len2;
+}
+</code></pre><p>比较两个字符串的大小。如果两个字符串的字符序列相等，则返回0；不相等时，从两个字符串第0个字符开始比较，返回第一个不相等的字符差。另一种情况，较长的字符串的前面部分恰好是较短的字符串，则返回他们的长度差。</p>
+<h2 id="startsWith"><a href="#startsWith" class="headerlink" title="startsWith"></a>startsWith</h2><pre><code>//测试此字符串从指定索引开始的子字符串是否以指定前缀开始。
+public boolean startsWith(String prefix, int toffset) {
+    char ta[] = value;
+    int to = toffset;
+    char pa[] = prefix.value;
+    int po = 0;
+    int pc = prefix.value.length;
+    // Note: toffset might be near -1&gt;&gt;&gt;1.
+    if ((toffset &lt; 0) || (toffset &gt; value.length - pc)) {
+        return false;
+    }
+    while (--pc &gt;= 0) {
+        if (ta[to++] != pa[po++]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+//测试此字符串是否以指定的前缀开始。 
+public boolean startsWith(String prefix) {
+    return startsWith(prefix, 0);
+}
+</code></pre><h2 id="endsWith"><a href="#endsWith" class="headerlink" title="endsWith"></a>endsWith</h2><pre><code>//测试此字符串是否以指定的后缀结束。
+public boolean endsWith(String suffix) {
+    return startsWith(suffix, value.length - suffix.value.length);
+}
+</code></pre><h2 id="hashCode"><a href="#hashCode" class="headerlink" title="hashCode"></a>hashCode</h2><pre><code>//返回此字符串的哈希码。String 对象的哈希码根据以下公式计算： s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1] 使用 int 算法，这里 s[i] 是字符串的第 i 个字符，n 是字符串的长度，^ 表示求幂。（空字符串的哈希值为 0。） 
+// 获取散列码方法
+public int hashCode() {
+    // 获取字符串缓存散列码
+    int h = hash;
+    if (h == 0 &amp;&amp; value.length &gt; 0) { // 如果字符串缓存散列码为0并且字符串数组长度大于0
+        // 定义字符数组指针
+        char val[] = value;
+
+        // 遍历每个字符
+        for (int i = 0; i &lt; value.length; i++) {
+            h = 31 * h + val[i]; // 31 * h会被JVM优化成(h &lt;&lt; 5) - h
+        }
+        hash = h; // 修改字符串缓存散列码
+    }
+    return h;
+}
+</code></pre><h2 id="indexOf"><a href="#indexOf" class="headerlink" title="indexOf"></a>indexOf</h2><pre><code>// 获取指定字符在此字符串中第一次出现处的索引
+public int indexOf(int ch) {
+    return indexOf(ch, 0); // 从0开始查找
+}
+
+// 获取在此字符串中第一次出现指定字符处的索引，从指定的索引开始搜索。
+// Unicode指统一码（采用双字节对字符进行编码）
+public int indexOf(int ch, int fromIndex) {
+    // 获取字符数组长度
+    final int max = value.length;
+    if (fromIndex &lt; 0) { // 如果起始位置&lt;0
+        fromIndex = 0; // 起始位置置0
+    } else if (fromIndex &gt;= max) { // 如果起始位置&gt;=字符数组长度
+        // Note: fromIndex might be near -1&gt;&gt;&gt;1.
+        return -1;
+    }
+
+    // Character.MIN_SUPPLEMENTARY_CODE_POINT是BmpCode代码点
+    // 值是2的16次方，是2个字节最大值+1
+    // 如果ch是非辅助代码点或者负值（无效代码点）
+    if (ch &lt; Character.MIN_SUPPLEMENTARY_CODE_POINT) { 
+        // handle most cases here (ch is a BMP code point or a
+        // negative value (invalid code point))
+        final char[] value = this.value; // 创建字符数组的指针
+        for (int i = fromIndex; i &lt; max; i++) { // 从fromIndex开始遍历每个字符
+            if (value[i] == ch) { // 如果找到ch字符
+                return i;
+            }
+        }
+        return -1;
+    } else { // 寻找ch在辅助部分中的索引
+        return indexOfSupplementary(ch, fromIndex);
+    }
+}
+
+//返回指定字符在此字符串中最后一次出现处的索引。
+public int lastIndexOf(int ch) {
+    return lastIndexOf(ch, value.length - 1);
+}
+
+//返回指定字符在此字符串中最后一次出现处的索引，从指定的索引处开始进行反向搜索。
+public int lastIndexOf(int ch, int fromIndex) {
+    if (ch &lt; Character.MIN_SUPPLEMENTARY_CODE_POINT) {
+        // handle most cases here (ch is a BMP code point or a
+        // negative value (invalid code point))
+        final char[] value = this.value;
+        int i = Math.min(fromIndex, value.length - 1);
+        for (; i &gt;= 0; i--) {
+            if (value[i] == ch) {
+                return i;
+            }
+        }
+        return -1;
+    } else {
+        return lastIndexOfSupplementary(ch, fromIndex);
+    }
+}
+
+//返回指定子字符串在此字符串中第一次出现处的索引。
+public int indexOf(String str) {
+    return indexOf(str, 0);
+}
+
+//返回指定子字符串在此字符串中第一次出现处的索引，从指定的索引开始。
+public int indexOf(String str, int fromIndex) {
+    return indexOf(value, 0, value.length,
+            str.value, 0, str.value.length, fromIndex);
+}
+
+
+// 获取参数子串在该字符串中从起始位置开始第一次出现的位置
+static int indexOf(char[] source, int sourceOffset, int sourceCount,
+        String target, int fromIndex) {
+    return indexOf(source, sourceOffset, sourceCount,
+                   target.value, 0, target.value.length,
+                   fromIndex);
+}
+
+/* @param   source       the characters being searched.//这里就是value数组
+     * @param   sourceOffset offset of the source string./ //源字符串的偏移量
+     * @param   sourceCount  count of the source string.    //这里是value数组的长度
+     * @param   target       the characters being searched for.  //待搜索目标字符串
+     * @param   targetOffset offset of the target string.   //待搜索目标字符串的偏移量
+     * @param   targetCount  count of the target string.   //待搜索目标字符串的长度
+     * @param   fromIndex    the index to begin searching from. //起始位置
+     */
+    // 获取参数子串在该字符串中从起始位置开始第一次出现的位置
+    // source是目标串（该字符串），target是模式串（子串）
+    static int indexOf(char[] source, int sourceOffset, int sourceCount,
+        char[] target, int targetOffset, int targetCount,
+        int fromIndex) {
+        if (fromIndex &gt;= sourceCount) {//越界了
+            return (targetCount == 0 ? sourceCount : -1);
+        }
+        if (fromIndex &lt; 0) {
+            fromIndex = 0;
+        }
+        if (targetCount == 0) {
+            return fromIndex;
+        }
+
+        char first = target[targetOffset];//待搜索字符串第一个字符
+        int max = sourceOffset + (sourceCount - targetCount);//搜索第一个匹配的字符时所能达到的最大值，因为要保证后面的长度&gt;=targetCount
+
+        // 朴素匹配算法
+        //下面这里就是核心搜索算法了，会先匹配第一个字符，然后依次向后移，直到完全匹配
+        //或者是匹配到max仍然没有匹配成功
+        for (int i = sourceOffset + fromIndex; i &lt;= max; i++) {
+            /* Look for first character. */
+            if (source[i] != first) {// 如果第一个字符不匹配
+                while (++i &lt;= max &amp;&amp; source[i] != first);// 寻找第一个匹配上的字符
+            }
+
+            /* Found first character, now look at the rest of v2 */
+            //可以注意这里i下标只是用来匹配第一个字符，因为有可能部分匹配时，需要从先在匹配
+            //所以这里重新应用下标j
+            if (i &lt;= max) {// 匹配除了第一个字符的其他部分
+                int j = i + 1;
+                int end = j + targetCount - 1;
+                for (int k = targetOffset + 1; j &lt; end &amp;&amp; source[j]
+                        == target[k]; j++, k++);
+
+                if (j == end) {
+                    /* Found whole string. */
+                    return i - sourceOffset;
+                }
+            }
+        }
+        return -1;
+    }//当匹配失败时，返回-1
+
+//返回指定子字符串在此字符串中最右边出现处的索引。
+public int lastIndexOf(String str) {
+    return lastIndexOf(str, value.length);
+}
+
+
+public int lastIndexOf(String str, int fromIndex) {
+    return lastIndexOf(value, 0, value.length,
+            str.value, 0, str.value.length, fromIndex);
+}
+</code></pre><p>static int lastIndexOf(char[] source, int sourceOffset, int sourceCount,<br>            char[] target, int targetOffset, int targetCount,<br>            int fromIndex) {<br>                /*</p>
+<pre><code>     * Check arguments; return immediately where possible. For
+     * consistency, don&apos;t check for null str.
+     */
+    //第一个字符所能匹配的最大位置，类似于上面的max
+    int rightIndex = sourceCount - targetCount;
+    if (fromIndex &lt; 0) {
+        return -1;
+    }
+    if (fromIndex &gt; rightIndex) {
+        fromIndex = rightIndex;
+    }
+    /* Empty string always matches. */
+    if (targetCount == 0) {
+        return fromIndex;
+    }
+
+    int strLastIndex = targetOffset + targetCount - 1;//目标字符串最后一个字符下标
+    char strLastChar = target[strLastIndex];//最后一个字符
+    int min = sourceOffset + targetCount - 1;//目标字符串最后一个字符所能匹配的源字符串最小下标
+    int i = min + fromIndex;//这里i下标永远是最后一个字符匹配的下标索引
+
+startSearchForLastChar:
+    while (true) {
+        while (i &gt;= min &amp;&amp; source[i] != strLastChar) {
+            i--;
+        }
+        //小于min则不可能在搜索到了
+        if (i &lt; min) {
+            return -1;
+        }
+        int j = i - 1;
+        int start = j - (targetCount - 1);
+        int k = strLastIndex - 1;
+
+        while (j &gt; start) {
+            if (source[j--] != target[k--]) {
+                //当存在部分匹配，而前半部分不匹配时，跳出当前查找，整体向前窗移
+                i--;
+                continue startSearchForLastChar;//直接跳到顶层while循环
+            }
+        }
+        return start - sourceOffset + 1;
+    }
+}
+</code></pre><p>可以看到与indexOf方法是对应的，只不过是反向搜索。</p>
+<h2 id="substring"><a href="#substring" class="headerlink" title="substring"></a>substring</h2><pre><code>//返回一个新的字符串，它是此字符串的一个子字符串。该子字符串从指定索引处的字符开始，直到此字符串末尾。
+public String substring(int beginIndex) {
+    if (beginIndex &lt; 0) { // 如果起始下标&lt;0
+        throw new StringIndexOutOfBoundsException(beginIndex);
+    }
+    int subLen = value.length - beginIndex; // 获取截取长度
+    if (subLen &lt; 0) { // 如果截取长度&lt;0
+        throw new StringIndexOutOfBoundsException(subLen);
+    }
+    return (beginIndex == 0) ? this : new String(value, beginIndex, subLen);
+}
+
+//返回一个新字符串，它是此字符串的一个子字符串。该子字符串从指定的 beginIndex 处开始，直到索引 endIndex - 1 处的字符。因此，该子字符串的长度为 endIndex-beginIndex。 
+public String substring(int beginIndex, int endIndex) {
+    if (beginIndex &lt; 0) { // 如果起始下标&lt;0
+        throw new StringIndexOutOfBoundsException(beginIndex);
+    }
+    if (endIndex &gt; value.length) { // 如果末尾下标&gt;字符数组长度
+        throw new StringIndexOutOfBoundsException(endIndex);
+    }
+    int subLen = endIndex - beginIndex; // 获取截取长度
+    if (subLen &lt; 0) { // 如果截取长度&lt;0
+        throw new StringIndexOutOfBoundsException(subLen);
+    }
+    return ((beginIndex == 0) &amp;&amp; (endIndex == value.length)) ? this
+            : new String(value, beginIndex, subLen);
+}
+</code></pre><h2 id="concat"><a href="#concat" class="headerlink" title="concat"></a>concat</h2><pre><code>//将指定字符串连接到此字符串的结尾。 
+//如果参数字符串的长度为 0，则返回此 String 对象。否则，创建一个新的 String 对象，用来表示由此 String 对象表示的字符序列和参数字符串表示的字符序列连接而成的字符序列。
+public String concat(String str) {
+    int otherLen = str.length();
+    if (otherLen == 0) {
+        return this;
+    }
+    int len = value.length;
+    char buf[] = Arrays.copyOf(value, len + otherLen);
+    str.getChars(buf, len);
+    return new String(buf, true);
+}
+
+void getChars(char dst[], int dstBegin) {
+            System.arraycopy(value, 0, dst, dstBegin, value.length);
+    }
+</code></pre><h2 id="replace"><a href="#replace" class="headerlink" title="replace"></a>replace</h2><pre><code>public String replace(char oldChar, char newChar) {
+    if (oldChar != newChar) {
+        int len = value.length;
+        int i = -1;
+        char[] val = value; /* avoid getfield opcode */
+
+        while (++i &lt; len) {
+            if (val[i] == oldChar) {
+                break;
+            }
+        }
+        if (i &lt; len) {
+            char buf[] = new char[len];
+            for (int j = 0; j &lt; i; j++) {
+                buf[j] = val[j];
+            }
+            while (i &lt; len) {
+                char c = val[i];
+                buf[i] = (c == oldChar) ? newChar : c;
+                i++;
+            }
+            return new String(buf, true);
+        }
+    }
+    return this;
+}
+</code></pre><h2 id="matches"><a href="#matches" class="headerlink" title="matches"></a>matches</h2><pre><code>//告知此字符串是否匹配给定的正则表达式。
+public boolean matches(String regex) {
+    return Pattern.matches(regex, this);
+}
+</code></pre><h2 id="split"><a href="#split" class="headerlink" title="split"></a>split</h2><pre><code>//根据给定正则表达式的匹配拆分此字符串。 
+public String[] split(String regex, int limit) {
+    /* fastpath if the regex is a
+     (1)one-char String and this character is not one of the
+        RegEx&apos;s meta characters &quot;.$|()[{^?*+\\&quot;, or
+     (2)two-char String and the first char is the backslash and
+        the second is not the ascii digit or ascii letter.
+     */
+    char ch = 0;
+    if (((regex.value.length == 1 &amp;&amp;
+         &quot;.$|()[{^?*+\\&quot;.indexOf(ch = regex.charAt(0)) == -1) ||
+         (regex.length() == 2 &amp;&amp;
+          regex.charAt(0) == &apos;\\&apos; &amp;&amp;
+          (((ch = regex.charAt(1))-&apos;0&apos;)|(&apos;9&apos;-ch)) &lt; 0 &amp;&amp;
+          ((ch-&apos;a&apos;)|(&apos;z&apos;-ch)) &lt; 0 &amp;&amp;
+          ((ch-&apos;A&apos;)|(&apos;Z&apos;-ch)) &lt; 0)) &amp;&amp;
+        (ch &lt; Character.MIN_HIGH_SURROGATE ||
+         ch &gt; Character.MAX_LOW_SURROGATE))
+    {
+        int off = 0;
+        int next = 0;
+        boolean limited = limit &gt; 0;
+        ArrayList&lt;String&gt; list = new ArrayList&lt;&gt;();
+        while ((next = indexOf(ch, off)) != -1) {
+            if (!limited || list.size() &lt; limit - 1) {
+                list.add(substring(off, next));
+                off = next + 1;
+            } else {    // last one
+                //assert (list.size() == limit - 1);
+                list.add(substring(off, value.length));
+                off = value.length;
+                break;
+            }
+        }
+        // If no match was found, return this
+        if (off == 0)
+            return new String[]{this};
+
+        // Add remaining segment
+        if (!limited || list.size() &lt; limit)
+            list.add(substring(off, value.length));
+
+        // Construct result
+        int resultSize = list.size();
+        if (limit == 0) {
+            while (resultSize &gt; 0 &amp;&amp; list.get(resultSize - 1).length() == 0) {
+                resultSize--;
+            }
+        }
+        String[] result = new String[resultSize];
+        return list.subList(0, resultSize).toArray(result);
+    }
+    return Pattern.compile(regex).split(this, limit);
+}
+
+public String[] split(String regex) {
+    return split(regex, 0);
+}
+</code></pre><h2 id="trim"><a href="#trim" class="headerlink" title="trim"></a>trim</h2><pre><code>//返回字符串的副本，忽略前导空白和尾部空白。
+public String trim() {
+    int len = value.length;
+    int st = 0;
+    char[] val = value;    /* avoid getfield opcode */
+
+    while ((st &lt; len) &amp;&amp; (val[st] &lt;= &apos; &apos;)) {
+        st++;
+    }
+    while ((st &lt; len) &amp;&amp; (val[len - 1] &lt;= &apos; &apos;)) {
+        len--;
+    }
+    return ((st &gt; 0) || (len &lt; value.length)) ? substring(st, len) : this;
+}
+</code></pre><p>这个trim()是去掉首尾的空格，而实现方式也非常简单，分别找到第一个非空格字符的下标，与最后一个非空格字符的下标<br>然后返回之间的子字符串。注意这里由于应用了substring方法，所以len变量的控制要小心</p>
+<h2 id="toString-NaN"><a href="#toString-NaN" class="headerlink" title="toString"></a>toString</h2><pre><code>//获取当前String对象
+public String toString() {
+    return this;
+}
+</code></pre><h2 id="toCharArray"><a href="#toCharArray" class="headerlink" title="toCharArray"></a>toCharArray</h2><pre><code>//将此字符串转换为一个新的字符数组。 
+public char[] toCharArray() {
+    // Cannot use Arrays.copyOf because of class initialization order issues
+    char result[] = new char[value.length];
+    System.arraycopy(value, 0, result, 0, value.length);
+    return result;
+}
+</code></pre><h2 id="format"><a href="#format" class="headerlink" title="format"></a>format</h2><pre><code>//使用指定的格式字符串和参数返回一个格式化字符串。
+public static String format(String format, Object... args) {
+    return new Formatter().format(format, args).toString();
+}
+
+//使用指定的语言环境、格式字符串和参数返回一个格式化字符串。 
+public static String format(Locale l, String format, Object... args) {
+    return new Formatter(l).format(format, args).toString();
+}
+</code></pre><h2 id="valueOf-NaN"><a href="#valueOf-NaN" class="headerlink" title="valueOf"></a>valueOf</h2><pre><code>//返回 Object 参数的字符串表示形式。
+public static String valueOf(Object obj) {
+    return (obj == null) ? &quot;null&quot; : obj.toString();
+}
+
+//返回 char 数组参数的字符串表示形式。字符数组的内容已被复制，后续修改不会影响新创建的字符串。 
+public static String valueOf(char data[]) {
+    return new String(data);
+}
+
+//返回 char 数组参数的特定子数组的字符串表示形式。 
+//offset 参数是子数组的第一个字符的索引。count 参数指定子数组的长度。字符数组的内容已被复制，后续修改不会影响新创建的字符串。 
+public static String valueOf(char data[], int offset, int count) {
+    return new String(data, offset, count);
+}
+
+//返回指定数组中表示该字符序列的 String。 
+public static String copyValueOf(char data[], int offset, int count) {
+    return new String(data, offset, count);
+}
+
+//返回指定数组中表示该字符序列的 String。 
+public static String copyValueOf(char data[]) {
+    return new String(data);
+}
+
+//返回 boolean 参数的字符串表示形式。 
+public static String valueOf(boolean b) {
+    return b ? &quot;true&quot; : &quot;false&quot;;
+}
+
+//返回 char 参数的字符串表示形式。 
+public static String valueOf(char c) {
+    char data[] = {c};
+    return new String(data, true);
+}
+
+//返回 int 参数的字符串表示形式。 
+public static String valueOf(int i) {
+    return Integer.toString(i);
+}
+
+//返回 long 参数的字符串表示形式。 
+public static String valueOf(long l) {
+    return Long.toString(l);
+}
+
+//返回 float 参数的字符串表示形式。 
+public static String valueOf(float f) {
+    return Float.toString(f);
+}
+
+//返回 double 参数的字符串表示形式。 
+public static String valueOf(double d) {
+    return Double.toString(d);
+}
+
+//本地方法，把该字符串存入常量池，返回此字符串的引用
+public native String intern();
+</code></pre></div><div class="tags"><a href="/tags/JDK1-8源码/">JDK1.8源码</a></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2018/01/31/Java虚拟机学习——类加载机制/" class="pre">Java虚拟机学习——类加载机制</a><a href="/2018/01/30/成为Java顶尖程序员-，看这11本书就够了/" class="next">成为Java顶尖程序员 ，看这11本书就够了</a></div><div id="comments"><div id="SOHUCS" sid="2018/01/30/JDK1.8源码解析——String/"></div></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一：类的声明"><span class="toc-text">一：类的声明</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#类的成员变量"><span class="toc-text">类的成员变量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#类的构造方法"><span class="toc-text">类的构造方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#无参构造器"><span class="toc-text">无参构造器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#String-参数"><span class="toc-text">String 参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#char-参数"><span class="toc-text">char[]参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#int-参数"><span class="toc-text">int[]参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#byte-参数"><span class="toc-text">byte[]参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基于StringBuilder-StringBuffer参数"><span class="toc-text">基于StringBuilder,StringBuffer参数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#重要方法"><span class="toc-text">重要方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#length"><span class="toc-text">length</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#isEmpty"><span class="toc-text">isEmpty</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#charAt"><span class="toc-text">charAt</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#getChars"><span class="toc-text">getChars</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#getBytes"><span class="toc-text">getBytes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#equals"><span class="toc-text">equals</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#equalsIgnoreCase"><span class="toc-text">equalsIgnoreCase</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#compareTo"><span class="toc-text">compareTo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#startsWith"><span class="toc-text">startsWith</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#endsWith"><span class="toc-text">endsWith</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hashCode"><span class="toc-text">hashCode</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#indexOf"><span class="toc-text">indexOf</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#substring"><span class="toc-text">substring</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#concat"><span class="toc-text">concat</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#replace"><span class="toc-text">replace</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#matches"><span class="toc-text">matches</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#split"><span class="toc-text">split</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#trim"><span class="toc-text">trim</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#toString-NaN"><span class="toc-text">toString</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#toCharArray"><span class="toc-text">toCharArray</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#format"><span class="toc-text">format</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#valueOf-NaN"><span class="toc-text">valueOf</span></a></li></ol></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/02/01/Java虚拟机学习——Java内存区域与内存溢出异常/">Java虚拟机学习——Java内存区域与内存溢出异常</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/31/IntelliJ-IDEA-2017-3激活/">IntelliJ IDEA 2017.3激活</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/31/Java虚拟机学习——类加载机制/">Java虚拟机学习——类加载机制</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/30/JDK1.8源码解析——String/">JDK1.8源码解析——String</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/30/成为Java顶尖程序员-，看这11本书就够了/">成为Java顶尖程序员 ，看这11本书就够了</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/27/解决微信公共号开发出现-redirect-uri域名与后台配置不一致，错误码10003-错误/">解决微信公共号开发出现 redirect_uri域名与后台配置不一致，错误码10003 错误</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/27/微信公共号开发教程java版——微信网页授权-八/">微信公共号开发教程java版——微信网页授权(八)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/27/微信公共号开发教程java版——获取用户基本信息-UnionID机制-七/">微信公共号开发教程java版——获取用户基本信息(UnionID机制)(七)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/26/微信公共号开发教程java版——实现自定义菜单-六/">微信公共号开发教程java版——实现自定义菜单(六)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/26/微信公共号开发教程java版——公共号access-token的获取-五/">微信公共号开发教程java版——公共号access_token的获取(五)</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Dubbo/">Dubbo</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/HttpClient/">HttpClient</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/IDEA/">IDEA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JDK1-8源码/">JDK1.8源码</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/">JVM</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/WebService/">WebService</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/axios/">axios</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/element-ui/">element ui</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/extjs/">extjs</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/maven/">maven</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mybatis/">mybatis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/oracle/">oracle</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/">quartz</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/select2/">select2</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/shiro/">shiro</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/spring/">spring</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/tomcat/">tomcat</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/weblogic/">weblogic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/webpack/">webpack</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ztree/">ztree</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习/">学习</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/微信公共号/">微信公共号</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编码规范/">编码规范</a><span class="category-list-count">1</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/mybatis/" style="font-size: 15px;">mybatis</a> <a href="/tags/docker/" style="font-size: 15px;">docker</a> <a href="/tags/JDK1-8源码/" style="font-size: 15px;">JDK1.8源码</a> <a href="/tags/Dubbo/" style="font-size: 15px;">Dubbo</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/maven/" style="font-size: 15px;">maven</a> <a href="/tags/tomcat/" style="font-size: 15px;">tomcat</a> <a href="/tags/Oracle-VM-VirtualBox/" style="font-size: 15px;">Oracle VM VirtualBox</a> <a href="/tags/linux/" style="font-size: 15px;">linux</a> <a href="/tags/oracle/" style="font-size: 15px;">oracle</a> <a href="/tags/redis/" style="font-size: 15px;">redis</a> <a href="/tags/quartz/" style="font-size: 15px;">quartz</a> <a href="/tags/spring-aop/" style="font-size: 15px;">spring aop</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/SpringMVC/" style="font-size: 15px;">SpringMVC</a> <a href="/tags/WebService/" style="font-size: 15px;">WebService</a> <a href="/tags/SpringBoot/" style="font-size: 15px;">SpringBoot</a> <a href="/tags/HttpClient/" style="font-size: 15px;">HttpClient</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/extjs/" style="font-size: 15px;">extjs</a> <a href="/tags/webpack/" style="font-size: 15px;">webpack</a> <a href="/tags/shiro/" style="font-size: 15px;">shiro</a> <a href="/tags/weblogic/" style="font-size: 15px;">weblogic</a> <a href="/tags/select2/" style="font-size: 15px;">select2</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/git/" style="font-size: 15px;">git</a> <a href="/tags/axios/" style="font-size: 15px;">axios</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/微信公共号/" style="font-size: 15px;">微信公共号</a> <a href="/tags/java基础/" style="font-size: 15px;">java基础</a> <a href="/tags/element-ui/" style="font-size: 15px;">element ui</a> <a href="/tags/jquery/" style="font-size: 15px;">jquery</a> <a href="/tags/ztree/" style="font-size: 15px;">ztree</a> <a href="/tags/编码规范/" style="font-size: 15px;">编码规范</a> <a href="/tags/JVM/" style="font-size: 15px;">JVM</a> <a href="/tags/java虚拟机/" style="font-size: 15px;">java虚拟机</a> <a href="/tags/学习/" style="font-size: 15px;">学习</a> <a href="/tags/工具/" style="font-size: 15px;">工具</a> <a href="/tags/IDEA/" style="font-size: 15px;">IDEA</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-you"> 友情链接</i></div><ul></ul><a href="https://github.com/wangyuanjun008" title="GitHub" target="_blank">GitHub</a></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">WangYuanJun.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script><script>window._config = { showScore: true };
+(function(){ 
+  var appid = 'cytn089Dg'; 
+  var conf = '4501ebcf59ba2646236d1827a7751555'; 
+  var width = window.innerWidth || document.documentElement.clientWidth; 
+  var nodes =document.getElementsByTagName("head")[0]||document.head||document.documentElement;
+  if (/(Android|iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent) && width < 750) {  
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+  }
+  else { 
+    var loadJs=function(d,a){
+      var b=document.createElement("script");b.setAttribute("type","text/javascript");
+      b.setAttribute("charset","UTF-8");
+      b.setAttribute("src",d);
+      if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}
+      nodes.appendChild(b)
+    };
+    loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); 
+  } 
+  var loadCss = function(cssString){  
+    var style=document.createElement("style");  
+    style.setAttribute("type", "text/css");  
+    if(style.styleSheet){// IE  
+        style.styleSheet.cssText = cssString;  
+    } else {// w3c  
+        var cssText = document.createTextNode(cssString);  
+        style.appendChild(cssText);  
+    }
+    nodes.appendChild(style);
+  }
+  window.onload=function(){loadCss('.module-hot-topic,.module-cmt-float-bar{display:none!important}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .wrap-action-w .cbox-prompt-w span.prompt-empty-w,#SOHUCS #SOHU_MAIN .module-cmt-float-bar .wrap-cont-w .cont-form-w .form-text-w span.text-null,#SOHUCS #SOHU_MAIN .module-cmt-float-bar .wrap-cont-w .cont-minwidth-w div.cont-comment-w a.comment-link-w,#SOHUCS #SOHU_MAIN .module-cmt-float-bar .wrap-cont-w .cont-minwidth-w div.cont-comment-w span.comment-text-w,#SOHUCS #SOHU_MAIN .module-cmt-footer .section-service-w div.service-wrap-w a:hover,#SOHUCS #SOHU_MAIN .module-cmt-header .section-cbox-w .block-head-w div.header-login,#SOHUCS #SOHU_MAIN .module-cmt-header .section-title-w .title-user-w .user-wrap-w span.wrap-name-w,#SOHUCS #SOHU_MAIN .module-cmt-list .action-click-gw span.click-disable-eg a em.icon-name-bg,#SOHUCS #SOHU_MAIN .module-cmt-list .block-title-gw ul li div.title-name-gw,#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type .cmt-list-number .comment-number span.cy-number,#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type .cmt-list-number span.comment-number,#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type .type-lists li.active,#SOHUCS #SOHU_MAIN .module-cmt-list .msg-wrap-gw .wrap-action-gw .action-click-gw span a:hover,#SOHUCS #SOHU_MAIN .module-cmt-list .picture-box-gw div.box-action-gw a:hover,#SOHUCS #SOHU_MAIN .module-cmt-list .wrap-action-gw .action-click-gw span a:hover em.icon-name-bg,#SOHUCS #SOHU_MAIN .module-cmt-list .wrap-user-gw span.user-name-gw a{color:#40759b!important}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .post-wrap-border-t div.post-wrap-border-t-r,#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w div.post-wrap-border-l,#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w div.post-wrap-border-r{display:none!important}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .post-wrap-border-t div.post-wrap-border-t-l{background:#FFF!important;top:-2px!important}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .wrap-action-w .action-function-w .uploading-wrapper-dw div.wrapper-image-dw,#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w div.post-wrap-main,#SOHUCS #SOHU_MAIN .module-cmt-float-bar .wrap-cont-w .cont-form-w div.form-text-w,#SOHUCS #SOHU_MAIN .module-cmt-header .section-cbox-w .block-head-w div.header-login,#SOHUCS #SOHU_MAIN .module-cmt-list .module-cmt-box .post-wrap-w div.post-wrap-main{border:1px solid #e6e6e6!important;border-radius:20px 20px 20px 20px;margin:0!important}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .wrap-action-w .action-issue-w .issue-btn-w a .btn-fw{width:130px!important;height:34px!important;line-height:33px!important;font-size:17px!important;background:#5483b1!important;border-radius:20px!important;color:#FFF!important;-webkit-box-shadow:0 -1px 4px #5483b1 inset;box-shadow:0 -1px 10px #5483b1 inset}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .wrap-action-w .action-issue-w .issue-btn-w a .btn-fw:before{content:"发表评论"}#SOHUCS #SOHU_MAIN .module-cmt-box .post-wrap-w .wrap-action-w .action-issue-w .issue-btn-w a:hover .btn-fw{color:#40759b!important;background:#FFF!important}#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type .type-lists li{background:none!important;border-bottom:1px solid #e6e6e6}#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type .type-lists li.active{border:1px solid #e6e6e6;border-radius:10px 10px 0 0;border-bottom:none}#SOHUCS #SOHU_MAIN .module-cmt-list .block-title-gw ul li .title-name-gw div.title-name-gw-tag{background:#5483b1!important;border-radius:3px}#SOHUCS #SOHU_MAIN .module-cmt-list .cmt-list-type div.cmt-list-border{background-color:#e6e6e6!important}#SOHUCS #SOHU_MAIN .module-cmt-notice ul.nt-list li.nt-item{border:1px solid #e6e6e6!important}#SOHUCS #SOHU_MAIN .module-cmt-notice ul.nt-list li.nt-item .nt-logo{text-align:center;line-height:40px;border-radius:50%!important;background:#e6e6e6!important}#SOHUCS #SOHU_MAIN .module-cmt-notice ul.nt-list li.nt-item .nt-logo:before{content:"畅";font-size:22px;color:#FFF}#SOHUCS #SOHU_MAIN .module-cmt-notice ul.nt-list li.nt-item a.nt-text,#SOHUCS #SOHU_MAIN .module-cmt-notice ul.nt-list li.nt-item a.nt-text i{color:#5483b1!important}#SOHUCS #SOHU_MAIN .module-cmt-header .section-title-w .title-user-w .user-wrap-w{background:#FFF!important}');};
+})();</script><script src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script></body></html>
