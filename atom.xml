@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wangyuanjun.cn/"/>
-  <updated>2018-02-08T02:14:06.329Z</updated>
+  <updated>2018-02-11T03:40:37.706Z</updated>
   <id>http://wangyuanjun.cn/</id>
   
   <author>
@@ -16,11 +16,324 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Shell脚本学习</title>
+    <link href="http://wangyuanjun.cn/2018/02/11/Shell%E8%84%9A%E6%9C%AC%E5%AD%A6%E4%B9%A0/"/>
+    <id>http://wangyuanjun.cn/2018/02/11/Shell脚本学习/</id>
+    <published>2018-02-11T03:40:37.000Z</published>
+    <updated>2018-02-11T03:40:37.706Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>MySQL读写分离详解与实践</title>
+    <link href="http://wangyuanjun.cn/2018/02/11/MySQL%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%E8%AF%A6%E8%A7%A3%E4%B8%8E%E5%AE%9E%E8%B7%B5/"/>
+    <id>http://wangyuanjun.cn/2018/02/11/MySQL读写分离详解与实践/</id>
+    <published>2018-02-11T03:38:51.000Z</published>
+    <updated>2018-02-11T05:54:24.530Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+      <category term="mysql" scheme="http://wangyuanjun.cn/categories/mysql/"/>
+    
+    
+      <category term="mysql" scheme="http://wangyuanjun.cn/tags/mysql/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MySQL主从复制详解与实践</title>
+    <link href="http://wangyuanjun.cn/2018/02/09/MySQL%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E8%AF%A6%E8%A7%A3%E4%B8%8E%E5%AE%9E%E8%B7%B5/"/>
+    <id>http://wangyuanjun.cn/2018/02/09/MySQL主从复制详解与实践/</id>
+    <published>2018-02-09T14:25:14.000Z</published>
+    <updated>2018-02-11T05:53:40.428Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="一：mysql主从原理"><a href="#一：mysql主从原理" class="headerlink" title="一：mysql主从原理"></a>一：mysql主从原理</h1><h2 id="1-1-基本介绍"><a href="#1-1-基本介绍" class="headerlink" title="1.1 基本介绍"></a>1.1 基本介绍</h2><p>MySQL 内建的复制功能是构建大型，高性能应用程序的基础。将 MySQL 的 数亿分布到到多个系统上去，这种分步的机制，是通过将 MySQL 的某一台主机的数据复制到其它主机( Slave )上，并重新执行一遍来实现的。复制过程中一个服务器充当服务器，而一个或多个其它服务器充当从服务器。主服务器将更新写入二进制日志，并维护文件的一个索引以跟踪日志循环。这些日志可以记录发送到从服务器的更新。当一个从服务器连接主服务器时，它通知主服务器从服务器在日志中读取的最后一次成功更新的位置，从服务器接收从那时起发生的任何更新，然后封锁等等主服务器通知新的更新。<br>请注意当你进行复制时，所有对复制中的表的更新必须在主服务器上进行。否则，你必须要小心，以避免用户对主服务器上的表进行的更新与对服务器上的表所进行的更新之间的冲突</p>
+<h2 id="1-2-MySQL支持的复制类型"><a href="#1-2-MySQL支持的复制类型" class="headerlink" title="1.2 MySQL支持的复制类型"></a>1.2 MySQL支持的复制类型</h2><ol>
+<li>基于语句的复制。 在主服务器上执行的 SQL 语句，在从服务器上执行同样的语句。否则，你必须要小心，以避免用户对主服务器上的表进行的更新与对服务器上的表所进行的更新之间的冲突，配置：binlog_format = ‘STATEMENT’</li>
+<li>基于行的复制。把改变的内容复制过去，而不是把命令在从服务器上执行一遍，从 MySQL 5.0开始支持，配置：binlog_format = ‘ROW’</li>
+<li>混合类型的复制。默认采用基于语句的复制，一旦发现基于语句的无法精确的复制时，就会采用基于行的复制,配置：binlog_format = ‘MIXED’</li>
+</ol>
+<h2 id="1-3-mysql复制解决的问题"><a href="#1-3-mysql复制解决的问题" class="headerlink" title="1.3 mysql复制解决的问题"></a>1.3 mysql复制解决的问题</h2><ul>
+<li>数据分布</li>
+<li>负载平衡</li>
+<li>备份</li>
+<li>高可用性和容错行</li>
+</ul>
+<h2 id="1-4-复制是如何工作的"><a href="#1-4-复制是如何工作的" class="headerlink" title="1.4 复制是如何工作的"></a>1.4 复制是如何工作的</h2><p>MySQL之间数据复制的基础是二进制日志文件（binary log file）。一台MySQL数据库一旦启用二进制日志后，其作为master，它的数据库中所有操作都会以“事件”的方式记录在二进制日志中，其他数据库作为slave通过一个I/O线程与主服务器保持通信，并监控master的二进制日志文件的变化，如果发现master二进制日志文件发生变化，则会把变化复制到自己的中继日志中，然后slave的一个SQL线程会把相关的“事件”执行到自己的数据库中，以此实现从数据库和主数据库的一致性，也就实现了主从复制。<br>可以简化为三个步骤(如下图)：</p>
+<ol>
+<li>Master 将改变记录到二进制日志中。</li>
+<li>Slave 将 Master 的二进制日志拷贝到它的中继日志( Relay_log )</li>
+<li>Slave 重做中继日志中的事件，将改变反映它自己的数据</li>
+</ol>
+<p><img src="/2018/02/09/MySQL主从复制详解与实践/主从复制.jpg" alt="主从复制"></p>
+<p>说明:</p>
+<ol>
+<li>Master 记录二进制的日志。在每个事务更新数据之前，Master 在二进制日志记录这些改变。 MySQL 将事务日志的写入二进制日志，及时事务中的语句都市交叉执行的。在事件写入二进制日志完成后，Master 通知存储引擎提交事务。</li>
+<li>Slave 将 Master 的 Binary log 拷贝到它自己的中继日志。首先 Slave 开始一个工作线程–I/O线程。I/O 线程在 Master 上打开一个连接，然后开始从二进制日志中读取事件，如果已经连上 Master，它会并等待master产生新的事件。I/O线程就这些事件写入中继日志。</li>
+<li>SQL Slave Thread ( SQL从线程)处理该过程的最后一步。SQL纯种从中继日志读取事件，并重放其中的事件而更新 Slave 的数据。使其它与 Master 中的数据保持一致。只要该线程与 I/O 线程保持一致，中继日志通常会位于 OS 的缓存中，所以中继日志的开销很小。</li>
+<li>此处，在 Master 中也有一个工作线程，和其他 MySQL 的连接一样，Slave 在 Master 中打开一个连接也会使得 Master 开始一个线程。复制过程有一个很重要的限制—复制在 Slave 上是串行化的，也就是说 Master 上的并行更新操作不能在 Slave 上并行操作。</li>
+</ol>
+<h2 id="1-5-复制实现细节分析"><a href="#1-5-复制实现细节分析" class="headerlink" title="1.5 复制实现细节分析"></a>1.5 复制实现细节分析</h2><p>MySQL主从复制功能使用<strong>三个线程实现，一个在主服务器上，两个在从服务器上</strong></p>
+<h3 id="1-5-1-Binlog转储线程。"><a href="#1-5-1-Binlog转储线程。" class="headerlink" title="1.5.1 Binlog转储线程。"></a>1.5.1 Binlog转储线程。</h3><p>当从服务器与主服务器连接时，主服务器会创建一个线程将二进制日志内容发送到从服务器。<br>该线程可以使用 语句 SHOW PROCESSLIST(下面有示例介绍) 在服务器 sql 控制台输出中标识为Binlog Dump线程。</p>
+<p>二进制日志转储线程获取服务器上二进制日志上的锁，用于读取要发送到从服务器的每个事件。一旦事件被读取，即使在将事件发送到从服务器之前，锁会被释放。</p>
+<h3 id="1-5-2-从服务器I-O线程。"><a href="#1-5-2-从服务器I-O线程。" class="headerlink" title="1.5.2 从服务器I/O线程。"></a>1.5.2 从服务器I/O线程。</h3><p>当在从服务器sql 控制台发出 START SLAVE语句时，从服务器将创建一个I/O线程，该线程连接到主服务器，并要求它发送记录在主服务器上的二进制更新日志。</p>
+<p>从机I/O线程读取主服务器Binlog Dump线程发送的更新 （参考上面 Binlog转储线程 介绍），并将它们复制到自己的本地文件二进制日志中。</p>
+<p>该线程的状态显示详情 Slave_IO_running 在输出端 使用 命令SHOW SLAVE STATUS</p>
+<p>使用\G语句终结符,而不是分号,是为了，易读的垂直布局</p>
+<p>这个命令在上面 查看从服务器状态 用到过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql&gt; SHOW SLAVE STATUS\G</div></pre></td></tr></table></figure>
+<h3 id="1-5-3-从服务器SQL线程。"><a href="#1-5-3-从服务器SQL线程。" class="headerlink" title="1.5.3 从服务器SQL线程。"></a>1.5.3 从服务器SQL线程。</h3><p>从服务器创建一条SQL线程来读取由主服务器I/O线程写入的二级制日志，并执行其中包含的事件。</p>
+<p>在前面的描述中，每个主/从连接有三个线程。主服务器为每个当前连接的从服务器创建一个二进制日志转储线程，每个从服务器都有自己的I/O和SQL线程。<br>从服务器使用两个线程将读取更新与主服务器更新事件，并将其执行为独立任务。因此，如果语句执行缓慢，则读取语句的任务不会减慢。</p>
+<p>例如，如果从服务器开始几分钟没有运行，或者即使SQL线程远远落后，它的I/O线程也可以从主服务器建立连接时，快速获取所有二进制日志内容。</p>
+<p>如果从服务器在SQL线程执行所有获取的语句之前停止，则I/O线程至少获取已经读取到的内容，以便将语句的安全副本存储在自己的二级制日志文件中，准备下次执行主从服务器建立连接，继续同步。</p>
+<p>使用命令 SHOW PROCESSLIST\G 可以查看有关复制的信息</p>
+<p>命令 SHOW FULL PROCESSLISTG</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">mysql&gt;  SHOW FULL PROCESSLIST\G</div><div class="line">*************************** 1. row ***************************</div><div class="line">     Id: 22</div><div class="line">   User: repl</div><div class="line">   Host: node2:39114</div><div class="line">     db: NULL</div><div class="line">Command: Binlog Dump</div><div class="line">   Time: 4435</div><div class="line">  State: Master has sent all binlog to slave; waiting for more updates</div><div class="line">   Info: NULL</div></pre></td></tr></table></figure>
+<p>Id: 22是Binlog Dump服务连接的从站的复制线程<br>Host: node2:39114 是从服务，主机名 级及端口<br>State: 信息表示所有更新都已同步发送到从服务器，并且主服务器正在等待更多更新发生。<br>如果Binlog Dump在主服务器上看不到 线程，意味着主从复制没有配置成功; 也就是说，没有从服务器连接主服务器。</p>
+<p>命令 SHOW PROCESSLISTG</p>
+<p>在 Slave 从服务器 ，查看两个线程的更新状态</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">mysql&gt; SHOW PROCESSLIST\G</div><div class="line">*************************** 1. row ***************************</div><div class="line">     Id: 6</div><div class="line">   User: system user</div><div class="line">   Host: </div><div class="line">     db: NULL</div><div class="line">Command: Connect</div><div class="line">   Time: 6810</div><div class="line">  State: Waiting for master to send event</div><div class="line">   Info: NULL</div><div class="line">*************************** 2. row ***************************</div><div class="line">     Id: 7</div><div class="line">   User: system user</div><div class="line">   Host: </div><div class="line">     db: NULL</div><div class="line">Command: Connect</div><div class="line">   Time: 3069</div><div class="line">  State: Slave has read all relay log; waiting for more updates</div><div class="line">   Info: NULL</div></pre></td></tr></table></figure>
+<p>Id: 6是与主服务器通信的I/O线程<br>Id: 7是正在处理存储在中继日志中的更新的SQL线程</p>
+<p>在 运行 SHOW PROCESSLIST 命令时，两个线程都空闲，等待进一步更新</p>
+<p>如果在主服务器上在设置的超时，时间内 Binlog Dump线程没有活动，则主服务器会和从服务器断开连接。超时取决于的 服务器系统变量 值 net_write_timeout(在中止写入之前等待块写入连接的秒数，默认10秒)和 net_retry_count;(如果通信端口上的读取或写入中断，请在重试次数，默认10次) 设置 服务器系统变量</p>
+<p>该SHOW SLAVE STATUS语句提供了有关从服务器上复制处理的附加信息。</p>
+<h2 id="1-6-复制常用类型"><a href="#1-6-复制常用类型" class="headerlink" title="1.6 复制常用类型"></a>1.6 复制常用类型</h2><h3 id="1-6-1-复制的常用体系结构基本原则"><a href="#1-6-1-复制的常用体系结构基本原则" class="headerlink" title="1.6.1 复制的常用体系结构基本原则"></a>1.6.1 复制的常用体系结构基本原则</h3><ol>
+<li>每个 Slave 只能有一个 Master；</li>
+<li>每个 Slave 只能有一个唯一的服务器ID；</li>
+<li>每个 Master 可以有很多 Slave;</li>
+<li>如果你设置了 log_slave_updates，Slave 可以是其他 Slave 的 Master，从而扩散 Master 的更新</li>
+<li>MySQL 不支持多主服务器复制—即一个 Slave 可以有多个 Master，但是，通过一些简单的组合，我们却可以建立灵活而强大的复制体系结构。</li>
+</ol>
+<h3 id="1-6-2-一主多从复制架构"><a href="#1-6-2-一主多从复制架构" class="headerlink" title="1.6.2 一主多从复制架构"></a>1.6.2 一主多从复制架构</h3><ol>
+<li>场景：在主库读取请求压力非常大的场景下，可以通过配置一主多从复制架构实现读写分离，把大量对实时性要求不是特别高的读请求通过负载均衡到多个从库上，降低主库的读取压力。在主库出现异常宕机的情况下，可以把一个从库切换为主库继续提供服务；</li>
+<li>建议：</li>
+</ol>
+<ul>
+<li>当 Slave 增加到一定数量时，Slave 对 Master 的负载以及网络带宽都会成为一个严重的问题。</li>
+<li>不同的 Slave 扮演不同的作用(例如使用不同的索引，或者不同的存储引擎)</li>
+<li>用一个 Slave 作为备用 Master，只进行复制</li>
+<li>用一个远程的 Slave，用于灾难恢复。</li>
+</ul>
+<h3 id="1-6-3-多级复制架构"><a href="#1-6-3-多级复制架构" class="headerlink" title="1.6.3 多级复制架构"></a>1.6.3 多级复制架构</h3><ol>
+<li>场景：一主多从的架构能够解决大部分读请求压力特别大的场景需求，但主库的I/O压力和网络压力会随着从库的增加而增长，而使用多级复制架构就可以解决一主多从场景下，主库额外的I/O和网络压力。 但要注意的是，多级复制场景下主库的数据是经历两次才到达读取的从库，期间的延时比一主多从复制场景下只经历一次复制的要大。</li>
+<li>建议：</li>
+</ol>
+<ul>
+<li>可能存在延时较长的风险</li>
+<li>这种方案可以与第三方软件结合使用，例如Slave+LVS+Keepalived 实现高可用。</li>
+</ul>
+<h3 id="1-6-4-双主复制-Dual-Master架构"><a href="#1-6-4-双主复制-Dual-Master架构" class="headerlink" title="1.6.4 双主复制/Dual Master架构"></a>1.6.4 双主复制/Dual Master架构</h3><ol>
+<li>场景：双主/Dual Master架构适用于写压力比较大的场景，或者DBA做维护需要主从切换的场景，通过双主/Dual master架构避免了重复搭建从库的麻烦。</li>
+<li>建议：</li>
+</ol>
+<ul>
+<li>最大问题就是更新冲突。</li>
+<li>可以采用MySQL Cluster，以及将Cluster和Replication结合起来，可以建立强大的高性能的数据库平台。</li>
+</ul>
+<h1 id="二：mysql主从配置实践"><a href="#二：mysql主从配置实践" class="headerlink" title="二：mysql主从配置实践"></a>二：mysql主从配置实践</h1><h2 id="2-1-实现MySQL主从复制需要进行的配置："><a href="#2-1-实现MySQL主从复制需要进行的配置：" class="headerlink" title="2.1 实现MySQL主从复制需要进行的配置："></a>2.1 实现MySQL主从复制需要进行的配置：</h2><p><strong>主服务器</strong>：</p>
+<ul>
+<li>开启二进制日志</li>
+<li>配置唯一的server-id</li>
+<li>获得master二进制日志文件名及位置</li>
+<li>创建一个用于slave和master通信的用户账号</li>
+</ul>
+<p><strong>从服务器</strong>：</p>
+<ul>
+<li>配置唯一的server-id</li>
+<li>使用master分配的用户账号读取master二进制日志</li>
+<li>启用slave服务</li>
+</ul>
+<p>具体实现过程如下：</p>
+<h2 id="2-2-基础环境配置"><a href="#2-2-基础环境配置" class="headerlink" title="2.2 基础环境配置"></a>2.2 基础环境配置</h2><ul>
+<li>数据库版本： mysql 5.1.73 ( Slave 版本可以大于或者等于 Maste r版本)</li>
+<li>操作系统： CentOS 6.7 x86_64</li>
+<li>IP地址：192.168.124.10 ( Master ) 192.168.124.20 ( Slave )</li>
+</ul>
+<h2 id="2-3-Master-Server配置"><a href="#2-3-Master-Server配置" class="headerlink" title="2.3 Master-Server配置"></a>2.3 Master-Server配置</h2><h3 id="2-3-1-修改mysql配置"><a href="#2-3-1-修改mysql配置" class="headerlink" title="2.3.1 修改mysql配置"></a>2.3.1 修改mysql配置</h3><p>找到主数据库的配置文件my.cnf(或者my.ini)，我的在/etc/mysql/my.cnf,在[mysqld]部分插入如下两行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[mysqld]</div><div class="line">log-bin=mysql-bin #开启二进制日志</div><div class="line">server-id=1 #设置server-id</div></pre></td></tr></table></figure></p>
+<p>重启MySQL服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># service mysqld restart</div></pre></td></tr></table></figure>
+<h3 id="2-3-2-创建用于同步的用户账号-复制帐号"><a href="#2-3-2-创建用于同步的用户账号-复制帐号" class="headerlink" title="2.3.2 创建用于同步的用户账号(复制帐号)"></a>2.3.2 创建用于同步的用户账号(复制帐号)</h3><p>在主服务器上为从服务器分配一个账号，就像一把钥匙，从服务器拿着这个钥匙，才能到主服务器上来共享主服务器的日志文件。</p>
+<p>在 Master 的数据库中建立一个复制账户，每个 Slave 使用该账户连接 Master 进行复制，需要 replication slave 和 replication client 权限，Master 的连接信息会存储在文本文件 master.info 文件中。(master.info文件在 Slave 的数据目录中)</p>
+<pre><code>mysql&gt;grant replication slave on *.* to &apos;replication&apos;@&apos;192.168.124.20&apos; identified by &apos;123456&apos;;#创建用户和分配权限
+mysql&gt;flush privileges;#刷新权限
+</code></pre><p>说明：创建了一个用户名为 replication 的用户，密码为 123456 ,只允许在 192.168.124.20 这个 Slave 上登录。</p>
+<h3 id="2-3-3-查询master的状态"><a href="#2-3-3-查询master的状态" class="headerlink" title="2.3.3 查询master的状态"></a>2.3.3 查询master的状态</h3><p>查看 File(日志文件名) 和 Postition(日志地址)，下面配置 Slave 的时候需要用。执行完之后记录下这两值，然后在配置完从服务器之前不要对主服务器进行任何操作，因为每次操作数据库时这两值会发生改变</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql&gt;show master status;</div></pre></td></tr></table></figure>
+<p><img src="/2018/02/09/MySQL主从复制详解与实践/masterstatus.png" alt="masterstatus"></p>
+<p>注：执行完这个步骤后不要再操作主数据库了，防止主数据库状态值变化</p>
+<h2 id="2-4-Slave-Server-配置"><a href="#2-4-Slave-Server-配置" class="headerlink" title="2.4 Slave-Server 配置"></a>2.4 Slave-Server 配置</h2><h3 id="2-4-1-修改mysql配置"><a href="#2-4-1-修改mysql配置" class="headerlink" title="2.4.1 修改mysql配置"></a>2.4.1 修改mysql配置</h3><p>关闭slave（如果你以前配置过主从的话，一定要先关闭）<br>命令：stop slave;</p>
+<p>找到从数据库的配置文件my.cnf(或者my.ini)，我的在/etc/mysql/my.cnf,在[mysqld]部分插入如下两行：<br>Master-Server和Slave-Server 的server-id必须不一样</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[mysqld]</div><div class="line">log-bin=mysql-bin #开启二进制日志</div><div class="line">server-id=2 #设置server-id</div></pre></td></tr></table></figure>
+<p>重启MySQL服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># service mysqld restart</div></pre></td></tr></table></figure>
+<h3 id="2-4-2-执行同步命令"><a href="#2-4-2-执行同步命令" class="headerlink" title="2.4.2 执行同步命令"></a>2.4.2 执行同步命令</h3><p>执行同步命令，设置主数据库ip，同步帐号密码，同步位置  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">mysql&gt; CHANGE MASTER TO</div><div class="line">    -&gt;     MASTER_HOST=&apos;192.168.124.10&apos;,</div><div class="line">    -&gt;     MASTER_USER=&apos;replication&apos;,</div><div class="line">    -&gt;     MASTER_PASSWORD=&apos;123456&apos;,</div><div class="line">    -&gt;     MASTER_LOG_FILE=&apos;mysql-bin.000060&apos;,</div><div class="line">    -&gt;     MASTER_LOG_POS=248;</div></pre></td></tr></table></figure>
+<p>选项：</p>
+<ul>
+<li>master_host：Master 服务器IP</li>
+<li>master_user：Master 服务器授权用户，也就是 Master 前面创建的那个用户</li>
+<li>master_password：Master 服务器授权用户对应的密码</li>
+<li>master_log_file：Master binlog 文件名</li>
+<li>master_log_pos：Master binlog 文件中的 Postion 值<br>更多的选项可以看:<a href="http://dev.mysql.com/doc/refman/5.7/en/change-master-to.html" target="_blank" rel="external">http://dev.mysql.com/doc/refman/5.7/en/change-master-to.html</a><br>说明：使用刚刚在 Master 创建的用户连接，log_file 和 log_pos 就是使用刚刚在 Master 上执行 show master status; 执行出来的结果</li>
+</ul>
+<h3 id="2-4-3-启动slave同步进程："><a href="#2-4-3-启动slave同步进程：" class="headerlink" title="2.4.3 启动slave同步进程："></a>2.4.3 启动slave同步进程：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql&gt;start slave;</div></pre></td></tr></table></figure>
+<h3 id="2-4-4-查看slave状态："><a href="#2-4-4-查看slave状态：" class="headerlink" title="2.4.4 查看slave状态："></a>2.4.4 查看slave状态：</h3><pre><code>mysql&gt; show slave status\G;
+*************************** 1. row ***************************
+               Slave_IO_State: Waiting for master to send event
+                  Master_Host: 192.168.124.10
+                  Master_User: replication
+                  Master_Port: 3306
+                Connect_Retry: 60
+              Master_Log_File: mysql-bin.000013
+          Read_Master_Log_Pos: 11662
+               Relay_Log_File: mysqld-relay-bin.000022
+                Relay_Log_Pos: 11765
+        Relay_Master_Log_File: mysql-bin.000013
+             Slave_IO_Running: Yes
+            Slave_SQL_Running: Yes
+              Replicate_Do_DB: 
+          Replicate_Ignore_DB: 
+        ...
+</code></pre><p>当Slave_IO_Running和Slave_SQL_Running都为YES的时候就表示主从同步设置成功了。接下来就可以进行一些验证了，比如在主master数据库的test数据库的一张表中插入一条数据，在slave的test库的相同数据表中查看是否有新增的数据即可验证主从复制功能是否有效，还可以关闭slave（mysql&gt;stop slave;）,然后再修改master，看slave是否也相应修改（停止slave后，master的修改不会同步到slave），就可以完成主从复制功能的验证了。</p>
+<p>还可以用到的其他相关参数：</p>
+<p>master开启二进制日志后默认记录所有库所有表的操作，可以通过配置来指定只记录指定的数据库甚至指定的表的操作，具体请看2.5</p>
+<h2 id="2-5-其他可能用到的相关参数"><a href="#2-5-其他可能用到的相关参数" class="headerlink" title="2.5 其他可能用到的相关参数"></a>2.5 其他可能用到的相关参数</h2><ol>
+<li><p>master端：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"># 不同步哪些数据库  </div><div class="line">binlog-ignore-db = mysql  </div><div class="line">binlog-ignore-db = test  </div><div class="line">binlog-ignore-db = information_schema  </div><div class="line">  </div><div class="line"># 只同步哪些数据库，除此之外，其他不同步  </div><div class="line">binlog-do-db = game  </div><div class="line">  </div><div class="line"># 日志保留时间  </div><div class="line">expire_logs_days = 10  </div><div class="line">  </div><div class="line"># 控制binlog的写入频率。每执行多少次事务写入一次  </div><div class="line"># 这个参数性能消耗很大，但可减小MySQL崩溃造成的损失  </div><div class="line">sync_binlog = 5  </div><div class="line">  </div><div class="line"># 日志格式，建议mixed  </div><div class="line"># statement 保存SQL语句  </div><div class="line"># row 保存影响记录数据  </div><div class="line"># mixed 前面两种的结合  </div><div class="line">binlog_format = mixed</div></pre></td></tr></table></figure>
+</li>
+<li><p>slave端：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"># 停止主从同步  </div><div class="line">mysql&gt; stop slave;  </div><div class="line">  </div><div class="line"># 连接断开时，重新连接超时时间  </div><div class="line">mysql&gt; change master to master_connect_retry=50;  </div><div class="line">  </div><div class="line"># 开启主从同步  </div><div class="line">mysql&gt; start slave;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="2-6-测试"><a href="#2-6-测试" class="headerlink" title="2.6 测试"></a>2.6 测试</h2><p>在 Master 数据库中执行sql语句操作，观察 Slave 是否同步，如果同步则说明配置成功。</p>
+<h2 id="2-7-注意事项"><a href="#2-7-注意事项" class="headerlink" title="2.7 注意事项"></a>2.7 注意事项</h2><ol>
+<li>主库和从库的数据库名必须相同；</li>
+<li>主库和从库的复制可以精确到表，但是在需要更改主库或从库的数据结构时需要立刻重启slave；</li>
+<li>不能在mysql配置文件里直接写入master的配置信息，需要用change master命令来完成；</li>
+<li>指定replicate_do_db必须在my.cnf里配置，不能用change master命令来完成；</li>
+<li>如果不及时清理，日积月累二进制日志文件可能会把磁盘空间占满，可以在配置文件里加上expire_logs_days=7，只保留最近7天的日志，建议当slave不再使用时，通过reset slave来取消relaylog；</li>
+<li>写一个监控脚本，用来监控 Slave 中的两个”yes”，如果只有一个”yes”或者零个，就表明主从有问题。</li>
+</ol>
+<h1 id="三：MySQL-主从错误处理"><a href="#三：MySQL-主从错误处理" class="headerlink" title="三：MySQL 主从错误处理"></a>三：MySQL 主从错误处理</h1><p>解决和处理主从错误这个是最重要的，比配置更更要。提高处理问题的能力，要熟悉原理，多处理积累，多学习其他网友的处理方式。出现错误都会在 Last_SQL_Error 中显示错误，一般根据错误提示进行处理，如果不太清楚，可以谷歌查询一下，不过操作完之后，同步正常后，一定要核对一下数据是否一致。<br>以下是收集的几个处理主从问题的链接：</p>
+<ul>
+<li><a href="http://hzcsky.blog.51cto.com/1560073/479476/" target="_blank" rel="external">http://hzcsky.blog.51cto.com/1560073/479476/</a></li>
+<li><a href="http://storysky.blog.51cto.com/628458/259280" target="_blank" rel="external">http://storysky.blog.51cto.com/628458/259280</a></li>
+<li><a href="http://outofmemory.cn/code-snippet/3177/mysql-zhucong-library-clock-error-%EF%BC%9A-1062-Error-Duplicate-entry-1438019-for-key-PRIMARY-on-query" target="_blank" rel="external">http://outofmemory.cn/code-snippet/3177/mysql-zhucong-library-clock-error-%EF%BC%9A-1062-Error-Duplicate-entry-1438019-for-key-PRIMARY-on-query</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/5.7/en/faqs-replication.html" target="_blank" rel="external">https://dev.mysql.com/doc/refman/5.7/en/faqs-replication.html</a></li>
+</ul>
+<p>参考：<br><a href="http://blog.csdn.net/mycwq/article/details/17136001" target="_blank" rel="external">MySQL数据库设置主从同步</a><br><a href="http://heylinux.com/archives/1004.html" target="_blank" rel="external">MySQL主从复制（Master-Slave）与读写分离（MySQL-Proxy）实践</a><br><a href="http://blog.csdn.net/u010098331/article/details/50828820" target="_blank" rel="external">MySQL 主从复制详解（详细）</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;一：mysql主从原理&quot;&gt;&lt;a href=&quot;#一：mysql主从原理&quot; class=&quot;headerlink&quot; title=&quot;一：mysql主从原理&quot;&gt;&lt;/a&gt;一：mysql主从原理&lt;/h1&gt;&lt;h2 id=&quot;1-1-基本介绍&quot;&gt;&lt;a href=&quot;#1-1-基本介绍&quot;
+    
+    </summary>
+    
+      <category term="mysql" scheme="http://wangyuanjun.cn/categories/mysql/"/>
+    
+    
+      <category term="mysql" scheme="http://wangyuanjun.cn/tags/mysql/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java虚拟机学习——垃圾收集器与内存分配策略</title>
+    <link href="http://wangyuanjun.cn/2018/02/08/Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E4%B8%8E%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5/"/>
+    <id>http://wangyuanjun.cn/2018/02/08/Java虚拟机学习——垃圾收集器与内存分配策略/</id>
+    <published>2018-02-08T07:24:49.000Z</published>
+    <updated>2018-02-11T05:52:08.129Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="一：Java中是如何管理对象的"><a href="#一：Java中是如何管理对象的" class="headerlink" title="一：Java中是如何管理对象的"></a>一：Java中是如何管理对象的</h1><p>垃圾收集（Garbage Collection，GC），要设计一个GC，需要考虑解决下面三件事情：<br>（1）哪些内存需要回收？<br>（2）什么时候回收？<br>（3）如何回收？</p>
+<h2 id="1-1-哪些内存需要回收？"><a href="#1-1-哪些内存需要回收？" class="headerlink" title="1.1 哪些内存需要回收？"></a>1.1 哪些内存需要回收？</h2><p>根据《Java虚拟机学习——Java内存区域与内存溢出异常》中介绍的java内存模型，其中，程序计数器、虚拟机栈、本地方法栈3个区域随线程而生，随线程而灭；栈中的栈帧随着方法的进入和退出有条不紊地执行着出栈和入栈操作。每一个栈帧中分配多少内存基本上是在类结构确定下来时就已知的，因此这几个区域的内存分配和回收都具备确定性，故这几个区域就不需要过多考虑回收的问题，因为方法结束或者线程结束时，内存自然就跟着回收了。<br>对于java堆和方法区则不一样，java堆是存放实例对象的地方，我们只有在程序运行期间才能知道会创建哪些对象，这部分内存的分配和回收是动态的，因此，垃圾收集器所关注的就是这一部分。<br>对于方法区（或者说HotSpot虚拟机中的永久代），垃圾回收主要是回收这两部分内容：废弃常量和无用的类。对于废弃常量，主要是判断当前系统中有没有对象引用这个常量；对于无用类则比较严格，需要满足下面三个条件：<br>（1）该类的所有实例都已经被回收，即堆中不存在该类任何势力；<br>（2）加载该类的ClassLoader已经被回收；<br>（3）对类对应的java.lang.Class对象没有在任何地方被引用，无法再任何地方通过反射访问该类的方法；<br>满足了上面三个条件也仅仅是“可以”进行回收了，还要根据HotSpot的一些配置参数综合考虑。</p>
+<h2 id="1-2-什么时候回收？"><a href="#1-2-什么时候回收？" class="headerlink" title="1.2 什么时候回收？"></a>1.2 什么时候回收？</h2><p>垃圾收集器在对堆进行回收前，第一件事就是要确定这些对象之中哪些还“存活”着，哪些已经“死去”，对于这些已经“死去”的对象我们需要进行回收。判断对象是否存活的算法：</p>
+<h3 id="1-2-1-引用计数算法"><a href="#1-2-1-引用计数算法" class="headerlink" title="1.2.1 引用计数算法"></a>1.2.1 引用计数算法</h3><p>算法过程如下：【给对象添加一个引用计数器，每当有一个地方引用它时，计数器值就加1；当引用失效时，计数器值就减1；任何时刻计数器为0的对象就是不可能再被使用的】。<br>引用计数算法实现简单，判定效率也很高，大部分情况下是一个不错的算法。但有一个比较重要的缺点：很难解决对象之间相互循环引用的问题。比如：j假设变量objA、objB为某个类的对象实例，objA中持有一个指向objB的成员，此时objB的引用计数为1；在objB中持有一个指向objA的成员，此时objA的引用计数值也为1；此时，即使把objA、objB都置为null，此时两个对象都不能被回收，因为这两个对象虽然为null了，但是它们的引用计数值都还为1。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class ReferenceCountingGC &#123;</div><div class="line"></div><div class="line">    public Object instance = null;</div><div class="line">    private static final int_1MB=1024*1024；</div><div class="line">    private byte[]bigSize=new byte[2*_1MB]；//这个成员属性的唯一意义就是占点内存，以便能在GC日志中看清楚是否被回收过</div><div class="line">    public static void testGC()&#123;</div><div class="line">        ReferenceCountingGC objA = new ReferenceCountingGC();</div><div class="line">        ReferenceCountingGC objB = new ReferenceCountingGC();</div><div class="line">        </div><div class="line">        objA.instance = objB;</div><div class="line">        objB.instance = objA;</div><div class="line">        </div><div class="line">        objA = null;</div><div class="line">        objB = null;</div><div class="line">        //假设在这行发生GC,objA和objB是否能被回收？</div><div class="line">        System.gc();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[F u l l G C（S y s t e m）[T e n u r e d：0 K-＞2 1 0 K（1 0 2 4 0 K），0.0 1 4 9 1 4 2 s e c s]4603K-＞210K（19456K），[Perm：2999K-＞2999K（21248K）]，0.0150007 secs][Times：user=0.01 sys=0.00，real=0.02 secs]</div><div class="line">Heap</div><div class="line">def new generation total 9216K,used 82K[0x00000000055e0000，0x0000000005fe0000，0x0000000005fe0000）</div><div class="line">Eden space 8192K，1%used[0x00000000055e00000x00000000055f4850，0x0000000005de0000）</div><div class="line">from space 1024K，0%used[0x0000000005de0000，0x0000000005de0000，0x0000000005ee0000）</div><div class="line">to space 1024K，0%used[0x0000000005ee0000，0x0000000005ee0000，0x0000000005fe0000）</div><div class="line">tenured generation total 10240K,used 210K[0x0000000005fe0000，0x00000000069e0000，0x00000000069e0000）</div><div class="line">the space 10240K，2%used[0x0000000005fe0000，0x0000000006014a18，0x0000000006014c00，0x00000000069e0000）</div><div class="line">compacting perm gen total 21248K,used 3016K[0x00000000069e0000，0x0000000007ea0000，0x000000000bde0000）</div><div class="line">the space 21248K，14%used[0x00000000069e0000，0x0000000006cd2398，0x0000000006cd2400，0x0000000007ea0000）</div><div class="line">No shared spaces configured.</div></pre></td></tr></table></figure>
+<p>从运行结果中可以清楚看到，GC日志中包含“4603K-＞210K”，意味着虚拟机并没有因为这两个对象互相引用就不回收它们，这也从侧面说明虚拟机并不是通过引用计数算法来判断对象是否存活的</p>
+<h3 id="1-2-2-可达性分析算法"><a href="#1-2-2-可达性分析算法" class="headerlink" title="1.2.2 可达性分析算法"></a>1.2.2 可达性分析算法</h3><p>目前主流的虚拟机，如java默认虚拟机HotSpot就是用的这种方式。算法基本思路为：【通过一系列的称为“GC Roots”的对象作为起始点，从这些节点开始向下搜索，搜索所走过的路径称为引用链，当一个对象到GC Roots没有任何引用链相连时（或者说从GC Roots到这个对象不可达），则证明此对象是不可用的】。如下图所示：<br><img src="/2018/02/08/Java虚拟机学习——垃圾收集器与内存分配策略/可达性分析算法.png" alt="可达性分析算法"><br>对象Object5、Object6、Object7相互虽然有关联，但是它们到GC Roots是不可达的，所以它们将会被判定为是可回收的对象。在Java语言中，可作为GC Roots的对象包括下面几种：</p>
+<ul>
+<li>虚拟机栈（栈帧中的本地变量表）中引用的对象；</li>
+<li>方法区中类静态static属性引用的对象；</li>
+<li>方法区中常量final引用的对象；</li>
+<li>本地方法栈中JNI（即一般说的Native方法）引用的对象；</li>
+</ul>
+<h2 id="1-3-再谈引用"><a href="#1-3-再谈引用" class="headerlink" title="1.3 再谈引用"></a>1.3 再谈引用</h2><p>无论是引用计数法还是可达性分析算法，都用到了引用的概念，从JDK1.2开始，Java对引用的概念进行了扩充，讲引用分为强引用（Strong Reference）、软引用（Softe Reference）、弱引用（Weak Reference）、虚引用（Phantom Reference）四种，增强引用的适用性。</p>
+<ul>
+<li>强引用就是指在程序代码之中普遍存在的，类似“Object obj = new Object()”这类的引用，只有强引用还存在，垃圾收集器永远不会回收掉被引用的对象。</li>
+<li>软引用也是用来描述一些有用但并非必要的对象。对于软引用关联着的对象，在系统将要发生内存溢出异常之前，将会把这些对象列进回收范围之中进行第二次回收。如果这次回收还没有足够的内存，才会抛出内存溢出异常。</li>
+<li>弱引用也是用来描述非必要对象的，但是它的强度比软引用更弱一些，被弱引用关联的对象只能生存到下一次垃圾收集发生之前。但垃圾收集工作时，无论当前内存是否足够，都会回收掉只内弱引用关联的对象。</li>
+<li>虚引用也称为幽灵引用或者幻影引用，它是最弱的一种引用关系。一个对象是否有虚引用的存在，完全不会对其生存时间构成影响，也无法通过虚引用来取得一个对象实例。为一个对象设置虚引用关联的唯一目的就是能在这个对象被收集器回收时收到一个系统通知。因为finalize函数（后续会讲）被调用的不确定性，所以无法预知对象是否被回收，所在这里虚引用就起作用了。</li>
+</ul>
+<h2 id="1-4-生存还是死亡"><a href="#1-4-生存还是死亡" class="headerlink" title="1.4 生存还是死亡"></a>1.4 生存还是死亡</h2><p>需要注意的是，即使在可达性分析算法中不可达的对象，也并非是“非死不可”的，要真正宣告一个对象死亡，至少要经历两次标记过程：如果对象在进行可达性分析后发现没有与GC Roots相连接的引用链，那它将会被第一次标记并且进行一次筛选，筛选的条件是此对象是否有必要执行finalize()方法。当对象没有覆盖finalize()方法，或者finalize()方法已经被虚拟机调用过（也就是说对象的finalize()方法只能被调用一次），虚拟机将这两种情况都视为“没有必要执行”。<br>如果这个对象被判定为有必要执行finalize()方法，那么这个对象将会放置在一个叫做F-Queue的队列之中，并在稍后由一个由虚拟机自动建立的、低优先级的Finalizer线程去执行它。这里所谓的“执行”是指虚拟机会触发这个方法，但并不承诺会等待它运行结束，这样做的原因是，如果一个对象在finalize()方法中执行缓慢，或者发生了死循环（更极端的情况），将很可能会导致F-Queue队列中其他对象永久处于等待，甚至导致整个内存回收系统崩溃。finalize()方法是对象逃脱死亡命运的最后一次机会，稍后GC将对F-Queue中的对象进行第二次小规模的标记，如果对象要在finalize()中成功拯救自己——只要重新与引用链上的任何一个对象建立关联即可，譬如把自己（this关键字）赋值给某个类变量或者对象的成员变量，那在第二次标记时它将被移除出“即将回收”的集合；如果对象这时候还没有逃脱，那基本上它就真的被回收了。从以下代码中我们可以看到一个对象的finalize()被<br>执行，但是它仍然可以存活。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">*此代码演示了两点：</div><div class="line">*1.对象可以在被GC时自我拯救。</div><div class="line">*2.这种自救的机会只有一次，因为一个对象的finalize（）方法最多只会被系统自动调用一次</div><div class="line">*/</div><div class="line">public class FinalizeEscapeGC&#123;</div><div class="line"></div><div class="line">	public static FinalizeEscapeGC SAVE_HOOK=null；</div><div class="line"></div><div class="line">	public void isAlive()&#123;</div><div class="line">		System.out.println(&quot;yes,i am still alive：)&quot;)；</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	protected void finalize()throws Throwable&#123;</div><div class="line">		super.finalize()；</div><div class="line">		System.out.println(&quot;finalize mehtod executed！&quot;)；</div><div class="line">		FinalizeEscapeGC.SAVE_HOOK=this；</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public static void main(String[]args)throws Throwable&#123;</div><div class="line"></div><div class="line">		SAVE_HOOK=new FinalizeEscapeGC()；</div><div class="line"></div><div class="line">		//对象第一次成功拯救自己</div><div class="line">		SAVE_HOOK=null；</div><div class="line"></div><div class="line">		System.gc()；</div><div class="line"></div><div class="line">		//因为finalize方法优先级很低，所以暂停0.5秒以等待它</div><div class="line">		Thread.sleep(500）；</div><div class="line"></div><div class="line">		if(SAVE_HOOK！=null）&#123;</div><div class="line">			SAVE_HOOK.isAlive()；</div><div class="line">		&#125;else&#123;</div><div class="line">			System.out.println(&quot;no,i am dead：(&quot;)；</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		//下面这段代码与上面的完全相同，但是这次自救却失败了</div><div class="line">		SAVE_HOOK=null；</div><div class="line"></div><div class="line">		System.gc()；</div><div class="line"></div><div class="line">		//因为finalize方法优先级很低，所以暂停0.5秒以等待它</div><div class="line">		Thread.sleep(500）；</div><div class="line"></div><div class="line">		if（SAVE_HOOK！=null）&#123;</div><div class="line">			SAVE_HOOK.isAlive()；</div><div class="line">		&#125;else&#123;</div><div class="line">			System.out.println(&quot;no,i am dead：(&quot;)；</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">finalize mehtod executed！</div><div class="line">yes,i am still alive：)</div><div class="line">no,i am dead：(</div></pre></td></tr></table></figure>
+<p>因此对于不可达对象判定真正死亡的过程小结如下：<br>（1）GC进行第一次标记并进行一次筛选（筛选那些覆盖了finalize方法并且finalize方法是第一次调用的对象）；<br>（2）另一个低优先级的线程去调用那些被筛选出来的对象的finalize方法；<br>（3）GC进行第二次标记，如果在前一步中那些筛选出来的对象没有在finalize拯救自己，此时，那些未被筛选到的和这些这些筛选到的但是没有拯救自己的对象都将会回收。</p>
+<h2 id="1-5-方法区收回"><a href="#1-5-方法区收回" class="headerlink" title="1.5 方法区收回"></a>1.5 方法区收回</h2><p>很多人认为方法区（或者HotSpot虚拟机中的永久代）是没有垃圾收集的，Java虚拟机规范中确实说过可以不要求虚拟机在方法区实现垃圾收集，而且在方法区中进行垃圾收集的“性价比”一般比较低：在堆中，尤其是在新生代中，常规应用进行一次垃圾收集一般可以回收70%～95%的空间，而永久代的垃圾收集效率远低于此。</p>
+<p>永久代的垃圾收集主要回收两部分内容：废弃常量和无用的类。回收废弃常量与回收Java堆中的对象非常类似。以常量池中字面量的回收为例，假如一个字符串“abc”已经进入了常量池中，但是当前系统没有任何一个String对象是叫做“abc”的，换句话说，就是没有任何String对象引用常量池中的“abc”常量，也没有其他地方引用了这个字面量，如果这时发生内存回收，而且必要的话，这个“abc”常量就会被系统清理出常量池。常量池中的其他类（接口）、方法、字段的符号引用也与此类似。</p>
+<p>判定一个常量是否是“废弃常量”比较简单，而要判定一个类是否是“无用的类”的条件则相对苛刻许多。类需要同时满足下面3个条件才能算是“无用的类”：</p>
+<ul>
+<li>该类所有的实例都已经被回收，也就是Java堆中不存在该类的任何实例。</li>
+<li>加载该类的ClassLoader已经被回收。</li>
+<li>该类对应的java.lang.Class对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法。</li>
+</ul>
+<p>虚拟机可以对满足上述3个条件的无用类进行回收，这里说的仅仅是“可以”，而并不是和对象一样，不使用了就必然会回收。是否对类进行回收，HotSpot虚拟机提供了-Xnoclassgc参数进行控制，还可以使用-verbose：class以及-XX：+TraceClassLoading、-XX：+TraceClassUnLoading查看类加载和卸载信息，其中-verbose：class和-XX：+TraceClassLoading可以在Product版的虚拟机中使用，-XX：+TraceClassUnLoading参数需要FastDebug版的虚拟机支持。可能永久代的效果不理想，在JDK8中，已经没有永久代的概念了，原先这块区域被放置到本地内存了。</p>
+<h1 id="二：垃圾收集算法"><a href="#二：垃圾收集算法" class="headerlink" title="二：垃圾收集算法"></a>二：垃圾收集算法</h1><h2 id="2-1-标记-清除算法"><a href="#2-1-标记-清除算法" class="headerlink" title="2.1 标记-清除算法"></a>2.1 标记-清除算法</h2><p>最基础的收集算法是“标记-清除”（Mark-Sweep）算法，如同它的名字一样，算法分为“标记”和“清除”两个阶段：首先标记出所有需要回收的对象，在标记完成后统一回收所有被标记的对象，标记过程就是上面可达性分析算法中所讲的二次标记过程。之所以说它是最基础的收集算法，是因为后续的收集算法都是基于这种思路并对其不足进行改进而得到的。<br>标记-清除算法的执行过程如下图所示：<br><img src="/2018/02/08/Java虚拟机学习——垃圾收集器与内存分配策略/标记清除算法.png" alt="标记清除算法"></p>
+<p>缺点：<br>（1）效率问题：标记和清除的两个过程效率都不高；<br>（2）空间问题：标记清除后会产生大量不连续的内存碎片，空间碎片太多可能会导致以后需要分配较大对象时，无法找到足够的连续内存而不得不提前出发另一次垃圾收集动作；</p>
+<h2 id="2-2-复制算法"><a href="#2-2-复制算法" class="headerlink" title="2.2 复制算法"></a>2.2 复制算法</h2><p>为了解决效率问题，一种称为“复制”（Copying）的收集算法出现了，它将可用内存按容量划分为大小相等的两块，每次只使用其中的一块。当这一块的内存用完了，就将还存活着的对象复制到另外一块上面，然后再把已使用过的内存空间一次清理掉。这样使得每次都是对其中的一块进行内存回收，内存分配时也就不用考虑内存碎片等复杂情况，只要移动堆顶指针，按顺序分配内存即可，实现简单，运行高效。只是这种算法的代价是将内存缩小为原来的一半，未免太高了一点。复制算法的执行过程如图<br><img src="/2018/02/08/Java虚拟机学习——垃圾收集器与内存分配策略/复制算法.png" alt="复制算法"><br>复制算法的优点：<br>（1）每次都是对整个半区进行内存回收，实现简单、运行也高效；<br>（2）在那块使用内存上进行内存分配时，不用考虑内存碎片的问题，只要移动堆顶指针，按顺序分配内存即可；<br>缺点：使用内存比原来缩小了一半。</p>
+<p>按照新生代的特点，新生代中的对象98%是“朝生夕死”的，因此，可以改进上面的复制算法，目前商业虚拟机正是用这种改进的收集算法来回收新生代。<br>改进的收集算法：<br>根据新生代的特点，我们并不需要按照1:1的比例来划分内存空间，而是将内存划分为一块较大的Eden空间和两块较小的Survivor空间，每次使用Eden和其中一块Survivor。当回收时，将Eden和Survivor中还存活的对象一次性地复制到另外一块Survivor空间。当回收时，将Eden和Survivor中还存活着的对象一次性地复制到另外一块Survivor空间上，最后清理掉Eden和刚才用过的Survivor空间最后清理掉Eden和刚才用过的Survivor空间。HotSpot虚拟机默认Eden和Survivor的大小比例是<br>8:1，也就是每次新生代中可用内存空间为整个新生代容量的90%（80%+10%），只有10%的内存会被“浪费”。当然，98%的对象可回收只是一般场景下的数据，我们没有办法保证每次回收都只有不多于10%的对象存活，当Survivor空间不够用时，需要依赖其他内存（这里指老年代）进行分配担保（Handle Promotion）。</p>
+<p>这种改进的收集算法也有一个问题，就是在回收时，那块空的Survivor空间能否放得下Eden和使用的Survivor空间中还存活的对象，如果Survivor空间不够存放上一次新生代收集下来的存活对象，此时就需要向老年代“借”内存，那些剩余未放下的对象就通过分配担保机制进入老年代。</p>
+<h2 id="2-4-标记-整理算法"><a href="#2-4-标记-整理算法" class="headerlink" title="2.4 标记-整理算法"></a>2.4 标记-整理算法</h2><p>复制收集算法在对象存活率较高时就要执行较多的复制操作，效率将会变低。更关键的是，如果不想浪费50%的空间，就需要有额外的空间进行分配担保，以应对被使用的内存中所有对象都100%存活的极端情况，所以在老年代一般不能直接选用这种算法。<br>根据老年代的特点，有人提出了另外一种“标记-整理”（Mark-Compact）算法，标记过程仍然与“标记-清除”算法一样，但后续步骤不是直接对可回收对象进行清理，而是让所有存活的对象都向一端移动，然后直接清理掉端边界以外的内存，“标记-整理”算法的示意图如图<br><img src="/2018/02/08/Java虚拟机学习——垃圾收集器与内存分配策略/标记-整理算法.png" alt="标记-整理算法"></p>
+<h2 id="2-5-分代收集算法"><a href="#2-5-分代收集算法" class="headerlink" title="2.5 分代收集算法"></a>2.5 分代收集算法</h2><p>当前商业虚拟机的垃圾收集都采用“分代收集”（Generational Collection）算法，这种算法并没有什么新的思想，只是根据对象存活周期的不同将内存划分为几块。一般是把Java堆分为新生代和老年代，这样就可以根据各个年代的特点采用最适当的收集算法。在新生代中，每次垃圾收集时都发现有大批对象死去，只有少量存活，那就选用复制算法，只需要付出少量存活对象的复制成本就可以完成收集。而老年代中因为对象存活率高、没有额外空间对它进行分配担保，就必须使用“标记—清理”或者“标记—整理”算法来进行回收。</p>
+<h1 id="三：垃圾收集器"><a href="#三：垃圾收集器" class="headerlink" title="三：垃圾收集器"></a>三：垃圾收集器</h1><p>如果说上面介绍的收集算法是内存回收的方法论，那么垃圾收集器就是内存回收的具体实现，按照上面的介绍，目前垃圾收集器基本都采用分代收集，因此一个垃圾收集器中一般都存在多种垃圾回收算法。不同的虚拟机提供的垃圾收集器也有很大差异，如下是HotSpot虚拟机基于JDK1.7版本所包含的所有垃圾收集器：<br><img src="/2018/02/08/Java虚拟机学习——垃圾收集器与内存分配策略/垃圾收集器.png" alt="垃圾收集器"><br>HotSpot中共有7中不同的垃圾收集器，如果两个收集器之间存在连线，说明它们之间可以搭配使用，其中，Serial、ParNew、Parallel Scavenge属于新生代收集器，CMS、Serial Old、Parallel Old属于老年代收集器，G1是最新的一种收集器，在新生代和老年代中都可使用。</p>
+<h2 id="3-1-Serial（串行）收集器"><a href="#3-1-Serial（串行）收集器" class="headerlink" title="3.1 Serial（串行）收集器"></a>3.1 Serial（串行）收集器</h2><p>最基本、发展历史最悠久的一种收集器。看名字就知道，这个收集器是一个单线程的收集器，只使用一个CPU或一条收集线程去完成垃圾收集工作，最重要的是，在它进行垃圾收集的时候，必须暂停其他所有的工作线程，知道它收集结束。虽然有这个缺点，但是依然是虚拟机运行在Client模式下的默认新生代收集器。优点是：简单而高效，没有线程交互的开销。运行过程如图：<br><img src="/2018/02/08/Java虚拟机学习——垃圾收集器与内存分配策略/Serial（串行）收集器.png" alt="Serial（串行）收集器"><br>新生代采用的是“复制算法”，老年代采用的是“标记-整理”算法。</p>
+<h2 id="3-2-ParNew收集器"><a href="#3-2-ParNew收集器" class="headerlink" title="3.2 ParNew收集器"></a>3.2 ParNew收集器</h2><p>ParNew收集器其实就是Serial收集器的多线程版本，除了使用多条线程进行垃圾收集之外，其他行为和Serial收集器一样。ParNew是许多运行在Server模式下的虚拟机中首选的新生代收集器，其中有一个与性能无关的重要原因，除了Serial收集器外，目前只有ParNew能与老年代的CMS收集器配合使用。ParNew是一种并行的收集器。在垃圾回收中，并行是指：多条垃圾收集线程并行工作，用户线程处于等待状态；并发是指：用户线程和垃圾收集线程同时执行（不一定并行，可能交替执行）。<br><img src="/2018/02/08/Java虚拟机学习——垃圾收集器与内存分配策略/ParNew收集器.png" alt="ParNew收集器"></p>
+<h2 id="3-3-Parallel-Scavenge收集器"><a href="#3-3-Parallel-Scavenge收集器" class="headerlink" title="3.3 Parallel Scavenge收集器"></a>3.3 Parallel Scavenge收集器</h2><p>Parallel Scavenge收集器使用的是复制算法，也是一个并行的多线程收集器。和ParNew相似，但是Parallel Scavenge的关注点不同，CMS收集器的关注点是尽可能地缩短垃圾收集时用户线程的停顿时间，而Parallel Scavenge收集器的目标则是达到一个可控制的吞吐量，吞吐量 = 运行用户代码时间 / (运行用户代码时间 + 垃圾收集时间)。</p>
+<p><strong>上面三种都是新生代收集器，下面介绍老年代收集器。</strong></p>
+<h2 id="3-4-Serial-Old收集器"><a href="#3-4-Serial-Old收集器" class="headerlink" title="3.4 Serial Old收集器"></a>3.4 Serial Old收集器</h2><p>Serial Old收集器是新生代Serial收集器的老年代版本，同样是一个单线程收集器，使用“标记-整理”算法，Serial Old的主要意义也是在于给Client模式下的虚拟机使用。</p>
+<p><img src="/2018/02/08/Java虚拟机学习——垃圾收集器与内存分配策略/Serial Old收集器.png" alt="Serial Old收集器"></p>
+<h2 id="3-5-Parallel-Old收集器"><a href="#3-5-Parallel-Old收集器" class="headerlink" title="3.5 Parallel Old收集器"></a>3.5 Parallel Old收集器</h2><p>Parallel Old是新生代收集器Prarllel Scavenge的老年代版本，使用多线程和“标记-整理”算法。运行流程如下：<br><img src="/2018/02/08/Java虚拟机学习——垃圾收集器与内存分配策略/Parallel Old收集器.png" alt="Parallel Old收集器"></p>
+<h2 id="3-6-CMS收集器"><a href="#3-6-CMS收集器" class="headerlink" title="3.6 CMS收集器"></a>3.6 CMS收集器</h2><p>CMS（Concurrent Mark Sweep）收集器是一种以获取最短回收停顿时间为目标的收集器。对于互联网站或者B/S系统的这种注重响应速度的服务端来说，CMS是很好的选择。从名字Mark Sweep可以看出，CMS是基于“标记-清除”算法实现的，分为四个步骤：<br>（1）初始标记（CMS initial mark）：仅仅标记一GC Roots能直接关联到的对象，这个步骤需要“stop the world”；<br>（2）并发标记（CMS concurrent mark）：就是GC Roots进行可达性分析阶段，可并发执行；<br>（3）重新标记（CMS remark）：修正并发标记期间发生变动的那一部分对象，这个步骤需要“stop the world”；<br>（4）并发清除（CMS concurrent sweep）：执行清除阶段。<br>执行过程如下：<br><img src="/2018/02/08/Java虚拟机学习——垃圾收集器与内存分配策略/CMS收集器.png" alt="CMS收集器"><br>可以看到，初始标记和重新标记阶段都是并行的，需要暂停用户线程（过程比较短）；在并发标记和并发清除阶段是并发的，可以和用户线程一起工作。</p>
+<p>CMS的优点：并发收集、低停顿。<br>CMS的缺点：<br>（1）对CPU资源非常敏感，面向并发设计程序的通病，虽然不至于导致用户线程停顿，但是会降低吞吐率；<br>（2）无法清理“浮动垃圾”，由于CMS并发清理阶段用户线程还在运行着，伴随程序运行自然就还会有新的垃圾不断出现，这一部分垃圾出现在标记过程之后，CMS无法在当次收集中处理掉它们，只好留待下一次的GC；<br>（3）会产生大量空间碎片，因为CMS是基于“标记-清除”算法，这种算法的最大缺点就是会产生大量空间碎片，给分配大对象带来麻烦，不得不提前触发Full GC。为了解决这个问题，CMS提供了一个“-XX:+UseCMSCompaceAtFullCollection”的开关参数（默认开启），用于在CMS收集器顶不住要进行Full GC时开启内存碎片的合并整理过程。</p>
+<h2 id="3-7-G1收集器"><a href="#3-7-G1收集器" class="headerlink" title="3.7 G1收集器"></a>3.7 G1收集器</h2><p>G1收集器是最新的一款收集器，JDK1.7才发布，是一种面向服务端应用的垃圾收集器，有如下特点：<br>（1）并行与并发：G1能充分利用多CPU、多核环境下的硬件优势，使用多个CPU（CPU或者CPU核心）来缩短Stop-The-World停顿的时间；<br>（2）分代收集：分代概念在G1中依然得以保留。虽然G1可以不需其他收集器配合就能独立管理整个GC堆，但它能够采用不同的方式去处理新创建的对象和已经存活了一段时间、熬过多次GC的旧对象以获取更好的收集效果；<br>（3）空间整合：与CMS的“标记-清理”算法不同，G1从整体看来是基于“标记-整理”算法实现的收集器，从局部（两个Region之间）上看是基于“复制”算法实现，无论如何，这两种算法都意味着G1运作期间不会产生内存空间碎片，收集后能提供规整的可用内存；<br>（4）可预测的停顿时间；</p>
+<p>使用G1收集器时，Java堆的内存布局与就与其他收集器有很大差别，它将整个Java堆划分为多个大小相等的独立区域（Region），虽然还保留有新生代和老年代的概念，但新生代和老年代不再是物理隔离的了，它们都是一部分Region（不需要连续）的集合。</p>
+<p>G1的收集过程分为以下几个步骤：<br>（1）初始标记（Initial Marking）<br>（2）并发标记（Concurrent Marking）<br>（3）最终标记（Final Marking）<br>（4）筛选回收（Live Data Counting and Evacuation）<br>前几个步骤和CMS有很多相似之处。运行示意图如下：</p>
+<p><img src="/2018/02/08/Java虚拟机学习——垃圾收集器与内存分配策略/G1收集器.png" alt="G1收集器"></p>
+<h1 id="四：总结"><a href="#四：总结" class="headerlink" title="四：总结"></a>四：总结</h1><p><img src="/2018/02/08/Java虚拟机学习——垃圾收集器与内存分配策略/堆细化.png" alt="堆细化"><br>JVM内存模型中分两大块，一块是New Generation, 另一块是Old Generation. 在New Generation中，有一个叫Eden的空间，主要是用来存放新生的对象，还有两个Survivor Spaces（from,to）, 它们用来存放每次垃圾回收后存活下来的对象。在Old Generation中，主要存放应用程序中生命周期长的内存对象，还有个Permanent Generation，主要用来放JVM自己的反射对象，比如类对象和方法对象等。<br>1) 在New Generation块中，垃圾回收一般用复制算法，速度快。每次GC的时候，存活下来的对象首先由Eden拷贝到某个Survivor Space, 当Survivor Space空间满了后, 剩下的live对象就被直接拷贝到Old Generation中去。因此，每次GC后，Eden内存块会被清空</p>
+<p>2) 在Old Generation块中，垃圾回收一般用标记整理的算法，速度慢些，但减少内存要求.</p>
+<p>垃圾回收分多级，0级为全部(Full)的垃圾回收，会回收Old段中的垃圾；1级或以上为部分垃圾回收，只会回收New中的垃圾，内存溢出通常发生于Old段或Perm段垃圾回收后，仍然无内存空间容纳新的Java对象的情况。</p>
+<p>Out Of Memory 只发生在jvm对old和perm generation 回收后还不能获足够内存的情况.<br>当生成一个新对象时，内存申请过程如下：<br>A. JVM会试图为相关Java对象在Eden中初始化一块内存区域<br>B. 当Eden空间足够时，内存申请结束。否则到下一步<br>C. JVM试图释放在Eden中所有不活跃的对象（这属于1或更高级的垃圾回收）, 释放后若Eden空间仍然不足以放入新对象，则试图将部分Eden中活跃对象放入Survivor区<br>D. Survivor区被用来作为Eden及Old的中间交换区域，当Old区空间足够时，Survivor区的对象会被移到Old区，否则会被保留在Survivor区<br>E. 当Old区空间不够时，JVM会在Old区进行完全的垃圾收集（0级）<br>F. 完全垃圾收集后，若Survivor及Old区仍然无法存放从Eden复制过来的部分对象，导致JVM无法在Eden区为新对象创建内存区域，则出现”out of memory错误”</p>
+<p>造成full gc的原因<br>new了很多对象,没有即时在主动释放掉-&gt;Eden内存不够用-&gt;不断把对象往old迁移-&gt;old满了-&gt;full gc</p>
+<p>总结：上面的内容就介绍了Java虚拟机如何管理对象的，我们也看到了上面主要就是收集算法和堆空间的从新划分，这样做的目的都是在于垃圾回收的高效执行，但是总归看来，如果对象交给系统来管理，在系统运行的过程效率肯定会有影响的，但是这有一点比较好，就是不需要手动管理，给程序猿带来方便。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;一：Java中是如何管理对象的&quot;&gt;&lt;a href=&quot;#一：Java中是如何管理对象的&quot; class=&quot;headerlink&quot; title=&quot;一：Java中是如何管理对象的&quot;&gt;&lt;/a&gt;一：Java中是如何管理对象的&lt;/h1&gt;&lt;p&gt;垃圾收集（Garbage Colle
+    
+    </summary>
+    
+      <category term="JVM" scheme="http://wangyuanjun.cn/categories/JVM/"/>
+    
+    
+      <category term="JVM" scheme="http://wangyuanjun.cn/tags/JVM/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Java虚拟机学习——Java内存区域与内存溢出异常</title>
     <link href="http://wangyuanjun.cn/2018/02/01/Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Java%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E4%B8%8E%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA%E5%BC%82%E5%B8%B8/"/>
     <id>http://wangyuanjun.cn/2018/02/01/Java虚拟机学习——Java内存区域与内存溢出异常/</id>
     <published>2018-02-01T02:50:54.000Z</published>
-    <updated>2018-02-08T02:14:06.329Z</updated>
+    <updated>2018-02-11T05:52:30.042Z</updated>
     
     <content type="html"><![CDATA[<h1 id="一：运行时数据区域"><a href="#一：运行时数据区域" class="headerlink" title="一：运行时数据区域"></a>一：运行时数据区域</h1><p><img src="/2018/02/01/Java虚拟机学习——Java内存区域与内存溢出异常/MemoryArea.jpg" alt="MemoryArea"></p>
 <h2 id="1-1-程序计数器（Program-Counter-Register）"><a href="#1-1-程序计数器（Program-Counter-Register）" class="headerlink" title="1.1 程序计数器（Program Counter Register）"></a>1.1 程序计数器（Program Counter Register）</h2><p>程序计数器（Program Counter Register），也有称作为PC寄存器。在汇编语言中，程序计数器是指CPU中的寄存器，它保存的是程序当前执行的指令的地址（也可以说保存下一条指令的所在存储单元的地址），当CPU需要执行指令时，需要从程序计数器中得到当前需要执行的指令所在存储单元的地址，然后根据得到的地址获取到指令，在得到指令之后，程序计数器便自动加1或者根据转移指针得到下一条指令的地址，如此循环，直至执行完所有的指令。<br>虽然JVM中的程序计数器并不像汇编语言中的程序计数器一样是物理概念上的CPU寄存器，但是JVM中的程序计数器的功能跟汇编语言中的程序计数器的功能在逻辑上是等同的，也就是说是用来指示 执行哪条指令的。程序计数器（ Program Counter Register）是一块较小的内存空间，<font color="red">它的作用可以看做是当前线程所执行的字节码的行号指示器。</font>字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令，分支、循环、跳转、异常处理、线程恢复等基础功能都需要依赖这个计数器来完成。</p>
@@ -213,8 +526,6 @@ Exception in thread &quot;main&quot; java.lang.OutOfMemoryError: unable to creat
     
       <category term="JVM" scheme="http://wangyuanjun.cn/tags/JVM/"/>
     
-      <category term="java虚拟机" scheme="http://wangyuanjun.cn/tags/java%E8%99%9A%E6%8B%9F%E6%9C%BA/"/>
-    
   </entry>
   
   <entry>
@@ -266,7 +577,7 @@ Exception in thread &quot;main&quot; java.lang.OutOfMemoryError: unable to creat
     <link href="http://wangyuanjun.cn/2018/01/31/Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/"/>
     <id>http://wangyuanjun.cn/2018/01/31/Java虚拟机学习——类加载机制/</id>
     <published>2018-01-31T09:28:16.000Z</published>
-    <updated>2018-02-08T06:13:17.162Z</updated>
+    <updated>2018-02-11T05:52:39.755Z</updated>
     
     <content type="html"><![CDATA[<h1 id="一：类加载机制概述"><a href="#一：类加载机制概述" class="headerlink" title="一：类加载机制概述"></a>一：类加载机制概述</h1><p><strong>虚拟机把描述类的数据从Class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型，这就是虚拟机的类加载机制。</strong><br>在java中，<font color="red">类型的加载、连接和初始化过程都是在程序运行期间完成的</font>，这种策略虽然会带来一些性能开销，但是却为java应用程序提供了高度的灵活性，java动态扩展的语言特性就是依赖运行期动态加载和动态链接这个特点形成的，所谓java动态扩展，比如，如果编写了一个面向接口的应用程序，可以等到运行时再指定其实际的实现类。</p>
 <h1 id="二：类加载时机"><a href="#二：类加载时机" class="headerlink" title="二：类加载时机"></a>二：类加载时机</h1><p>类从被加载到虚拟机内存中开始，到卸载出内存为止，整个生命周期包括：加载、验证、准备、解析、初始化、使用、卸载，共七个阶段。其中，验证、准备、解析3个阶段称为连接（Linking），7个过程发生顺序如下：<br><img src="/2018/01/31/Java虚拟机学习——类加载机制/类加载过程.png" alt="类加载过程"><br>上面这七个过程，除了解析这个过程外，其余过程必须按部就班地执行，即顺序是确定的，而解析过程不一定，在某些情况下可以在初始化阶段之后再执行，这是为了支持java语言的运行时绑定（也称为动态绑定或晚期绑定）。</p>
@@ -363,8 +674,6 @@ Exception in thread &quot;main&quot; java.lang.OutOfMemoryError: unable to creat
     
     
       <category term="JVM" scheme="http://wangyuanjun.cn/tags/JVM/"/>
-    
-      <category term="java虚拟机" scheme="http://wangyuanjun.cn/tags/java%E8%99%9A%E6%8B%9F%E6%9C%BA/"/>
     
   </entry>
   
@@ -2190,176 +2499,6 @@ public native String intern();
     
     
       <category term="nginx" scheme="http://wangyuanjun.cn/tags/nginx/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Nginx学习——反向代理与负载均衡(一)</title>
-    <link href="http://wangyuanjun.cn/2018/01/16/Nginx%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E4%B8%8E%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1-%E4%B8%80/"/>
-    <id>http://wangyuanjun.cn/2018/01/16/Nginx学习——反向代理与负载均衡-一/</id>
-    <published>2018-01-16T08:04:25.000Z</published>
-    <updated>2018-01-21T11:32:48.876Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="一：环境配置"><a href="#一：环境配置" class="headerlink" title="一：环境配置"></a>一：环境配置</h1><p>我本地是Windows系统，使用 Oracle VM VirtualBox 虚拟机安装一个虚拟的Linux系统，安装jdk1.8，nginx,两个tomcat </p>
-<p><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/架构图.png" alt="架构图"><br>一般需要用到三台服务器，一台 nginx 服务器，两台正式部署项目的服务器。为了方便操作，我只在一台服务器上面安装了一个nginx和两个tomcat(端口不一样)</p>
-<h1 id="二：配置tomcat集群"><a href="#二：配置tomcat集群" class="headerlink" title="二：配置tomcat集群"></a>二：配置tomcat集群</h1><p>首先在服务器上安装两个 tomcat：这个也是简单，不多说</p>
-<p>安装 tomcat：上传解压即可使用，bin 目录下 startup.sh 启动，shutdown.sh 关闭</p>
-<p>配置防火墙端口：vim /etc/sysconfig/iptables 编辑，开放 8080 端口，8081 端口，80 端口等一些常用端口，当然后边有用到一些端口都是需要配置开放的，不建议关闭防火墙</p>
-<p><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/tomcat防火墙.png" alt="tomcat防火墙"></p>
-<p>编辑好后 service iptables restart 重新加载防火墙配置<br><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/防火墙规则.png" alt="防火墙规则"></p>
-<blockquote>
-<p>如果是自己测试嫌配置麻烦，关闭防火墙： service iptables stop 重启后防火墙打开，即在此次开机状态下有效，完全关闭再使用 chkconfig iptables off , 即会在重启后也关闭防火墙，注意有时候服务都起了但访问出错，可能就是防火墙问题哦</p>
-</blockquote>
-<p>启动 tomcat 访问：192.168.43.3:8080，192.168.43.3:8081，打开 tomcat 首页即成功。</p>
-<p>然后编写测试项目，部署到两台 tomcat 上，eclipse 新建 web 项目，项目名为 testproject，在 webapp 下新建一个 jsp 页面为 index.jsp, 添加如下内容<br><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/jsp.png" alt="jsp"></p>
-<p>maven导出为 war 包，spring-demo.war，将该 war 包上传到服务器的两台 tomcat 的 webapps 中<br><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/tomcat1.png" alt="tomcat1"><br><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/tomcat2.png" alt="tomcat2"></p>
-<p>此时，重新启动 tomcat，访问 192.168.43.3:8080，192.168.43.3:8081, 显示 index.jsp 内容：两台服务器访问显示如下<br><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/t1.png" alt="t1"><br><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/t2.png" alt="t2"></p>
-<p>至此，两台 tomcat 服务器搭建完成。</p>
-<h1 id="三：Nginx的安装配置与测试"><a href="#三：Nginx的安装配置与测试" class="headerlink" title="三：Nginx的安装配置与测试"></a>三：Nginx的安装配置与测试</h1><p>先使用 yum 命令安装 gcc，安装 pcre，zlib，openssl：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">yum install -y gcc   </div><div class="line">yum install -y pcre pcre-devel   </div><div class="line">yum install -y zlib zlib-devel   </div><div class="line">yum install -y openssl openssl-develplain</div></pre></td></tr></table></figure></p>
-<p>在 /root/wyj/tools 目录下新建 nginx 目录，将 nginx-1.17.7.tar.gz 放到此处，解压<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar -zxvf nginx-1.17.7.tar.gz</div></pre></td></tr></table></figure></p>
-<p>进入解压后目录<br><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/nginx.png" alt="nginx"><br>依次执行命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">./configure   </div><div class="line"></div><div class="line">make   </div><div class="line"></div><div class="line">mkae install</div></pre></td></tr></table></figure></p>
-<p>此时 nginx 安装完毕，安装目录是 /usr/local/nginx，nginx 默认占用 80 端口<br><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/nginx安装.png" alt="nginx安装"><br>其中，sbin 目录为 nginx 执行命令，conf 目录下的 nginx.conf 为默认加载的配置文件</p>
-<p>启动 nginx：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./nginx</div></pre></td></tr></table></figure></p>
-<p>关闭 nginx：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./nginx -s stop</div></pre></td></tr></table></figure></p>
-<p>重启<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./nginx  -s reload</div></pre></td></tr></table></figure></p>
-<p>启动 nginx 后访问 192.168.50.133:80 即可访问 nginx：显示 nginx 欢迎页<br><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/nginx欢迎.png" alt="nginx欢迎"></p>
-<p>至此，nginx 安装完毕。</p>
-<h1 id="四：反向代理与负载均衡配置"><a href="#四：反向代理与负载均衡配置" class="headerlink" title="四：反向代理与负载均衡配置"></a>四：反向代理与负载均衡配置</h1><p>现有一台服务器，为 192.168.43.3，服务器上有一台 tomcat，端口为 8080 和 8081，经过配置 nginx，当访问 192.168.43.3:80 时，即可访问 192.168.43.3:8080，192.168.43.3:8081 中随机一台，此时 192.168.43.3:80 被 nginx 监听，当有请求时，代理到 192.168.43.3:8080，192.168.43.3:8081 随机一台即可，即为 nginx 反向代理功能，同时此时可以通过 nginx 将请求进行转发，保证了一个入口，将所有请求转发到两台服务器上也减轻了任何一台的负载压力，当有大量请求时，可以搭建大量服务器，在入口代理服务器上使用 nginx 进行转发，即是负载均衡功能。</p>
-<p>配置即是配置 nginx 安装目录中 conf 目录下的 nginx.conf 文件即可：具体配置如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">#user  nobody;</div><div class="line">worker_processes  1;</div><div class="line"></div><div class="line">#error_log  logs/error.log;</div><div class="line">#error_log  logs/error.log  notice;</div><div class="line">#error_log  logs/error.log  info;</div><div class="line"></div><div class="line">#pid        logs/nginx.pid;</div><div class="line"></div><div class="line"></div><div class="line">events &#123;</div><div class="line">    worker_connections  1024;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">http &#123;</div><div class="line">    include       mime.types;</div><div class="line">    default_type  application/octet-stream;</div><div class="line"></div><div class="line">    #log_format  main  &apos;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &apos;</div><div class="line">    #                  &apos;$status $body_bytes_sent &quot;$http_referer&quot; &apos;</div><div class="line">    #                  &apos;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&apos;;</div><div class="line"></div><div class="line">    #access_log  logs/access.log  main;</div><div class="line"></div><div class="line">    sendfile        on;</div><div class="line">    #tcp_nopush     on;</div><div class="line"></div><div class="line">    #keepalive_timeout  0;</div><div class="line">    keepalive_timeout  65;</div><div class="line"></div><div class="line">    #gzip  on;</div><div class="line"></div><div class="line"> 	#配置被代理的服务器</div><div class="line">    upstream blank &#123;</div><div class="line">        #ip_hash;</div><div class="line">        server 192.168.43.3:8080 weight=2;</div><div class="line">        server 192.168.43.3:8081 weight=1;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    server &#123;</div><div class="line">    	#nginx监听80端口，请求该端口时转发到真实目标</div><div class="line">        listen       80;</div><div class="line">        server_name  localhost;</div><div class="line"></div><div class="line">        #charset koi8-r;</div><div class="line"></div><div class="line">        #access_log  logs/host.access.log  main;</div><div class="line"></div><div class="line">        location / &#123;</div><div class="line">            #这里配置代理是指上面定义的两个被代理目标，blank名字必须一致</div><div class="line">          proxy_pass http://blank;</div><div class="line"></div><div class="line">            root   html;</div><div class="line">            index  index.html index.htm;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        #error_page  404              /404.html;</div><div class="line"></div><div class="line">        # redirect server error pages to the static page /50x.html</div><div class="line">        #</div><div class="line">        error_page   500 502 503 504  /50x.html;</div><div class="line">        location = /50x.html &#123;</div><div class="line">            root   html;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        # proxy the PHP scripts to Apache listening on 127.0.0.1:80</div><div class="line">        #</div><div class="line">        #location ~ \.php$ &#123;</div><div class="line">        #    proxy_pass   http://127.0.0.1;</div><div class="line">        #&#125;</div><div class="line"></div><div class="line">        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</div><div class="line">        #</div><div class="line">        #location ~ \.php$ &#123;</div><div class="line">        #    root           html;</div><div class="line">        #    fastcgi_pass   127.0.0.1:9000;</div><div class="line">        #    fastcgi_index  index.php;</div><div class="line">        #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;</div><div class="line">        #    include        fastcgi_params;</div><div class="line">        #&#125;</div><div class="line"></div><div class="line">        # deny access to .htaccess files, if Apache&apos;s document root</div><div class="line">        # concurs with nginx&apos;s one</div><div class="line">        #</div><div class="line">        #location ~ /\.ht &#123;</div><div class="line">        #    deny  all;</div><div class="line">        #&#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    # another virtual host using mix of IP-, name-, and port-based configuration</div><div class="line">    #</div><div class="line">    #server &#123;</div><div class="line">    #    listen       8000;</div><div class="line">    #    listen       somename:8080;</div><div class="line">    #    server_name  somename  alias  another.alias;</div><div class="line"></div><div class="line">    #    location / &#123;</div><div class="line">    #        root   html;</div><div class="line">    #        index  index.html index.htm;</div><div class="line">    #    &#125;</div><div class="line">    #&#125;</div><div class="line"></div><div class="line"></div><div class="line">    # HTTPS server</div><div class="line">    #</div><div class="line">    #server &#123;</div><div class="line">    #    listen       443 ssl;</div><div class="line">    #    server_name  localhost;</div><div class="line"></div><div class="line">    #    ssl_certificate      cert.pem;</div><div class="line">    #    ssl_certificate_key  cert.key;</div><div class="line"></div><div class="line">    #    ssl_session_cache    shared:SSL:1m;</div><div class="line">    #    ssl_session_timeout  5m;</div><div class="line"></div><div class="line">    #    ssl_ciphers  HIGH:!aNULL:!MD5;</div><div class="line">    #    ssl_prefer_server_ciphers  on;</div><div class="line"></div><div class="line">    #    location / &#123;</div><div class="line">    #        root   html;</div><div class="line">    #        index  index.html index.htm;</div><div class="line">    #    &#125;</div><div class="line">    #&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>启动两台 tomcat，重新启动 nginx：</p>
-<p>访问 192.168.43.3:80 将会随机访问 192.168.43.3:8080 和 192.168.43.3:8081 其中一台。（问题：每次刷新 nginx 服务器地址 sessionid 会变，session 不能共享。）</p>
-<p><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/nginxtomcat1.png" alt="nginxtomcat1"><br><img src="/2018/01/16/Nginx学习——反向代理与负载均衡-一/nginxtomcat2.png" alt="nginxtomcat2"></p>
-<p>尝试不断刷新，两个页面会交替显示，即成功。<br>但发现SessionID并不相同，下一篇博文来通过Redis来实现Session的共享（同步）。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;一：环境配置&quot;&gt;&lt;a href=&quot;#一：环境配置&quot; class=&quot;headerlink&quot; title=&quot;一：环境配置&quot;&gt;&lt;/a&gt;一：环境配置&lt;/h1&gt;&lt;p&gt;我本地是Windows系统，使用 Oracle VM VirtualBox 虚拟机安装一个虚拟的Linux系
-    
-    </summary>
-    
-      <category term="nginx" scheme="http://wangyuanjun.cn/categories/nginx/"/>
-    
-    
-      <category term="nginx" scheme="http://wangyuanjun.cn/tags/nginx/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>HTML/CSS基础知识学习笔记</title>
-    <link href="http://wangyuanjun.cn/2018/01/11/HTML-CSS%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
-    <id>http://wangyuanjun.cn/2018/01/11/HTML-CSS基础知识学习笔记/</id>
-    <published>2018-01-11T09:21:16.000Z</published>
-    <updated>2018-01-11T09:21:16.726Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Dubbo学习——Dubbo-admin管理平台搭建(三)</title>
-    <link href="http://wangyuanjun.cn/2018/01/11/Dubbo%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Dubbo-admin%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0%E6%90%AD%E5%BB%BA-%E4%B8%89/"/>
-    <id>http://wangyuanjun.cn/2018/01/11/Dubbo学习——Dubbo-admin管理平台搭建-三/</id>
-    <published>2018-01-11T03:05:23.000Z</published>
-    <updated>2018-01-21T11:19:13.927Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="一：前言"><a href="#一：前言" class="headerlink" title="一：前言"></a>一：前言</h1><p>上一篇博文介绍的是dubbo的使用，包括有注册中心，消费者，提供者的使用，但是并不能看到有哪些消费者和提供者，为了更好的调试，发现问题，解决问题，因此引入dubbo-admin。通过dubbo-admin可以对消费者和提供者进行管理。</p>
-<h1 id="二：下载与配置打包"><a href="#二：下载与配置打包" class="headerlink" title="二：下载与配置打包"></a>二：下载与配置打包</h1><p>dubbo-admin的下载，可自行到官网下载：<a href="https://github.com/alibaba/dubbo" target="_blank" rel="external">https://github.com/alibaba/dubbo</a><br><img src="/2018/01/11/Dubbo学习——Dubbo-admin管理平台搭建-三/dubbo.png" alt="dubbo"></p>
-<p>但是这里我们只关心dubbo-admin这个文件夹。<br>打包war包，进入dubbo-admin这个文件目录 运行命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn package -Dmaven.skip.test=true</div></pre></td></tr></table></figure>
-<p>打包成功之后，就会发现dubbo-admin下多了个target文件夹，打开target文件夹，发现里面有个war包：<br><img src="/2018/01/11/Dubbo学习——Dubbo-admin管理平台搭建-三/war包.png" alt="war包"></p>
-<h1 id="三：安装dubbo-admin"><a href="#三：安装dubbo-admin" class="headerlink" title="三：安装dubbo-admin"></a>三：安装dubbo-admin</h1><ol>
-<li><p>第二步我们得到dubbo-admin-2.5.8-SNAPSHOT.war，把dubbo-admin-2.5.8-SNAPSHOT.war放到tomcat的webapps目录下，然后启动tomcat,启动完成后停tomcat，得到解压后的dubbo-admin<br><img src="/2018/01/11/Dubbo学习——Dubbo-admin管理平台搭建-三/a.png" alt="a"></p>
-</li>
-<li><p>打开刚刚tomcat解压生成的dubbo.properties<br><img src="/2018/01/11/Dubbo学习——Dubbo-admin管理平台搭建-三/b.png" alt="b"></p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">dubbo.registry.address=zookeeper://192.168.99.100:2181</div><div class="line">dubbo.admin.root.password=root</div><div class="line">dubbo.admin.guest.password=guest</div></pre></td></tr></table></figure>
-<p>修改zookeeper地址为192.168.99.100:2181</p>
-<p>帐号：root,密码：root,待会儿登录用</p>
-<h1 id="四：运行"><a href="#四：运行" class="headerlink" title="四：运行"></a>四：运行</h1><ol>
-<li><p>先启动zookeeper，然后再启动tomcat<br><img src="/2018/01/11/Dubbo学习——Dubbo-admin管理平台搭建-三/zookeeper.png" alt="zookeeper"><br><img src="/2018/01/11/Dubbo学习——Dubbo-admin管理平台搭建-三/c.png" alt="c"><br>帐号：root;密码:root<br><img src="/2018/01/11/Dubbo学习——Dubbo-admin管理平台搭建-三/dubboadminindx.png" alt="dubboadminindx"></p>
-</li>
-<li><p>查看提供者<br><img src="/2018/01/11/Dubbo学习——Dubbo-admin管理平台搭建-三/provider.png" alt="provider"></p>
-</li>
-<li><p>查看消费者：<br><img src="/2018/01/11/Dubbo学习——Dubbo-admin管理平台搭建-三/consumer.png" alt="consumer"></p>
-</li>
-</ol>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;一：前言&quot;&gt;&lt;a href=&quot;#一：前言&quot; class=&quot;headerlink&quot; title=&quot;一：前言&quot;&gt;&lt;/a&gt;一：前言&lt;/h1&gt;&lt;p&gt;上一篇博文介绍的是dubbo的使用，包括有注册中心，消费者，提供者的使用，但是并不能看到有哪些消费者和提供者，为了更好的调试
-    
-    </summary>
-    
-      <category term="Dubbo" scheme="http://wangyuanjun.cn/categories/Dubbo/"/>
-    
-    
-      <category term="Dubbo" scheme="http://wangyuanjun.cn/tags/Dubbo/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Dubbo学习——Dubbo简单入门Demo(二)</title>
-    <link href="http://wangyuanjun.cn/2018/01/10/Dubbo%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Dubbo%E7%AE%80%E5%8D%95%E5%85%A5%E9%97%A8Demo-%E4%BA%8C/"/>
-    <id>http://wangyuanjun.cn/2018/01/10/Dubbo学习——Dubbo简单入门Demo-二/</id>
-    <published>2018-01-10T15:16:22.000Z</published>
-    <updated>2018-01-21T11:06:01.930Z</updated>
-    
-    <content type="html"><![CDATA[<p>本文采用Dubbo与Zookeeper、Spring框架的整合。整个项目的代码已经上传到我的github <a href="https://github.com/wangyuanjun008/wyj-dubbo-demo.git" target="_blank" rel="external">https://github.com/wangyuanjun008/wyj-dubbo-demo.git</a> 欢迎查看。<br>主要是以下几个步骤： </p>
-<ol>
-<li>安装Zookeeper,启动； </li>
-<li>创建MAVEN项目，构建Dubbo+Zookeeper+Spring实现的简单Demo； </li>
-<li>安装Dubbo-admin，实现监控。</li>
-</ol>
-<h1 id="一：Zookeeper介绍与安装"><a href="#一：Zookeeper介绍与安装" class="headerlink" title="一：Zookeeper介绍与安装"></a>一：Zookeeper介绍与安装</h1><p>本Demo中的Dubbo注册中心采用的是Zookeeper。为什么采用Zookeeper呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Zookeeper是一个分布式的服务框架，是树型的目录服务的数据存储，能做到集群管理数据 ，这里能很好的作为Dubbo服务的注册中心。</div><div class="line"></div><div class="line">Dubbo能与Zookeeper做到集群部署，当提供者出现断电等异常停机时，Zookeeper注册中心能自动删除提供者信息，当提供者重启时，能自动恢复注册数据，以及订阅请求</div></pre></td></tr></table></figure></p>
-<p>到官网下载并安装到windows上，可参考博文： <a href="http://blog.csdn.net/tlk20071/article/details/52028945" target="_blank" rel="external">http://blog.csdn.net/tlk20071/article/details/52028945</a><br>我使用的是docker容器，在docker上下载zooleeper镜像,然后使用如下命令创建并启动zookeeper容器，映射与本机的端口号<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run --name zookeeper -p 2181:2181 -p 2888:2888 -p 3888:3888 -d zookeeper:latest</div></pre></td></tr></table></figure></p>
-<p><img src="/2018/01/10/Dubbo学习——Dubbo简单入门Demo-二/zookeeper.png" alt="zookeeper"></p>
-<p>我之前下载过，所以我直接启动zookeeper容器</p>
-<h1 id="二：创建MAVEN项目"><a href="#二：创建MAVEN项目" class="headerlink" title="二：创建MAVEN项目"></a>二：创建MAVEN项目</h1><p>项目结构：<br>主要分三大模块：<br>dubbo-api : 存放公共接口；<br>dubbo-consumer :　调用远程服务；<br>dubbo-provider : 提供远程服务。<br><img src="/2018/01/10/Dubbo学习——Dubbo简单入门Demo-二/project.png" alt="project"></p>
-<p>下面将详细叙述代码构建过程。 </p>
-<ol>
-<li><p>首先构建MAVEN项目，导入所需要的jar包依赖。<br>需要导入的有spring, dubbo, zookeeper等jar包。<br>(详情参看后面提供的项目代码)</p>
-</li>
-<li><p>建dubbo-api的MAVEN项目(有独立的pom.xml，用来打包供提供者消费者使用)。<br>在项目中定义服务接口：该接口需单独打包，在服务提供方和消费方共享。<br><img src="/2018/01/10/Dubbo学习——Dubbo简单入门Demo-二/api.png" alt="api"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">package com.wyj.dubbo.demo;</div><div class="line">/**</div><div class="line"> * 定义服务接口</div><div class="line"> * </div><div class="line"> * </div><div class="line"> * @author：WangYuanJun</div><div class="line"> * @date：2018年1月9日 下午9:03:40</div><div class="line"> */</div><div class="line">public interface DemoService &#123;</div><div class="line">    </div><div class="line">    String sayHello(String name);</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>创建dubbo-provider的MAVEN项目(有独立的pom.xml，用来打包供消费者使用)。 </p>
-<p> 实现公共接口，此实现对消费者隐藏：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">package com.wyj.dubbo.demo.provider;</div><div class="line"></div><div class="line">import com.wyj.dubbo.demo.DemoService;</div><div class="line"></div><div class="line">/**</div><div class="line"> * 服务提供者实现服务定义</div><div class="line"> * </div><div class="line"> * </div><div class="line"> * @author：WangYuanJun</div><div class="line"> * @date：2018年1月9日 下午9:07:16</div><div class="line"> */</div><div class="line">public class DemoServiceImpl implements DemoService &#123;</div><div class="line"></div><div class="line">    public String sayHello(String name) &#123;</div><div class="line">        return &quot;Hello &quot; + name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p> 需加入公共接口所在的依赖<br> <img src="/2018/01/10/Dubbo学习——Dubbo简单入门Demo-二/provider-pom.png" alt="provider-pom"></p>
-<p> 用Spring配置声明暴露服务</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</div><div class="line">&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;</div><div class="line">	xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:dubbo=&quot;http://code.alibabatech.com/schema/dubbo&quot;</div><div class="line">	xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans</div><div class="line">       http://www.springframework.org/schema/beans/spring-beans.xsd</div><div class="line">       http://code.alibabatech.com/schema/dubbo</div><div class="line">       http://code.alibabatech.com/schema/dubbo/dubbo.xsd&quot;&gt;</div><div class="line">       </div><div class="line">	&lt;!--定义了提供方应用信息，用于计算依赖关系；在 dubbo-admin 或 dubbo-monitor 会显示这个名字，方便辨识 --&gt;</div><div class="line">	&lt;dubbo:application name=&quot;demotest-provider&quot; owner=&quot;programmer&quot;</div><div class="line">		organization=&quot;dubbox&quot; /&gt;</div><div class="line">	&lt;!--使用 zookeeper 注册中心暴露服务，注意要先开启 zookeeper --&gt;</div><div class="line">	&lt;dubbo:registry address=&quot;zookeeper://192.168.99.100:2181&quot; /&gt;</div><div class="line">	&lt;!-- 用dubbo协议在20880端口暴露服务 --&gt;</div><div class="line">	&lt;dubbo:protocol name=&quot;dubbo&quot; port=&quot;20880&quot; /&gt;</div><div class="line">	&lt;!--使用 dubbo 协议实现定义好的 api.PermissionService 接口 --&gt;</div><div class="line">	&lt;dubbo:service interface=&quot;com.wyj.dubbo.demo.DemoService&quot;</div><div class="line">		ref=&quot;demoService&quot; protocol=&quot;dubbo&quot; /&gt;</div><div class="line">	&lt;!--具体实现该接口的 bean --&gt;</div><div class="line">	&lt;bean id=&quot;demoService&quot; class=&quot;com.wyj.dubbo.demo.provider.DemoServiceImpl&quot; /&gt;</div><div class="line">	</div><div class="line">&lt;/beans&gt;</div></pre></td></tr></table></figure>
-<p> 启动远程服务：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">package com.wyj.dubbo.demo.provider;</div><div class="line"></div><div class="line">import java.io.IOException;</div><div class="line"></div><div class="line">import org.springframework.context.support.ClassPathXmlApplicationContext;</div><div class="line"></div><div class="line">/**</div><div class="line"> * 启动服务提供者</div><div class="line"> * </div><div class="line"> * </div><div class="line"> * @author：WangYuanJun</div><div class="line"> * @date：2018年1月9日 下午9:10:38</div><div class="line"> */</div><div class="line">public class Provider &#123;</div><div class="line"></div><div class="line">    public static void main(String[] args) throws IOException &#123;</div><div class="line">        </div><div class="line">        ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(&quot;dubbo-provider.xml&quot;);</div><div class="line">        System.out.println(classPathXmlApplicationContext.getDisplayName() + &quot;: here&quot;);</div><div class="line">        classPathXmlApplicationContext.start();</div><div class="line">        System.out.println(&quot;服务已经启动...&quot;);</div><div class="line">        System.in.read();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>创建dubbo-consumer的MAVEN项目(可以有多个consumer，但是需要配置好)。<br> 调用所需要的远程服务：</p>
-<p> 通过Spring配置引用远程服务：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</div><div class="line">&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;</div><div class="line">	xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:dubbo=&quot;http://code.alibabatech.com/schema/dubbo&quot;</div><div class="line">	xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd</div><div class="line">       http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd&quot;&gt;</div><div class="line">       </div><div class="line">	&lt;dubbo:application name=&quot;demotest-consumer&quot; owner=&quot;programmer&quot; organization=&quot;dubbox&quot; /&gt;</div><div class="line">		</div><div class="line">	&lt;!--向 zookeeper 订阅 provider 的地址，由 zookeeper 定时推送 --&gt;</div><div class="line">	&lt;dubbo:registry address=&quot;zookeeper://192.168.99.100:2181&quot; /&gt;</div><div class="line">	</div><div class="line">	&lt;!--使用 dubbo 协议调用定义好的 api.demoService 接口 --&gt;</div><div class="line">	&lt;dubbo:reference id=&quot;demoService&quot; interface=&quot;com.wyj.dubbo.demo.DemoService&quot; /&gt;</div><div class="line">		</div><div class="line">&lt;/beans&gt;</div></pre></td></tr></table></figure>
-<p> 启动Consumer,调用远程服务：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">package com.wyj.dubbo.demo.consumer;</div><div class="line"></div><div class="line">import org.springframework.context.support.ClassPathXmlApplicationContext;</div><div class="line"></div><div class="line">import com.wyj.dubbo.demo.DemoService;</div><div class="line"></div><div class="line">/**</div><div class="line"> * 启动服务消费者</div><div class="line"> * </div><div class="line"> * </div><div class="line"> * @author：WangYuanJun</div><div class="line"> * @date：2018年1月9日 下午10:00:33</div><div class="line"> */</div><div class="line">public class Consumer &#123;</div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line"></div><div class="line">        ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(&quot;dubbo-consumer.xml&quot;);</div><div class="line">        classPathXmlApplicationContext.start();</div><div class="line">        DemoService demoService = (DemoService) classPathXmlApplicationContext.getBean(&quot;demoService&quot;); </div><div class="line"></div><div class="line">        while (true) &#123;</div><div class="line">            try &#123;</div><div class="line">                Thread.sleep(1000);</div><div class="line">                String hello = demoService.sayHello(&quot;world&quot;); </div><div class="line">                System.out.println(hello); </div><div class="line"></div><div class="line">            &#125; catch (Throwable throwable) &#123;</div><div class="line">                throwable.printStackTrace();</div><div class="line">            &#125;</div><div class="line"></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>运行项目，先确保provider已被运行后再启动consumer模块：<br> 运行提供者：<br> <img src="/2018/01/10/Dubbo学习——Dubbo简单入门Demo-二/provider.png" alt="provider"></p>
-<p> 消费者成功调用提供者所提供的远程服务：<br> <img src="/2018/01/10/Dubbo学习——Dubbo简单入门Demo-二/consumer.png" alt="consumer"></p>
-</li>
-</ol>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;本文采用Dubbo与Zookeeper、Spring框架的整合。整个项目的代码已经上传到我的github &lt;a href=&quot;https://github.com/wangyuanjun008/wyj-dubbo-demo.git&quot; target=&quot;_blank&quot; rel=&quot;
-    
-    </summary>
-    
-      <category term="Dubbo" scheme="http://wangyuanjun.cn/categories/Dubbo/"/>
-    
-    
-      <category term="Dubbo" scheme="http://wangyuanjun.cn/tags/Dubbo/"/>
     
   </entry>
   
