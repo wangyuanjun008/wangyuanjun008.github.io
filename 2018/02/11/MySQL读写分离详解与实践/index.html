@@ -1,4 +1,373 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>MySQL读写分离详解与实践 | 守望的稻草人</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">MySQL读写分离详解与实践</h1><a id="logo" href="/.">守望的稻草人</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">MySQL读写分离详解与实践</h1><div class="post-meta"><a href="/2018/02/11/MySQL读写分离详解与实践/#comments" class="comment-count"><i id="changyan_count_unit" data-xid="2018/02/11/MySQL读写分离详解与实践/"></i>留言,<i id="changyan_parti_unit" data-xid="2018/02/11/MySQL读写分离详解与实践/"></i>参与</a><p><span class="date">Feb 11, 2018</span><span><a href="/categories/mysql/" class="category">mysql</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"></div><div class="tags"><a href="/tags/mysql/">mysql</a></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2018/02/11/Shell脚本学习/" class="pre">Shell脚本学习</a><a href="/2018/02/09/MySQL主从复制详解与实践/" class="next">MySQL主从复制详解与实践</a></div><div id="comments"><div id="SOHUCS" sid="2018/02/11/MySQL读写分离详解与实践/"></div></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/02/11/Shell脚本学习/">Shell脚本学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/11/MySQL读写分离详解与实践/">MySQL读写分离详解与实践</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/09/MySQL主从复制详解与实践/">MySQL主从复制详解与实践</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/08/Java虚拟机学习——垃圾收集器与内存分配策略/">Java虚拟机学习——垃圾收集器与内存分配策略</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/01/Java虚拟机学习——Java内存区域与内存溢出异常/">Java虚拟机学习——Java内存区域与内存溢出异常</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/31/IntelliJ-IDEA-2017-3激活/">IntelliJ IDEA 2017.3激活</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/31/Java虚拟机学习——类加载机制/">Java虚拟机学习——类加载机制</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/30/JDK1.8源码解析——String/">JDK1.8源码解析——String</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/30/成为Java顶尖程序员-，看这11本书就够了/">成为Java顶尖程序员 ，看这11本书就够了</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/27/解决微信公共号开发出现-redirect-uri域名与后台配置不一致，错误码10003-错误/">解决微信公共号开发出现 redirect_uri域名与后台配置不一致，错误码10003 错误</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Dubbo/">Dubbo</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/HttpClient/">HttpClient</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/IDEA/">IDEA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JDK1-8源码/">JDK1.8源码</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/">JVM</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/WebService/">WebService</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/axios/">axios</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/element-ui/">element ui</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/extjs/">extjs</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/maven/">maven</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mybatis/">mybatis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/oracle/">oracle</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/">quartz</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/select2/">select2</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/shiro/">shiro</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/spring/">spring</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/tomcat/">tomcat</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/weblogic/">weblogic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/webpack/">webpack</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ztree/">ztree</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习/">学习</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/微信公共号/">微信公共号</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编码规范/">编码规范</a><span class="category-list-count">1</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/SpringMVC/" style="font-size: 15px;">SpringMVC</a> <a href="/tags/docker/" style="font-size: 15px;">docker</a> <a href="/tags/工具/" style="font-size: 15px;">工具</a> <a href="/tags/IDEA/" style="font-size: 15px;">IDEA</a> <a href="/tags/JDK1-8源码/" style="font-size: 15px;">JDK1.8源码</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/JVM/" style="font-size: 15px;">JVM</a> <a href="/tags/maven/" style="font-size: 15px;">maven</a> <a href="/tags/tomcat/" style="font-size: 15px;">tomcat</a> <a href="/tags/oracle/" style="font-size: 15px;">oracle</a> <a href="/tags/Oracle-VM-VirtualBox/" style="font-size: 15px;">Oracle VM VirtualBox</a> <a href="/tags/linux/" style="font-size: 15px;">linux</a> <a href="/tags/quartz/" style="font-size: 15px;">quartz</a> <a href="/tags/redis/" style="font-size: 15px;">redis</a> <a href="/tags/spring-aop/" style="font-size: 15px;">spring aop</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/HttpClient/" style="font-size: 15px;">HttpClient</a> <a href="/tags/SpringBoot/" style="font-size: 15px;">SpringBoot</a> <a href="/tags/Dubbo/" style="font-size: 15px;">Dubbo</a> <a href="/tags/WebService/" style="font-size: 15px;">WebService</a> <a href="/tags/extjs/" style="font-size: 15px;">extjs</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/mybatis/" style="font-size: 15px;">mybatis</a> <a href="/tags/webpack/" style="font-size: 15px;">webpack</a> <a href="/tags/shiro/" style="font-size: 15px;">shiro</a> <a href="/tags/jquery/" style="font-size: 15px;">jquery</a> <a href="/tags/ztree/" style="font-size: 15px;">ztree</a> <a href="/tags/select2/" style="font-size: 15px;">select2</a> <a href="/tags/weblogic/" style="font-size: 15px;">weblogic</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/axios/" style="font-size: 15px;">axios</a> <a href="/tags/java基础/" style="font-size: 15px;">java基础</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/微信公共号/" style="font-size: 15px;">微信公共号</a> <a href="/tags/git/" style="font-size: 15px;">git</a> <a href="/tags/学习/" style="font-size: 15px;">学习</a> <a href="/tags/element-ui/" style="font-size: 15px;">element ui</a> <a href="/tags/编码规范/" style="font-size: 15px;">编码规范</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-you"> 友情链接</i></div><ul></ul><a href="https://github.com/wangyuanjun008" title="GitHub" target="_blank">GitHub</a></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">WangYuanJun.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>MySQL读写分离详解与实践 | 守望的稻草人</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">MySQL读写分离详解与实践</h1><a id="logo" href="/.">守望的稻草人</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">MySQL读写分离详解与实践</h1><div class="post-meta"><a href="/2018/02/11/MySQL读写分离详解与实践/#comments" class="comment-count"><i id="changyan_count_unit" data-xid="2018/02/11/MySQL读写分离详解与实践/"></i>留言,<i id="changyan_parti_unit" data-xid="2018/02/11/MySQL读写分离详解与实践/"></i>参与</a><p><span class="date">Feb 11, 2018</span><span><a href="/categories/mysql/" class="category">mysql</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><h1 id="一：mysql读写分离原理"><a href="#一：mysql读写分离原理" class="headerlink" title="一：mysql读写分离原理"></a>一：mysql读写分离原理</h1><p>MySQL的主从复制和MySQL的读写分离两者有着紧密联系，首先部署主从复制，只有主从复制完了，才能在此基础上进行数据的读写分离。<br>简单来说，读写分离就是只在主服务器上写，只在从服务器上读，基本的原理是让主数据库处理事务性操作，而从数据库处理非事务性操作，然后再采用主从复制来把master上的事务性操作同步到slave数据库中。</p>
+<p>1.基于程序代码内部实现<br>在代码中根据select,insert进行路由分类，这类方法也是目前生产环境应用最广泛的，优点是性能好，因为在程序代码中实现，不需要曾加额外的设备作为硬件开支，缺点是需要开发人员来实现，运维人员无从下手。<br>2.基于中间代理层实现<br>代理一般位于客户端和服务器之间，代理服务器接到客户端请求后通过判断后转发到后端数据库，有两个代表性程序。</p>
+<p>（1）mysql-proxy 为mysql开源项目，通过其自带的lua脚本进行SQL判断，虽然是mysql的官方产品，但是mysql官方不建议将其应用到生产环境</p>
+<p>（2）Amoeba （变形虫）由陈思儒开发，曾就职与阿里巴巴，该程序由java语言进行开发，阿里巴巴将其应用于生成环境，它不支持事物和存储过程</p>
+<p>通过程序代码实现mysql读写分离自然是一个不错的选择，但是并不是所有的应用都适合在程序代码中实现读写分离，像一些大型复杂的java应用，如果在程序代码中实现读写分离对代码改动就较大，像这种应用一般会考虑使用代理层来实现。</p>
+<h1 id="二：基于-Amoeba-实现读写分离"><a href="#二：基于-Amoeba-实现读写分离" class="headerlink" title="二：基于 Amoeba 实现读写分离"></a>二：基于 Amoeba 实现读写分离</h1><p><img src="/2018/02/11/MySQL读写分离详解与实践/amoeba.png" alt="amoeba"></p>
+<h2 id="2-1-环境搭建"><a href="#2-1-环境搭建" class="headerlink" title="2.1 环境搭建"></a>2.1 环境搭建</h2><p>amoeba:192.168.2.203</p>
+<p>masterDB：192.168.2.204 </p>
+<p>slaveDB：192.168.2.205<br>以上系统全为centos6.8</p>
+<p>Amoeba框架是居于JDK1.5开发的，采用了JDK1.5的特性，所以还需要安装java环境，建议使用javaSE1.5以上的JDK版本</p>
+<h2 id="2-2-安装java环境"><a href="#2-2-安装java环境" class="headerlink" title="2.2 安装java环境"></a>2.2 安装java环境</h2><p>先去官网下载：<a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" target="_blank" rel="external">http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html</a></p>
+<h3 id="2-2-1-安装"><a href="#2-2-1-安装" class="headerlink" title="2.2.1 安装"></a>2.2.1 安装</h3><pre><code>[root@bogon src]# rpm -ivh jdk-8u111-linux-x64.rpm
+Preparing...                ########################################### [100%]
+   1:jdk1.8.0_111           ########################################### [100%]
+Unpacking JAR files...
+    tools.jar...
+    plugin.jar...
+    javaws.jar...
+    deploy.jar...
+    rt.jar...
+    jsse.jar...
+    charsets.jar...
+    localedata.jar...
+</code></pre><h3 id="2-2-2-设置java环境变量"><a href="#2-2-2-设置java环境变量" class="headerlink" title="2.2.2 设置java环境变量"></a>2.2.2 设置java环境变量</h3><pre><code>[root@bogon src]# vim /etc/profile
+
+#set java environment
+JAVA_HOME=/usr/java/jdk1.8.0_111
+JRE_HOME=/usr/java/jdk1.8.0_111/jre
+CLASS_PATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib
+PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
+export JAVA_HOME JRE_HOME CLASS_PATH PATH
+[root@bogon amoeba]# source /etc/profile
+</code></pre><h3 id="2-2-3-测试是否安装成功"><a href="#2-2-3-测试是否安装成功" class="headerlink" title="2.2.3 测试是否安装成功"></a>2.2.3 测试是否安装成功</h3><pre><code>[root@bogon src]# java -version
+java version &quot;1.8.0_111&quot;
+Java(TM) SE Runtime Environment (build 1.8.0_111-b14)
+Java HotSpot(TM) 64-Bit Server VM (build 25.111-b14, mixed mode)
+</code></pre><h2 id="2-3-安装Amoeba"><a href="#2-3-安装Amoeba" class="headerlink" title="2.3 安装Amoeba"></a>2.3 安装Amoeba</h2><p>可以从<a href="https://sourceforge.net/projects/amoeba/下载最新版本的Amoeba，我这里下载的是amoeba-mysql-3.0.5-RC-distribution.zip。Amoeba安装非常简单，直接解压即可使用，这里将Amoeba解压到/usr/local/amoeba目录下，这样就安装完成了" target="_blank" rel="external">https://sourceforge.net/projects/amoeba/下载最新版本的Amoeba，我这里下载的是amoeba-mysql-3.0.5-RC-distribution.zip。Amoeba安装非常简单，直接解压即可使用，这里将Amoeba解压到/usr/local/amoeba目录下，这样就安装完成了</a></p>
+<pre><code>[root@bogon amoeba]# pwd
+/usr/local/amoeba
+  [root@bogon amoeba]# ll
+  总用量 20
+  drwxrwxrwx. 2 root root 4096 7月 5 2013 benchmark
+  drwxrwxrwx. 2 root root 4096 7月 5 2013 bin
+  drwxrwxrwx. 2 root root 4096 7月 5 2013 conf
+  -rwxrwxrwx. 1 root root 728 7月 5 2013 jvm.properties
+  drwxrwxrwx. 2 root root 4096 7月 5 2013 lib
+</code></pre><h2 id="2-4-配置Amoeba"><a href="#2-4-配置Amoeba" class="headerlink" title="2.4 配置Amoeba"></a>2.4 配置Amoeba</h2><p>Amoeba的配置文件在本环境下位于/usr/local/amoeba/conf目录下。配置文件比较多，但是仅仅使用读写分离功能，只需配置两个文件即可，分别是dbServers.xml和amoeba.xml，如果需要配置ip访问控制，还需要修改access_list.conf文件，下面首先介绍dbServers.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div></pre></td><td class="code"><pre><div class="line">[root@bogon amoeba]# cat conf/dbServers.xml </div><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;gbk&quot;?&gt;</div><div class="line"></div><div class="line">&lt;!DOCTYPE amoeba:dbServers SYSTEM &quot;dbserver.dtd&quot;&gt;</div><div class="line">&lt;amoeba:dbServers xmlns:amoeba=&quot;http://amoeba.meidusa.com/&quot;&gt;</div><div class="line"></div><div class="line">        &lt;!-- </div><div class="line">            Each dbServer needs to be configured into a Pool,</div><div class="line">            If you need to configure multiple dbServer with load balancing that can be simplified by the following configuration:</div><div class="line">             add attribute with name virtual = &quot;true&quot; in dbServer, but the configuration does not allow the element with name factoryConfig</div><div class="line">             such as &apos;multiPool&apos; dbServer   </div><div class="line">        --&gt;</div><div class="line">        </div><div class="line">    &lt;dbServer name=&quot;abstractServer&quot; abstractive=&quot;true&quot;&gt;</div><div class="line">        &lt;factoryConfig class=&quot;com.meidusa.amoeba.mysql.net.MysqlServerConnectionFactory&quot;&gt;</div><div class="line">            &lt;property name=&quot;connectionManager&quot;&gt;$&#123;defaultManager&#125;&lt;/property&gt;</div><div class="line">            &lt;property name=&quot;sendBufferSize&quot;&gt;64&lt;/property&gt;</div><div class="line">            &lt;property name=&quot;receiveBufferSize&quot;&gt;128&lt;/property&gt;</div><div class="line">                </div><div class="line">            &lt;!-- mysql port --&gt;</div><div class="line">            &lt;property name=&quot;port&quot;&gt;3306&lt;/property&gt;　　#设置Amoeba要连接的mysql数据库的端口，默认是3306</div><div class="line">            </div><div class="line">            &lt;!-- mysql schema --&gt;</div><div class="line">            &lt;property name=&quot;schema&quot;&gt;testdb&lt;/property&gt;　　#设置缺省的数据库，当连接amoeba时，操作表必须显式的指定数据库名，即采用dbname.tablename的方式，不支持 use dbname指定缺省库，因为操作会调度到各个后端dbserver</div><div class="line">            </div><div class="line">            &lt;!-- mysql user --&gt;</div><div class="line">            &lt;property name=&quot;user&quot;&gt;test1&lt;/property&gt;　　#设置amoeba连接后端数据库服务器的账号和密码，因此需要在所有后端数据库上创建该用户，并授权amoeba服务器可连接</div><div class="line">            </div><div class="line">            &lt;property name=&quot;password&quot;&gt;111111&lt;/property&gt;</div><div class="line">        &lt;/factoryConfig&gt;</div><div class="line"></div><div class="line">        &lt;poolConfig class=&quot;com.meidusa.toolkit.common.poolable.PoolableObjectPool&quot;&gt;</div><div class="line">            &lt;property name=&quot;maxActive&quot;&gt;500&lt;/property&gt;　　#最大连接数，默认500</div><div class="line">            &lt;property name=&quot;maxIdle&quot;&gt;500&lt;/property&gt;　　　　#最大空闲连接数</div><div class="line">            &lt;property name=&quot;minIdle&quot;&gt;1&lt;/property&gt;　　　　#最新空闲连接数</div><div class="line">            &lt;property name=&quot;minEvictableIdleTimeMillis&quot;&gt;600000&lt;/property&gt;</div><div class="line">            &lt;property name=&quot;timeBetweenEvictionRunsMillis&quot;&gt;600000&lt;/property&gt;</div><div class="line">            &lt;property name=&quot;testOnBorrow&quot;&gt;true&lt;/property&gt;</div><div class="line">            &lt;property name=&quot;testOnReturn&quot;&gt;true&lt;/property&gt;</div><div class="line">            &lt;property name=&quot;testWhileIdle&quot;&gt;true&lt;/property&gt;</div><div class="line">        &lt;/poolConfig&gt;</div><div class="line">    &lt;/dbServer&gt;</div><div class="line"></div><div class="line">    &lt;dbServer name=&quot;writedb&quot;  parent=&quot;abstractServer&quot;&gt;　　#设置一个后端可写的dbServer，这里定义为writedb，这个名字可以任意命名，后面还会用到</div><div class="line">        &lt;factoryConfig&gt;</div><div class="line">            &lt;!-- mysql ip --&gt;</div><div class="line">            &lt;property name=&quot;ipAddress&quot;&gt;192.168.2.204&lt;/property&gt; #设置后端可写dbserver</div><div class="line">        &lt;/factoryConfig&gt;</div><div class="line">    &lt;/dbServer&gt;</div><div class="line">    </div><div class="line">    &lt;dbServer name=&quot;slave&quot;  parent=&quot;abstractServer&quot;&gt;　　#设置后端可读dbserver</div><div class="line">        &lt;factoryConfig&gt;</div><div class="line">            &lt;!-- mysql ip --&gt;</div><div class="line">            &lt;property name=&quot;ipAddress&quot;&gt;192.168.2.205&lt;/property&gt;</div><div class="line">        &lt;/factoryConfig&gt;</div><div class="line">    &lt;/dbServer&gt;</div><div class="line">    </div><div class="line">    &lt;dbServer name=&quot;myslave&quot; virtual=&quot;true&quot;&gt;　　#设置定义一个虚拟的dbserver，实际上相当于一个dbserver组，这里将可读的数据库ip统一放到一个组中，将这个组的名字命名为myslave</div><div class="line">        &lt;poolConfig class=&quot;com.meidusa.amoeba.server.MultipleServerPool&quot;&gt;</div><div class="line">            &lt;!-- Load balancing strategy: 1=ROUNDROBIN , 2=WEIGHTBASED , 3=HA--&gt;</div><div class="line">            &lt;property name=&quot;loadbalance&quot;&gt;1&lt;/property&gt;　　#选择调度算法，1表示复制均衡，2表示权重，3表示HA， 这里选择1</div><div class="line">            </div><div class="line">            &lt;!-- Separated by commas,such as: server1,server2,server1 --&gt;</div><div class="line">            &lt;property name=&quot;poolNames&quot;&gt;slave&lt;/property&gt;　　#myslave组成员</div><div class="line">        &lt;/poolConfig&gt;</div><div class="line">    &lt;/dbServer&gt;</div><div class="line">        </div><div class="line">&lt;/amoeba:dbServers&gt;</div></pre></td></tr></table></figure>
+<p>另一个配置文件amoeba.xml</p>
+<pre><code>[root@bogon amoeba]# cat conf/amoeba.xml 
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;gbk&quot;?&gt;
+
+&lt;!DOCTYPE amoeba:configuration SYSTEM &quot;amoeba.dtd&quot;&gt;
+&lt;amoeba:configuration xmlns:amoeba=&quot;http://amoeba.meidusa.com/&quot;&gt;
+
+    &lt;proxy&gt;
+
+        &lt;!-- service class must implements com.meidusa.amoeba.service.Service --&gt;
+        &lt;service name=&quot;Amoeba for Mysql&quot; class=&quot;com.meidusa.amoeba.mysql.server.MySQLService&quot;&gt;
+            &lt;!-- port --&gt;
+            &lt;property name=&quot;port&quot;&gt;8066&lt;/property&gt;　　　　#设置amoeba监听的端口，默认是8066
+
+            &lt;!-- bind ipAddress --&gt;　　　　#下面配置监听的接口，如果不设置，默认监听所以的IP
+            &lt;!-- 
+            &lt;property name=&quot;ipAddress&quot;&gt;127.0.0.1&lt;/property&gt;
+             --&gt;
+
+            &lt;property name=&quot;connectionFactory&quot;&gt;
+                &lt;bean class=&quot;com.meidusa.amoeba.mysql.net.MysqlClientConnectionFactory&quot;&gt;
+                    &lt;property name=&quot;sendBufferSize&quot;&gt;128&lt;/property&gt;
+                    &lt;property name=&quot;receiveBufferSize&quot;&gt;64&lt;/property&gt;
+                &lt;/bean&gt;
+            &lt;/property&gt;
+
+            &lt;property name=&quot;authenticateProvider&quot;&gt;
+                &lt;bean class=&quot;com.meidusa.amoeba.mysql.server.MysqlClientAuthenticator&quot;&gt;
+
+
+# 提供客户端连接amoeba时需要使用这里设定的账号 (这里的账号密码和amoeba连接后端数据库服务器的密码无关)
+
+                    &lt;property name=&quot;user&quot;&gt;root&lt;/property&gt;　　　　
+
+
+                    &lt;property name=&quot;password&quot;&gt;123456&lt;/property&gt;
+
+                    &lt;property name=&quot;filter&quot;&gt;
+                        &lt;bean class=&quot;com.meidusa.toolkit.net.authenticate.server.IPAccessController&quot;&gt;
+                            &lt;property name=&quot;ipFile&quot;&gt;${amoeba.home}/conf/access_list.conf&lt;/property&gt;
+                        &lt;/bean&gt;
+                    &lt;/property&gt;
+                &lt;/bean&gt;
+            &lt;/property&gt;
+
+        &lt;/service&gt;
+
+        &lt;runtime class=&quot;com.meidusa.amoeba.mysql.context.MysqlRuntimeContext&quot;&gt;
+
+            &lt;!-- proxy server client process thread size --&gt;
+            &lt;property name=&quot;executeThreadSize&quot;&gt;128&lt;/property&gt;
+
+            &lt;!-- per connection cache prepared statement size  --&gt;
+            &lt;property name=&quot;statementCacheSize&quot;&gt;500&lt;/property&gt;
+
+            &lt;!-- default charset --&gt;
+            &lt;property name=&quot;serverCharset&quot;&gt;utf8&lt;/property&gt;
+
+            &lt;!-- query timeout( default: 60 second , TimeUnit:second) --&gt;
+            &lt;property name=&quot;queryTimeout&quot;&gt;60&lt;/property&gt;
+        &lt;/runtime&gt;
+
+    &lt;/proxy&gt;
+
+    &lt;!-- 
+        Each ConnectionManager will start as thread
+        manager responsible for the Connection IO read , Death Detection
+    --&gt;
+    &lt;connectionManagerList&gt;
+        &lt;connectionManager name=&quot;defaultManager&quot; class=&quot;com.meidusa.toolkit.net.MultiConnectionManagerWrapper&quot;&gt;
+            &lt;property name=&quot;subManagerClassName&quot;&gt;com.meidusa.toolkit.net.AuthingableConnectionManager&lt;/property&gt;
+        &lt;/connectionManager&gt;
+    &lt;/connectionManagerList&gt;
+
+        &lt;!-- default using file loader --&gt;
+    &lt;dbServerLoader class=&quot;com.meidusa.amoeba.context.DBServerConfigFileLoader&quot;&gt;
+        &lt;property name=&quot;configFile&quot;&gt;${amoeba.home}/conf/dbServers.xml&lt;/property&gt;
+    &lt;/dbServerLoader&gt;
+
+    &lt;queryRouter class=&quot;com.meidusa.amoeba.mysql.parser.MysqlQueryRouter&quot;&gt;
+        &lt;property name=&quot;ruleLoader&quot;&gt;
+            &lt;bean class=&quot;com.meidusa.amoeba.route.TableRuleFileLoader&quot;&gt;
+                &lt;property name=&quot;ruleFile&quot;&gt;${amoeba.home}/conf/rule.xml&lt;/property&gt;
+                &lt;property name=&quot;functionFile&quot;&gt;${amoeba.home}/conf/ruleFunctionMap.xml&lt;/property&gt;
+            &lt;/bean&gt;
+        &lt;/property&gt;
+        &lt;property name=&quot;sqlFunctionFile&quot;&gt;${amoeba.home}/conf/functionMap.xml&lt;/property&gt;
+        &lt;property name=&quot;LRUMapSize&quot;&gt;1500&lt;/property&gt;
+        &lt;property name=&quot;defaultPool&quot;&gt;writedb&lt;/property&gt;　　#设置amoeba默认的池，这里设置为writedb
+
+
+        &lt;property name=&quot;writePool&quot;&gt;writedb&lt;/property&gt;　　#这两个选项默认是注销掉的，需要取消注释，这里用来指定前面定义好的俩个读写池
+        &lt;property name=&quot;readPool&quot;&gt;myslave&lt;/property&gt;　　 #
+
+        &lt;property name=&quot;needParse&quot;&gt;true&lt;/property&gt;
+    &lt;/queryRouter&gt;
+&lt;/amoeba:configuration&gt;
+</code></pre><h2 id="2-5-在masterdb上创建数据库testdb"><a href="#2-5-在masterdb上创建数据库testdb" class="headerlink" title="2.5 在masterdb上创建数据库testdb"></a>2.5 在masterdb上创建数据库testdb</h2><pre><code>mysql&gt; create database testdb;
+Query OK, 1 row affected (0.08 sec)
+
+mysql&gt; show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mydb               |
+| mysql              |
+| performance_schema |
+| test               |
+| testdb             |
++--------------------+
+6 rows in set (0.00 sec)
+</code></pre><p>查看slavedb是否复制成功</p>
+<pre><code>mysql&gt; show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mydb               |
+| mysql              |
+| performance_schema |
+| test               |
+| testdb             |
++--------------------+
+6 rows in set (0.00 sec)
+</code></pre><p>分别在masterdb和slavedb上为amoedb授权</p>
+<pre><code>mysql&gt; GRANT ALL ON testdb.* TO &apos;test1&apos;@&apos;192.168.2.203&apos; IDENTIFIED BY &apos;111111&apos;;
+Query OK, 0 rows affected (0.05 sec)
+
+mysql&gt; flush privileges;
+Query OK, 0 rows affected (0.02 sec)
+</code></pre><p>启动amoeba    </p>
+<pre><code>[root@bogon amoeba]# /usr/local/amoeba/bin/launcher
+Error: JAVA_HOME environment variable is not set.
+[root@bogon amoeba]# vim /etc/profile^C
+[root@bogon amoeba]# source /etc/profile
+[root@bogon amoeba]# /usr/local/amoeba/bin/launcher
+Java HotSpot(TM) 64-Bit Server VM warning: ignoring option PermSize=16m; support was removed in 8.0
+Java HotSpot(TM) 64-Bit Server VM warning: ignoring option MaxPermSize=96m; support was removed in 8.0
+
+The stack size specified is too small, Specify at least 228k
+Error: Could not create the Java Virtual Machine.
+Error: A fatal exception has occurred. Program will exit.
+</code></pre><p>报错:</p>
+<p>Error: Could not create the Java Virtual Machine.<br>Error: A fatal exception has occurred. Program will exit.<br>从错误文字上看，应该是由于stack size太小，导致JVM启动失败，要如何修改呢？<br>其实Amoeba已经考虑到这个问题，并将JVM参数配置写在属性文件里。现在，让我们通过该属性文件修改JVM参数。<br>修改jvm.properties文件JVM_OPTIONS参数。</p>
+<pre><code>[root@bogon amoeba]# vim /usr/local/amoeba/jvm.properties 
+改成：JVM_OPTIONS=&quot;-server -Xms1024m -Xmx1024m -Xss256k -XX:PermSize=16m -XX:MaxPermSize=96m&quot;
+原为：JVM_OPTIONS=&quot;-server -Xms256m -Xmx1024m -Xss196k -XX:PermSize=16m -XX:MaxPermSize=96m&quot;
+</code></pre><p>再次启动</p>
+<pre><code>[root@bogon ~]# /usr/local/amoeba/bin/launcher
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launchStandard(Launcher.java:329)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launch(Launcher.java:239)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode(Launcher.java:409)
+    at org.codehaus.classworlds.Launcher.mainWithExitCode(Launcher.java:127)
+    at org.codehaus.classworlds.Launcher.main(Launcher.java:110)
+Caused by: com.meidusa.toolkit.common.bean.util.InitialisationException: default pool required!,defaultPool=writedb invalid
+    at com.meidusa.amoeba.route.AbstractQueryRouter.init(AbstractQueryRouter.java:469)
+    at com.meidusa.amoeba.context.ProxyRuntimeContext.initAllInitialisableBeans(ProxyRuntimeContext.java:337)
+    ... 11 more
+ 2016-10-24 18:46:37 [INFO] Project Name=Amoeba-MySQL, PID=1577 , System shutdown ....
+Java HotSpot(TM) 64-Bit Server VM warning: ignoring option PermSize=16m; support was removed in 8.0
+Java HotSpot(TM) 64-Bit Server VM warning: ignoring option MaxPermSize=96m; support was removed in 8.0
+ 2016-10-24 18:50:19 [INFO] Project Name=Amoeba-MySQL, PID=1602 , starting...
+log4j:WARN log4j config load completed from file:/usr/local/amoeba/conf/log4j.xml
+2016-10-24 18:50:21,668 INFO  context.MysqlRuntimeContext - Amoeba for Mysql current versoin=5.1.45-mysql-amoeba-proxy-3.0.4-BETA
+log4j:WARN ip access config load completed from file:/usr/local/amoeba/conf/access_list.conf
+2016-10-24 18:50:22,852 INFO  net.ServerableConnectionManager - Server listening on 0.0.0.0/0.0.0.0:8066.
+</code></pre><p>查看端口</p>
+<pre><code>[root@bogon ~]# netstat -unlpt | grep java
+tcp        0      0 :::8066                     :::*                        LISTEN      1602/java    
+</code></pre><p>由此可知Amoeba启动正常</p>
+<h2 id="2-6-测试"><a href="#2-6-测试" class="headerlink" title="2.6 测试"></a>2.6 测试</h2><p>远程登陆mysql客户端通过指定amoeba配置文件中指定的用户名、密码、和端口以及amoeba服务器ip地址链接mysql数据库</p>
+<pre><code>[root@lys2 ~]# mysql -h192.168.2.203 -uroot -p -P8066
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 1364055863
+Server version: 5.1.45-mysql-amoeba-proxy-3.0.4-BETA Source distribution
+
+Copyright (c) 2000, 2016, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type &apos;help;&apos; or &apos;\h&apos; for help. Type &apos;\c&apos; to clear the current input statement.
+
+mysql&gt; 
+</code></pre><p>在testdb中创建表test并插入数据</p>
+<pre><code>mysql&gt; use testdb;
+Database changed
+mysql&gt; create table test_table(id int,password varchar(40) not null);
+Query OK, 0 rows affected (0.19 sec)
+
+mysql&gt; show tables;
++------------------+
+| Tables_in_testdb |
++------------------+
+| test_table       |
++------------------+
+1 row in set (0.02 sec)
+
+mysql&gt; insert into test_table(id,password) values(&apos;1&apos;,&apos;test1&apos;);
+Query OK, 1 row affected (0.04 sec)
+
+mysql&gt; select * from test_table;
++------+----------+
+| id   | password |
++------+----------+
+|    1 | test1    |
++------+----------+
+1 row in set (0.02 sec)
+</code></pre><p>分别登陆masterdb和slavedb查看数据</p>
+<p>masterdb：</p>
+<pre><code>mysql&gt; use testdb;
+Database changed
+mysql&gt; show tables;
++------------------+
+| Tables_in_testdb |
++------------------+
+| test_table       |
++------------------+
+1 row in set (0.00 sec)
+
+mysql&gt; select * from test_table;
++------+----------+
+| id   | password |
++------+----------+
+|    1 | test1    |
++------+----------+
+1 row in set (0.03 sec)
+</code></pre><p>slavedb：</p>
+<pre><code>mysql&gt; use testdb;
+Database changed
+mysql&gt; show tables;
++------------------+
+| Tables_in_testdb |
++------------------+
+| test_table       |
++------------------+
+1 row in set (0.00 sec)
+
+mysql&gt; select * from test_table;
++------+----------+
+| id   | password |
++------+----------+
+|    1 | test1    |
++------+----------+
+1 row in set (0.00 sec)
+</code></pre><p>停掉masterdb，然后在客户端分别执行插入和查询功能</p>
+<p>masterdb：</p>
+<p>　　[root@bogon ~]# service mysqld stop<br>　　Shutting down MySQL. SUCCESS!</p>
+<p>客户端：</p>
+<pre><code>mysql&gt; insert into test_table(id,password) values(&apos;2&apos;,&apos;test2&apos;);
+ERROR 1044 (42000): Amoeba could not connect to MySQL server[192.168.2.204:3306],拒绝连接
+mysql&gt; select * from test_table;
++------+----------+
+| id   | password |
++------+----------+
+|    1 | test1    |
++------+----------+
+1 row in set (0.01 sec)
+</code></pre><p>可以看到，关掉masterdb和写入报错，读正常</p>
+<p>开启masterdb上的msyql 关闭slave上的mysql</p>
+<p>masterdb：</p>
+<pre><code>[root@bogon ~]# service mysqld start
+Starting MySQL.. SUCCESS! 
+</code></pre><p>slavedb：</p>
+<pre><code>[root@localhost ~]# service mysqld stop
+Shutting down MySQL. SUCCESS! 
+</code></pre><p>客户端再次尝试</p>
+<pre><code>mysql&gt; insert into test_table(id,password) values(&apos;2&apos;,&apos;test2&apos;);
+Query OK, 1 row affected (0.19 sec)
+
+mysql&gt; select * from test_table;
+ERROR 1044 (42000): poolName=myslave, no valid pools
+</code></pre><p>可以看到插入成功，读取失败</p>
+<p>开启slavedb上的mysql，查看数据是否自动同步</p>
+<p>slavedb:</p>
+<pre><code>[root@localhost ~]# service mysqld start
+Starting MySQL... SUCCESS! 
+</code></pre><p>客户端：</p>
+<pre><code>mysql&gt; select * from test_table;
++------+----------+
+| id   | password |
++------+----------+
+|    1 | test1    |
+|    2 | test2    |
++------+----------+
+2 rows in set (0.01 sec)
+</code></pre><p>接着客户端：</p>
+<pre><code>mysql&gt; insert into test_table(id,password) values(&apos;3&apos;,&apos;test3&apos;);
+Query OK, 1 row affected (0.03 sec)
+
+mysql&gt; select * from test_table;
++------+----------+
+| id   | password |
++------+----------+
+|    1 | test1    |
+|    2 | test2    |
+|    3 | test3    |
++------+----------+
+3 rows in set (0.02 sec)
+</code></pre><p>OK 一切正常，到此全部结束</p>
+<p>注：关于mysql主从同步自行查看博主之前的主从同步笔记！</p>
+<ul>
+<li><p>Amoeba主配置文件($AMOEBA_HOME/conf/amoeba.xml)，用来配置Amoeba服务的基本参数，如Amoeba主机地址、端口、认证方式、用于连接的用户名、密码、线程数、超时时间、其他配置文件的位置等。</p>
+</li>
+<li><p>数据库服务器配置文件($AMOEBA_HOME/conf/dbServers.xml)，用来存储和配置Amoeba所代理的数据库服务器的信息，如:主机IP、端口、用户名、密码等。</p>
+</li>
+<li><p>切分规则配置文件($AMOEBA_HOME/conf/rule.xml)，用来配置切分规则。</p>
+</li>
+<li><p>数据库函数配置文件($AMOEBA_HOME/conf/functionMap.xml)，用来配置数据库函数的处理方法，Amoeba将使用该配置文件中的方法解析数据库函数。</p>
+</li>
+<li><p>切分规则函数配置文件($AMOEBA_HOME/conf/ruleFunctionMap.xml)，用来配置切分规则中使用的用户自定义函数的处理方法。</p>
+</li>
+<li><p>访问规则配置文件($AMOEBA_HOME/conf/access_list.conf)，用来授权或禁止某些服务器IP访问Amoeba。</p>
+</li>
+<li><p>日志规格配置文件($AMOEBA_HOME/conf/log4j.xml)，用来配置Amoeba输出日志的级别和方式。</p>
+</li>
+</ul>
+<p>转载：<a href="https://www.cnblogs.com/liuyisai/p/6009379.html" target="_blank" rel="external">Amoeba+Mysql实现数据库读写分离</a></p>
+</div><div class="tags"><a href="/tags/mysql/">mysql</a></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2018/02/11/Shell脚本学习/" class="pre">Shell脚本学习</a><a href="/2018/02/09/MySQL主从复制详解与实践/" class="next">MySQL主从复制详解与实践</a></div><div id="comments"><div id="SOHUCS" sid="2018/02/11/MySQL读写分离详解与实践/"></div></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一：mysql读写分离原理"><span class="toc-text">一：mysql读写分离原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二：基于-Amoeba-实现读写分离"><span class="toc-text">二：基于 Amoeba 实现读写分离</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-环境搭建"><span class="toc-text">2.1 环境搭建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-安装java环境"><span class="toc-text">2.2 安装java环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-安装"><span class="toc-text">2.2.1 安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2-设置java环境变量"><span class="toc-text">2.2.2 设置java环境变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-3-测试是否安装成功"><span class="toc-text">2.2.3 测试是否安装成功</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-安装Amoeba"><span class="toc-text">2.3 安装Amoeba</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-配置Amoeba"><span class="toc-text">2.4 配置Amoeba</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-在masterdb上创建数据库testdb"><span class="toc-text">2.5 在masterdb上创建数据库testdb</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-6-测试"><span class="toc-text">2.6 测试</span></a></li></ol></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/02/27/JDK1-8源码解析——HashMap-二/">JDK1.8源码解析——HashMap(二)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/27/JDK1-8源码解析——HashMap/">JDK1.8源码解析——HashMap(一)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/26/JDK1-7源码解析——HashMap/">JDK1.7源码解析——HashMap</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/12/Docker容器部署Java-web应用方式二/">Docker容器部署Java web应用(定制镜像)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/12/Docker容器部署Java-web应用/">Docker容器部署Java web应用(容器基础上创建新镜像)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/11/Shell脚本学习/">Shell脚本学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/11/MySQL读写分离详解与实践/">MySQL读写分离详解与实践</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/09/MySQL主从复制详解与实践/">MySQL主从复制详解与实践</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/08/Java虚拟机学习——垃圾收集器与内存分配策略/">Java虚拟机学习——垃圾收集器与内存分配策略</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/01/Java虚拟机学习——Java内存区域与内存溢出异常/">Java虚拟机学习——Java内存区域与内存溢出异常</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Docker/">Docker</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Dubbo/">Dubbo</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/HttpClient/">HttpClient</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/IDEA/">IDEA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JDK1-8源码/">JDK1.8源码</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/">JVM</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/WebService/">WebService</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/axios/">axios</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/element-ui/">element ui</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/extjs/">extjs</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/maven/">maven</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mybatis/">mybatis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nginx/">nginx</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/oracle/">oracle</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/">quartz</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/select2/">select2</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/shell/">shell</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/shiro/">shiro</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/spring/">spring</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/tomcat/">tomcat</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/weblogic/">weblogic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/webpack/">webpack</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ztree/">ztree</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习/">学习</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/微信公共号/">微信公共号</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编码规范/">编码规范</a><span class="category-list-count">1</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/SpringBoot/" style="font-size: 15px;">SpringBoot</a> <a href="/tags/docker/" style="font-size: 15px;">docker</a> <a href="/tags/Dubbo/" style="font-size: 15px;">Dubbo</a> <a href="/tags/extjs/" style="font-size: 15px;">extjs</a> <a href="/tags/JDK1-8源码/" style="font-size: 15px;">JDK1.8源码</a> <a href="/tags/工具/" style="font-size: 15px;">工具</a> <a href="/tags/IDEA/" style="font-size: 15px;">IDEA</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/JVM/" style="font-size: 15px;">JVM</a> <a href="/tags/maven/" style="font-size: 15px;">maven</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/tomcat/" style="font-size: 15px;">tomcat</a> <a href="/tags/oracle/" style="font-size: 15px;">oracle</a> <a href="/tags/Oracle-VM-VirtualBox/" style="font-size: 15px;">Oracle VM VirtualBox</a> <a href="/tags/linux/" style="font-size: 15px;">linux</a> <a href="/tags/quartz/" style="font-size: 15px;">quartz</a> <a href="/tags/spring-aop/" style="font-size: 15px;">spring aop</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/redis/" style="font-size: 15px;">redis</a> <a href="/tags/SpringMVC/" style="font-size: 15px;">SpringMVC</a> <a href="/tags/Docker/" style="font-size: 15px;">Docker</a> <a href="/tags/WebService/" style="font-size: 15px;">WebService</a> <a href="/tags/shell/" style="font-size: 15px;">shell</a> <a href="/tags/HttpClient/" style="font-size: 15px;">HttpClient</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/mybatis/" style="font-size: 15px;">mybatis</a> <a href="/tags/webpack/" style="font-size: 15px;">webpack</a> <a href="/tags/weblogic/" style="font-size: 15px;">weblogic</a> <a href="/tags/jquery/" style="font-size: 15px;">jquery</a> <a href="/tags/ztree/" style="font-size: 15px;">ztree</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/axios/" style="font-size: 15px;">axios</a> <a href="/tags/select2/" style="font-size: 15px;">select2</a> <a href="/tags/java基础/" style="font-size: 15px;">java基础</a> <a href="/tags/git/" style="font-size: 15px;">git</a> <a href="/tags/微信公共号/" style="font-size: 15px;">微信公共号</a> <a href="/tags/shiro/" style="font-size: 15px;">shiro</a> <a href="/tags/学习/" style="font-size: 15px;">学习</a> <a href="/tags/element-ui/" style="font-size: 15px;">element ui</a> <a href="/tags/编码规范/" style="font-size: 15px;">编码规范</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-you"> 友情链接</i></div><ul></ul><a href="https://github.com/wangyuanjun008" title="GitHub" target="_blank">GitHub</a></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">WangYuanJun.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
 </script><script>window._config = { showScore: true };
 (function(){ 
   var appid = 'cytn089Dg'; 
