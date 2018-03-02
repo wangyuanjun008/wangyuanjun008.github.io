@@ -536,7 +536,7 @@ sh /usr/java/tomcat/apache-tomcat-7.0.68/bin/catalina.sh run
     <link href="http://wangyuanjun.cn/2018/02/11/Shell%E8%84%9A%E6%9C%AC%E5%AD%A6%E4%B9%A0/"/>
     <id>http://wangyuanjun.cn/2018/02/11/Shell脚本学习/</id>
     <published>2018-02-11T03:40:37.000Z</published>
-    <updated>2018-02-11T09:56:41.098Z</updated>
+    <updated>2018-03-02T02:37:19.363Z</updated>
     
     <content type="html"><![CDATA[<p>Shell脚本,就是利用Shell的命令解释的功能，对一个纯文本的文件进行解析，然后执行这些功能，也可以说Shell脚本就是一系列命令的集合。<br>Shell可以直接使用在win/Unix/Linux上面，并且可以调用大量系统内部的功能来解释执行程序，如果熟练掌握Shell脚本，可以让我们操作计算机变得更加轻松，也会节省很多时间。</p>
 <h1 id="一：Shell应用场景"><a href="#一：Shell应用场景" class="headerlink" title="一：Shell应用场景"></a>一：Shell应用场景</h1><h2 id="Shell能做什么"><a href="#Shell能做什么" class="headerlink" title="Shell能做什么"></a>Shell能做什么</h2><ul>
@@ -561,7 +561,7 @@ echo &quot;Hello World&quot;
 2. chmod +x ./test.sh  #给脚本权限
 3. ./test.sh  #执行脚本
 </code></pre><p><img src="/2018/02/11/Shell脚本学习/helloworld.png" alt="helloworld"></p>
-<h1 id="shell变量"><a href="#shell变量" class="headerlink" title="shell变量"></a>shell变量</h1><p>定义变量时，变量名不加美元符号（$，PHP语言中变量需要），如：</p>
+<h1 id="二：shell变量"><a href="#二：shell变量" class="headerlink" title="二：shell变量"></a>二：shell变量</h1><p>定义变量时，变量名不加美元符号（$，PHP语言中变量需要），如：</p>
 <blockquote>
 <p>your_name=”runoob.com”</p>
 </blockquote>
@@ -580,7 +580,7 @@ myUrl=&quot;http://www.runoob.com&quot;
 <pre><code>/bin/sh: NAME: This variable is read only.
 </code></pre><h2 id="删除变量"><a href="#删除变量" class="headerlink" title="删除变量"></a>删除变量</h2><p>变量被删除后不能再次使用。unset 命令不能删除只读变量。</p>
 <pre><code>unset variable_name
-</code></pre><h1 id="Shell-传递参数"><a href="#Shell-传递参数" class="headerlink" title="Shell 传递参数"></a>Shell 传递参数</h1><p>我们可以在执行 Shell 脚本时，向脚本传递参数，脚本内获取参数的格式为：$n。n 代表一个数字，1 为执行脚本的第一个参数，2 为执行脚本的第二个参数，以此类推……</p>
+</code></pre><h1 id="三：Shell-传递参数"><a href="#三：Shell-传递参数" class="headerlink" title="三：Shell 传递参数"></a>三：Shell 传递参数</h1><p>我们可以在执行 Shell 脚本时，向脚本传递参数，脚本内获取参数的格式为：$n。n 代表一个数字，1 为执行脚本的第一个参数，2 为执行脚本的第二个参数，以此类推……</p>
 <h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>以下实例我们向脚本传递三个参数，并分别输出，其中 $0 为执行的文件名：</p>
 <pre><code>#!/bin/bash
 # author:菜鸟教程
@@ -681,7 +681,7 @@ $ ./test.sh 1 2 3
 1
 2
 3
-</code></pre><h1 id="shell数组"><a href="#shell数组" class="headerlink" title="shell数组"></a>shell数组</h1><h2 id="定义数组"><a href="#定义数组" class="headerlink" title="定义数组"></a>定义数组</h2><p>在Shell中，用括号来表示数组，数组元素用”空格”符号分割开。定义数组的一般形式为：<br>数组名=(值1 值2 … 值n)<br>例如：</p>
+</code></pre><h1 id="四：shell数组"><a href="#四：shell数组" class="headerlink" title="四：shell数组"></a>四：shell数组</h1><h2 id="定义数组"><a href="#定义数组" class="headerlink" title="定义数组"></a>定义数组</h2><p>在Shell中，用括号来表示数组，数组元素用”空格”符号分割开。定义数组的一般形式为：<br>数组名=(值1 值2 … 值n)<br>例如：</p>
 <p>在Shell中，用括号来表示数组，数组元素用”空格”符号分割开。定义数组的一般形式为：</p>
 <pre><code>数组名=(值1 值2 ... 值n)
 </code></pre><p>例如：</p>
@@ -726,7 +726,7 @@ lengthn=${#array_name[n]}
 # 
 #
 ##### 用户配置区 结束  #####
-</code></pre><h1 id="基本运算符"><a href="#基本运算符" class="headerlink" title="基本运算符"></a>基本运算符</h1><p>Shell 和其他编程语言一样，支持多种运算符，包括：</p>
+</code></pre><h1 id="五：基本运算符"><a href="#五：基本运算符" class="headerlink" title="五：基本运算符"></a>五：基本运算符</h1><p>Shell 和其他编程语言一样，支持多种运算符，包括：</p>
 <ul>
 <li>算数运算符</li>
 <li>关系运算符</li>
@@ -1258,7 +1258,7 @@ fi
 文件不是个目录
 文件不为空
 文件存在
-</code></pre><h1 id="Shell-test-命令"><a href="#Shell-test-命令" class="headerlink" title="Shell test 命令"></a>Shell test 命令</h1><p>Shell中的 test 命令用于检查某个条件是否成立，它可以进行数值、字符和文件三个方面的测试。</p>
+</code></pre><h1 id="六：Shell-test-命令"><a href="#六：Shell-test-命令" class="headerlink" title="六：Shell test 命令"></a>六：Shell test 命令</h1><p>Shell中的 test 命令用于检查某个条件是否成立，它可以进行数值、字符和文件三个方面的测试。</p>
 <h2 id="数值测试"><a href="#数值测试" class="headerlink" title="数值测试"></a>数值测试</h2><table>
 <thead>
 <tr>
@@ -1415,7 +1415,7 @@ else
 fi
 </code></pre><p>输出结果：</p>
 <pre><code>有一个文件存在!
-</code></pre><h1 id="Shell-流程控制"><a href="#Shell-流程控制" class="headerlink" title="Shell 流程控制"></a>Shell 流程控制</h1><p>和Java、PHP等语言不一样，sh的流程控制不可为空，如(以下为PHP流程控制写法)：</p>
+</code></pre><h1 id="七：Shell-流程控制"><a href="#七：Shell-流程控制" class="headerlink" title="七：Shell 流程控制"></a>七：Shell 流程控制</h1><p>和Java、PHP等语言不一样，sh的流程控制不可为空，如(以下为PHP流程控制写法)：</p>
 <pre><code>&lt;?php
 if (isset($_GET[&quot;q&quot;])) {
     search(q);
@@ -1643,7 +1643,7 @@ do
 done
 </code></pre><p>运行代码发现，当输入大于5的数字时，该例中的循环不会结束，语句 echo “Game is over!” 永远不会被执行。</p>
 <h3 id="esac"><a href="#esac" class="headerlink" title="esac"></a>esac</h3><p>case的语法和C family语言差别很大，它需要一个esac（就是case反过来）作为结束标记，每个case分支用右圆括号，用两个分号表示break。</p>
-<h1 id="Shell-函数"><a href="#Shell-函数" class="headerlink" title="Shell 函数"></a>Shell 函数</h1><p>linux shell 可以用户定义函数，然后在shell脚本中可以随便调用。</p>
+<h1 id="八：Shell-函数"><a href="#八：Shell-函数" class="headerlink" title="八：Shell 函数"></a>八：Shell 函数</h1><p>linux shell 可以用户定义函数，然后在shell脚本中可以随便调用。</p>
 <p>shell中函数的定义格式如下：</p>
 <pre><code>[ function ] funname [()]
 
@@ -1696,7 +1696,7 @@ echo &quot;输入的两个数字之和为 $? !&quot;
 输入的两个数字之和为 3 !
 </code></pre><p>函数返回值在调用该函数后通过 $? 来获得。</p>
 <p>注意：所有函数在使用前必须定义。这意味着必须将函数放在脚本开始部分，直至shell解释器首次发现它时，才可以使用。调用函数仅使用其函数名即可。</p>
-<h3 id="函数参数"><a href="#函数参数" class="headerlink" title="函数参数"></a>函数参数</h3><p>在Shell中，调用函数时可以向其传递参数。在函数体内部，通过 $n 的形式来获取参数的值，例如，$1表示第一个参数，$2表示第二个参数…</p>
+<h2 id="函数参数"><a href="#函数参数" class="headerlink" title="函数参数"></a>函数参数</h2><p>在Shell中，调用函数时可以向其传递参数。在函数体内部，通过 $n 的形式来获取参数的值，例如，$1表示第一个参数，$2表示第二个参数…</p>
 <p>带参数的函数示例：</p>
 <pre><code>#!/bin/bash
 # author:菜鸟教程
@@ -1760,12 +1760,13 @@ funWithParam 1 2 3 4 5 6 7 8 9 34 73
 </tr>
 </tbody>
 </table>
-<h1 id="Shell-输入-输出重定向"><a href="#Shell-输入-输出重定向" class="headerlink" title="Shell 输入/输出重定向"></a>Shell 输入/输出重定向</h1><p>大多数 UNIX 系统命令从你的终端接受输入并将所产生的输出发送回​​到您的终端。一个命令通常从一个叫标准输入的地方读取输入，默认情况下，这恰好是你的终端。同样，一个命令通常将其输出写入到标准输出，默认情况下，这也是你的终端。</p>
+<h1 id="九：Shell-输入-输出重定向"><a href="#九：Shell-输入-输出重定向" class="headerlink" title="九：Shell 输入/输出重定向"></a>九：Shell 输入/输出重定向</h1><p>大多数 UNIX 系统命令从你的终端接受输入并将所产生的输出发送回​​到您的终端。一个命令通常从一个叫标准输入的地方读取输入，默认情况下，这恰好是你的终端。同样，一个命令通常将其输出写入到标准输出，默认情况下，这也是你的终端。</p>
 <p>重定向命令列表如下：</p>
 <table>
 <thead>
 <tr>
-<th>命令    说明</th>
+<th>命令</th>
+<th style="text-align:center">说明</th>
 </tr>
 </thead>
 <tbody>
@@ -1804,7 +1805,7 @@ funWithParam 1 2 3 4 5 6 7 8 9 34 73
 </tbody>
 </table>
 <p>需要注意的是文件描述符 0 通常是标准输入（STDIN），1 是标准输出（STDOUT），2 是标准错误输出（STDERR）。</p>
-<p>##输出重定向<br>重定向一般通过在命令间插入特定的符号来实现。特别的，这些符号的语法如下所示:</p>
+<h2 id="输出重定向"><a href="#输出重定向" class="headerlink" title="输出重定向"></a>输出重定向</h2><p>重定向一般通过在命令间插入特定的符号来实现。特别的，这些符号的语法如下所示:</p>
 <pre><code>command1 &gt; file1
 </code></pre><p>上面这个命令执行command1然后将输出的内容存入file1。</p>
 <p>注意任何file1内的已经存在的内容将被新内容替代。如果要将新内容添加在文件末尾，请使用&gt;&gt;操作符。</p>
