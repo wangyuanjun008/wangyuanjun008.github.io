@@ -4,6 +4,21 @@
 
     
   <url>
+    <loc>http://wangyuanjun.cn/2018/04/09/Caused-by-java-sql-SQLSyntaxErrorException-ORA-00932-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E4%B8%8D%E4%B8%80%E8%87%B4-%E5%BA%94%E4%B8%BA-%E4%BD%86%E5%8D%B4%E8%8E%B7%E5%BE%97-CLOB/</loc>
+    <lastmod>2018-04-10T02:18:00.995Z</lastmod>
+    <data>
+        <display>
+        <title>Caused by: java.sql.SQLSyntaxErrorException: ORA-00932: 数据类型不一致: 应为 -, 但却获得 CLOB</title>
+        <pubTime>2018-04-09T09:50:07.000Z</pubTime>
+        
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://wangyuanjun.cn/2018/02/11/Shell%E8%84%9A%E6%9C%AC%E5%AD%A6%E4%B9%A0/</loc>
     <lastmod>2018-03-02T02:37:19.363Z</lastmod>
     <data>
@@ -1437,9 +1452,9 @@
         <title>SpringBoot发布HttpClient服务和客户端调用HttpClient服务</title>
         <pubTime>2017-12-23T06:28:27.000Z</pubTime>
         
-        <tag>SpringBoot</tag>
-         
         <tag>HttpClient</tag>
+         
+        <tag>SpringBoot</tag>
          
          
            
