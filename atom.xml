@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wangyuanjun.cn/"/>
-  <updated>2018-05-13T06:30:51.103Z</updated>
+  <updated>2018-06-08T02:48:52.226Z</updated>
   <id>http://wangyuanjun.cn/</id>
   
   <author>
@@ -14,6 +14,68 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Java多线程系列——volatile关键字</title>
+    <link href="http://wangyuanjun.cn/2018/06/08/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94volatile%E5%85%B3%E9%94%AE%E5%AD%97/"/>
+    <id>http://wangyuanjun.cn/2018/06/08/Java多线程系列——volatile关键字/</id>
+    <published>2018-06-08T01:32:52.000Z</published>
+    <updated>2018-06-08T02:48:52.226Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="一：volatite-简述"><a href="#一：volatite-简述" class="headerlink" title="一：volatite 简述"></a>一：volatite 简述</h1><p>Java 语言提供了一种稍弱的同步机制,即 volatile 变量.用来确保将变量的更新操作通知到其他线程,保证了新值能立即同步到主内存,以及每次使用前立即从主内存刷新. 当把变量声明为volatile类型后,编译器与运行时都会注意到这个变量是共享的.</p>
+<p>在多处理器的CPU架构下，因为每个处理器都有自己的缓存，线程访问变量的时候会读取缓存，多个线程读取的缓存不一样会导致每个线程得到的值不一样。使用该关键字的效果是：</p>
+<ul>
+<li>处理器将缓存写回到内存</li>
+<li>处理器将缓存写回到内存的时候会导致其他处理器的内存失效</li>
+</ul>
+<p>作用</p>
+<ul>
+<li>保证可见性，Java内存模型（JMM）确保所有线程看到的这个变量的值是一致的</li>
+<li>只保证简单操作的原子性(保证变量简单赋值操作的原子性，如：temp = 1，不保证复杂操作的原子性，如：temp++)</li>
+</ul>
+<p>内存语义（就是内存会做的操作）</p>
+<ul>
+<li>写：当写一个volatile的变量时，JMM把该线程对应的本地缓存中的共享变量刷新到主内存</li>
+<li>读：当读一个volatile变量时，JMM把该线程对应的本地缓存置为无效，线程接下来将从主存中读取共享变量<br>问题：上面提到的刷新操作是对这个本地内存刷新，还是只刷新volatile变量？<br>解答：是刷新整个本地缓存，包括其他共享变量</li>
+</ul>
+<h1 id="二：volatile关键字的可见性"><a href="#二：volatile关键字的可见性" class="headerlink" title="二：volatile关键字的可见性"></a>二：volatile关键字的可见性</h1><p>要想理解volatile关键字，得先了解下JAVA的内存模型，Java内存模型的抽象示意图如下：<br><img src="/2018/06/08/Java多线程系列——volatile关键字/1.png" alt="1"></p>
+<p>从图中可以看出：</p>
+<p>①每个线程都有一个自己的本地内存空间–线程栈空间，线程执行时，先把变量从主内存读取到线程自己的本地内存空间，然后再对该变量进行操作</p>
+<p>②对该变量操作完后，在某个时间再把变量刷新回主内存</p>
+<p>因此，就存在内存可见性问题，看一个示例程序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">public class RunThread extends Thread &#123;</div><div class="line"></div><div class="line">    private boolean isRunning = true;</div><div class="line"></div><div class="line">    public boolean isRunning() &#123;</div><div class="line">        return isRunning;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setRunning(boolean isRunning) &#123;</div><div class="line">        this.isRunning = isRunning;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void run() &#123;</div><div class="line">        System.out.println(&quot;进入到run方法中了&quot;);</div><div class="line">        while (isRunning == true) &#123;</div><div class="line">        &#125;</div><div class="line">        System.out.println(&quot;线程执行完成了&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class Run &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        try &#123;</div><div class="line">            RunThread thread = new RunThread();</div><div class="line">            thread.start();</div><div class="line">            Thread.sleep(1000);</div><div class="line">            thread.setRunning(false);</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>main线程 将启动的线程RunThread中的共享变量设置为false，从而想让RunThread.java 第14行中的while循环结束。<br>如果，我们使用JVM -server参数执行该程序时，RunThread线程并不会终止！从而出现了死循环！！</p>
+<p>原因分析：<br>现在有两个线程，一个是main线程，另一个是RunThread。它们都试图修改 第三行的 isRunning变量。按照JVM内存模型，main线程将isRunning读取到本地线程内存空间，修改后，再刷新回主内存。<br>而在JVM 设置成 -server模式运行程序时，线程会一直在私有堆栈中读取isRunning变量。因此，RunThread线程无法读到main线程改变的isRunning变量<br>从而出现了死循环，导致RunThread无法终止。这种情形，在《Effective JAVA》中，将之称为“活性失败”<br>解决方法，在第三行代码处用 volatile 关键字修饰即可。这里，它强制线程从主内存中取 volatile修饰的变量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">volatile private boolean isRunning = true;</div></pre></td></tr></table></figure>
+<p>扩展一下，当多个线程之间需要根据某个条件确定 哪个线程可以执行时，要确保这个条件在 线程 之间是可见的。因此，可以用volatile修饰。</p>
+<font color="red">综上，volatile关键字的作用是：使变量在多个线程间可见（可见性）</font>
+
+
+<h1 id="三：volatile关键字的非原子性"><a href="#三：volatile关键字的非原子性" class="headerlink" title="三：volatile关键字的非原子性"></a>三：volatile关键字的非原子性</h1><p>所谓原子性，就是某系列的操作步骤要么全部执行，要么都不执行。<br>比如，变量的自增操作 i++，分三个步骤：</p>
+<p>①从内存中读取出变量 i 的值<br>②将 i 的值加1<br>③将 加1 后的值写回内存</p>
+<p>这说明 i++ 并不是一个原子操作。因为，它分成了三步，有可能当某个线程执行到了第②时被中断了，那么就意味着只执行了其中的两个步骤，没有全部执行。<br>关于volatile的非原子性，看个示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">public class MyThread extends Thread &#123;</div><div class="line">    public volatile static int count;</div><div class="line"></div><div class="line">    private static void addCount() &#123;</div><div class="line">        for (int i = 0; i &lt; 100; i++) &#123;</div><div class="line">            count++;</div><div class="line">        &#125;</div><div class="line">        System.out.println(&quot;count=&quot; + count);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void run() &#123;</div><div class="line">        addCount();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class Run &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        MyThread[] mythreadArray = new MyThread[100];</div><div class="line">        for (int i = 0; i &lt; 100; i++) &#123;</div><div class="line">            mythreadArray[i] = new MyThread();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        for (int i = 0; i &lt; 100; i++) &#123;</div><div class="line">            mythreadArray[i].start();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>MyThread类第2行，count变量使用volatile修饰<br>Run.java 第20行 for循环中创建了100个线程，第25行将这100个线程启动去执行 addCount()，每个线程执行100次加1<br>期望的正确的结果应该是 100*100=10000，但是，实际上count并没有达到10000<br>原因是：volatile修饰的变量并不保证对它的操作（自增）具有原子性。（对于自增操作，可以使用JAVA的原子类AutoicInteger类保证原子自增）<br>比如，假设 i 自增到 5，线程A从主内存中读取i，值为5，将它存储到自己的线程空间中，执行加1操作，值为6。此时，CPU切换到线程B执行，从主从内存中读取变量i的值。由于线程A还没有来得及将加1后的结果写回到主内存，线程B就已经从主内存中读取了i，因此，线程B读到的变量 i 值还是5<br>相当于线程B读取的是已经过时的数据了，从而导致线程不安全性。<font color="red">这种情形在《Effective JAVA》中称之为“安全性失败”<br>综上，仅靠volatile不能保证线程的安全性。（原子性）</font></p>
+<h1 id="四：volatile-与-synchronized-的比较"><a href="#四：volatile-与-synchronized-的比较" class="headerlink" title="四：volatile 与 synchronized 的比较"></a>四：volatile 与 synchronized 的比较</h1><p>volatile主要用在多个线程感知实例变量被更改了场合，从而使得各个线程获得最新的值。它强制线程每次从主内存中讲到变量，而不是从线程的私有内存中读取变量，从而保证了数据的可见性。<br>关于synchronized，可参考：JAVA多线程之Synchronized关键字–对象锁的特点<br>比较：</p>
+<ol>
+<li>volatile是线程同步的轻量级实现，所以性能要比synchronized要好，并且volatile只修饰于变量，而synchronized可以修饰方法以及代码块。并且jdk新版本的发布，synchronized关键字在执行效率上得到很大提升，在开发中使用synchronized关键字的比率还是比较大的。</li>
+<li>volatile只能保证数据的可见性，不能用来同步，多线程访问volatile不会发生阻塞，而synchronized会出现阻塞。</li>
+<li>volatile能保证数据的可见性，但是不能保证原子性；而synchronized可以保证原子性，也可以间接的保证可见性，因为它将私有内存和公共内存中的数据做同步。只有获得了锁的线程才能进入临界区，从而保证临界区中的所有语句都全部执行。多个线程争抢synchronized锁对象时，会出现阻塞。</li>
+<li>volatile解决的是变量在多个线程之间的可见性，而synchronized解决的是多个线程之间访问资源的同步性。java的同步机制都是围绕原子性和可见性两个方面来确保线程安全的。</li>
+</ol>
+<h1 id="五：线程安全性"><a href="#五：线程安全性" class="headerlink" title="五：线程安全性"></a>五：线程安全性</h1><p>线程安全性包括两个方面，①可见性。②原子性。</p>
+<p>从上面自增的例子中可以看出：仅仅使用volatile并不能保证线程安全性。而synchronized则可实现线程的安全性。</p>
+<p>转载： <a href="https://www.cnblogs.com/hapjin/p/5492880.html" target="_blank" rel="external">https://www.cnblogs.com/hapjin/p/5492880.html</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;一：volatite-简述&quot;&gt;&lt;a href=&quot;#一：volatite-简述&quot; class=&quot;headerlink&quot; title=&quot;一：volatite 简述&quot;&gt;&lt;/a&gt;一：volatite 简述&lt;/h1&gt;&lt;p&gt;Java 语言提供了一种稍弱的同步机制,即 vola
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>Java多线程系列——原子类的实现（CAS算法）</title>
@@ -4076,103 +4138,6 @@ public native String intern();
     
     
       <category term="JDK1.8源码" scheme="http://wangyuanjun.cn/tags/JDK1-8%E6%BA%90%E7%A0%81/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>成为Java顶尖程序员 ，看这11本书就够了</title>
-    <link href="http://wangyuanjun.cn/2018/01/30/%E6%88%90%E4%B8%BAJava%E9%A1%B6%E5%B0%96%E7%A8%8B%E5%BA%8F%E5%91%98-%EF%BC%8C%E7%9C%8B%E8%BF%9911%E6%9C%AC%E4%B9%A6%E5%B0%B1%E5%A4%9F%E4%BA%86/"/>
-    <id>http://wangyuanjun.cn/2018/01/30/成为Java顶尖程序员-，看这11本书就够了/</id>
-    <published>2018-01-30T09:40:17.000Z</published>
-    <updated>2018-02-01T02:56:11.943Z</updated>
-    
-    <content type="html"><![CDATA[<p>“学习的最好途径就是看书”，这是我自己学习并且小有了一定的积累之后的第一体会。个人认为看书有两点好处：<br><img src="/2018/01/30/成为Java顶尖程序员-，看这11本书就够了/1.jpg" alt="1"><br>1.能出版出来的书一定是经过反复的思考、雕琢和审核的，因此从专业性的角度来说，一本好书的价值远超其他资料</p>
-<p>2.对着书上的代码自己敲的时候方便</p>
-<p>“看完书之后再次提升自我的最好途径是看一些相关的好博文”，我个人认为这是学习的第二步，因为一本书往往有好几百页，好的博文是自己看书学习之后的一些总结和提炼，对于梳理学习的内容很有好处，当然这里不是说自己的学习方法，就不再扯下去了。</p>
-<p>很多程序员们往往有看书的冲动，但不知道看哪些书，下面我就给各位Java程序猿们推荐一些好书（每本书的作者会加粗标红），其中绝大多数都是我自己平时在看的书，也算是我对于平时读的书做一个小总结和读后感吧。</p>
-<p>首先推荐的不是一本书，而是一个博客，也是我们博客园另外一位博友java_my_life。</p>
-<p>目前市面上讲解设计模式的书很多，虽然我前面讲了看书是最好的，但是对设计模式感兴趣的朋友们，我推荐的是这个博客。这位博友的设计模式讲得非常非常好，我认为90%的内容都是没有问题且很值得学习的，其讲解设计模式的大体路线是：</p>
-<p>1、随便开篇点明该设计模式的定义</p>
-<p>2、图文并茂讲解该设计模式中的结构</p>
-<p>3、以详细的代码形式写一下该种设计模式的实现</p>
-<p>4、补充内容</p>
-<p>5、讲解该设计模式的优缺点</p>
-<p>对于一个设计模式我们关注、学习的知识点，不就是上面这些吗？</p>
-<p>不 过我要重点提醒一下网友们，同一种设计模式的写法有多种，并不是说只有按某种写法来写才是这种设计模式。比方说适配器模式，我们关注适配器模式一定要关注 的是什么是适配器模式不是怎么写适配器模式，不要认为某段代码不是按照适配器模式的写法写下来的它就不是适配器模式了，记住这一点，你在学习设计模式的时 候一定会对代码中用到的设计模式有更深入的理解。</p>
-<h2 id="《深入理解Java虚拟机：JVM高级特性与最佳实践》"><a href="#《深入理解Java虚拟机：JVM高级特性与最佳实践》" class="headerlink" title="《深入理解Java虚拟机：JVM高级特性与最佳实践》"></a>《深入理解Java虚拟机：JVM高级特性与最佳实践》</h2><p><img src="/2018/01/30/成为Java顶尖程序员-，看这11本书就够了/深入理解Java虚拟机：JVM高级特性与最佳实践.jpeg" alt="深入理解Java虚拟机：JVM高级特性与最佳实践"></p>
-<p>如果你不满足于做一个只会写if…else…的Java程序员，而是希望更进一步，我随便举几个例子吧：</p>
-<p>1、了解Java代码的底层运行机制</p>
-<p>2、定位性能问题</p>
-<p>3、对整个系统进行性能调优</p>
-<p>4、解决各种奇奇怪怪的线上线下问题</p>
-<p>5、更加高级别的，为自己的项目量身定做一款适合自己项目的虚拟机</p>
-<p>那 么Java虚拟机是你必学的一门技术。《深入理解Java虚拟机：JVM高级特性与最佳实践》作者是周志明，这本书可以说是国内写得最好的有关Java虚 拟机的书籍，近半年，前前后后这本书我起码看了有5遍。国内写虚拟机的书除了这本，其实还有一些其他的，我也买过，不过粗略看下来，很多内容也是《深入理 解Java虚拟机：JVM高级特性与最佳实践》此书里面的。</p>
-<p>另外值得一提的是，《深入理解Java虚拟机：JVM高级特性与最佳实践》这本 书，有电子版的，网上搜一下就能下载到了。不过建议有兴趣的朋友还是去买书看，电子版本下载到的一般是比较老的版本，相比最新修订版的《深入理解Java 虚拟机：JVM高级特性与最佳实践》，有很多作者新补充的知识点是没有的。</p>
-<h2 id="《HotSpot实战》"><a href="#《HotSpot实战》" class="headerlink" title="《HotSpot实战》"></a>《HotSpot实战》</h2><p><img src="/2018/01/30/成为Java顶尖程序员-，看这11本书就够了/HotSpot实战.jpeg" alt="HotSpot实战"><br>所有的Java虚拟机都是遵循着Java虚拟机规范来的，市面上的Java虚拟机几十款，《深入理解Java虚拟机：JVM高级特性与最佳实践》一书里面讲的虚拟机并不针对某种特定的虚拟机，而是从Java虚拟机规范的角度来讲解Java虚拟机。</p>
-<p>我们平时使用的乃至商用的大多数Java虚拟机都是Sun公司的HotSpot，大家cmd进入命令行，使用”java -version”命令就可以看到了。如果希望在Java虚拟机规范的基础上更加深入地去理解虚拟机的一些细节是怎么实现的，就可以看一下《HotSpot实战》一书，作者是陈涛。不过由于HotSpot的源码都是C/C++写的，所以要求读者有非常好的C/C++基础，如果对这两门语言不是很熟悉的朋友，看这本书可能对你帮助不是很大。</p>
-<p>最后提一句，如果有兴趣的朋友，不妨先去网上下载一个openJDK，HotSpot的源码就在里面。</p>
-<h2 id="《Java并发编程实战》"><a href="#《Java并发编程实战》" class="headerlink" title="《Java并发编程实战》"></a>《Java并发编程实战》</h2><p><img src="/2018/01/30/成为Java顶尖程序员-，看这11本书就够了/Java并发编程实战.jpeg" alt="Java并发编程实战"><br>这本书常常被列入Java程序员必读十大书籍排行榜前几位，不过个人不是很推荐这本书。</p>
-<p>《Java并发编程实战》作者是Brian Goetz，怎么说呢，这本书前前后后我也看了两遍左右，个人感受是：</p>
-<p>1、文字多代码少</p>
-<p>2、讲解多实践少</p>
-<p>我 觉得这可能就是老外写书的特点吧，因为Java是北美国家（加拿大、美国）开发和维护的，所以老外对Java方方面面的理论知识体系都掌握得是非常清楚和 透彻的。翻开这本书看，多线程什么用、什么是死锁、什么是竞争、什么是线程安全等等，方方面面的知识点都用大量的文字篇幅讲解，不免让人感觉十分枯燥，也 难让读者有实质性的进步。我这本书看了两遍也属于一目十行意思，有兴趣的地方就重点看一下。</p>
-<p>无论如何，作为一本常常位于Jva程序员必读十大书籍排行榜前几名的书，还是一定要推荐给大家的。</p>
-<h2 id="《java多线程编程核心技术》"><a href="#《java多线程编程核心技术》" class="headerlink" title="《java多线程编程核心技术》"></a>《java多线程编程核心技术》</h2><p><img src="/2018/01/30/成为Java顶尖程序员-，看这11本书就够了/java多线程编程核心技术.jpeg" alt="java多线程编程核心技术"><br>《Java多线程编程核心技术》作者高洪岩。想要学习多线程的朋友，这本书是我大力推荐的，我的个人博客里面二十多篇的多线程博文都是基于此书，并且在这本书的基础上进行提炼和总结而写出来的。</p>
-<p>此书和《Java并发编程实战》 相反，这本书的特点是大篇幅的代码+小篇幅的精讲解，可能这和中国人写的书比较偏向实用主义的风格有关。本书关于线程安全、synchronized、 Reentrant、Timer等等都用详细的代码进行了讲解，而且每个大知识点下的多个小知识点都会详细讲解到，非常有实践价值。</p>
-<p>有兴趣的朋友们，我相信只要你们跟着这本书里面的代码敲、运行、思考，三步走，对于多线程的使用与理解一定会进几大步。</p>
-<p>不 过这本书的缺点就是对于Java并发包下的一些类像CountDownLatch、Semphore、CyclicBarrier、Future、 Callable等都没有讲到，重点的CAS和AQS也没有触及，重点类的实现原理也没有提。当然，这很深入了，在学习了这本书之后如果能再去对这些知识 进行一些学习、研究的话，你一定会慢慢成长为一个很厉害的多线程高手。</p>
-<h2 id="《Effective-Java中文版》"><a href="#《Effective-Java中文版》" class="headerlink" title="《Effective Java中文版》"></a>《Effective Java中文版》</h2><p><img src="/2018/01/30/成为Java顶尖程序员-，看这11本书就够了/Effective Java中文版.jpeg" alt="Effective Java中文版"><br>这是唯一一本我没有买的书。初识这本书，是在我的博文Java代码优化（长期更新）里面，底下评论的时候有朋友提到了这本书，当时我说要去买，不过这两个月一直都没时间去逛书店，甚是遗憾，之后肯定会找时间去买这本书的。</p>
-<p>《Effective Java中文版》的作者是Joshua Bloch，这个人就很厉害了，他是谷歌的首席架构师，属于超级技术大牛级别了吧，呵呵。由于没有看过这本书，所以我不好发表评论，但是从这本书的知名度 以及其作者的来头来看（多提一句，这本书也是Java之父James Gosling博士推崇的一本书），我相信这一定是一本值得一看的好书。</p>
-<p>好 的代码是每个Java程序员都应该去追求的，不是说我今天写一段好代码相比写一段烂代码对性能会有多大的提升，更多的应该是提升了代码的可读性以及可以规 避许多潜在的、未知的问题，避免代码上线之后出问题而花时间去维护—-无论从时间成本、人力成本还是风险成本来说，这都是非常高的。</p>
-<h2 id="《深入分析Java-Web技术内幕》"><a href="#《深入分析Java-Web技术内幕》" class="headerlink" title="《深入分析Java Web技术内幕》"></a>《深入分析Java Web技术内幕》</h2><p><img src="/2018/01/30/成为Java顶尖程序员-，看这11本书就够了/深入分析Java Web技术内幕.jpeg" alt="深入分析Java Web技术内幕"><br>《深入分析Java Web技术内幕》，作者许令波，淘宝工程师。</p>
-<p>这本书我用一个字概括就是：全。真的非常全，HTTP、DNS、CDN、静态化、Jetty、Tomcat、Servlet、Spring、MyBatis等等，什么都有，涉及知识面非常广，但又不像专门精讲某个知识点的书籍一样讲得非常深入，感觉这本书就是尽量去用短的篇幅讲清楚一些Java Web使用到的技术的内幕，让读者对这些知识点的技术内幕有一个理性的认识。</p>
-<p>不过，尽管每个知识点的篇幅都不多，但是重点都基本讲到了，是一本让人真正有收获的书。如果想进一步了解这些技术的技术内幕，就要自己去买相关书籍或者自己上网查资料了，有种抛砖引玉，或者说师傅领进门、修行在个人的感觉。</p>
-<h2 id="《大型网站技术架构-核心原理与案例分析》"><a href="#《大型网站技术架构-核心原理与案例分析》" class="headerlink" title="《大型网站技术架构 核心原理与案例分析》"></a>《大型网站技术架构 核心原理与案例分析》</h2><p><img src="/2018/01/30/成为Java顶尖程序员-，看这11本书就够了/大型网站技术架构 核心原理与案例分析.jpeg" alt="大型网站技术架构 核心原理与案例分析"></p>
-<p>一个字评价这本书，屌；两个字评价这本书，很屌；三个字评价这本书，非常屌。呵呵，好了，再说下去可能别人以为我是水军了。</p>
-<p>《大型网站技术架构 核心原理与案例分析》的作者是李智慧，原阿里巴巴技术专家。</p>
-<p>Java 的大多数应用都是用在Web上的，现在只要稍微大型一点的Web应用，都一定是一个分布式系统，那么一个分布式系统用到了哪些技术？一个大型网站是如何从 一个小型网站成长起来的？如何保证你的网站安全？分布式系统使用到了缓存，有哪些缓存？缓存的使用有哪些值得注意的事项？</p>
-<p>关 于分布式的知识点，都在这本书里面有体现，只有你想不到，没有他写不到，而且写得非常易懂，基本属于看一两遍，再记一些笔记就知道是怎么一回事儿了。多看 几遍，对分布式的理解一定会加深不少。而且里面不仅仅是分布式的知识，还非常接地气地写了如何做一个好的架构师，其实我认为这不仅仅是写给想做架构师的读 者看的，就是给读者一些建议，如何更好地提出意见、如何更让别人关注你的声音、如何看到他人的优点，入木三分，让人获益匪浅。</p>
-<h2 id="《大型网站系统与Java中间件实践》"><a href="#《大型网站系统与Java中间件实践》" class="headerlink" title="《大型网站系统与Java中间件实践》"></a>《大型网站系统与Java中间件实践》</h2><p><img src="/2018/01/30/成为Java顶尖程序员-，看这11本书就够了/大型网站系统与Java中间件实践.jpeg" alt="大型网站系统与Java中间件实践"><br>《大型网站系统与Java中间件实践》作者曾宪杰，是淘宝的技术总监，算起来应该在阿里有至少P8的级别了吧。</p>
-<p>这本书的部分内容和上面一本李智慧的《大型网站技术架构 核心原理与案例分析》有所重合，像分布式系统的演化、CDN、CAP理论和BASE理论等等，这也更说明这些都是分布式系统或者说是一个大型网站重点关注的内容，当作一次再学习也不错。</p>
-<p>本书要突出的重点是中间件三个字，中间件是分布式系统中一个非常重要的东西，其最重要的作用应该就是解耦，降低模块与模块之间的强依赖，不同的模块之间的依赖度降低，便可以各自独立地开发自己的功能，这也可以说是软件工程发展的目标和驱动力。</p>
-<p>因此，本书有一部分的内容就是基于中间件，详细讲解了中间件与JMS的各种知识，适合对分布式系统比较熟悉并且想要往中间件方面有一定研究的读者。</p>
-<h2 id="《从Paxos到ZooKeeper-分布式一致性原理与实践》"><a href="#《从Paxos到ZooKeeper-分布式一致性原理与实践》" class="headerlink" title="《从Paxos到ZooKeeper 分布式一致性原理与实践》"></a>《从Paxos到ZooKeeper 分布式一致性原理与实践》</h2><p><img src="/2018/01/30/成为Java顶尖程序员-，看这11本书就够了/从Paxos到ZooKeeper 分布式一致性原理与实践.jpeg" alt="从Paxos到ZooKeeper 分布式一致性原理与实践"></p>
-<p>《从Paxos到ZooKeeper 分布式一致性原理与实践》，作者倪超，阿里巴巴工程师。</p>
-<p>这本书是我最近在研读的一本书，和上面的《大型网站系统与Java中间件实践》一样，属于分布式组件的范畴，属于有些深入的内容，当然也是我自己的个人兴趣。当然，如果有志向做一个出色的大型网站架构师、公司的技术总监之类，这些知识当然是必须掌握的。</p>
-<p>本书从分布式系统基本理论开始讲起，讲到Paxos算法，最后慢慢引入到Zookeeper，循序渐进。当然，更多的我目前还不方便发表什么看法，因为这本书的第二张Paxos算法我都还没有弄懂（Paxos算法确实有些难以理解和不太易懂），接下来的章节还没有看下去。</p>
-<p>如果网友们所在的公司在使用Zookeeper，并且你又对Zookeeper感兴趣想要研究一下它的原理的，这本书将是不二之选。</p>
-<h2 id="《MySQL5-6从零开始学》"><a href="#《MySQL5-6从零开始学》" class="headerlink" title="《MySQL5.6从零开始学》"></a>《MySQL5.6从零开始学》</h2><p><img src="/2018/01/30/成为Java顶尖程序员-，看这11本书就够了/MySQL5.6从零开始学.jpeg" alt="MySQL5.6从零开始学"><br>《MySQL5.6从零开始学》，作者刘增杰和李坤。</p>
-<p>作为一名Java程序员，我认为我们千万不要觉得数据库是DBA的事情，数据库对一个Java程序员来说也是必须掌握的一门知识，丰富的数据库性能优化经验是一个顶尖程序员必备技能。</p>
-<p>目前主流的数据库有Oracle和MySQL，当然推荐大家的是MySQL，主要原因我认为有两点：</p>
-<p>1、MySQL相比Oracle更轻量级、更小、安装和卸载更方便，SQL其实都是差不多的，如果想学数据库，学MySQL就可以了，在家里面可以自己方便地研究，如果你的公司使用Oracle，只要再用对比学习法，关注一下Oracle和MySQL的差别即可</p>
-<p>2、随着2009年阿里巴巴去IOE的运动的进行，目前国内的很多互联网公司都会选择MySQL作为它们使用的数据库，因为MySQL免费，所以既省钱又不需要出了问题就依赖甲骨文公司</p>
-<p>MySQL学习我推荐的是这本我自己学习看的《MySQL5.6从零开始学》，我是觉得挺好的这本书，书里面的知识点很细致、很全面，读者选择书籍的标准大多不就是这两点吗？</p>
-<h2 id="《Spring源码深度解析》"><a href="#《Spring源码深度解析》" class="headerlink" title="《Spring源码深度解析》"></a>《Spring源码深度解析》</h2><p><img src="/2018/01/30/成为Java顶尖程序员-，看这11本书就够了/Spring源码深度解析.jpeg" alt="Spring源码深度解析"><br>《Spring源码深度解析》，作者郝佳。</p>
-<p>Spring 这个框架做得太好了，功能太强大了，以至于很多开发者都只知Spring，不知什么是工厂、什么是单例、什么是代理（我面试别人的真实体会）。这种功能强 大的框架内部一定是很复杂的实现，这就导致一旦你的程序使用Spring，出了问题，可能是Error、可能是Exception、可能是程序运行结果不 是你的预期的，出现诸如此类问题的时候，将会让你感到困惑，除了上网查资料或者问别人似乎没有更好的解决办法。</p>
-<p>研读Spring的源代码不失为一种很好的学习方法，我个人认为这有很多好处：</p>
-<p>1、理解框架内部的实现之后，可以主动去解决问题，而不需要依赖别人</p>
-<p>2、Spring框架内部实现用到了很多设计模式，很好的代码设计思路，这将会对你写代码、对你理解设计模式有很大的提高</p>
-<p>3、研究Spring框架将会大大增强你读代码的能力，我相信只要你能研究清楚Spring内部是如何实现的，其他任何一个框架的源代码都难不倒你</p>
-<p>总而言之，我认为读代码的能力是一个普通的程序员和一个好的程序员之间最大的差别之一，前者只会把别人写好的东西拿来用，后者不仅能用好，还清楚知道别人写好的东西底层是如何实现的，在出现问题的时候可以轻松解决。</p>
-<p>Spring源代码，个人推荐《Spring源码深度解析》一书，真要研究透并且写清楚Spring源代码，恐怕三四本书都不够，作者在近400页的篇幅中尽量去讲解Spring源代码是如何实现的，殊为不易，尽管无法讲得完全，但是相信作者的讲解配合上读者自己的研究，一定可以对Spring的实现有更深度的理解。</p>
-<p>后记</p>
-<p>以 上就是我推荐给Java开发者们的一些值得一看的好书。但是这些书里面并没有Java基础、Java教程之类的书，不是我不推荐，而是离我自己学习 Java基础技术也过去好几年了，我学习的时候看的什么也忘了，所以我不能不负责任地推荐一些我自己都没有看过的书给大家。对于Java基础知识的学习， 我提两点建议吧：</p>
-<p>1、多写多敲代码，好的代码与扎实的基础知识一定是实践出来的</p>
-<p>2、可以去尚学堂下载一下马士兵的视频来学习一下Java基础，还挺不错的，如果尚学堂官网上下载不了可以底下回复，我的电脑里有</p>
-<p>最后，每一位读到这里的网友，感谢你们能耐心地看完。希望在成为一名更优秀的Java程序员的道路上，我们可以一起学习、一起进步。</p>
-<p>转载：<a href="http://developer.51cto.com/art/201512/503095.htm" target="_blank" rel="external">http://developer.51cto.com/art/201512/503095.htm</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;“学习的最好途径就是看书”，这是我自己学习并且小有了一定的积累之后的第一体会。个人认为看书有两点好处：&lt;br&gt;&lt;img src=&quot;/2018/01/30/成为Java顶尖程序员-，看这11本书就够了/1.jpg&quot; alt=&quot;1&quot;&gt;&lt;br&gt;1.能出版出来的书一定是经过反复的思
-    
-    </summary>
-    
-      <category term="学习" scheme="http://wangyuanjun.cn/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-      <category term="学习" scheme="http://wangyuanjun.cn/tags/%E5%AD%A6%E4%B9%A0/"/>
     
   </entry>
   
